@@ -1,0 +1,9 @@
+{
+  "name": "shared-data",
+  "version": "1.0.0",
+  "description": "Geographic primitives shared across nick's projects: state names, regions, slugify, US airports.",
+  "private": false,
+  "type": "commonjs",
+  "main": "src/index.ts",
+  "license": "UNLICENSED"
+}
