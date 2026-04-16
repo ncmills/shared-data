@@ -9,3 +9,6 @@ export * from "./states";
 export * from "./regions";
 export * from "./slugify";
 export * from "./airports";
+export * from "./destinations-types";
+export * from "./destinations-overlay";
+export { sharedDestinations } from "./destinations-data";
