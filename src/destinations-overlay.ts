@@ -20,7 +20,16 @@ import type {
   CanonicalDining,
 } from "./destinations-types";
 
-/** Activity-type unions known to each repo. Filter out anything unknown. */
+/** Activity-type unions known to each repo. Filter out anything unknown.
+ *
+ * 2026-04-20 audit: types like `sleigh-ride`, `yacht-charter`, `painting-class`
+ * were silently dropped from the MOH overlay even though the MOH engine's
+ * vibeTag scoring (party-planner-prompt.ts) explicitly checks for them —
+ * `mountain-glow` checks `sleigh-ride`, `old-money` checks `yacht-charter`,
+ * `parisian-soiree` checks `art-class`, `bayou-baddie` checks `ghost-tour`,
+ * `desert-mystic` checks `vortex-hike`, `palm-springs-siren` checks
+ * `mid-century-tour`. Dropping these pre-filter meant the scoring branches
+ * never fired. The superset below matches everything the prompts reference. */
 const MOH_ACTIVITY_TYPES = new Set([
   "spa","wine-tour","brewery-tour","distillery-tour","cooking-class","cocktail-class",
   "boat-cruise","karaoke","escape-room","axe-throwing","go-karts","paintball","casino",
@@ -32,6 +41,10 @@ const MOH_ACTIVITY_TYPES = new Set([
   "perfume-making","flower-crown","drag-brunch","sound-bath","cacao-ceremony","tarot-reading",
   "pole-class","burlesque-class","silent-disco","luxe-picnic","matcha-ceremony","pickleball",
   "photoshoot","dance-class","shopping-tour","stargazing","yoga-retreat","tea-ceremony",
+  // 2026-04-20 audit: referenced by MOH vibeTag + theme scoring branches but
+  // previously absent from the overlay allow-list — added to stop silent drops.
+  "sleigh-ride","yacht-charter","painting-class","tennis-clinic","ghost-tour",
+  "vortex-hike","mid-century-tour","art-class","spa-day","beach-hangout",
 ]);
 
 const BESTMAN_ACTIVITY_TYPES = new Set([
@@ -41,7 +54,7 @@ const BESTMAN_ACTIVITY_TYPES = new Set([
   "atv","skydiving","racing","poker-night","cigar-bar","sports-event","mural-tour",
   "sunset-cruise","rooftop-bar","skiing","biking","kayaking","rafting","snorkeling",
   "canyoneering","zip-lining","horseback-riding","dog-sledding","adventure-park",
-  "tour","walking-tour","scenic-overlook","farm-tour",
+  "tour","walking-tour","scenic-overlook","farm-tour","beach-hangout",
 ]);
 
 const filterByBrand = <T extends { brands: ("moh" | "bestman" | "both")[] }>(

@@ -1023,7 +1023,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Glitter Wagon Nashville", type: "party-bus", priceRange: "$600-$1,400 for 4 hr", highlight: "Decked-out party buses with disco lights and aux cords" },
     ],
     presentation: {
-      moh: { tagline: "Cowboy boots, brunch crawls, and rooftop sunsets — the Last Rodeo capital", description: "Nashville is the bachelorette capital of America for a reason. Pedal taverns roll past honky-tonks, every restaurant has a brunch line on Saturday morning, and the rooftop bars stay packed until last call. Her crew can do a full Last Rodeo weekend without trying — boots, hats, and string lights are everywhere. Lean into Music Row, the Gulch, and East Nashville for the most curated weekend." },
+      moh: { tagline: "Cowboy boots, brunch crawls, and rooftop sunsets — the Last Rodeo capital", description: "Nashville is the bachelorette capital of America for a reason. Pedal taverns roll past honky-tonks, every restaurant has a brunch line on Saturday morning, and the rooftop bars stay packed until last call. The bridesmaids can run a full Last Rodeo weekend without trying — boots, hats, and string lights are everywhere. Lean into Music Row, the Gulch, and East Nashville for the most curated weekend." },
       bestman: { tagline: "Honky-tonks, hot chicken, and zero regrets", description: "Broadway is basically a conveyor belt of bachelor parties — and for good reason. Live music pours out of every door, pedal taverns clog the streets, and the late-night hot chicken scene is undefeated. Nashville delivers whether the crew wants cowboy boots or craft cocktails." },
     } },
 
@@ -1184,7 +1184,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "St. Charles Streetcar", type: "shuttle", priceRange: "$1.25 per ride", highlight: "Historic streetcar Canal → Garden District → Audubon — scenic transport with character" },
     ],
     presentation: {
-      moh: { tagline: "Drag brunch, tarot readings, ghost tours, and a hurricane in a courtyard bar", description: "NOLA is the bachelorette city for the crew that wants something with character — not the basic Vegas/Nashville run. Drag brunches are an institution, ghost tours are unironically cool, tarot readers line Jackson Square, and the courtyard cocktail bars are pure magic. Lean French Quarter, Frenchmen Street, and Bywater for the curated weekend." },
+      moh: { tagline: "Drag brunch, tarot readings, ghost tours, and a hurricane in a courtyard bar", description: "NOLA is the bachelorette city for the bridal party that wants something with character — not the basic Vegas/Nashville run. Drag brunches are an institution, ghost tours are unironically cool, tarot readers line Jackson Square, and the courtyard cocktail bars are pure magic. Lean French Quarter, Frenchmen Street, and Bywater for the curated weekend." },
       bestman: { tagline: "Bourbon Street is just the appetizer", description: "NOLA is the godfather of American party cities. Bourbon Street gets the headlines, but Frenchmen Street has the real music, the Garden District has the charm, and the food is the best in the country. Open containers everywhere, 24/7 bars, and a city that treats every weekend like Mardi Gras." },
     } },
 
@@ -1295,7 +1295,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Yacht Charter Captain", type: "charter", priceRange: "$1,500-$5,000 for 4-8 hr", highlight: "Marquee day activity AND transport — cruises Biscayne Bay with stops" },
     ],
     presentation: {
-      moh: { tagline: "Yacht days, Wynwood walls, and a rosé-soaked South Beach weekend", description: "Miami is the bachelorette city for the crew that wants the works: yacht charter day, beach club afternoon, Wynwood mural walk, brunch with bottomless rosé, and late-night dancing on Ocean Drive. The Faena and 1 Hotel anchor the elevated end; Wynwood and Brickell deliver more chill artsy days. International airport access makes it easy for guests flying from anywhere." },
+      moh: { tagline: "Yacht days, Wynwood walls, and a rosé-soaked South Beach weekend", description: "Miami is the bachelorette city for the bridal party that wants the works: yacht charter day, beach club afternoon, Wynwood mural walk, brunch with bottomless rosé, and late-night dancing on Ocean Drive. The Faena and 1 Hotel anchor the elevated end; Wynwood and Brickell deliver more chill artsy days. International airport access makes it easy for guests flying from anywhere." },
       bestman: { tagline: "Bottle service, beach clubs, and bad decisions until 5am", description: "Miami is the undisputed heavyweight of American party cities. South Beach delivers mega-clubs and pool parties, Wynwood brings the art and cocktails, Brickell has the rooftops, and Little Havana has the culture. If the crew wants world-class nightlife, there is no substitute." },
     } },
 
@@ -1408,7 +1408,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Presidential Limousine", type: "limo", priceRange: "$500-$1,500 for 4 hr", highlight: "Stretch limos, Hummers, and Escalades for VIP arrivals" },
     ],
     presentation: {
-      moh: { tagline: "The Strip, pool parties, and shows that never end — America's ultimate bachelorette playground", description: "Las Vegas is the undisputed #1 bachelorette destination in the country. The Strip delivers world-class nightclubs, Michelin-starred dinners, rooftop pools, and headliner shows all within walking distance. Off-Strip, the Arts District and Fremont Street offer a grittier, more local counterpoint. The bride and her crew can custom-build any energy here — from spa days at the Wynn to 3 AM dance floors at Zouk." },
+      moh: { tagline: "The Strip, pool parties, and shows that never end — America's ultimate bachelorette playground", description: "Las Vegas is the undisputed #1 bachelorette destination in the country. The Strip delivers world-class nightclubs, Michelin-starred dinners, rooftop pools, and headliner shows all within walking distance. Off-Strip, the Arts District and Fremont Street offer a grittier, more local counterpoint. The bride and her bridesmaids can custom-build any energy here — from spa days at the Wynn to 3 AM dance floors at Zouk." },
       bestman: { tagline: "What happens in Vegas... you already know the rest", description: "The undisputed heavyweight champ of bachelor parties. World-class clubs, 24/7 action, bottomless buffets, and the understanding that nobody here is judging you. XS, Hakkasan, Encore Beach Club, TopGolf, and a Lamborghini on a real track — Vegas doesn't do subtle." },
     } },
   { id: "asheville-nc", city: "Asheville", state: "NC", region: "south",
@@ -4596,7 +4596,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Uber / Cabify Cabo", type: "rideshare", priceRange: "$5-20 per ride", highlight: "Uber works well in Cabo — cheaper than taxis around the Marina area" },
     ],
     presentation: {
-      moh: { tagline: "Infinity-pool spa days, rosé beach clubs, and sunset catamaran nights", description: "Cabo for brides is the Ritz-Carlton Reserve pool + Flora Farms long lunches + a catamaran sunset with the squad. Zero-planning if the concierge is on it." },
+      moh: { tagline: "Infinity-pool spa days, rosé beach clubs, and sunset catamaran nights", description: "Cabo for brides is the Ritz-Carlton Reserve pool + Flora Farms long lunches + a catamaran sunset with the bridal party. Zero-planning if the concierge is on it." },
       bestman: { tagline: "Where the desert meets the ocean and the party never stops", description: "Cabo delivers the ultimate group trip: all-inclusive resorts, legendary nightlife on the Marina strip, deep-sea fishing, and sun-drenched beaches. Whether you want a VIP bottle-service blowout or a chill catamaran sunset cruise, Cabo checks every box." },
     },
   },
