@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "Shared data primitives: geographic (states, regions, airports, slugify) + canonical wedding-planning destinations with per-brand overlays (MOH + BESTMAN).",
   "private": false,
-  "type": "commonjs",
+  "type": "module",
   "main": "src/index.ts",
   "license": "UNLICENSED"
 }
