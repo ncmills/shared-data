@@ -129,7 +129,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Persephone's Kitchen", cuisine: "Cafe", priceRange: "$$", highlight: "Beach picnics + smoothie bowls", bestFor: "brunch", groupFriendly: true, brands: ["both"] },
     ],
     activities: [
-      { name: "Mohegan Bluffs cliff walk", type: "hiking", duration: "2 hr", pricePerPerson: [0,0], groupMin: 2, groupMax: 20, highlight: "141 wood steps to the most photographed beach in RI", bestFor: "morning", brands: ["both"] },
+      { name: "Mohegan Bluffs cliff walk", type: "hiking", duration: "2 hr", pricePerPerson: [0,10], groupMin: 2, groupMax: 20, highlight: "141 wood steps to the most photographed beach in RI", bestFor: "morning", brands: ["both"] },
       { name: "Mopeds across the island", type: "tour", duration: "4 hr", pricePerPerson: [60,110], groupMin: 4, groupMax: 14, highlight: "Loop the lighthouses + harbor swim stops", bestFor: "first day", brands: ["both"] },
       { name: "Sunset sail", type: "sunset-cruise", duration: "2 hr", pricePerPerson: [70,130], groupMin: 4, groupMax: 24, highlight: "Old Harbor sloop charter", bestFor: "first night", brands: ["both"] },
       { name: "Crescent Beach luxe picnic", type: "luxe-picnic", duration: "2 hr", pricePerPerson: [65,140], groupMin: 4, groupMax: 12, highlight: "Catered beach spread with rosé + umbrellas", bestFor: "afternoon", brands: ["moh"] },
@@ -324,7 +324,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Sully's Steamers", cuisine: "Bagel sandwiches", priceRange: "$", highlight: "Late-night and brunch shovels", bestFor: "brunch", groupFriendly: true, brands: ["both"] },
     ],
     activities: [
-      { name: "Falls Park + Liberty Bridge stroll", type: "walking-tour", duration: "2 hr", pricePerPerson: [0,0], groupMin: 2, groupMax: 30, highlight: "Downtown waterfall + suspended bridge", bestFor: "morning", brands: ["both"] },
+      { name: "Falls Park + Liberty Bridge stroll", type: "walking-tour", duration: "2 hr", pricePerPerson: [0,10], groupMin: 2, groupMax: 30, highlight: "Downtown waterfall + suspended bridge", bestFor: "morning", brands: ["both"] },
       { name: "Swamp Rabbit Trail bike", type: "biking", duration: "3 hr", pricePerPerson: [40,80], groupMin: 4, groupMax: 16, highlight: "Greenway to Travelers Rest brewpubs", bestFor: "afternoon", brands: ["both"] },
       { name: "Yeah, that Greenville food tour", type: "food-tour", duration: "3 hr", pricePerPerson: [85,140], groupMin: 4, groupMax: 14, highlight: "Six tastings on Main", bestFor: "first day", brands: ["both"] },
       { name: "Sole Lab pottery + paint class", type: "pottery-class", duration: "2 hr", pricePerPerson: [50,95], groupMin: 4, groupMax: 14, highlight: "Village of West Greenville clay studio + BYO bubbles", bestFor: "afternoon", brands: ["moh"] },
@@ -382,6 +382,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     nightlife: [
       { name: "Maxine's Live", type: "bar", vibe: "balanced", priceRange: "$$", highlight: "Dive-meets-music hall in the bathhouse row", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["both"] },
       { name: "Superior Bathhouse Brewery", type: "beer-garden", vibe: "chill", priceRange: "$$", highlight: "Only brewery inside a national park", reservationNeeded: false, groupFriendly: true, lateNight: false, brands: ["both"] },
+      { name: "Oaklawn Racing Casino Resort", type: "casino", vibe: "balanced", priceRange: "$$$", highlight: "Hot Springs' flagship gaming floor — slots, table games, sportsbook, and live thoroughbred racing from December to May", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["both"] },
     ],
     dining: [
       { name: "Grateful Head Pizza Oven", cuisine: "Pizza", priceRange: "$$", highlight: "Wood-fired + craft cocktails", bestFor: "dinner", groupFriendly: true, brands: ["both"] },
@@ -844,7 +845,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Sankaty Head Golf Club round", type: "golf", duration: "5 hr", pricePerPerson: [280,520], groupMin: 4, groupMax: 8, highlight: "Bluff links with the red-striped lighthouse on 6 — member guest-play only", bestFor: "morning", brands: ["bestman"] },
       { name: "Striped-bass charter out of Madaket", type: "fishing", duration: "5 hr", pricePerPerson: [220,380], groupMin: 4, groupMax: 8, highlight: "Captain-run striper + bluefish run — back by lunch", bestFor: "morning", brands: ["bestman"] },
       { name: "Cisco Brewers beach bar", type: "brewery-tour", duration: "3 hr", pricePerPerson: [40,80], groupMin: 4, groupMax: 16, highlight: "Open-air brewery + distillery + winery on one lot", bestFor: "afternoon", brands: ["bestman"] },
-      { name: "'Sconset bluff walk + Sankaty Light", type: "walking-tour", duration: "2 hr", pricePerPerson: [0,0], groupMin: 2, groupMax: 20, highlight: "Rose-covered cottages along the eastern bluff to the red-striped lighthouse", bestFor: "morning", brands: ["both"] },
+      { name: "'Sconset bluff walk + Sankaty Light", type: "walking-tour", duration: "2 hr", pricePerPerson: [0,10], groupMin: 2, groupMax: 20, highlight: "Rose-covered cottages along the eastern bluff to the red-striped lighthouse", bestFor: "morning", brands: ["both"] },
       { name: "Madaket Beach sunset picnic", type: "luxe-picnic", duration: "2 hr", pricePerPerson: [75,150], groupMin: 4, groupMax: 14, highlight: "Catered beach spread for the island's best sunset", bestFor: "first night", brands: ["both"] },
     ],
     lodging: [
@@ -1012,6 +1013,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Pins Mechanical Co.", type: "axe-throwing", duration: "1-2 hr", pricePerPerson: [10,25], groupMin: 4, groupMax: 40, highlight: "Duckpin bowling, pinball, and axe throwing with craft cocktails", bestFor: "group competition", brands: ["bestman"] },
       { name: "Nashville Gun Club (Sporting Clays)", type: "shooting-range", duration: "2 hr", pricePerPerson: [40,75], groupMin: 4, groupMax: 20, highlight: "Sporting clays and trap shooting just outside the city", bestFor: "morning", brands: ["bestman"] },
       { name: "Nashville Craft Brewery Tour", type: "brewery-tour", duration: "3-4 hr", pricePerPerson: [50,80], groupMin: 4, groupMax: 15, highlight: "Guided tour of Nashville's best craft breweries with tastings", bestFor: "afternoon", brands: ["bestman"] },
+      { name: "Wannabe's Song Bar & Karaoke", type: "karaoke", duration: "2 hr", pricePerPerson: [20,45], groupMin: 4, groupMax: 20, highlight: "Broadway karaoke bar built for bachelorettes — sing country anthems on stage with a live crowd", bestFor: "pre-honky-tonk night out", brands: ["both"] },
     ],
     lodging: [
       { name: "Graduate Nashville", type: "boutique-hotel", pricePerNight: [220,420], perRoom: true, maxGuests: 4, highlight: "Vanderbilt-area boutique with White Limozeen rooftop on top — central, photogenic" },
@@ -2137,6 +2139,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Painted Duck", type: "lounge", vibe: "balanced", priceRange: "$$$", highlight: "Upscale duckpin bowling and craft cocktails in Westside", reservationNeeded: true, groupFriendly: true, lateNight: false, brands: ["bestman"], dressCode: "Smart casual" },
       { name: "Red Phone Booth", type: "speakeasy", vibe: "chill", priceRange: "$$$", highlight: "Enter through a phone booth for cigars and cocktails", reservationNeeded: true, groupFriendly: false, lateNight: true, brands: ["bestman"] },
       { name: "Monday Night Brewing Garage", type: "beer-garden", vibe: "chill", priceRange: "$$", highlight: "Westside brewery with huge outdoor space and great IPAs", reservationNeeded: false, groupFriendly: true, lateNight: false, brands: ["bestman"] },
+      { name: "Painted Pin Casino Lounge", type: "casino", vibe: "balanced", priceRange: "$$$", highlight: "Buckhead's upscale gaming and games-lounge concept — blackjack tables, bocce, and craft cocktails for a Vegas-lite night close to the hotel strip", reservationNeeded: true, groupFriendly: true, lateNight: true, brands: ["bestman"] },
     ],
     dining: [
       { name: "Staplehouse", cuisine: "Modern Southern", priceRange: "$$$", highlight: "Old Fourth Ward's James Beard Award-winning restaurant with a deeply personal, seasonal menu.", bestFor: "dinner", groupFriendly: false, brands: ["moh"] },
@@ -3212,6 +3215,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Garage Fishtown", type: "bar", vibe: "balanced", priceRange: "$$", highlight: "Bowling, games, and cocktails in a converted auto shop", reservationNeeded: true, groupFriendly: true, lateNight: true, brands: ["bestman"] },
       { name: "Concourse Dance Bar", type: "club", vibe: "unhinged", priceRange: "$$", highlight: "Underground dance club with different themed nights", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["bestman"] },
       { name: "Woody's", type: "bar", vibe: "unhinged", priceRange: "$", highlight: "Legendary Gayborhood dance bar open to everyone", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["bestman"] },
+      { name: "Rivers Casino Philadelphia", type: "casino", vibe: "balanced", priceRange: "$$$", highlight: "Waterfront casino on the Delaware River (formerly SugarHouse) — 2,000+ slots, table games, a poker room, and a sportsbook open 24/7", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["bestman"] },
     ],
     dining: [
       { name: "Zahav", cuisine: "Modern Israeli", priceRange: "$$$", highlight: "Michael Solomonov's James Beard Award-winning restaurant — book months ahead and order the hummus first.", bestFor: "dinner", groupFriendly: false, brands: ["both"] },
@@ -5013,6 +5017,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Deluxx Fluxx at the Belt", type: "club", vibe: "unhinged", priceRange: "$$", highlight: "Underground dance club in an alley behind the Z Lot with DJ sets", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["both"] },
       { name: "Two James Spirits Tasting Room", type: "bar", vibe: "chill", priceRange: "$$", highlight: "Corktown distillery tasting room with craft spirits and cocktails", reservationNeeded: false, groupFriendly: true, lateNight: false, brands: ["both"] },
       { name: "Standby (Belt Alley)", type: "cocktail-lounge", vibe: "balanced", priceRange: "$$$", highlight: "Belt-alley cocktail den with seasonal drinks + small plates", reservationNeeded: true, groupFriendly: true, lateNight: true, brands: ["moh"] },
+      { name: "MGM Grand Detroit", type: "casino", vibe: "balanced", priceRange: "$$$$", highlight: "Detroit's premier casino resort downtown — 100,000 sq ft gaming floor, VIP poker room, and three on-site restaurants running late", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["bestman"], dressCode: "Smart casual" },
     ],
     dining: [
       { name: "Slows Bar BQ", cuisine: "BBQ", priceRange: "$$", highlight: "Legendary Corktown BBQ with craft beer and a party atmosphere", bestFor: "group-dinner", groupFriendly: true, brands: ["bestman"] },
@@ -5986,6 +5991,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Victor's", type: "bar", vibe: "unhinged", priceRange: "$", highlight: "Water Street party bar with DJ and late-night energy", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["both"] },
       { name: "Sabbatic", type: "cocktail-bar", vibe: "chill", priceRange: "$$", highlight: "Intimate Brady Street cocktail bar with creative seasonal menus", reservationNeeded: false, groupFriendly: false, lateNight: true, brands: ["both"] },
       { name: "The Bryant", type: "cocktail-lounge", vibe: "balanced", priceRange: "$$$", highlight: "Historic Bay-View cocktail den — candlelit booths + champagne service", reservationNeeded: true, groupFriendly: true, lateNight: true, brands: ["moh"] },
+      { name: "Potawatomi Hotel & Casino", type: "casino", vibe: "balanced", priceRange: "$$$", highlight: "Milwaukee's full-service casino resort in Menomonee Valley — 2,500 slots, table games, poker, bingo, and late-night lounges steps from downtown", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["bestman"] },
     ],
     dining: [
       { name: "Ardent", cuisine: "New American", priceRange: "$$$$", highlight: "Milwaukee's top fine dining — intimate tasting menu experience", bestFor: "dinner", groupFriendly: false, brands: ["both"] },
@@ -6210,6 +6216,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Hurley's Irish Pub", type: "bar", vibe: "balanced", priceRange: "$$", highlight: "Crescent Street institution with live Celtic music and massive beer selection", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["both"] },
       { name: "Bar Pamplemousse", type: "cocktail-bar", vibe: "chill", priceRange: "$$", highlight: "Cozy Mile End cocktail bar with quirky decor and natural wines", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["both"] },
       { name: "Terrasse William Gray", type: "rooftop", vibe: "balanced", priceRange: "$$$$", highlight: "Old-Port rooftop with champagne service + cobblestone views", reservationNeeded: true, groupFriendly: true, lateNight: true, brands: ["moh"] },
+      { name: "Casino de Montreal", type: "casino", vibe: "balanced", priceRange: "$$$", highlight: "One of the largest casinos in the world on Ile Notre-Dame — 3,000+ slots, 100 table games, a poker room, and the Cabaret du Casino for late-night shows", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["bestman"] },
     ],
     dining: [
       { name: "Joe Beef", cuisine: "French / Steakhouse", priceRange: "$$$$", highlight: "Montreal's most famous restaurant — decadent French-Canadian cuisine", bestFor: "group-dinner", groupFriendly: true, brands: ["bestman"] },
@@ -6383,6 +6390,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Spirit Bar", type: "lounge", vibe: "balanced", priceRange: "$$", highlight: "Lawrenceville cocktail lounge with inventive drinks", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["both"] },
       { name: "Southern Tier Brewing Company Pittsburgh", type: "beer-garden", vibe: "chill", priceRange: "$$", highlight: "Huge beer hall and patio on the North Shore near PNC Park", reservationNeeded: false, groupFriendly: true, lateNight: false, brands: ["both"] },
       { name: "The Speakeasy at Omni William Penn", type: "cocktail-lounge", vibe: "balanced", priceRange: "$$$", highlight: "Historic hotel speakeasy-style lounge + candlelit booths", reservationNeeded: true, groupFriendly: true, lateNight: true, brands: ["moh"] },
+      { name: "Rivers Casino Pittsburgh", type: "casino", vibe: "balanced", priceRange: "$$$", highlight: "North Shore riverside casino — 2,900 slots, 110 table games, a poker room, an on-site sportsbook, and riverfront patio bars", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["bestman"] },
     ],
     dining: [
       { name: "Gaucho Parrilla Argentina", cuisine: "Argentine", priceRange: "$$$", highlight: "Open-fire grilled meats in the Strip District", bestFor: "group-dinner", groupFriendly: true, brands: ["both"] },
@@ -6785,6 +6793,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Spokane Comedy Club", type: "comedy-club", vibe: "balanced", priceRange: "$$", highlight: "Downtown comedy venue with national headliners and two-drink minimum", reservationNeeded: true, groupFriendly: true, lateNight: false, brands: ["both"] },
       { name: "The Volstead Act", type: "speakeasy", vibe: "chill", priceRange: "$$$", highlight: "Hidden prohibition-era cocktail bar behind an unmarked door downtown", reservationNeeded: true, groupFriendly: true, lateNight: true, brands: ["both"] },
       { name: "The Peacock Room Lounge (Davenport)", type: "cocktail-lounge", vibe: "balanced", priceRange: "$$$", highlight: "Historic hotel lounge — champagne + small plates + candlelit booths", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["moh"] },
+      { name: "Northern Quest Resort & Casino", type: "casino", vibe: "balanced", priceRange: "$$$", highlight: "Kalispel-tribe-owned casino resort in Airway Heights — 2,000 slots, 50 table games, a poker room, a sportsbook, and headliner concerts", reservationNeeded: false, groupFriendly: true, lateNight: true, brands: ["bestman"] },
     ],
     dining: [
       { name: "Clover", cuisine: "New American", priceRange: "$$$", highlight: "Farm-to-table dining with seasonal menus and a chef's tasting option", bestFor: "group-dinner", groupFriendly: true, brands: ["both"] },
