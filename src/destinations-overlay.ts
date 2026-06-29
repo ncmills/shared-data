@@ -96,6 +96,60 @@ export function applyMohOverlay(c: CanonicalDestination): unknown {
   };
 }
 
+/**
+ * Activity types that are NOT appropriate for a corporate / client audience —
+ * gambling, adult-entertainment, and bachelor/ette-party-coded staples. Everything
+ * else in the canonical set (golf, wine/brewery tours, cooking, sailing, team
+ * games, adventure, wellness, dining-adjacent) is fair game for Offsite Outpost.
+ */
+const OUTPOST_ACTIVITY_DENY = new Set([
+  "poker-night", "casino", "boudoir", "pole-class", "burlesque-class",
+  "drag-brunch", "pool-party", "silent-disco",
+]);
+
+/** Nightlife vibes a corporate host wouldn't put a client in front of. */
+const OUTPOST_NIGHTLIFE_DENY_VIBE = new Set(["unhinged"]);
+
+/**
+ * Corporate overlay — the Offsite Outpost lens on the shared universe. Same
+ * pattern as the brand overlays, but the filter is by AUDIENCE-appropriateness
+ * (corporate / client) rather than bachelor-vs-bachelorette. Outings on
+ * offsiteoutpost.com pull real activities/dining/lodging per city from here.
+ *
+ * (First step toward the fully-tagged universe: this lens is computed from
+ * activity type + vibe; explicit per-item `sites/products/audiences` tags are
+ * the planned fast-follow.)
+ */
+export function applyOutpostOverlay(c: CanonicalDestination): unknown {
+  const strip = <T extends { brands: ("moh" | "bestman" | "both")[] }>(i: T) => {
+    const { brands: _b, ...rest } = i;
+    return rest;
+  };
+  const activities = c.activities
+    .filter((a) => !OUTPOST_ACTIVITY_DENY.has(a.type))
+    .map(strip);
+  const nightlife = c.nightlife
+    .filter((n) => !OUTPOST_NIGHTLIFE_DENY_VIBE.has(n.vibe))
+    .map(strip);
+  const dining = c.dining.map(strip);
+  return {
+    id: c.id,
+    city: c.city,
+    state: c.state,
+    region: c.region,
+    nearestAirport: c.nearestAirport,
+    bestMonths: c.bestMonths,
+    vibes: c.vibes,
+    nightlife,
+    dining,
+    activities,
+    lodging: c.lodging,
+    transport: c.transport,
+    /** generic neutral score; OO does its own corporate scoring downstream */
+    score: c.score,
+  };
+}
+
 export function applyBestmanOverlay(c: CanonicalDestination): unknown {
   const nightlife = filterByBrand(c.nightlife, "bestman").map((n: CanonicalNightlife) => {
     const { brands: _b, ...rest } = n;
