@@ -97,28 +97,48 @@ export function applyMohOverlay(c: CanonicalDestination): unknown {
 }
 
 /**
- * Activity types that are NOT appropriate for a corporate / client audience —
- * gambling, adult-entertainment, and bachelor/ette-party-coded staples. Everything
- * else in the canonical set (golf, wine/brewery tours, cooking, sailing, team
- * games, adventure, wellness, dining-adjacent) is fair game for Offsite Outpost.
+ * Universe audience tags. Every item in the shared cache is tagged with which
+ * audiences it suits; a site's overlay then keeps only the items tagged for its
+ * audience. This is the explicit, editable replacement for the old implicit
+ * denylist — to (de)qualify an activity type for corporate, edit the map below.
  */
-const OUTPOST_ACTIVITY_DENY = new Set([
-  "poker-night", "casino", "boudoir", "pole-class", "burlesque-class",
-  "drag-brunch", "pool-party", "silent-disco",
-]);
+export type UniverseAudience = "corporate" | "clients" | "bachelor" | "bachelorette";
 
-/** Nightlife vibes a corporate host wouldn't put a client in front of. */
-const OUTPOST_NIGHTLIFE_DENY_VIBE = new Set(["unhinged"]);
+const ALL_AUDIENCES: UniverseAudience[] = ["corporate", "clients", "bachelor", "bachelorette"];
+
+/**
+ * Per-activity-type audience tags. Unlisted types default to ALL audiences
+ * (so new corporate-appropriate types are included automatically); list a type
+ * here to RESTRICT it — gambling, adult-entertainment, and party-only staples
+ * are tagged bachelor/ette-only so they never surface for a corporate client.
+ */
+const ACTIVITY_AUDIENCE_TAGS: Record<string, UniverseAudience[]> = {
+  "poker-night": ["bachelor", "bachelorette"],
+  casino: ["bachelor", "bachelorette"],
+  "cigar-bar": ["bachelor"],
+  boudoir: ["bachelorette"],
+  "pole-class": ["bachelorette"],
+  "burlesque-class": ["bachelorette"],
+  "drag-brunch": ["bachelorette"],
+  "pool-party": ["bachelor", "bachelorette"],
+  "silent-disco": ["bachelor", "bachelorette"],
+  "brunch-crawl": ["bachelor", "bachelorette"],
+};
+
+export function activityAudiences(type: string): UniverseAudience[] {
+  return ACTIVITY_AUDIENCE_TAGS[type] ?? ALL_AUDIENCES;
+}
+
+/** Nightlife is audience-tagged by vibe: an "unhinged" room isn't corporate. */
+export function nightlifeAudiences(vibe: string): UniverseAudience[] {
+  return vibe === "unhinged" ? ["bachelor", "bachelorette"] : ALL_AUDIENCES;
+}
 
 /**
  * Corporate overlay — the Offsite Outpost lens on the shared universe. Same
- * pattern as the brand overlays, but the filter is by AUDIENCE-appropriateness
- * (corporate / client) rather than bachelor-vs-bachelorette. Outings on
- * offsiteoutpost.com pull real activities/dining/lodging per city from here.
- *
- * (First step toward the fully-tagged universe: this lens is computed from
- * activity type + vibe; explicit per-item `sites/products/audiences` tags are
- * the planned fast-follow.)
+ * pattern as the brand overlays, but it keeps items tagged for the `corporate`
+ * audience and attaches the explicit `audiences` tag to every item it returns.
+ * Outings on offsiteoutpost.com pull real activities/dining/lodging per city here.
  */
 export function applyOutpostOverlay(c: CanonicalDestination): unknown {
   const strip = <T extends { brands: ("moh" | "bestman" | "both")[] }>(i: T) => {
@@ -126,12 +146,12 @@ export function applyOutpostOverlay(c: CanonicalDestination): unknown {
     return rest;
   };
   const activities = c.activities
-    .filter((a) => !OUTPOST_ACTIVITY_DENY.has(a.type))
-    .map(strip);
+    .map((a) => ({ ...strip(a), audiences: activityAudiences(a.type) }))
+    .filter((a) => a.audiences.includes("corporate"));
   const nightlife = c.nightlife
-    .filter((n) => !OUTPOST_NIGHTLIFE_DENY_VIBE.has(n.vibe))
-    .map(strip);
-  const dining = c.dining.map(strip);
+    .map((n) => ({ ...strip(n), audiences: nightlifeAudiences(n.vibe) }))
+    .filter((n) => n.audiences.includes("corporate"));
+  const dining = c.dining.map((d) => ({ ...strip(d), audiences: ALL_AUDIENCES }));
   return {
     id: c.id,
     city: c.city,
