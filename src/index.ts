@@ -11,6 +11,7 @@ export * from "./slugify";
 export * from "./airports";
 export * from "./destinations-types";
 export * from "./destinations-overlay";
+export * from "./golf-courses";
 
 // 2026-06-24 expansion: the canonical catalog is now the core set plus the
 // region/international expansion files. New cities land in a
