@@ -101,6 +101,11 @@ for (const t of SHARED_TDF_DESTINATIONS) {
   if (JSON.stringify(t.wizards) !== JSON.stringify(["tdf"])) fail(`tdf-dest ${t.id}: wizards != [tdf]`);
 }
 for (const m of mohLocals()) if (!(m.wizards ?? []).includes("moh")) fail(`moh-local ${m.id}: missing moh wizard`);
+// moh-locals bypass applyMohOverlay's golf filter (they merge straight into MOH's
+// catalog), so guard the locals directly: no golf activity may live in moh-locals.
+for (const m of mohLocals())
+  for (const a of (((m as Record<string, any>).activities ?? []) as { type?: string; name?: string }[]))
+    if (a.type === "golf") fail(`moh-local golf leak: ${m.id}/${a.name} (golf must never reach MOH)`);
 for (const b of bestmanLocals()) if (!(b.wizards ?? []).includes("bestman")) fail(`bestman-local ${b.id}: missing bestman wizard`);
 
 console.log(
