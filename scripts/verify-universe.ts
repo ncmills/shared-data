@@ -17,6 +17,7 @@
 import {
   sharedDestinations,
   applyOutpostOverlay,
+  applyMohOverlay,
   SHARED_GOLF_COURSES,
   SHARED_RESIDENCES,
   SHARED_TDF_DESTINATIONS,
@@ -65,6 +66,20 @@ for (const d of sharedDestinations) {
       if (!(it.audiences ?? []).includes("corporate"))
         fail(`OO overlay leak: ${d.id}/${cat}/${it.name} not corporate`);
     }
+  }
+}
+
+// 4b: brand-protection — the MOH overlay (MOH's REAL consumption path) must emit
+// ZERO golf activities. The bake's brands→wizards path has no isGolf guard, so a
+// golf activity tagged brands:["both"] would otherwise carry the `moh` wizard and
+// surface in bachelorette plans (caught 2026-06-30: Tunica round + 3 TopGolf).
+// deriveRouting already excludes golf→moh; this guards the overlay path it doesn't cover.
+let mohActs = 0;
+for (const d of sharedDestinations) {
+  const moh = applyMohOverlay(d) as Record<string, any>;
+  for (const it of moh.activities ?? []) {
+    mohActs++;
+    if (it.type === "golf") fail(`MOH overlay golf leak: ${d.id}/${it.name} (golf must never reach MOH)`);
   }
 }
 

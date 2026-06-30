@@ -41,7 +41,7 @@ const MOH_ACTIVITY_TYPES = new Set([
   "pool-party","beach","hiking","brunch-crawl","food-tour","skiing","biking","kayaking",
   "rafting","snorkeling","canyoneering","zip-lining","horseback-riding","dog-sledding",
   "adventure-park","atv","skydiving","racing","mural-tour","sunset-cruise","rooftop-bar",
-  "tour","walking-tour","scenic-overlook","farm-tour","golf","shooting-range","fishing",
+  "tour","walking-tour","scenic-overlook","farm-tour","shooting-range","fishing",
   "poker-night","cigar-bar","sports-event","boudoir","pottery-class","candle-making",
   "perfume-making","flower-crown","drag-brunch","sound-bath","cacao-ceremony","tarot-reading",
   "pole-class","burlesque-class","silent-disco","luxe-picnic","matcha-ceremony","pickleball",
