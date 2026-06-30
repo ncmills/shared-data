@@ -20,6 +20,7 @@ import {
   SHARED_GOLF_COURSES,
   SHARED_RESIDENCES,
   SHARED_TDF_DESTINATIONS,
+  residencesForSite,
   mohLocals,
   bestmanLocals,
 } from "../src/index";
@@ -74,6 +75,12 @@ for (const c of SHARED_GOLF_COURSES) {
 }
 for (const r of SHARED_RESIDENCES) {
   if (!r.sites?.length) fail(`residence ${r.id}: empty sites`);
+}
+// residencesForSite attaches wizard routing (offsite-retreat / offsite-outing)
+for (const r of residencesForSite("offsite")) {
+  if (!r.wizards?.length) fail(`residence ${r.id}: empty wizards`);
+  for (const w of r.wizards ?? [])
+    if (w !== "offsite-retreat" && w !== "offsite-outing") fail(`residence ${r.id}: bad wizard "${w}"`);
 }
 for (const t of SHARED_TDF_DESTINATIONS) {
   if (JSON.stringify(t.wizards) !== JSON.stringify(["tdf"])) fail(`tdf-dest ${t.id}: wizards != [tdf]`);

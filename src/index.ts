@@ -17,6 +17,7 @@ export * from "./residences";
 export * from "./tdf-destinations";
 export * from "./moh-locals";
 export * from "./bestman-locals";
+export * from "./oo-atlas";
 
 // 2026-06-24 expansion: the canonical catalog is now the core set plus the
 // region/international expansion files. New cities land in a
