@@ -25,7 +25,7 @@
  */
 
 import type { WizardTag, AudienceTag, ProductTag } from "./tags";
-import { activityAudiences, nightlifeAudiences } from "./tags";
+import { activityAudiences, nightlifeAudiences, CATEGORY_OF } from "./tags";
 
 export type EntityKind =
   | "party-venue" // activity/dining/nightlife/lodging/transport on a destination
@@ -47,6 +47,10 @@ export interface RoutingInput {
   setting?: string;
   /** legacy party brands, when present */
   brands?: ("moh" | "bestman" | "both")[];
+  /** explicit audiences carried by the item (used to gate party cross-tags:
+   *  an item flagged corporate/clients-only is corporate-coded and never
+   *  crosses to a party brand). */
+  audiences?: AudienceTag[];
 }
 
 export interface Routing {
@@ -64,6 +68,36 @@ function partyWizardsFromBrands(brands: ("moh" | "bestman" | "both")[] = []): Wi
   if (brands.includes("bestman") || brands.includes("both")) w.push("bestman");
   if (brands.includes("moh") || brands.includes("both")) w.push("moh");
   return w;
+}
+
+/**
+ * BRAND PROTECTION — the single chokepoint for "may this activity/experience
+ * cross to a PARTY wizard, and which one?" (bachelor → Best Man HQ,
+ * bachelorette → Maid of Honor HQ). Hard rules baked into the data, not left to
+ * the consuming engine:
+ *   - GOLF is a bachelor + corporate thing. It may cross to Best Man HQ; it
+ *     NEVER crosses to Maid of Honor HQ (golf is not a bachelorette activity).
+ *   - Bachelorette-only staples (boudoir, pole-class, drag-brunch, …) cross to
+ *     MOH only — never to Best Man HQ.
+ *   - Everything else follows the per-type audience taxonomy in tags.ts.
+ * An item with NO party audiences (corporate/clients-only) returns [] — it is
+ * corporate-coded and crosses to no party brand.
+ */
+function partyFitWizards(activityType?: string): WizardTag[] {
+  const aud = activityAudiences(activityType ?? "");
+  const isGolf = (CATEGORY_OF[activityType ?? ""] ?? []).includes("golf");
+  const out: WizardTag[] = [];
+  if (aud.includes("bachelor")) out.push("bestman");
+  // golf → never bachelorette/MOH, regardless of its broad audience default
+  if (aud.includes("bachelorette") && !isGolf) out.push("moh");
+  return out;
+}
+
+/** True when the item's explicit audiences include a party audience. Items
+ *  flagged corporate/clients-only are corporate-coded → no party cross-tag. */
+function hasPartyAudience(audiences?: AudienceTag[]): boolean {
+  if (!audiences || audiences.length === 0) return true; // unknown → defer to type taxonomy
+  return audiences.some((a) => a === "bachelor" || a === "bachelorette");
 }
 
 // Settings that read as a corporate DAY-event venue (so an urban/lake/coastal
@@ -103,16 +137,18 @@ export function deriveRouting(input: RoutingInput): Routing {
     }
 
     case "golf-course": {
-      // Golf is broadly appropriate. Engines that read courses today: tdf,
-      // offsite-retreat, offsite-outing. Bachelor/ette golf is the expansion.
+      // Golf is a bachelor + corporate thing. Engines that read courses today:
+      // tdf, offsite-retreat, offsite-outing. Audiences deliberately EXCLUDE
+      // bachelorette — golf never belongs to Maid of Honor HQ. The one party
+      // expansion is Best Man HQ only (see partyFitWizards: golf → [bestman]).
       return {
         core: {
           wizards: ["tdf", "offsite-retreat", "offsite-outing"],
-          audiences: ALL_AUD,
+          audiences: ["corporate", "clients", "bachelor"],
           products: ["golf-trip", "retreat", "outing"],
         },
         expand: [
-          { wizards: ["bestman", "moh"], reason: "golf is a common bachelor/ette day activity — needs BM/MOH engine to read courses" },
+          { wizards: partyFitWizards("golf"), reason: "golf is a common bachelor day activity → Best Man HQ only (NEVER MOH); needs the BM engine to read courses" },
         ],
       };
     }
@@ -131,17 +167,20 @@ export function deriveRouting(input: RoutingInput): Routing {
 
     case "experience": {
       // Experiences already feed both offsite wizards (Phase A). Expansion:
-      // an experience that maps to a party-appropriate activity type could feed
+      // a party-appropriate, non-corporate-coded experience could feed
       // bestman/moh if those engines read experiences (they don't today).
+      // Brand-fit is enforced HERE so corporate-coded / golf experiences can
+      // never leak into a party brand (golf → bestman only, never MOH).
+      const fit = hasPartyAudience(input.audiences) ? partyFitWizards(activityType) : [];
       return {
         core: {
           wizards: ["offsite-retreat", "offsite-outing"],
           audiences: ["corporate", "clients", "internal"],
           products: ["retreat", "outing"],
         },
-        expand: [
-          { wizards: ["bestman", "moh"], reason: "non-corporate-coded experiences could seed party activities — needs BM/MOH engine to read experiences" },
-        ],
+        expand: fit.length
+          ? [{ wizards: fit, reason: "party-appropriate experience → party brand(s) by audience fit (corporate-coded & golf-to-MOH excluded); needs the party engine to read experiences" }]
+          : [],
       };
     }
 
