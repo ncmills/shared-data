@@ -1,9 +1,12 @@
 {
   "name": "shared-data",
-  "version": "1.1.0",
-  "description": "Shared data primitives: geographic (states, regions, airports, slugify) + canonical wedding-planning destinations with per-brand overlays (MOH + BESTMAN).",
+  "version": "1.2.0",
+  "description": "Shared data primitives: geographic (states, regions, airports, slugify) + the tagged destination universe (party cities, golf courses, estate residences, TDF golf-trip destinations, MOH/BESTMAN locals) consumed by all wizard sites via per-wizard overlays.",
   "private": false,
   "type": "module",
   "main": "src/index.ts",
+  "scripts": {
+    "verify": "tsx scripts/verify-universe.ts"
+  },
   "license": "UNLICENSED"
 }
