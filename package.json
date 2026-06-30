@@ -6,7 +6,7 @@
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
-    "verify": "tsx scripts/verify-universe.ts"
+    "verify": "tsx scripts/verify-universe.ts && tsx scripts/check-brand-rules.ts"
   },
   "license": "UNLICENSED"
 }
