@@ -18,8 +18,22 @@
  *  - presentation block (tagline + description + highlights) per brand
  */
 
+import type { WizardTag, AudienceTag, ProductTag, PriceTier } from "./tags";
+
 export type CanonicalRegion = "south" | "west" | "northeast" | "midwest" | "international";
 export type PartyVibe = "chill" | "balanced" | "unhinged";
+
+/**
+ * Baked universe tags. Optional so the (un-baked) source data files still
+ * typecheck; `bakeDestination` (destinations-bake.ts) fills them at module load
+ * before `sharedDestinations` is exported. See tags.ts for the vocabulary.
+ */
+export interface UniverseTags {
+  wizards?: WizardTag[];
+  audiences?: AudienceTag[];
+  products?: ProductTag[];
+  priceTier?: PriceTier;
+}
 
 export interface CanonicalAirport {
   code: string;
@@ -27,7 +41,7 @@ export interface CanonicalAirport {
   driveMinutes: number;
 }
 
-export interface CanonicalNightlife {
+export interface CanonicalNightlife extends UniverseTags {
   name: string;
   type: string; // "club" | "bar" | "rooftop" | "honky-tonk" | ... — unioned per-brand
   vibe: PartyVibe;
@@ -41,7 +55,7 @@ export interface CanonicalNightlife {
   dressCode?: string;
 }
 
-export interface CanonicalActivity {
+export interface CanonicalActivity extends UniverseTags {
   name: string;
   type: string; // string for forward compat; overlays narrow per brand
   duration: string;
@@ -54,7 +68,7 @@ export interface CanonicalActivity {
   url?: string;
 }
 
-export interface CanonicalDining {
+export interface CanonicalDining extends UniverseTags {
   name: string;
   cuisine: string;
   priceRange: "$" | "$$" | "$$$" | "$$$$";
@@ -65,7 +79,7 @@ export interface CanonicalDining {
   url?: string;
 }
 
-export interface CanonicalLodging {
+export interface CanonicalLodging extends UniverseTags {
   name: string;
   type: "house" | "hotel" | "resort" | "airbnb" | "boutique-hotel" | "hostel";
   pricePerNight: [number, number];
@@ -75,7 +89,7 @@ export interface CanonicalLodging {
   url?: string;
 }
 
-export interface CanonicalTransport {
+export interface CanonicalTransport extends UniverseTags {
   name: string;
   type: "party-bus" | "limo" | "shuttle" | "rideshare" | "charter";
   priceRange: string;
@@ -89,7 +103,7 @@ export interface BrandPresentation {
   highlights?: string[];
 }
 
-export interface CanonicalDestination {
+export interface CanonicalDestination extends UniverseTags {
   id: string;
   city: string;
   state: string;
