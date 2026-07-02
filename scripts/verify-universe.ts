@@ -24,6 +24,16 @@ import {
   residencesForSite,
   mohLocals,
   bestmanLocals,
+  ooExperiences,
+  ooHeroExpAir,
+  ooPoolExpAir,
+  ooHeroExpWater,
+  ooPoolExpWater,
+  ooHeroExpWinter,
+  ooPoolExpWinter,
+  ooSignatureOutings,
+  ooHeroOutingsUrban,
+  ooPoolOutingsUrban,
 } from "../src/index";
 
 const WIZARDS = new Set(["bestman", "moh", "tdf", "offsite-retreat", "offsite-outing"]);
@@ -107,6 +117,46 @@ for (const m of mohLocals())
   for (const a of (((m as Record<string, any>).activities ?? []) as { type?: string; name?: string }[]))
     if (a.type === "golf") fail(`moh-local golf leak: ${m.id}/${a.name} (golf must never reach MOH)`);
 for (const b of bestmanLocals()) if (!(b.wizards ?? []).includes("bestman")) fail(`bestman-local ${b.id}: missing bestman wizard`);
+
+// 6: OO atlas rows (experiences + outings). These feed the two Offsite wizards.
+// They were previously unchecked; guard their routing so new data can't drift:
+//   - corporate-coded → NEVER a party wizard/audience (brand protection)
+//   - experiences → both offsite wizards; outings → offsite-outing only
+//   - enum-valid kind/focus; unique ids; outing.experienceId resolves.
+const OO_KINDS = new Set([
+  "golf","wrangling","field-sports","water","motorsport","wilderness","culinary",
+  "highland-games","service","winter","air","equestrian","cycling","amazing-race",
+  "wildlife","wellness","hospitality","nightlife","spirits",
+]);
+const PARTY_W = new Set(["bestman","moh"]);
+const PARTY_A = new Set(["bachelor","bachelorette"]);
+const allOoExp = [
+  ...ooExperiences, ...ooHeroExpAir, ...ooPoolExpAir, ...ooHeroExpWater,
+  ...ooPoolExpWater, ...ooHeroExpWinter, ...ooPoolExpWinter,
+] as Record<string, any>[];
+const allOoOut = [...ooSignatureOutings, ...ooHeroOutingsUrban, ...ooPoolOutingsUrban] as Record<string, any>[];
+const expIds = new Set(allOoExp.map((e) => e.id));
+const ooSeen = new Set<string>();
+for (const e of allOoExp) {
+  if (!e.id) { fail(`oo-exp: row missing id`); continue; }
+  if (ooSeen.has(e.id)) fail(`oo-exp ${e.id}: duplicate id`);
+  ooSeen.add(e.id);
+  if (!OO_KINDS.has(e.kind)) fail(`oo-exp ${e.id}: bad kind "${e.kind}"`);
+  for (const w of e.wizards ?? []) if (PARTY_W.has(w)) fail(`oo-exp ${e.id}: party wizard "${w}" (corporate-coded, brand leak)`);
+  for (const a of e.audiences ?? []) if (PARTY_A.has(a)) fail(`oo-exp ${e.id}: party audience "${a}" (brand leak)`);
+}
+const ooSeenO = new Set<string>();
+for (const o of allOoOut) {
+  if (!o.id) { fail(`oo-outing: row missing id`); continue; }
+  if (ooSeenO.has(o.id)) fail(`oo-outing ${o.id}: duplicate id`);
+  ooSeenO.add(o.id);
+  if (!OO_KINDS.has(o.focus)) fail(`oo-outing ${o.id}: bad focus "${o.focus}"`);
+  const w = o.wizards ?? [];
+  if (JSON.stringify(w) !== JSON.stringify(["offsite-outing"])) fail(`oo-outing ${o.id}: wizards != [offsite-outing] (got ${JSON.stringify(w)})`);
+  for (const a of o.audiences ?? []) if (PARTY_A.has(a)) fail(`oo-outing ${o.id}: party audience "${a}" (brand leak)`);
+  if (o.experienceId && !expIds.has(o.experienceId)) fail(`oo-outing ${o.id}: experienceId "${o.experienceId}" does not resolve`);
+}
+console.log(`  oo-atlas: ${allOoExp.length} experiences · ${allOoOut.length} outings checked`);
 
 console.log(
   `universe: ${sharedDestinations.length} party-dests (${itemCount} items) · ` +
