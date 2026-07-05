@@ -44,8 +44,14 @@ const cases: [string, RoutingInput, (r: ReturnType<typeof deriveRouting>) => boo
   ["corporate-coded experience (corporate/clients-only) -> NO party expand",
     { kind: "experience", activityType: "team-building", audiences: ["corporate", "clients"] },
     (r) => r.expand.length === 0],
-  ["residence never crosses to a party brand",
-    { kind: "residence", setting: "lake" },
+  // Task 6 correction: a residence with NO audience flag (e.g. a ranch/lake
+  // house) is a plausible bachelor/bachelorette rental too, so it now
+  // legitimately expands to bestman/moh (gated by audience, engine still
+  // unwired — see tagging-rules.ts residence case). The invariant that
+  // actually matters is the corporate-coded case: an explicitly
+  // corporate/clients-only residence must never leak to a party brand.
+  ["a corporate-flagged residence never crosses to a party brand",
+    { kind: "residence", setting: "lake", audiences: ["corporate", "clients"] },
     (r) => !wizardsOf(r).includes("bestman") && !wizardsOf(r).includes("moh")],
   ["party-venue (bachelorette brand) does NOT leak to bestman",
     { kind: "party-venue", venueType: "activity", activityType: "boudoir", brands: ["moh"] },

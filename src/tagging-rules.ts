@@ -100,16 +100,12 @@ function hasPartyAudience(audiences?: AudienceTag[]): boolean {
   return audiences.some((a) => a === "bachelor" || a === "bachelorette");
 }
 
-// Settings that read as a corporate DAY-event venue (so an urban/lake/coastal
-// residence is also outing-eligible, not just multi-day retreat).
-const OUTING_SETTINGS = new Set(["urban", "lake", "coastal", "vineyard", "island"]);
-
 /**
  * The rule. Pure, deterministic, editable. Returns BOTH the safe core routing
  * and the expansion candidates (which an engine must opt into).
  */
 export function deriveRouting(input: RoutingInput): Routing {
-  const { kind, venueType, activityType, vibe, setting, brands } = input;
+  const { kind, venueType, activityType, vibe, brands } = input;
 
   switch (kind) {
     case "party-venue": {
@@ -157,14 +153,25 @@ export function deriveRouting(input: RoutingInput): Routing {
     }
 
     case "residence": {
-      const outing = setting ? OUTING_SETTINGS.has(setting) : false;
+      // Consumed ONLY by offsite-retreat today (OO retreat is the sole engine
+      // that reads residences — see Task 1 wiring-map / Task 4 reconciliation).
+      // offsite-outing does not read residences yet, and neither party wizard
+      // does either — even though a ranch/lake house is a completely plausible
+      // bachelor/bachelorette rental house. Audience-gated so a residence
+      // explicitly flagged corporate/clients-only never leaks to a party brand.
+      const partyFit = hasPartyAudience(input.audiences) ? (["bestman", "moh"] as WizardTag[]) : [];
       return {
         core: {
-          wizards: uniq(["offsite-retreat", ...(outing ? (["offsite-outing"] as WizardTag[]) : [])]),
+          wizards: ["offsite-retreat"],
           audiences: ["corporate", "clients", "internal"],
-          products: uniq(["retreat", ...(outing ? (["outing"] as ProductTag[]) : [])]),
+          products: ["retreat"],
         },
-        expand: [],
+        expand: [
+          {
+            wizards: uniq(["offsite-outing", ...partyFit]),
+            reason: "party/outing engines don't read residences yet",
+          },
+        ],
       };
     }
 
@@ -187,11 +194,19 @@ export function deriveRouting(input: RoutingInput): Routing {
       };
     }
 
-    case "outing-template":
+    case "outing-template": {
+      // Consumed by offsite-outing today. A party-appropriate, non-corporate-
+      // coded outing template could feed bestman/moh if those engines read
+      // outing templates (they don't today). Brand-fit enforced via
+      // partyFitWizards (golf → bestman only, never MOH).
+      const fit = hasPartyAudience(input.audiences) ? partyFitWizards(activityType) : [];
       return {
         core: { wizards: ["offsite-outing"], audiences: ["corporate", "clients", "internal"], products: ["outing"] },
-        expand: [],
+        expand: fit.length
+          ? [{ wizards: fit, reason: "party-appropriate outing template → party brand(s) by audience fit (corporate-coded & golf-to-MOH excluded); needs the party engine to read outing templates" }]
+          : [],
       };
+    }
 
     case "golf-destination":
       return {
