@@ -40,16 +40,16 @@ test("golf still never crosses to moh (brand guard)", () => {
 
 // --- Task 6: every EntityKind returns a complete {core, expand} routing -----
 
-test("a residence is core offsite-retreat, expand to party wizards", () => {
+test("a residence is core to both offsite wizards, expand to party wizards", () => {
   const r = deriveRouting({ kind: "residence", setting: "ranch" });
-  expect(r.core.wizards).toEqual(["offsite-retreat"]);
+  expect(r.core.wizards).toEqual(["offsite-retreat", "offsite-outing"]);
   expect(r.expand.some(e => e.wizards.includes("bestman"))).toBe(true);
 });
 
-test("residence expand also includes offsite-outing (not yet core)", () => {
+test("residence core includes offsite-outing (outing engine reads residences live)", () => {
   const r = deriveRouting({ kind: "residence", setting: "lake" });
-  expect(r.core.wizards).not.toContain("offsite-outing");
-  expect(r.expand.some(e => e.wizards.includes("offsite-outing"))).toBe(true);
+  expect(r.core.wizards).toContain("offsite-outing");
+  expect(r.expand.some(e => e.wizards.includes("offsite-outing"))).toBe(false);
 });
 
 test("residence expand includes moh too (audience-gated, not just bestman)", () => {
@@ -57,11 +57,11 @@ test("residence expand includes moh too (audience-gated, not just bestman)", () 
   expect(r.expand.some(e => e.wizards.includes("moh"))).toBe(true);
 });
 
-test("a corporate-only-flagged residence does NOT expand to a party wizard", () => {
+test("a corporate-only-flagged residence does NOT reach a party wizard anywhere (core or expand)", () => {
   const r = deriveRouting({ kind: "residence", setting: "ranch", audiences: ["corporate", "clients"] });
-  const expandWizards = r.expand.flatMap(e => e.wizards);
-  expect(expandWizards).not.toContain("bestman");
-  expect(expandWizards).not.toContain("moh");
+  const allWizards = [...r.core.wizards, ...r.expand.flatMap(e => e.wizards)];
+  expect(allWizards).not.toContain("bestman");
+  expect(allWizards).not.toContain("moh");
 });
 
 test("an experience is core to both offsite wizards", () => {

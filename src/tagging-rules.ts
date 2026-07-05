@@ -153,25 +153,28 @@ export function deriveRouting(input: RoutingInput): Routing {
     }
 
     case "residence": {
-      // Consumed ONLY by offsite-retreat today (OO retreat is the sole engine
-      // that reads residences — see Task 1 wiring-map / Task 4 reconciliation).
-      // offsite-outing does not read residences yet, and neither party wizard
-      // does either — even though a ranch/lake house is a completely plausible
-      // bachelor/bachelorette rental house. Audience-gated so a residence
-      // explicitly flagged corporate/clients-only never leaks to a party brand.
+      // Consumed by BOTH offsite wizards today: ALL_VENUES = residencesForSite("offsite")
+      // in offsite-outpost/src/lib/atlas/index.ts feeds both the retreat path AND the
+      // outing path (pickVenueForOuting / ALL_VENUES.filter(...) in engine/generate.ts) —
+      // see Task 6 reconciliation. Neither party wizard reads residences yet — even
+      // though a ranch/lake house is a completely plausible bachelor/bachelorette rental
+      // house. Audience-gated so a residence explicitly flagged corporate/clients-only
+      // never leaks to a party brand.
       const partyFit = hasPartyAudience(input.audiences) ? (["bestman", "moh"] as WizardTag[]) : [];
       return {
         core: {
-          wizards: ["offsite-retreat"],
+          wizards: ["offsite-retreat", "offsite-outing"],
           audiences: ["corporate", "clients", "internal"],
           products: ["retreat"],
         },
-        expand: [
-          {
-            wizards: uniq(["offsite-outing", ...partyFit]),
-            reason: "party/outing engines don't read residences yet",
-          },
-        ],
+        expand: partyFit.length
+          ? [
+              {
+                wizards: partyFit,
+                reason: "party engines don't read residences yet",
+              },
+            ]
+          : [],
       };
     }
 
