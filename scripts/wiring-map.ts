@@ -9,7 +9,7 @@
  * Run: npx tsx scripts/wiring-map.ts
  */
 import { execSync } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { WizardTag } from "../src/tags";
@@ -75,19 +75,33 @@ const GREP_PATTERN = "sharedDestinations|shared-data";
 const FORK_FIND_EXPR =
   `\\( -iname 'golf-atlas.ts' -o -iname 'destinations-*.ts' -o -path '*/lib/atlas/*' \\)`;
 
-function runOrEmpty(cmd: string, cwd: string): string[] {
+export function runOrEmpty(cmd: string, cwd: string): string[] {
   try {
     const out = execSync(cmd, { cwd, encoding: "utf8" });
     return out.split("\n").filter(Boolean);
   } catch (err) {
-    const e = err as { stdout?: string };
-    // grep/find exit non-zero on "no matches" — a valid empty result, not a failure.
-    if (typeof e.stdout === "string") return e.stdout.split("\n").filter(Boolean);
-    return [];
+    const e = err as { status?: number | null; stdout?: string };
+    // grep/find exit code 1 means "no matches" — a valid empty result, not a
+    // failure. Any other exit code (bad flags, ENOENT, permission errors,
+    // signal kills, cwd missing) is a genuine failure and must NOT be
+    // swallowed into an empty array — this script's whole purpose is
+    // flagging "NOT wired" repos, and a silent [] here would misreport a
+    // broken lookup as a real "NOT wired" finding.
+    if (e.status === 1) {
+      return typeof e.stdout === "string" ? e.stdout.split("\n").filter(Boolean) : [];
+    }
+    throw err;
   }
 }
 
 function grepRepo(repoPath: string): string[] {
+  if (!existsSync(repoPath) || !existsSync(path.join(repoPath, "src"))) {
+    throw new Error(
+      `wiring-map: repo path or src/ missing (${repoPath}) — cannot distinguish ` +
+        `"not wired" from "broken lookup," refusing to report a false finding.`
+    );
+  }
+
   const contentHits = runOrEmpty(
     `grep -rn -E '${GREP_PATTERN}' --include='*.ts' --include='*.tsx' src`,
     repoPath

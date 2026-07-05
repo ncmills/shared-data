@@ -1,7 +1,7 @@
 // wiring-map.test.ts
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { classifyRepo } from "./wiring-map";
+import { classifyRepo, runOrEmpty } from "./wiring-map";
 
 function expect<T>(actual: T) {
   return {
@@ -29,4 +29,17 @@ test("classifies HHQ golf-atlas as a local fork", () => {
     "src/data/golf-atlas.ts: export const GOLF_ATLAS",
   ]);
   expect(row.localForks).toContain("src/data/golf-atlas.ts");
+});
+
+test("runOrEmpty does not silently swallow a genuine failure (missing cwd) into []", () => {
+  assert.throws(() => {
+    runOrEmpty("grep -rn -E 'foo' src", "/Users/bignick/this-repo-does-not-exist-xyz");
+  });
+});
+
+test("runOrEmpty does not silently swallow a non-1 exit code (bad invocation) into []", () => {
+  assert.throws(() => {
+    // grep exits 2 on a malformed invocation — distinct from exit 1's "no matches."
+    runOrEmpty("grep --this-flag-does-not-exist foo src", "/Users/bignick/shared-data");
+  });
 });
