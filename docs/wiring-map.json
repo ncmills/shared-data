@@ -1,0 +1,77 @@
+[
+  {
+    "wizard": "bestman",
+    "repo": "/Users/bignick/plan-my-party",
+    "readsShared": true,
+    "localForks": [],
+    "entityKinds": []
+  },
+  {
+    "wizard": "moh",
+    "repo": "/Users/bignick/maid-of-honor-hq",
+    "readsShared": true,
+    "localForks": [],
+    "entityKinds": []
+  },
+  {
+    "wizard": "handicap",
+    "repo": "/Users/bignick/handicap-hq",
+    "readsShared": true,
+    "localForks": [
+      "src/data/golf-atlas.ts"
+    ],
+    "entityKinds": [
+      "golf"
+    ]
+  },
+  {
+    "wizard": "offsite-retreat",
+    "repo": "/Users/bignick/offsite-outpost",
+    "readsShared": true,
+    "localForks": [
+      "src/lib/atlas/gen/outings-urban.ts",
+      "src/lib/atlas/gen/experiences-water.ts",
+      "src/lib/atlas/gen/experiences-winter.ts",
+      "src/lib/atlas/gen/experiences-air.ts",
+      "src/lib/atlas/experiences.ts",
+      "src/lib/atlas/types.ts",
+      "src/lib/atlas/index.ts",
+      "src/lib/atlas/outings.ts",
+      "src/lib/atlas/compare.ts",
+      "src/lib/atlas/macro-regions.ts",
+      "src/lib/atlas/macro-regions.test.ts",
+      "src/lib/atlas/seasonality.ts",
+      "src/lib/atlas/slug.test.ts",
+      "src/lib/atlas/packages.ts",
+      "src/lib/atlas/hydrate.ts"
+    ],
+    "entityKinds": [
+      "atlas"
+    ]
+  },
+  {
+    "wizard": "offsite-outing",
+    "repo": "/Users/bignick/offsite-outpost",
+    "readsShared": true,
+    "localForks": [
+      "src/lib/atlas/gen/outings-urban.ts",
+      "src/lib/atlas/gen/experiences-water.ts",
+      "src/lib/atlas/gen/experiences-winter.ts",
+      "src/lib/atlas/gen/experiences-air.ts",
+      "src/lib/atlas/experiences.ts",
+      "src/lib/atlas/types.ts",
+      "src/lib/atlas/index.ts",
+      "src/lib/atlas/outings.ts",
+      "src/lib/atlas/compare.ts",
+      "src/lib/atlas/macro-regions.ts",
+      "src/lib/atlas/macro-regions.test.ts",
+      "src/lib/atlas/seasonality.ts",
+      "src/lib/atlas/slug.test.ts",
+      "src/lib/atlas/packages.ts",
+      "src/lib/atlas/hydrate.ts"
+    ],
+    "entityKinds": [
+      "atlas"
+    ]
+  }
+]
