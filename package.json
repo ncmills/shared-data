@@ -6,7 +6,11 @@
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
-    "verify": "tsx scripts/verify-universe.ts && tsx scripts/check-brand-rules.ts"
+    "audit": "tsx scripts/audit/index.ts",
+    "verify": "tsx scripts/verify-universe.ts && tsx scripts/check-brand-rules.ts && tsx scripts/audit/index.ts"
   },
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "tsx": "^4.23.0"
+  }
 }

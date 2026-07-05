@@ -1,0 +1,585 @@
+{
+  "generatedAt": "2026-07-05T23:58:15.405Z",
+  "underTagged": [],
+  "orphaned": [],
+  "starved": [
+    {
+      "wizard": "handicap",
+      "cell": {
+        "golfRegion": "International",
+        "tier": "solid"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "handicap",
+      "cell": {
+        "golfRegion": "International",
+        "tier": "budget"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "tdf",
+      "cell": {
+        "golfRegion": "International",
+        "tier": "solid"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "tdf",
+      "cell": {
+        "golfRegion": "International",
+        "tier": "budget"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "alpine",
+        "worldRegion": "Latin America & Caribbean"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "alpine",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "alpine",
+        "worldRegion": "Africa"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "alpine",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "castle",
+        "worldRegion": "North America"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "castle",
+        "worldRegion": "Latin America & Caribbean"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "castle",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "castle",
+        "worldRegion": "Africa"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "castle",
+        "worldRegion": "Asia-Pacific"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "castle",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "coastal",
+        "worldRegion": "Latin America & Caribbean"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "coastal",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "coastal",
+        "worldRegion": "Africa"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "coastal",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "countryside",
+        "worldRegion": "Latin America & Caribbean"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "countryside",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "countryside",
+        "worldRegion": "Africa"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "countryside",
+        "worldRegion": "Asia-Pacific"
+      },
+      "count": 2
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "countryside",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "desert",
+        "worldRegion": "Latin America & Caribbean"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "desert",
+        "worldRegion": "Europe"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "desert",
+        "worldRegion": "Asia-Pacific"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "desert",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "island",
+        "worldRegion": "North America"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "island",
+        "worldRegion": "Europe"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "island",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "island",
+        "worldRegion": "Africa"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "island",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "lake",
+        "worldRegion": "Latin America & Caribbean"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "lake",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "lake",
+        "worldRegion": "Africa"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "lake",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "links",
+        "worldRegion": "Latin America & Caribbean"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "links",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "links",
+        "worldRegion": "Africa"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "links",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "palace",
+        "worldRegion": "North America"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "palace",
+        "worldRegion": "Latin America & Caribbean"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "palace",
+        "worldRegion": "Middle East"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "palace",
+        "worldRegion": "Africa"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "palace",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "ranch",
+        "worldRegion": "Latin America & Caribbean"
+      },
+      "count": 2
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "ranch",
+        "worldRegion": "Europe"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "ranch",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "ranch",
+        "worldRegion": "Africa"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "ranch",
+        "worldRegion": "Asia-Pacific"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "ranch",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "safari",
+        "worldRegion": "North America"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "safari",
+        "worldRegion": "Latin America & Caribbean"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "safari",
+        "worldRegion": "Europe"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "safari",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "safari",
+        "worldRegion": "Asia-Pacific"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "safari",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "ski-resort",
+        "worldRegion": "Latin America & Caribbean"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "ski-resort",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "ski-resort",
+        "worldRegion": "Africa"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "ski-resort",
+        "worldRegion": "Asia-Pacific"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "ski-resort",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "tropical",
+        "worldRegion": "Europe"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "tropical",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "tropical",
+        "worldRegion": "Africa"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "tropical",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "urban",
+        "worldRegion": "Latin America & Caribbean"
+      },
+      "count": 1
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "urban",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "urban",
+        "worldRegion": "Africa"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "urban",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "vineyard",
+        "worldRegion": "Middle East"
+      },
+      "count": 0
+    },
+    {
+      "wizard": "offsite-retreat",
+      "cell": {
+        "setting": "vineyard",
+        "worldRegion": "Other"
+      },
+      "count": 0
+    }
+  ],
+  "regressions": [],
+  "exitCode": 0
+}
