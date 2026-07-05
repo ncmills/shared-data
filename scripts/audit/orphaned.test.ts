@@ -30,18 +30,22 @@ function fakeRow(overrides: Partial<BackfilledRow>): BackfilledRow {
   };
 }
 
-test("TEETH: a golf course baked for bestman (engine doesn't read golf) is reported as orphaned", () => {
+test("TEETH: a residence baked for bestman (engine doesn't read residences) is reported as orphaned", () => {
+  // golf-course tagged bestman is NO LONGER an orphan (the BM engine reads
+  // courses via coursesForCity → golf→bestman is live core reach). A residence
+  // tagged bestman is still a genuine orphan: the BM engine does not read
+  // residences, so that tag can never surface.
   const badRow = fakeRow({
-    id: "synthetic-golf-1",
-    dataset: "golf",
-    kind: "golf-course",
+    id: "synthetic-residence-orphan-1",
+    dataset: "residence",
+    kind: "residence",
     postWizards: ["bestman"],
   });
 
   const result = findOrphanedIn([badRow]);
 
   assert.equal(result.length, 1);
-  assert.deepEqual(result[0], { itemId: "synthetic-golf-1", kind: "golf-course", wizard: "bestman" });
+  assert.deepEqual(result[0], { itemId: "synthetic-residence-orphan-1", kind: "residence", wizard: "bestman" });
 });
 
 test("TEETH: a correctly-tagged row (engine reads the kind) reports nothing", () => {

@@ -21,7 +21,9 @@
  *   - party items  — already baked with party-venue core at module load
  *                    (destinations-bake). Union is a no-op; superset holds trivially.
  *   - golf         — legacy `sites[]` (no `wizards`). pre = sites→wizards; core adds
- *                    `handicap` (HHQ). Golf NEVER routes to moh (brand guard).
+ *                    `handicap` (HHQ) AND `bestman` (BM reads courses live via
+ *                    `coursesForCity` — golf is intended on BestMan HQ). Golf NEVER
+ *                    routes to moh (brand guard).
  *   - residences   — pre from products (offsite-retreat[/outing]); core is
  *                    [offsite-retreat, offsite-outing] → retreat-only residences GAIN
  *                    offsite-outing (OO outing reads residences live, Task 6).
@@ -332,7 +334,7 @@ function writeDocs(rows: BackfilledRow[]) {
   lines.push("## Notes");
   lines.push("");
   lines.push("- **party** items were already baked with party-venue core at module load (`destinations-bake.ts`); the backfill union is a no-op for them (superset holds trivially).");
-  lines.push("- **golf** rows gain `handicap` (HHQ reads courses) on top of the `sites`→wizard mapping; golf never routes to `moh` (brand guard).");
+  lines.push("- **golf** rows gain `handicap` (HHQ reads courses) AND `bestman` (Best Man HQ reads courses live via `coursesForCity` — golf is intended on BestMan HQ) on top of the `sites`→wizard mapping; golf never routes to `moh` (brand guard).");
   lines.push("- **residences** with products `[retreat]` gain `offsite-outing` (OO outing reads residences live, Task 6).");
   lines.push("- **tdf-destinations** gain `handicap` (golf-destination core).");
   lines.push("- **locals** are brand-scoped; no engine reads another brand's locals, so they carry no cross-tag and stay single-brand.");

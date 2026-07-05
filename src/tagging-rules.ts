@@ -136,19 +136,20 @@ export function deriveRouting(input: RoutingInput): Routing {
       // Golf is a bachelor + corporate thing. Engines that read courses today:
       // tdf, offsite-retreat, offsite-outing, handicap (HHQ — the golf wizard;
       // tdf itself is now a personal site with no wizard, kept here for
-      // back-compat / superset only — never subtracted). Audiences
+      // back-compat / superset only — never subtracted), AND bestman (Best Man
+      // HQ's plan engine reads courses LIVE via `coursesForCity` in
+      // plan-my-party/src/data/query.ts — the same reader Offsite Outpost uses).
+      // Golf IS intended on Best Man HQ (Nick, 2026-07-05), so `bestman` is
+      // LIVE `core` reach, not a pending `expand` candidate. Audiences
       // deliberately EXCLUDE bachelorette — golf never belongs to Maid of
-      // Honor HQ. The one party expansion is Best Man HQ only (see
-      // partyFitWizards: golf → [bestman]).
+      // Honor HQ (brand guard; see partyFitWizards: golf → [bestman], never moh).
       return {
         core: {
-          wizards: ["tdf", "offsite-retreat", "offsite-outing", "handicap"],
+          wizards: ["tdf", "offsite-retreat", "offsite-outing", "handicap", "bestman"],
           audiences: ["corporate", "clients", "bachelor"],
           products: ["golf-trip", "retreat", "outing"],
         },
-        expand: [
-          { wizards: partyFitWizards("golf"), reason: "golf is a common bachelor day activity → Best Man HQ only (NEVER MOH); needs the BM engine to read courses" },
-        ],
+        expand: [],
       };
     }
 

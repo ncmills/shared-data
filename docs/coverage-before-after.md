@@ -8,7 +8,7 @@ Per-wizard row coverage (a row counts once per wizard it carries):
 
 | wizard | before | after | Δ | rows newly gaining it |
 |---|---:|---:|---:|---:|
-| bestman | 5219 | 5219 | +0 | 0 |
+| bestman | 5219 | 6213 | +994 | 994 |
 | moh | 4896 | 4896 | +0 | 0 |
 | tdf | 1228 | 1228 | +0 | 0 |
 | offsite-retreat | 1480 | 1480 | +0 | 0 |
@@ -18,7 +18,7 @@ Per-wizard row coverage (a row counts once per wizard it carries):
 ## Notes
 
 - **party** items were already baked with party-venue core at module load (`destinations-bake.ts`); the backfill union is a no-op for them (superset holds trivially).
-- **golf** rows gain `handicap` (HHQ reads courses) on top of the `sites`→wizard mapping; golf never routes to `moh` (brand guard).
+- **golf** rows gain `handicap` (HHQ reads courses) AND `bestman` (Best Man HQ reads courses live via `coursesForCity` — golf is intended on BestMan HQ) on top of the `sites`→wizard mapping; golf never routes to `moh` (brand guard).
 - **residences** with products `[retreat]` gain `offsite-outing` (OO outing reads residences live, Task 6).
 - **tdf-destinations** gain `handicap` (golf-destination core).
 - **locals** are brand-scoped; no engine reads another brand's locals, so they carry no cross-tag and stay single-brand.

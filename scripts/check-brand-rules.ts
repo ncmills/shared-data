@@ -20,9 +20,9 @@ const expandWizardsOf = (r: ReturnType<typeof deriveRouting>) =>
   r.expand.flatMap((e) => e.wizards);
 
 const cases: [string, RoutingInput, (r: ReturnType<typeof deriveRouting>) => boolean][] = [
-  ["golf-course expand = [bestman] only (NEVER moh)",
+  ["golf-course is CORE bestman reach (golf intended on BestMan HQ) and NEVER moh",
     { kind: "golf-course" },
-    (r) => JSON.stringify([...new Set(expandWizardsOf(r))].sort()) === JSON.stringify(["bestman"])],
+    (r) => r.core.wizards.includes("bestman") && !wizardsOf(r).includes("moh")],
   ["golf-course core audiences exclude bachelorette",
     { kind: "golf-course" },
     (r) => !r.core.audiences.includes("bachelorette") && r.core.audiences.includes("bachelor")],

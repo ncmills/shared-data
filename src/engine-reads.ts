@@ -15,17 +15,17 @@
  * `entityKinds` are coarse — "golf" / "atlas" — so this is the accurate,
  * fine-grained source):
  *
- *   - bestman (plan-my-party)   → party-venue only. Golf is deliberately
- *     EXCLUDED here even though `src/data/query.ts`'s `GOLF_FITS_BESTMAN`
- *     flag currently gates a live read of `SharedGolfCourse` — see the
- *     concern noted in the Task 10 report: that reflects an already-wired
- *     `expand` candidate that `tagging-rules.ts` still classifies as
- *     `expand` rather than `core`. No real baked row can ever produce
- *     `(golf-course, bestman)` today (`deriveRouting`'s `core` never assigns
- *     bestman to golf-course rows, and legacy `sitesToWizards` never
- *     produces "bestman" either), so leaving it out here doesn't create a
- *     false-positive orphan on the real universe — only on the synthetic
- *     teeth-test row that deliberately constructs that combination.
+ *   - bestman (plan-my-party)   → party-venue AND golf-course. Best Man HQ's
+ *     plan engine reads golf courses LIVE: `src/data/query.ts`'s
+ *     `GOLF_FITS_BESTMAN` flag (unconditionally true today) gates a real read
+ *     of `SharedGolfCourse` via `coursesForCity(...)` — the SAME reader
+ *     Offsite Outpost uses. Golf IS intended on Best Man HQ (Nick,
+ *     2026-07-05), so `deriveRouting`'s `core` for `golf-course` now assigns
+ *     `bestman` (live `core` reach, no longer a pending `expand` candidate),
+ *     and this map matches: the engine genuinely consumes golf-course data,
+ *     so `(golf-course, bestman)` is CORRECTLY tagged and NOT an orphan.
+ *     Residences are still NOT read by the BM engine (a residence tagged
+ *     bestman remains a genuine orphan).
  *   - moh (maid-of-honor-hq)    → party-venue only. Golf NEVER crosses to
  *     MOH (brand guard in `tagging-rules.ts`/`tags.ts`); residences aren't
  *     read either.
@@ -48,7 +48,7 @@ import type { WizardTag } from "./tags";
 import type { EntityKind } from "./tagging-rules";
 
 export const ENGINE_READS: Record<WizardTag, EntityKind[]> = {
-  bestman: ["party-venue"],
+  bestman: ["party-venue", "golf-course"],
   moh: ["party-venue"],
   "offsite-retreat": ["residence", "experience", "outing-template", "party-venue", "golf-course"],
   "offsite-outing": ["residence", "experience", "outing-template", "party-venue", "golf-course"],

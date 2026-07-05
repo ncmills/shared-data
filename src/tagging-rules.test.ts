@@ -37,6 +37,11 @@ test("golf still never crosses to moh (brand guard)", () => {
   expect(r.core.wizards).not.toContain("moh");
   expect(r.expand.flatMap(e => e.wizards)).not.toContain("moh");
 });
+test("golf-course routes to bestman in CORE now (golf intended on BestMan HQ), not expand", () => {
+  const r = deriveRouting({ kind: "golf-course", activityType: "golf" });
+  expect(r.core.wizards).toContain("bestman");
+  expect(r.expand.flatMap(e => e.wizards)).not.toContain("bestman");
+});
 
 // --- Task 6: every EntityKind returns a complete {core, expand} routing -----
 

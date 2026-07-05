@@ -68,10 +68,14 @@ test("BRAND GUARD: no golf row ever routes to moh (post or expand)", () => {
   }
 });
 
-test("BRAND GUARD: expand reach never leaks into baked post wizards", () => {
-  // golf expands to [bestman] but bestman must never appear in golf's baked post.
-  for (const r of rows.filter((r) => r.dataset === "golf")) {
-    assert.ok(!r.postWizards.includes("bestman"), `${r.id}: golf expand(bestman) leaked into post`);
+test("CORE REACH: golf rows now BAKE bestman (golf intended on BestMan HQ) and never moh", () => {
+  // golf→bestman is LIVE core reach now (BM engine reads courses via coursesForCity),
+  // so bestman SHOULD appear in golf's baked post; moh must still never appear.
+  const golf = rows.filter((r) => r.dataset === "golf");
+  assert.ok(golf.length > 0, "expected golf rows in the universe");
+  for (const r of golf) {
+    assert.ok(r.postWizards.includes("bestman"), `${r.id}: golf should bake bestman as core reach`);
+    assert.ok(!r.postWizards.includes("moh"), `${r.id}: golf must never bake moh`);
   }
 });
 
@@ -84,10 +88,16 @@ test("BRAND GUARD: locals stay single-brand after backfill", () => {
   }
 });
 
-test("EXPAND SET: golf courses each contribute a bestman expand entry", () => {
+test("EXPAND SET: golf courses NO LONGER contribute a bestman expand entry (golf→bestman is core now)", () => {
   const expandSet = buildExpandSet(rows);
   const golfBestman = expandSet.filter((e) => e.kind === "golf-course" && e.targetWizard === "bestman");
-  assert.ok(golfBestman.length > 0, "golf-course bestman expansion candidates missing from expand set");
+  assert.equal(golfBestman.length, 0, "golf-course→bestman is live core reach, not an expand candidate");
+  // the expand set is still non-trivial: residences legitimately expand to party
+  // brands (party engines don't read residences yet).
+  const residenceParty = expandSet.filter(
+    (e) => e.kind === "residence" && (e.targetWizard === "bestman" || e.targetWizard === "moh"),
+  );
+  assert.ok(residenceParty.length > 0, "residence party expansion candidates should remain in the expand set");
   // expand entries must carry a reason
   for (const e of expandSet) assert.ok(e.reason && e.reason.length > 0, `expand entry ${e.id} missing reason`);
 });
