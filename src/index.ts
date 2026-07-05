@@ -13,6 +13,7 @@ export * from "./tags";
 export * from "./destinations-types";
 export * from "./destinations-overlay";
 export * from "./golf-courses";
+export * from "./golf-courses-hhq-merge";
 export * from "./residences";
 export * from "./tdf-destinations";
 export * from "./moh-locals";
@@ -44,3 +45,15 @@ export const sharedDestinations: CanonicalDestination[] = [
   ...expansionMidwest,
   ...expansionWest,
 ].map(bakeDestination);
+
+// Golf is the single golf-cite source (Task 3). The regenerated 994-row
+// `golf-courses.ts` (do-not-hand-edit) plus the `golf-courses-hhq-merge.ts`
+// overlay (HHQ-only courses tagged "handicap"; empty today) combine into the
+// canonical set every consumer — TDF, Offsite, Handicap HQ — reads.
+import { SHARED_GOLF_COURSES } from "./golf-courses";
+import { SHARED_GOLF_COURSES_HHQ_MERGE } from "./golf-courses-hhq-merge";
+import type { SharedGolfCourse } from "./golf-courses";
+export const ALL_GOLF_COURSES: SharedGolfCourse[] = [
+  ...SHARED_GOLF_COURSES,
+  ...SHARED_GOLF_COURSES_HHQ_MERGE,
+];

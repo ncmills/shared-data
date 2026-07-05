@@ -19,6 +19,7 @@ import {
   applyOutpostOverlay,
   applyMohOverlay,
   SHARED_GOLF_COURSES,
+  ALL_GOLF_COURSES,
   SHARED_RESIDENCES,
   SHARED_TDF_DESTINATIONS,
   residencesForSite,
@@ -94,9 +95,9 @@ for (const d of sharedDestinations) {
 }
 
 // 5: per-entity routing
-for (const c of SHARED_GOLF_COURSES) {
+for (const c of ALL_GOLF_COURSES) {
   if (!c.sites?.length) fail(`golf ${c.name}: empty sites`);
-  for (const s of c.sites ?? []) if (s !== "tdf" && s !== "offsite") fail(`golf ${c.name}: bad site "${s}"`);
+  for (const s of c.sites ?? []) if (s !== "tdf" && s !== "offsite" && s !== "handicap") fail(`golf ${c.name}: bad site "${s}"`);
 }
 for (const r of SHARED_RESIDENCES) {
   if (!r.sites?.length) fail(`residence ${r.id}: empty sites`);
