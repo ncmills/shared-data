@@ -21,10 +21,11 @@ export type WizardTag =
   | "moh"
   | "tdf"
   | "offsite-retreat"
-  | "offsite-outing";
+  | "offsite-outing"
+  | "handicap";
 
 /** Brand domains (derived from wizards; kept for back-compat with golf/residence `sites`). */
-export type SiteTag = "moh" | "bestman" | "tdf" | "offsite";
+export type SiteTag = "moh" | "bestman" | "tdf" | "offsite" | "handicap";
 
 export type ProductTag =
   | "bach-party"

@@ -138,12 +138,15 @@ export function deriveRouting(input: RoutingInput): Routing {
 
     case "golf-course": {
       // Golf is a bachelor + corporate thing. Engines that read courses today:
-      // tdf, offsite-retreat, offsite-outing. Audiences deliberately EXCLUDE
-      // bachelorette — golf never belongs to Maid of Honor HQ. The one party
-      // expansion is Best Man HQ only (see partyFitWizards: golf → [bestman]).
+      // tdf, offsite-retreat, offsite-outing, handicap (HHQ — the golf wizard;
+      // tdf itself is now a personal site with no wizard, kept here for
+      // back-compat / superset only — never subtracted). Audiences
+      // deliberately EXCLUDE bachelorette — golf never belongs to Maid of
+      // Honor HQ. The one party expansion is Best Man HQ only (see
+      // partyFitWizards: golf → [bestman]).
       return {
         core: {
-          wizards: ["tdf", "offsite-retreat", "offsite-outing"],
+          wizards: ["tdf", "offsite-retreat", "offsite-outing", "handicap"],
           audiences: ["corporate", "clients", "bachelor"],
           products: ["golf-trip", "retreat", "outing"],
         },
@@ -192,7 +195,7 @@ export function deriveRouting(input: RoutingInput): Routing {
 
     case "golf-destination":
       return {
-        core: { wizards: ["tdf"], audiences: ALL_AUD, products: ["golf-trip"] },
+        core: { wizards: ["tdf", "handicap"], audiences: ALL_AUD, products: ["golf-trip"] },
         expand: [
           { wizards: ["offsite-retreat", "offsite-outing"], reason: "a golf destination's town has corporate-usable courses/dining — needs OO engine to read TDF destinations" },
         ],

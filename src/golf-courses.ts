@@ -11,7 +11,7 @@ export interface SharedGolfCourse {
   tier: string; greenFeeRange: [number, number]; style: string; walkable: boolean;
   driveMinutes: number; rating?: number; googleRating?: number; reviewCount?: number;
   hypeTag?: string; rankNote?: string; url?: string; highlight: string;
-  sites: ("tdf" | "offsite")[];
+  sites: ("tdf" | "offsite" | "handicap")[];
   products: ("golf-trip" | "outing" | "retreat")[];
 }
 
