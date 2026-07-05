@@ -140,20 +140,27 @@ test("every pilgrimage marquee course exists in the shared golf set", () => {
 - [ ] **Step 5: Run test PASS; `cd ~/offsite-outpost && npm run build`** succeeds; smoke both wizards (Retreat + Outing) — plans still render, now citing the shared set.
 - [ ] **Step 6: Commit** both repos.
 
-### Task 5: Prebuild fetch harness (all consumers)
+### Task 5: Standardize propagation on the pinned npm git dependency
+
+**Reality correction (from Tasks 3–4):** all 4 consumers already depend on shared-data via `"shared-data": "github:ncmills/shared-data"` (an npm git dep tracking `main`, unpinned). BM/MOH/OO consume purely through it; HHQ additionally carries a now-**redundant** jsDelivr `fetch-shared-data.mjs` (added in Task 3). The original "scatter a jsDelivr fetch into each consumer" approach is therefore wrong — it duplicates the npm dep. The real propagation gaps are: (a) the dep floats `main` (unpinned → non-reproducible builds, cache-dependent refresh), and (b) branch changes reach no consumer until shared-data merges to `main`. This task unifies on ONE mechanism: the npm git dep pinned to a release SHA, with a bump script.
 
 **Files:**
-- Create: `scripts/fetch-shared-data.mjs` in each consumer (`plan-my-party`, `maid-of-honor-hq`, `handicap-hq`, `offsite-outpost`)
-- Modify: each consumer `package.json` (`prebuild` script; pin `SHARED_DATA_SHA` env or a committed constant)
+- Create: `~/shared-data/scripts/release.ts` (tags a shared-data release SHA; prints the `github:ncmills/shared-data#<sha>` string)
+- Create: `~/shared-data/scripts/bump-consumers.ts` (rewrites each consumer's `package.json` `shared-data` dep to a given SHA + runs `npm install` there to refresh the lockfile)
+- Modify: `~/handicap-hq/package.json` + delete `~/handicap-hq/scripts/fetch-shared-data.mjs` (remove the redundant jsDelivr fetch; revert HHQ to consume golf via the npm dep like the others)
+- Modify: each consumer `package.json` — pin `"shared-data": "github:ncmills/shared-data#<sha>"` (SHA, not floating `main`)
+- Create: `~/shared-data/docs/propagation.md` (the release→bump→rebuild runbook)
 
 **Interfaces:**
-- Produces: on every build, each consumer refreshes its local mirror of the needed `shared-data/src/*.ts` from jsDelivr at a pinned SHA.
+- Produces: `bumpConsumers(sha: string, repos: string[]): void` — pins every consumer to the same shared-data SHA and refreshes its lockfile. Propagation of any future expansion = merge shared-data to `main`, then `bump-consumers <sha>`.
 
-- [ ] **Step 1: Write the fetch script** — `fetch-shared-data.mjs` downloads the listed files from `https://cdn.jsdelivr.net/gh/ncmills/shared-data@${SHA}/src/<file>.ts` into `src/lib/shared-data/`, fails the build on non-200.
-- [ ] **Step 2: Test** — run `node scripts/fetch-shared-data.mjs` in one repo; assert files land and match remote (byte length > 0, contains a known export).
-- [ ] **Step 3: Wire `prebuild`** in all 4 `package.json`.
-- [ ] **Step 4: Build all 4 repos** — each `npm run build` triggers prebuild + succeeds.
-- [ ] **Step 5: Commit** each repo.
+- [ ] **Step 1: Remove HHQ's redundant fetch** — delete `~/handicap-hq/scripts/fetch-shared-data.mjs`, drop it from HHQ's `prebuild`, and confirm HHQ's golf still resolves via the `shared-data` npm dep (`hhqCourses()`/`tdfDestinations()` import from `"shared-data"`, not the deleted local mirror). Run `cd ~/handicap-hq && npm run build` → succeeds.
+- [ ] **Step 2: Write the failing test** for `bumpConsumers` — `scripts/bump-consumers.test.ts`: given a temp `package.json` string with `"shared-data": "github:ncmills/shared-data"`, `rewriteDep(json, "abc123")` returns json with `"shared-data": "github:ncmills/shared-data#abc123"`. Assert idempotence (re-pinning an already-pinned dep replaces the SHA, doesn't append).
+- [ ] **Step 3: Run test, verify FAIL** — `cd ~/shared-data && npx tsx --test scripts/bump-consumers.test.ts`.
+- [ ] **Step 4: Implement** `rewriteDep` (pure string/JSON transform) + `bumpConsumers` (reads each repo `package.json`, applies `rewriteDep`, writes back, runs `npm install --package-lock-only` in each). `release.ts` prints current `git rev-parse HEAD`.
+- [ ] **Step 5: Run test, verify PASS.**
+- [ ] **Step 6: Write `docs/propagation.md`** — the runbook: (1) merge shared-data feature branch to `main`; (2) `npx tsx scripts/release.ts` to get the SHA; (3) `npx tsx scripts/bump-consumers.ts <sha>`; (4) commit each consumer's `package.json`+lockfile; (5) rebuild/deploy. Note this is the ONLY step that makes a shared-data change reach production.
+- [ ] **Step 7: Commit** shared-data (scripts + docs) and HHQ (fetch removal). Do NOT pin consumers to a SHA yet or push — pinning happens at real release time (documented, deferred), since our branch isn't merged to `main`. Leave a one-line note in `propagation.md` that the first pin bump is a release-time action.
 
 ---
 
