@@ -29,7 +29,10 @@ const GOOD_GOLF: ResearchedRow = {
   citations: ["https://www.cabotcapebreton.com/golf/cabot-cliffs/"],
 };
 
-/** A complete, real-shaped residence row (fields mirror SharedResidence). */
+/** A complete, real-shaped residence row (fields mirror SharedResidence).
+ *  Includes real (non-zero) `capacity`/`price` — display-critical fields
+ *  Offsite Outpost renders straight into live page copy with no zero-guard,
+ *  so they're hard-required alongside the identity fields. */
 const GOOD_RESIDENCE: ResearchedRow = {
   dataset: "residence",
   id: "some-alpine-lodge",
@@ -39,6 +42,8 @@ const GOOD_RESIDENCE: ResearchedRow = {
   country: "France",
   sites: ["offsite"],
   products: ["retreat"],
+  capacity: { min: 20, max: 80, sleepsOnsite: 80 },
+  price: { perPersonPerNight: { low: 400, high: 900 } },
   sourceUrl: "https://www.example-lodge.fr/",
   citations: ["https://www.example-lodge.fr/about"],
 };
@@ -100,6 +105,50 @@ test("REJECTS a residence row missing a required field (setting)", () => {
   const res = validateResearchedRow(rest);
   assert.equal(res.ok, false);
   if (!res.ok) assert.ok(res.reasons.some((r) => /setting/i.test(r)));
+});
+
+test("REJECTS a residence row missing capacity entirely", () => {
+  const { capacity, ...rest } = GOOD_RESIDENCE as unknown as Record<string, unknown>;
+  const res = validateResearchedRow(rest);
+  assert.equal(res.ok, false);
+  if (!res.ok) assert.ok(res.reasons.some((r) => /capacity/i.test(r)));
+});
+
+test("REJECTS a residence row with a zeroed capacity (the old UI-default shape)", () => {
+  const res = validateResearchedRow({
+    ...GOOD_RESIDENCE,
+    capacity: { min: 0, max: 0, sleepsOnsite: 0 },
+  });
+  assert.equal(res.ok, false);
+  if (!res.ok) assert.ok(res.reasons.some((r) => /capacity/i.test(r)));
+});
+
+test("REJECTS a residence row with only a partial capacity (min present, max missing)", () => {
+  const res = validateResearchedRow({ ...GOOD_RESIDENCE, capacity: { min: 20 } });
+  assert.equal(res.ok, false);
+  if (!res.ok) assert.ok(res.reasons.some((r) => /capacity/i.test(r)));
+});
+
+test("REJECTS a residence row missing price entirely", () => {
+  const { price, ...rest } = GOOD_RESIDENCE as unknown as Record<string, unknown>;
+  const res = validateResearchedRow(rest);
+  assert.equal(res.ok, false);
+  if (!res.ok) assert.ok(res.reasons.some((r) => /price/i.test(r)));
+});
+
+test("REJECTS a residence row with a zeroed price (the old UI-default shape)", () => {
+  const res = validateResearchedRow({
+    ...GOOD_RESIDENCE,
+    price: { perPersonPerNight: { low: 0, high: 0 } },
+  });
+  assert.equal(res.ok, false);
+  if (!res.ok) assert.ok(res.reasons.some((r) => /price/i.test(r)));
+});
+
+test("golf rows are UNAFFECTED by the residence-only capacity/price requirement", () => {
+  // GOOD_GOLF carries neither field — must still pass.
+  const res = validateResearchedRow(GOOD_GOLF);
+  assert.equal(res.ok, true);
 });
 
 test("REJECTS a placeholder sourceUrl (example.com)", () => {

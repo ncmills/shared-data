@@ -306,20 +306,27 @@ function toGolfCourse(row: ResearchedGolfRow): ConvertResult<SharedGolfCourse> {
  * These defaults are all neutral/empty (0, "", [], false) — NEVER an
  * invented specific fact (no fake capacity numbers, no fake pricing, no fake
  * "great room seats 250"). A residence written with these defaults simply
- * scores as "unknown fit" everywhere (capacity 0–0 never matches a real
- * headcount; price band $0 never wins a price comparison) rather than
- * crashing OR silently claiming a fact nobody verified.
+ * scores as "unknown fit" everywhere those fields are read.
+ *
+ * `capacity` and `price` are DELIBERATELY ABSENT from this default table —
+ * unlike every other field here, OO interpolates them straight into live
+ * page copy ("Capacity: {min}–{max} guests", "Sleeps {sleepsOnsite}",
+ * "${low}–{high} per person/night") with no zero-guard, so a `0`/`0` default
+ * doesn't just "score as unknown fit," it PUBLISHES fabricated-looking copy
+ * on real commercial pages. `validateResearchedRow` (research-schema.ts)
+ * now hard-requires real (>0) `capacity.min/.max` and
+ * `price.perPersonPerNight.low/.high` for every residence row, so by the
+ * time a row reaches this function those fields are always present and real
+ * — spread in from `...rest` below, never defaulted to zero here.
  */
 const RESIDENCE_UI_DEFAULTS: Record<string, unknown> = {
   nearestAirports: [],
   summary: "",
   whySpecial: "",
-  capacity: { min: 0, max: 0, sleepsOnsite: 0 },
   spaces: { general: "", breakout: "", outdoor: "" },
   dining: "",
   signatureExperiences: [],
   seasonality: { bestMonths: "", offPeak: "" },
-  price: { perPersonPerNight: { low: 0, high: 0 }, buyoutNote: "", indicative: true },
   logistics: "",
   accessibility: "",
   goodFor: [],

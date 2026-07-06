@@ -52,7 +52,8 @@ export interface ResearchGapResult {
 /** Human dataset → canonical-field hint for the prompt (what a good row needs). */
 const DATASET_FIELD_HINT: Record<string, string> = {
   golf: "name, city, state, region (must equal the region above), tier (must equal the tier above), greenFeeRange [low,high], style, walkable, driveMinutes, highlight",
-  residence: "id (kebab-case), name, setting (must equal the setting above), region, country",
+  residence:
+    'id (kebab-case), name, setting (must equal the setting above), region, country, capacity {min, max} (REAL guest headcount range the venue holds, sourced from the venue\'s own site/listing — not a guess), price {perPersonPerNight: {low, high}} (REAL per-person-per-night rate band, sourced the same way)',
 };
 
 /**
@@ -66,6 +67,18 @@ export function buildResearchPrompt(task: GapTask): string {
     .map(([k, v]) => `  - ${k}: ${v}`)
     .join("\n");
   const fieldHint = DATASET_FIELD_HINT[task.dataset] ?? "the canonical fields for this dataset";
+  const residenceConstraints =
+    task.dataset === "residence"
+      ? [
+          `- Every row MUST include "capacity": {"min": <number>, "max": <number>} — the REAL guest`,
+          `  headcount range the venue holds (from the venue's own site or an official listing), both > 0.`,
+          `  Do not guess or round to a generic number — find the venue's actual stated capacity.`,
+          `- Every row MUST include "price": {"perPersonPerNight": {"low": <number>, "high": <number>}} —`,
+          `  the REAL per-person-per-night rate band, sourced the same way, both > 0.`,
+          `- If you cannot find a REAL capacity or a REAL per-person-per-night price for a venue, DROP it`,
+          `  rather than guess — a residence without both is rejected before it ever reaches the site.`,
+        ]
+      : [];
 
   return [
     `Research REAL ${task.dataset} venues to fill a starved data cell.`,
@@ -81,6 +94,7 @@ export function buildResearchPrompt(task: GapTask): string {
     `- Every row MUST include "citations": an array with >=1 primary-source URL backing the facts.`,
     `- Cite PRIMARY sources (the venue's own site, an official/authoritative listing). Do not cite from memory.`,
     `- If you cannot verify a venue has a real primary URL, DROP it rather than guess.`,
+    ...residenceConstraints,
     ``,
     `Output: a JSON array of objects, each shaped as:`,
     `  { "dataset": "${task.dataset}", <${fieldHint}>, "sourceUrl": "...", "citations": ["..."] }`,

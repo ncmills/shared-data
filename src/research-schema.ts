@@ -11,9 +11,13 @@
  *
  * `validateResearchedRow` is the gate. It REJECTS anything that could be
  * fabricated or half-real: a missing/blank/non-http sourceUrl, no citation,
- * a missing/blank required canonical field, or an obvious placeholder value.
- * Rejected rows never reach the dataset — NO FABRICATION is the hard
- * constraint (feedback_no_fabricated_social_proof, feedback_research_before_drafting).
+ * a missing/blank required canonical field, an obvious placeholder value, or
+ * (residence only) a missing/zero display-critical numeric field — real
+ * capacity and price are hard-required for residences because Offsite
+ * Outpost renders them straight into live page copy with no zero-guard (see
+ * the residence-only block below). Rejected rows never reach the dataset —
+ * NO FABRICATION is the hard constraint (feedback_no_fabricated_social_proof,
+ * feedback_research_before_drafting).
  */
 
 import type { SharedGolfCourse } from "./golf-courses";
@@ -49,7 +53,9 @@ export type ValidationResult =
  * shapes, so a row missing any of these can't become a real dataset entry.
  * (Kept to the discriminating/identity fields — the engine derives or
  * defaults the rest — so a genuinely-real venue isn't rejected for a missing
- * optional like `driveMinutes`.)
+ * optional like `driveMinutes`.) Residence's `capacity`/`price` are display-
+ * critical (see the dedicated numeric check below) so they're NOT defaulted
+ * by the ingest gate the way every other optional residence field is.
  */
 const REQUIRED_FIELDS: Record<ResearchedRow["dataset"], string[]> = {
   golf: ["name", "city", "state", "region", "tier", "highlight"],
@@ -145,6 +151,48 @@ export function validateResearchedRow(input: unknown): ValidationResult {
   const setting = typeof row.setting === "string" ? row.setting.trim().toLowerCase() : "";
   if (name && (name === region || name === setting)) {
     reasons.push(`name equals its region/setting (placeholder tell): ${row.name}`);
+  }
+
+  // ── residence-only: display-critical numeric fields ─────────────────────
+  // Offsite Outpost renders `residencesForSite("offsite")` as a direct,
+  // unguarded `Venue[]` cast (no hydration step) and interpolates
+  // `capacity.min/.max` and `price.perPersonPerNight.low/.high` straight
+  // into live page copy — no zero-guard. A missing/zero value here doesn't
+  // crash (unlike golf's greenFeeRange, which the wizard engine actively
+  // needs to score against); it PUBLISHES fabricated-looking copy
+  // ("Capacity: 0–0 guests", "Sleeps 0", "$0–0 per person/night") on real
+  // commercial pages. So these are hard-required here, with REAL (>0)
+  // numbers, at the same tier as golf's greenFeeRange/style — reject rather
+  // than let the ingest gate default them to zero.
+  if (dataset === "residence") {
+    const capacity = row.capacity as { min?: unknown; max?: unknown } | undefined;
+    const hasRealCapacity =
+      typeof capacity === "object" &&
+      capacity !== null &&
+      typeof capacity.min === "number" &&
+      typeof capacity.max === "number" &&
+      capacity.min > 0 &&
+      capacity.max > 0;
+    if (!hasRealCapacity) {
+      reasons.push(
+        "residence missing real capacity (capacity.min and capacity.max must be present numbers > 0)",
+      );
+    }
+
+    const price = row.price as { perPersonPerNight?: { low?: unknown; high?: unknown } } | undefined;
+    const perPersonPerNight = price?.perPersonPerNight;
+    const hasRealPrice =
+      typeof perPersonPerNight === "object" &&
+      perPersonPerNight !== null &&
+      typeof perPersonPerNight.low === "number" &&
+      typeof perPersonPerNight.high === "number" &&
+      perPersonPerNight.low > 0 &&
+      perPersonPerNight.high > 0;
+    if (!hasRealPrice) {
+      reasons.push(
+        "residence missing real price (price.perPersonPerNight.low and .high must be present numbers > 0)",
+      );
+    }
   }
 
   if (reasons.length > 0) return { ok: false, reasons };

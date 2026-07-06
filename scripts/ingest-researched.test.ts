@@ -247,9 +247,11 @@ test("dedup: a residence row matching an existing base-dataset id (SHARED_RESIDE
       setting: "ranch",
       region: "Somewhere Else",
       country: "USA",
+      capacity: { min: 20, max: 60, sleepsOnsite: 60 },
+      price: { perPersonPerNight: { low: 400, high: 800 } },
       sourceUrl: "https://www.ingest-test-fixture-residence.example/",
       citations: ["https://www.ingest-test-fixture-residence.example/about"],
-    };
+    } as unknown as ResearchedRow;
     const result = ingestResearched([dupeRow], { residenceFilePath: tmpResidencePath });
 
     assert.equal(result.accepted, 0);
@@ -343,7 +345,7 @@ test("golf still REJECTS a row missing greenFeeRange or style (no safe default e
   }
 });
 
-test("residence UI defaults: a minimal row lands with SAFE structural defaults consumers read directly (no crash)", () => {
+test("residence UI defaults: a minimal-but-real row (real capacity/price) lands with SAFE structural defaults for the rest (no crash)", () => {
   const tmpDir = mkdtempSync(join(tmpdir(), "ingest-defaults-residence-"));
   const tmpResidencePath = join(tmpDir, "residence-fixture.ts");
   writeFileSync(
@@ -359,9 +361,13 @@ test("residence UI defaults: a minimal row lands with SAFE structural defaults c
       setting: "countryside",
       region: "Test Region",
       country: "USA",
+      // capacity + price are display-critical and hard-required (no longer
+      // defaulted to zero) — see research-schema.ts's residence-only check.
+      capacity: { min: 30, max: 90, sleepsOnsite: 90 },
+      price: { perPersonPerNight: { low: 500, high: 950 } },
       sourceUrl: "https://www.ingest-test-minimal-residence.example/",
       citations: ["https://www.ingest-test-minimal-residence.example/about"],
-    };
+    } as unknown as ResearchedRow;
     const result = ingestResearched([minimalRow], {
       residenceFilePath: tmpResidencePath,
       runGates: () => ({ ok: true, output: "" }),
@@ -372,11 +378,11 @@ test("residence UI defaults: a minimal row lands with SAFE structural defaults c
     assert.equal(written.length, 1);
     const r = written[0];
     assert.deepEqual(r.nearestAirports, [], "nearestAirports must default to [] (OO reads it via [0]?.code)");
-    assert.deepEqual(r.capacity, { min: 0, max: 0, sleepsOnsite: 0 }, "capacity must default to a neutral zeroed struct — OO reads v.capacity.min/.max directly, no optional chaining");
+    assert.deepEqual(r.capacity, { min: 30, max: 90, sleepsOnsite: 90 }, "capacity must be the REAL researched value — no longer defaulted");
     assert.deepEqual(r.goodFor, [], "goodFor must default to [] — OO reads v.goodFor.includes(...) directly");
     assert.deepEqual(r.signatureExperiences, [], "signatureExperiences must default to [] — OO reads .includes(...) directly");
     assert.deepEqual(r.seasonality, { bestMonths: "", offPeak: "" }, "seasonality must default to empty strings — OO reads v.seasonality.bestMonths/.offPeak directly");
-    assert.deepEqual(r.price, { perPersonPerNight: { low: 0, high: 0 }, buyoutNote: "", indicative: true }, "price must default to a neutral zeroed struct — OO reads v.price.perPersonPerNight.low/.high directly");
+    assert.deepEqual(r.price, { perPersonPerNight: { low: 500, high: 950 } }, "price must be the REAL researched value — no longer defaulted");
     assert.equal(r.dining, "");
     assert.equal(r.logistics, "");
     assert.equal(r.accessibility, "");
@@ -384,6 +390,74 @@ test("residence UI defaults: a minimal row lands with SAFE structural defaults c
     assert.equal(r.summary, "");
     assert.deepEqual(r.tags, []);
     assert.equal(r.imageQuery, "");
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test("residence with missing capacity/price is REJECTED at ingest, never defaulted to zero", () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-reject-residence-nocapacity-"));
+  const tmpResidencePath = join(tmpDir, "residence-fixture.ts");
+  const initialContent =
+    `import type { SharedResidence } from "../src/residences";\n\n` +
+    `export const SHARED_RESIDENCES_EXPANSION: SharedResidence[] = [];\n`;
+  writeFileSync(tmpResidencePath, initialContent);
+  try {
+    const noCapacityNoPrice: ResearchedRow = {
+      dataset: "residence",
+      id: `ingest-test-nocapacity-residence-${Date.now()}`,
+      name: "Ingest Test No-Capacity Residence",
+      setting: "countryside",
+      region: "Test Region",
+      country: "USA",
+      sourceUrl: "https://www.ingest-test-nocapacity-residence.example/",
+      citations: ["https://www.ingest-test-nocapacity-residence.example/about"],
+    };
+    const result = ingestResearched([noCapacityNoPrice], {
+      residenceFilePath: tmpResidencePath,
+      runGates: () => ({ ok: true, output: "" }),
+    });
+
+    assert.equal(result.accepted, 0);
+    assert.equal(result.rejected, 1);
+    assert.ok(result.reasons.some((r) => /capacity/i.test(r)));
+    assert.ok(result.reasons.some((r) => /price/i.test(r)));
+    const after = readFileSync(tmpResidencePath, "utf-8");
+    assert.equal(after, initialContent, "the expansion file must be untouched — nothing with a zeroed capacity/price ever lands");
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test("residence with zeroed capacity/price (the old UI-default shape) is REJECTED at ingest", () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-reject-residence-zeroed-"));
+  const tmpResidencePath = join(tmpDir, "residence-fixture.ts");
+  const initialContent =
+    `import type { SharedResidence } from "../src/residences";\n\n` +
+    `export const SHARED_RESIDENCES_EXPANSION: SharedResidence[] = [];\n`;
+  writeFileSync(tmpResidencePath, initialContent);
+  try {
+    const zeroedRow: ResearchedRow = {
+      dataset: "residence",
+      id: `ingest-test-zeroed-residence-${Date.now()}`,
+      name: "Ingest Test Zeroed Residence",
+      setting: "countryside",
+      region: "Test Region",
+      country: "USA",
+      capacity: { min: 0, max: 0, sleepsOnsite: 0 },
+      price: { perPersonPerNight: { low: 0, high: 0 } },
+      sourceUrl: "https://www.ingest-test-zeroed-residence.example/",
+      citations: ["https://www.ingest-test-zeroed-residence.example/about"],
+    } as unknown as ResearchedRow;
+    const result = ingestResearched([zeroedRow], {
+      residenceFilePath: tmpResidencePath,
+      runGates: () => ({ ok: true, output: "" }),
+    });
+
+    assert.equal(result.accepted, 0);
+    assert.equal(result.rejected, 1);
+    const after = readFileSync(tmpResidencePath, "utf-8");
+    assert.equal(after, initialContent);
   } finally {
     rmSync(tmpDir, { recursive: true, force: true });
   }
@@ -408,6 +482,7 @@ test("residence UI defaults: an explicitly-supplied optional field WINS over the
       sourceUrl: "https://www.ingest-test-override-residence.example/",
       citations: ["https://www.ingest-test-override-residence.example/about"],
       capacity: { min: 20, max: 60, sleepsOnsite: 60 },
+      price: { perPersonPerNight: { low: 300, high: 700 } },
       dining: "Real researched dining note.",
     } as unknown as ResearchedRow;
     const result = ingestResearched([row], {
