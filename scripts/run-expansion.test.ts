@@ -92,7 +92,7 @@ function spyIngest(): { fn: (rows: ResearchedRow[]) => IngestResult; calls: Rese
   const calls: ResearchedRow[][] = [];
   const fn = (rows: ResearchedRow[]): IngestResult => {
     calls.push(rows);
-    return { accepted: rows.length, rejected: 0, reasons: [] };
+    return { accepted: rows.length, rejected: 0, reasons: [], acceptedRows: rows };
   };
   return { fn, calls };
 }
@@ -281,7 +281,12 @@ test("when the ingest gate accepts 0 rows, no PR is proposed", async () => {
       topK: 1,
       gapQueue: [GOLF_TASK],
       researcher,
-      ingest: () => ({ accepted: 0, rejected: 1, reasons: ["batch rejected + rolled back: gate failed"] }),
+      ingest: () => ({
+        accepted: 0,
+        rejected: 1,
+        reasons: ["batch rejected + rolled back: gate failed"],
+        acceptedRows: [],
+      }),
       propose: propose.fn,
     }),
   );
@@ -289,4 +294,74 @@ test("when the ingest gate accepts 0 rows, no PR is proposed", async () => {
   assert.equal(propose.calls.length, 0, "no PR when nothing landed");
   assert.equal(res.pr, undefined);
   assert.equal(res.ingestResult?.accepted, 0);
+});
+
+// ─── 6. PR-body fidelity: a row shape-rejected INSIDE ingest (a normal ─────
+// partial-reject, distinct from the whole-batch gate rollback above) must
+// never inflate the PR body / commit message — see DroppedIngestRow.
+
+test("PR body reflects only rows that ACTUALLY landed at ingest, not the pre-ingest submitted batch", async () => {
+  const propose = spyPropose();
+  const goodRow = golfRow("Leven", "https://leven.example/");
+  // Passes validateResearchedRow (has every REQUIRED_FIELDS.golf field —
+  // name/city/state/region/tier/highlight — plus sourceUrl/citations) but is
+  // missing `style`, which `toGolfCourse()` requires and
+  // `validateResearchedRow` does NOT. This is the exact seam the fix closes:
+  // research-schema validation is intentionally looser than ingest's
+  // per-row shape-conversion, so a row can be counted as "valid" upstream and
+  // still be shape-rejected at ingest.
+  const shapeRejectedRow: ResearchedRow = (() => {
+    const { style: _drop, ...rest } = golfRow("Crail", "https://crail.example/") as unknown as Record<
+      string,
+      unknown
+    >;
+    return rest as unknown as ResearchedRow;
+  })();
+
+  const researcher = mockResearcher({ [GOLF_TASK.id]: [goodRow, shapeRejectedRow] });
+
+  // A fake ingest that mimics ingestResearched's REAL partial-reject
+  // behavior: rows missing `style` are shape-rejected and excluded from
+  // `acceptedRows`, exactly like the real toGolfCourse()/ingestResearched
+  // would do (see scripts/ingest-researched.ts's toGolfCourse + Step 1/2).
+  const fakeIngest = (rows: ResearchedRow[]): IngestResult => {
+    const accepted = rows.filter((r) => (r as { style?: string }).style !== undefined);
+    const droppedRows = rows.filter((r) => (r as { style?: string }).style === undefined);
+    const reasons = droppedRows.map(
+      (r) =>
+        `rejected (shape): golf row "${(r as { name: string }).name}" is missing required shape field(s) ` +
+        `for SharedGolfCourse: style`,
+    );
+    return { accepted: accepted.length, rejected: droppedRows.length, reasons, acceptedRows: accepted };
+  };
+
+  const res = await runExpansion(
+    baseOpts({
+      topK: 1,
+      gapQueue: [GOLF_TASK],
+      researcher,
+      ingest: fakeIngest,
+      propose: propose.fn,
+    }),
+  );
+
+  // both rows were submitted to ingest (passed research validation + the row cap) ...
+  assert.equal(res.ingestedRows.length, 2);
+  // ... but only 1 actually landed.
+  assert.equal(res.ingestResult?.accepted, 1);
+
+  // the dropped row is REPORTED on RunResult — no silent truncation
+  assert.equal(res.droppedAtIngest.length, 1);
+  assert.equal(res.droppedAtIngest[0].row.name, "Crail");
+  assert.match(res.droppedAtIngest[0].reason, /Crail/);
+
+  // the PR body / breakdown reflects ONLY the row that landed
+  assert.equal(propose.calls.length, 1);
+  const call = propose.calls[0];
+  assert.deepEqual(call.rowCountsByDataset, { golf: 1 }, "PR row count must reflect only the row that landed");
+  assert.ok(call.citations?.includes("https://leven.example/about"), "accepted row's citation must be present");
+  assert.ok(
+    !call.citations?.includes("https://crail.example/about"),
+    "dropped row's citation must NOT appear in the PR body",
+  );
 });

@@ -89,6 +89,25 @@ export interface IngestResult {
   accepted: number;
   rejected: number;
   reasons: string[];
+  /**
+   * The exact `ResearchedRow`s that PASSED validation AND shape-conversion
+   * AND every gate, and were actually written to a sanctioned expansion
+   * file — i.e. the rows that landed for real. Same object references as
+   * the corresponding entries of the `rows` argument (no cloning), so a
+   * caller can identify which submitted rows are missing from this array
+   * via reference equality.
+   *
+   * This exists so a downstream PR-body / commit-message builder (Task 17's
+   * `runExpansion`) can derive its per-dataset row counts + citations from
+   * rows that PROVABLY landed, never from the pre-ingest submitted batch —
+   * `validateResearchedRow` (Task 14) intentionally requires FEWER fields
+   * than this module's per-row shape conversion, so a row can pass research
+   * validation and still be shape-rejected here (a normal partial-reject,
+   * not the atomic gate rollback). Always empty when `accepted === 0`
+   * (either nothing survived shape-conversion, or the whole batch was
+   * rolled back by a failing gate).
+   */
+  acceptedRows: ResearchedRow[];
 }
 
 /** Thrown internally to short-circuit to the rollback path with a message. */
@@ -253,6 +272,11 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
 
   const validGolf: SharedGolfCourse[] = [];
   const validResidence: SharedResidence[] = [];
+  // Parallel to validGolf/validResidence — the ORIGINAL ResearchedRow (same
+  // object reference as validateResearchedRow's input) for every row that
+  // survives shape-conversion. Threaded through as IngestResult.acceptedRows
+  // once the batch is actually kept (Step 4/4b below).
+  const acceptedRows: ResearchedRow[] = [];
 
   // ── Step 1: validate every row through the honesty firewall ─────────────
   for (const row of rows) {
@@ -271,6 +295,7 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
         continue;
       }
       validGolf.push(conv.row);
+      acceptedRows.push(v.row);
     } else {
       const conv = toResidence(v.row);
       if (!conv.ok) {
@@ -279,11 +304,12 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
         continue;
       }
       validResidence.push(conv.row);
+      acceptedRows.push(v.row);
     }
   }
 
   if (validGolf.length === 0 && validResidence.length === 0) {
-    return { accepted: 0, rejected, reasons };
+    return { accepted: 0, rejected, reasons, acceptedRows: [] };
   }
 
   // ── Step 3: transactional append — capture prior contents before ANY write
@@ -331,12 +357,12 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
       throw new GateFailure(`gate "${gate.failedGate ?? "verify/audit"}" failed:\n${gate.output.slice(0, 4000)}`);
     }
 
-    return { accepted: validGolf.length + validResidence.length, rejected, reasons };
+    return { accepted: validGolf.length + validResidence.length, rejected, reasons, acceptedRows };
   } catch (e) {
     // ── Step 5: roll back EVERY touched file to its exact prior contents ──
     for (const b of backups) writeFileSync(b.path, b.prevContent);
     const msg = e instanceof Error ? e.message : String(e);
     reasons.push(`batch rejected + rolled back: ${msg}`);
-    return { accepted: 0, rejected: rejected + validGolf.length + validResidence.length, reasons };
+    return { accepted: 0, rejected: rejected + validGolf.length + validResidence.length, reasons, acceptedRows: [] };
   }
 }

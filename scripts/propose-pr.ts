@@ -9,11 +9,13 @@
  *
  *   1. a git branch `expand/<dataset>-<label>` off the current HEAD,
  *   2. a commit of the sanctioned expansion files + regenerated audit docs
- *      on that branch,
+ *      ON THAT BRANCH,
  *   3. a markdown PR BODY — GapTasks addressed, rows added per dataset, a
  *      coverage-matrix before/after diff, and the citation URLs of the
  *      added rows — written to `docs/pending-prs/<branch>.md` (the
- *      "ready-to-open PR artifact").
+ *      "ready-to-open PR artifact") AND staged into that same commit, so the
+ *      artifact persists with the branch rather than being left as a loose
+ *      untracked file in the working tree.
  *
  * ── GO-LIVE CONSTRAINT (Nick-directed): LOCAL ONLY BY DEFAULT ──────────────
  * This module NEVER pushes and NEVER calls `gh` unless the caller passes
@@ -32,7 +34,7 @@
 
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { GapTask } from "./gap-queue";
@@ -349,6 +351,13 @@ export function proposePr(opts: ProposePrOptions): ProposePrResult {
   for (const f of filesToCommit) {
     run("git", ["add", "--", f], { cwd: repoRoot });
   }
+  // Also stage the PR-body artifact itself (written above, BEFORE the branch
+  // checkout, so it's an untracked file in the working tree at this point).
+  // Its path is derived from the branch name, so it can't live in the static
+  // `DEFAULT_FILES_TO_COMMIT` list — staged explicitly here instead, so it's
+  // committed ONTO the expand branch and persists with it rather than being
+  // left as a loose untracked file after `proposePr` returns.
+  run("git", ["add", "--", relative(repoRoot, bodyPath)], { cwd: repoRoot });
   const commitMessage = opts.commitMessage ?? defaultCommitMessage(rowCountsByDataset, branch);
   run("git", ["commit", "-m", commitMessage], { cwd: repoRoot });
 

@@ -66,6 +66,22 @@ export interface DroppedTask {
   reason: string;
 }
 
+/**
+ * A row that passed `validateResearchedRow` (Task 14) and was submitted to
+ * `ingestResearched`, but did NOT land — `validateResearchedRow` intentionally
+ * requires FEWER fields than `ingestResearched`'s per-row shape-conversion, so
+ * a row can be counted as "valid" here and still be shape-rejected at ingest
+ * (a normal partial-reject, distinct from an atomic gate rollback, which
+ * drops the whole batch and is reported via `ingestResult.accepted === 0`
+ * instead). Recorded so the PR-body/commit-message fidelity fix (Task 17)
+ * never silently overstates rows added or misattributes a citation to a row
+ * that never landed — same "no silent truncation" principle as `droppedByCap`.
+ */
+export interface DroppedIngestRow {
+  row: ResearchedRow;
+  reason: string;
+}
+
 export interface RunResult {
   label: string;
   dryRun: boolean;
@@ -81,6 +97,10 @@ export interface RunResult {
   breakdown: DatasetBreakdown[];
   /** GapTasks dropped/trimmed by the row cap, with an explicit reason each. */
   droppedByCap: DroppedTask[];
+  /** Rows that passed research validation + the row cap but were shape-
+   *  rejected inside `ingestResearched` (never landed) — always `[]` on a
+   *  dry run or when ingest wasn't reached. See `DroppedIngestRow`. */
+  droppedAtIngest: DroppedIngestRow[];
   /** How many research candidates the validator rejected (no fabrication). */
   rejectedCandidates: number;
   /** The ingest gate's result — undefined on a dry run (ingest not called). */
@@ -225,6 +245,7 @@ export async function runExpansion(opts: RunExpansionOptions): Promise<RunResult
       ingestedRows,
       breakdown,
       droppedByCap,
+      droppedAtIngest: [],
       rejectedCandidates,
       logs,
     };
@@ -242,6 +263,7 @@ export async function runExpansion(opts: RunExpansionOptions): Promise<RunResult
       ingestedRows,
       breakdown,
       droppedByCap,
+      droppedAtIngest: [],
       rejectedCandidates,
       logs,
     };
@@ -261,6 +283,42 @@ export async function runExpansion(opts: RunExpansionOptions): Promise<RunResult
     );
   }
 
+  // ── PR-fidelity fix: the PR body must reflect ONLY rows that ACTUALLY
+  // landed. `validateResearchedRow` requires fewer fields than ingest's
+  // per-row shape-conversion, so a row can pass the row cap above and still
+  // be shape-rejected inside `ingestResearched` (a normal partial-reject,
+  // not the atomic gate rollback `accepted<=0` below). Identify the
+  // submitted rows missing from `ingestResult.acceptedRows` by reference
+  // equality (`ingestResearched` never clones a validated row) and report
+  // them — same "no silent truncation" principle as `droppedByCap` — instead
+  // of silently letting the PR overstate rows added / misattribute a
+  // citation to a row that never landed.
+  const acceptedRows = ingestResult.acceptedRows ?? [];
+  const acceptedSet = new Set(acceptedRows);
+  const droppedAtIngest: DroppedIngestRow[] = ingestedRows
+    .filter((row) => !acceptedSet.has(row))
+    .map((row) => {
+      const needle = (row as { name?: string; id?: string }).name ?? (row as { name?: string; id?: string }).id;
+      const matched = needle ? ingestResult.reasons.find((r) => r.includes(needle)) : undefined;
+      return {
+        row,
+        reason:
+          matched ??
+          `dropped at ingest: row passed research validation + the row cap but did not land ` +
+            `(see ingestResult.reasons for the gate's own accounting)`,
+      };
+    });
+  if (droppedAtIngest.length > 0) {
+    say(
+      `  WARNING: ${droppedAtIngest.length} row(s) passed validation but were shape-rejected at ingest — ` +
+        `excluded from the PR body: ${droppedAtIngest.map((d) => d.reason).join(" | ")}`,
+    );
+  }
+  // the PR-body breakdown is derived from ACCEPTED rows only — never from the
+  // pre-ingest submitted batch (`breakdown`, computed above, still reflects
+  // the submitted batch and is returned as-is for dry-run/reporting purposes).
+  const acceptedBreakdown = breakdownFor(acceptedRows);
+
   // ── Step 5: nothing landed → no PR (a rolled-back gate leaves no change) ──
   if (ingestResult.accepted <= 0) {
     say(`  ingest accepted 0 rows (gate rejected the batch); no branch/PR created.`);
@@ -273,6 +331,7 @@ export async function runExpansion(opts: RunExpansionOptions): Promise<RunResult
       ingestedRows,
       breakdown,
       droppedByCap,
+      droppedAtIngest,
       rejectedCandidates,
       ingestResult,
       logs,
@@ -282,11 +341,11 @@ export async function runExpansion(opts: RunExpansionOptions): Promise<RunResult
   // ── Step 6: propose the LOCAL PR (push:false — go-live constraint) ────────
   const rowCountsByDataset: Record<string, number> = {};
   const citations: string[] = [];
-  for (const b of breakdown) {
+  for (const b of acceptedBreakdown) {
     rowCountsByDataset[b.dataset] = b.rowsAdded;
     citations.push(...b.citations);
   }
-  const dataset = breakdown[0]?.dataset ?? "batch";
+  const dataset = acceptedBreakdown[0]?.dataset ?? "batch";
   const pr = propose({
     branch: `expand/${opts.label}`,
     label: opts.label,
@@ -307,6 +366,7 @@ export async function runExpansion(opts: RunExpansionOptions): Promise<RunResult
     ingestedRows,
     breakdown,
     droppedByCap,
+    droppedAtIngest,
     rejectedCandidates,
     ingestResult,
     pr,

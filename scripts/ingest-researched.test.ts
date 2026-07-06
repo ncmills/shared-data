@@ -76,6 +76,9 @@ test("ACCEPTS a valid golf row; it appears in ALL_GOLF_COURSES tagged handicap+b
 
     assert.equal(result.accepted, 1);
     assert.equal(result.rejected, 0);
+    assert.equal(result.acceptedRows.length, 1);
+    assert.equal(result.acceptedRows[0].dataset, "golf");
+    assert.equal(result.acceptedRows[0].name, name);
 
     const tags = golfRowPostWizards(name, "Duluth", "MN");
     assert.ok(tags, "ingested row should be present in backfillUniverse()'s golf rows");
@@ -103,6 +106,7 @@ test("REJECTS + ROLLS BACK a golf row hand-forced to a brand-breaking site tag (
     const result = ingestResearched([badRow]);
 
     assert.equal(result.accepted, 0);
+    assert.deepEqual(result.acceptedRows, [], "a rolled-back batch must report zero accepted rows");
     assert.ok(
       result.reasons.some((r) => /rolled back/i.test(r)),
       `expected a rollback reason in ${JSON.stringify(result.reasons)}`,
@@ -127,6 +131,7 @@ test("REJECTS an invalid row (no sourceUrl) by validation, before ever touching 
 
   assert.equal(result.accepted, 0);
   assert.equal(result.rejected, 1);
+  assert.deepEqual(result.acceptedRows, [], "a row rejected at validation must not appear in acceptedRows");
   assert.ok(result.reasons.some((r) => /sourceUrl/i.test(r)));
 
   const after = readFileSync(DEFAULT_GOLF_EXPANSION_PATH, "utf-8");
@@ -152,6 +157,7 @@ test("rollback mechanism: an injected gate failure restores an injected (temp) e
     });
 
     assert.equal(result.accepted, 0);
+    assert.deepEqual(result.acceptedRows, [], "a gate-failed batch must report zero accepted rows");
     assert.ok(result.reasons.some((r) => /rolled back/i.test(r)));
     assert.ok(result.reasons.some((r) => /audit/i.test(r)));
 

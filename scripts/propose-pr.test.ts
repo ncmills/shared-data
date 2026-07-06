@@ -242,6 +242,39 @@ test("proposePr writes the PR body artifact to docs/pending-prs/<branch>.md", ()
   });
 });
 
+test("proposePr stages the PR-body artifact itself so it persists ON the branch, not as a loose untracked file", () => {
+  withTempDocsDir((docsDir) => {
+    const { run, calls } = makeSpyRunner();
+    const result = proposePr({
+      branch: "expand/golf-artifact-commit-test",
+      rowCountsByDataset: { golf: 1 },
+      gapTasks: [SAMPLE_GAP_TASK],
+      citations: ["https://www.realcourse.example/about"],
+      beforeMatrixMd: BEFORE_MATRIX_MD,
+      afterMatrixMd: AFTER_MATRIX_MD,
+      docsDir,
+      repoRoot: docsDir,
+      run,
+    });
+
+    const expectedRelativeBodyPath = "pending-prs/expand/golf-artifact-commit-test.md";
+    assert.ok(
+      calls.some((c) => c.cmd === "git" && c.args[0] === "add" && c.args.includes(expectedRelativeBodyPath)),
+      `expected a "git add -- ${expectedRelativeBodyPath}" call, got: ${JSON.stringify(calls)}`,
+    );
+    // the add for the PR-body artifact must happen before the commit, and
+    // after the branch checkout (so it lands ON the new branch's commit).
+    const checkoutIdx = calls.findIndex((c) => c.cmd === "git" && c.args[0] === "checkout");
+    const addBodyIdx = calls.findIndex(
+      (c) => c.cmd === "git" && c.args[0] === "add" && c.args.includes(expectedRelativeBodyPath),
+    );
+    const commitIdx = calls.findIndex((c) => c.cmd === "git" && c.args[0] === "commit");
+    assert.ok(checkoutIdx < addBodyIdx, "checkout must happen before staging the PR-body artifact");
+    assert.ok(addBodyIdx < commitIdx, "the PR-body artifact must be staged before the commit");
+    assert.ok(result.bodyPath.endsWith(expectedRelativeBodyPath));
+  });
+});
+
 test("proposePr uses an explicit branch name verbatim when provided (does not re-derive)", () => {
   withTempDocsDir((docsDir) => {
     const { run } = makeSpyRunner();
