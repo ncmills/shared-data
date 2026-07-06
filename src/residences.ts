@@ -32,10 +32,20 @@ function residenceWizards(products: string[]): string[] {
   return w;
 }
 
+// Task 15: the sanctioned expansion file appended to by the ingest gate
+// (`scripts/ingest-researched.ts`). Merged here — the ONE aggregation point —
+// so every consumer of `residencesForSite` sees ingested rows without any
+// other file needing to know the expansion file exists.
+import { SHARED_RESIDENCES_EXPANSION } from "./residences-expansion";
+
+/** Base (regen-only) + the sanctioned expansion file. Mirrors golf's
+ *  `ALL_GOLF_COURSES` pattern in `src/index.ts`. */
+export const ALL_RESIDENCES: SharedResidence[] = [...SHARED_RESIDENCES, ...SHARED_RESIDENCES_EXPANSION];
+
 /** Residences a given site may surface (e.g. "offsite"), tagged with the
  *  wizard vocabulary (offsite-retreat / offsite-outing) derived from products. */
 export function residencesForSite(site: string): SharedResidence[] {
-  return SHARED_RESIDENCES.filter((r) => r.sites.includes(site)).map((r) => ({
+  return ALL_RESIDENCES.filter((r) => r.sites.includes(site)).map((r) => ({
     ...r,
     wizards: r.wizards ?? residenceWizards(r.products),
   }));

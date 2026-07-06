@@ -15,6 +15,7 @@ export * from "./destinations-overlay";
 export * from "./golf-courses";
 export * from "./golf-courses-hhq-merge";
 export * from "./residences";
+export * from "./residences-expansion";
 export * from "./tdf-destinations";
 export * from "./moh-locals";
 export * from "./bestman-locals";

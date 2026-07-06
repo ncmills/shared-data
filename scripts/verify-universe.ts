@@ -20,7 +20,7 @@ import {
   applyMohOverlay,
   SHARED_GOLF_COURSES,
   ALL_GOLF_COURSES,
-  SHARED_RESIDENCES,
+  ALL_RESIDENCES,
   SHARED_TDF_DESTINATIONS,
   residencesForSite,
   mohLocals,
@@ -99,7 +99,9 @@ for (const c of ALL_GOLF_COURSES) {
   if (!c.sites?.length) fail(`golf ${c.name}: empty sites`);
   for (const s of c.sites ?? []) if (s !== "tdf" && s !== "offsite" && s !== "handicap") fail(`golf ${c.name}: bad site "${s}"`);
 }
-for (const r of SHARED_RESIDENCES) {
+// ALL_RESIDENCES = SHARED_RESIDENCES (regen-only) + the Task 15 sanctioned
+// expansion file, so ingested rows get the same "non-empty sites" guard.
+for (const r of ALL_RESIDENCES) {
   if (!r.sites?.length) fail(`residence ${r.id}: empty sites`);
 }
 // residencesForSite attaches wizard routing (offsite-retreat / offsite-outing)
@@ -161,7 +163,7 @@ console.log(`  oo-atlas: ${allOoExp.length} experiences · ${allOoOut.length} ou
 
 console.log(
   `universe: ${sharedDestinations.length} party-dests (${itemCount} items) · ` +
-    `${SHARED_GOLF_COURSES.length} courses · ${SHARED_RESIDENCES.length} residences · ` +
+    `${SHARED_GOLF_COURSES.length} courses · ${ALL_RESIDENCES.length} residences · ` +
     `${SHARED_TDF_DESTINATIONS.length} tdf-dests · ${mohLocals().length} moh-locals · ` +
     `${bestmanLocals().length} bestman-locals · OO-overlay items checked: ${ooItems}`,
 );
