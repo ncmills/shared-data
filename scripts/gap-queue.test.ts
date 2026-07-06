@@ -24,12 +24,12 @@ const GOLF_GAP: Starved = {
 };
 
 test("TEETH: for equal deficit, the dataset serving MORE wizards outranks the one serving fewer", () => {
-  // party-venue (bestman, moh, offsite-outing = 3 wizards per ENGINE_READS)
-  // vs golf-course (bestman, offsite-retreat, offsite-outing, handicap, tdf
-  // = 5 wizards per ENGINE_READS, since Task 10b added bestman). Whichever
-  // wizard count is actually larger should win — assert against the live
-  // reverse-lookup result, not a hardcoded expectation, so this test can't
-  // silently drift from ENGINE_READS.
+  // party-venue (bestman, moh, offsite-retreat, offsite-outing = 4 wizards
+  // per ENGINE_READS) vs golf-course (bestman, offsite-retreat,
+  // offsite-outing, handicap, tdf = 5 wizards per ENGINE_READS, since Task
+  // 10b added bestman). Whichever wizard count is actually larger should
+  // win — assert against the live reverse-lookup result, not a hardcoded
+  // expectation, so this test can't silently drift from ENGINE_READS.
   const queue = buildGapQueueFrom([PARTY_GAP, GOLF_GAP], 3);
   assert.equal(queue.length, 2);
 
@@ -113,4 +113,49 @@ test("ties on leverageScore preserve original relative order (stable sort)", () 
   const queue = buildGapQueueFrom([a, b], 3);
   assert.equal(queue[0].cell.golfRegion, "Midwest");
   assert.equal(queue[1].cell.golfRegion, "Southeast");
+});
+
+test("TEETH: no two tasks in the output share the same (dataset, cell) — one physical gap, one score", () => {
+  // handicap and tdf share the identical golfRegion x tier input space over
+  // the same golf-course universe (WIZARD_INPUT_SPACE), so the SAME
+  // physical cell is enumerated once per wizard by findStarvedIn. Without
+  // dedup this would double-count leverage for one real gap.
+  const handicapGap: Starved = { wizard: "handicap", cell: { golfRegion: "International", tier: "budget" }, count: 0 };
+  const tdfGap: Starved = { wizard: "tdf", cell: { golfRegion: "International", tier: "budget" }, count: 1 };
+  const queue = buildGapQueueFrom([handicapGap, tdfGap], 3);
+
+  const seen = new Set<string>();
+  for (const t of queue) {
+    const key = `${t.dataset}::${JSON.stringify(Object.entries(t.cell).sort())}`;
+    assert.ok(!seen.has(key), `duplicate (dataset, cell) in output: ${key}`);
+    seen.add(key);
+  }
+});
+
+test("TEETH: the same physical cell starved for two different wizards collapses into ONE task with the merged (max) deficit and full wizardsServed", () => {
+  const handicapGap: Starved = { wizard: "handicap", cell: { golfRegion: "International", tier: "budget" }, count: 0 }; // deficit 3
+  const tdfGap: Starved = { wizard: "tdf", cell: { golfRegion: "International", tier: "budget" }, count: 1 }; // deficit 2
+  const queue = buildGapQueueFrom([handicapGap, tdfGap], 3);
+
+  assert.equal(queue.length, 1, "one physical gap must yield exactly one task");
+  const [task] = queue;
+  assert.equal(task.dataset, "golf");
+  assert.deepEqual(task.cell, { golfRegion: "International", tier: "budget" });
+  assert.equal(task.deficit, 3, "merged deficit must be the MAX across the duplicates (worst starvation)");
+  // wizardsServed is the dataset's full reverse-lookup (unchanged, union already).
+  assert.ok(task.wizardsServed.includes("handicap"));
+  assert.ok(task.wizardsServed.includes("tdf"));
+  assert.ok(task.wizardsServed.includes("bestman"));
+  // starvedForWizards: provenance of which wizards were actually starved on
+  // this cell (union of the merged duplicates), distinct from wizardsServed.
+  assert.equal(task.starvedForWizards.length, 2);
+  assert.ok(task.starvedForWizards.includes("handicap"));
+  assert.ok(task.starvedForWizards.includes("tdf"));
+  // leverageScore recomputed on the merged (max) deficit.
+  assert.equal(task.leverageScore, 3 * task.wizardsServed.length * 1.0);
+});
+
+test("id is (dataset, cell)-based, not wizard-based, so it's stable and unique per physical gap", () => {
+  const [task] = buildGapQueueFrom([{ wizard: "handicap", cell: { golfRegion: "International", tier: "budget" }, count: 1 }], 3);
+  assert.equal(task.id, "golf:golfRegion=International;tier=budget");
 });

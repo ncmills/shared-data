@@ -26,6 +26,19 @@
  * differentiation (e.g. if a non-Planning-cluster wizard should count less),
  * not a currently-active penalty.
  *
+ * DEDUP: multiple wizards can enumerate the IDENTICAL (dataset, cell) axis —
+ * handicap/tdf both walk golfRegion × tier over the golf-course universe;
+ * bestman/moh both walk region × partyVibe over the party-venue universe.
+ * `findStarved` (Task 11) commits each wizard's own cell independently, so
+ * the same physical gap can show up as two `Starved` entries with identical
+ * `(dataset, cell)`. One physical gap must produce exactly one ranked entry
+ * — `buildGapQueueFrom` groups by `(dataset, cell)` BEFORE scoring, keeps the
+ * MAX deficit across the merged duplicates (worst starvation wins), and
+ * records the origin wizards as `starvedForWizards` (provenance only,
+ * distinct from `wizardsServed`, which stays the dataset's full
+ * reverse-lookup). Without this, top-K selection (Task 17) and the
+ * researcher (Task 14) would double-process one gap at an identical score.
+ *
  * Run:  npx tsx scripts/gap-queue.ts        (writes docs/gap-queue.json)
  * Test: npx tsx --test scripts/gap-queue.test.ts
  */
@@ -45,6 +58,12 @@ export interface GapTask {
   cell: Record<string, string>;
   deficit: number;
   wizardsServed: WizardTag[];
+  /** Origin wizard(s) whose starved-input enumeration produced this physical
+   *  gap (union across merged duplicates — see `buildGapQueueFrom`'s dedup
+   *  step). Provenance only; distinct from `wizardsServed`, which is the
+   *  dataset's full reverse-lookup of every wizard that would benefit from
+   *  filling it. */
+  starvedForWizards: WizardTag[];
   leverageScore: number;
 }
 
@@ -106,33 +125,77 @@ function wizardsServedFor(kind: EntityKind): WizardTag[] {
   return (Object.keys(ENGINE_READS) as WizardTag[]).filter((w) => ENGINE_READS[w].includes(kind));
 }
 
-/** Stable `id` for a starved cell: wizard + sorted "key=value" cell pairs. */
-function idFor(wizard: WizardTag, cell: Record<string, string>): string {
-  const pairs = Object.keys(cell)
+/** Sorted "key=value" cell pairs — the part of the id/dedup-key that's
+ *  wizard-independent. */
+function cellKey(cell: Record<string, string>): string {
+  return Object.keys(cell)
     .sort()
     .map((k) => `${k}=${cell[k]}`)
     .join(";");
-  return `${wizard}:${pairs}`;
+}
+
+/** Stable `id` for a PHYSICAL gap: dataset + sorted "key=value" cell pairs.
+ *  Deliberately dataset-based, not wizard-based — multiple wizards can share
+ *  the identical (dataset, cell) axis (e.g. handicap/tdf both enumerate
+ *  golfRegion x tier over the same golf-course universe), and a physical gap
+ *  must have exactly one id regardless of which wizard(s) surfaced it. */
+function idFor(dataset: string, cell: Record<string, string>): string {
+  return `${dataset}:${cellKey(cell)}`;
+}
+
+/** Intermediate per-(dataset, cell) accumulator used while deduping. */
+interface GapGroup {
+  dataset: string;
+  cell: Record<string, string>;
+  kind: EntityKind;
+  deficit: number; // running MAX across merged duplicates
+  starvedForWizards: WizardTag[]; // dedup'd, first-seen order
 }
 
 /**
  * Core, test-friendly builder — takes a `Starved[]` (real or synthetic) and
  * the same `threshold` `findStarved` was run with, and returns the ranked
  * `GapTask[]` queue. No file I/O, no live-data dependency.
+ *
+ * `wizardsServed` is derived purely from the DATASET (a reverse lookup over
+ * `ENGINE_READS`), but multiple wizards can enumerate the identical input
+ * cell over that same dataset (e.g. handicap/tdf both walk golfRegion x tier
+ * over the golf-course universe; bestman/moh both walk region x partyVibe
+ * over the party-venue universe). Left un-deduped, that's the SAME physical
+ * gap counted twice at an IDENTICAL leverageScore, which would double-process
+ * one gap in top-K selection and the researcher. So: group by `(dataset,
+ * cell)` first, keep the worst (max) deficit across the merged duplicates,
+ * and only then compute one leverageScore and sort.
  */
 export function buildGapQueueFrom(starved: Starved[], threshold = 3): GapTask[] {
-  const tasks: GapTask[] = starved.map((s) => {
+  const groups = new Map<string, GapGroup>();
+
+  for (const s of starved) {
     const kind = WIZARD_TO_STARVED_KIND[s.wizard];
     const dataset = KIND_TO_DATASET[kind];
-    const wizardsServed = wizardsServedFor(kind);
     const deficit = threshold - s.count;
-    const leverageScore = deficit * wizardsServed.length * seoWeightFor(s.wizard);
+    const key = `${dataset}::${cellKey(s.cell)}`;
+
+    const existing = groups.get(key);
+    if (existing) {
+      existing.deficit = Math.max(existing.deficit, deficit);
+      if (!existing.starvedForWizards.includes(s.wizard)) existing.starvedForWizards.push(s.wizard);
+    } else {
+      groups.set(key, { dataset, cell: s.cell, kind, deficit, starvedForWizards: [s.wizard] });
+    }
+  }
+
+  const tasks: GapTask[] = Array.from(groups.values()).map((g) => {
+    const wizardsServed = wizardsServedFor(g.kind);
+    const seoWeight = Math.max(...g.starvedForWizards.map(seoWeightFor));
+    const leverageScore = g.deficit * wizardsServed.length * seoWeight;
     return {
-      id: idFor(s.wizard, s.cell),
-      dataset,
-      cell: s.cell,
-      deficit,
+      id: idFor(g.dataset, g.cell),
+      dataset: g.dataset,
+      cell: g.cell,
+      deficit: g.deficit,
       wizardsServed,
+      starvedForWizards: g.starvedForWizards,
       leverageScore,
     };
   });
@@ -160,7 +223,7 @@ if (isMain) {
   console.log(`top ${Math.min(5, queue.length)}:`);
   for (const t of queue.slice(0, 5)) {
     console.log(
-      `  ${t.leverageScore.toFixed(1).padStart(6)}  ${t.dataset.padEnd(10)} deficit=${t.deficit} servedBy=[${t.wizardsServed.join(",")}]  ${JSON.stringify(t.cell)}`,
+      `  ${t.leverageScore.toFixed(1).padStart(6)}  ${t.dataset.padEnd(10)} deficit=${t.deficit} servedBy=[${t.wizardsServed.join(",")}] starvedFor=[${t.starvedForWizards.join(",")}]  ${JSON.stringify(t.cell)}`,
     );
   }
 }
