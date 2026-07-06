@@ -106,16 +106,44 @@ Cadence: **monthly, Day 6 ~09:30** — the day after the Day-5 SEO fleet agent
 ## Test
 
 ```bash
-npx tsx --test scripts/run-expansion.test.ts
+npx tsx --test scripts/run-expansion.test.ts scripts/research-gap.test.ts \
+  scripts/ingest-researched.test.ts src/research-schema.test.ts src/verify-url.test.ts
 ```
 
 Covers: per-dataset breakdown (the seam), rowCap enforcement with reported
 drops, dryRun zero-side-effects (injected ingest/propose spies), the
-push:false LOCAL-only gate, and the empty-batch / rolled-back-gate → no-PR
-paths. No network, no git, no real-file writes.
+push:false LOCAL-only gate, the empty-batch / rolled-back-gate → no-PR
+paths, ingest dedup (`skippedDuplicates`), the UI-field defaults, and the
+URL-liveness gate (`verifyUrlLive`/`validateResearchedRowLive`, `liveUrlCheck`
+threading). No network, no git, no real-file writes — every network-shaped
+check injects a fake `fetch`/verifier.
 
 ## Arm-time prerequisites (before `launchctl load`)
 
-1. **Fix ingest dedup** — `ingestResearched` appends unconditionally; add dedup by `(name,city)`/`id` before append so a venue researched across two monthly runs is not double-counted (harmless while disarmed + human-in-loop, latent in a recurring engine — final-review finding #9).
+1. ~~**Fix ingest dedup**~~ — **DONE.** `ingestResearched` now dedups before
+   append against BOTH the target sanctioned expansion file AND the regen-only
+   base dataset (golf: `(name, city)` case-insensitive; residence: `id`
+   case-insensitive, falling back to `(name, region)`), plus within the same
+   batch. Skips are reported via `IngestResult.skippedDuplicates` + a matching
+   `reasons` line — never silent. See `scripts/ingest-researched.ts` and its
+   test file.
 2. **Wire a real researcher backend** (e.g. headless `claude -p`) — the disarmed CLI fails closed (no ingest) without one.
-3. **Backfill optional wizard-UI fields** on ingested rows (minimal ResearchedRow set omits `driveMinutes`/`capacity`/etc. the live wizard UI expects).
+3. ~~**Backfill optional wizard-UI fields**~~ — **DONE.** `toGolfCourse`/
+   `toResidence` now write SAFE, neutral (never fabricated) defaults for the
+   optional fields live consumers read directly with no fallback on their
+   end — golf: `driveMinutes` defaults to `0`, `walkable` to `false`
+   (`greenFeeRange`/`style` remain hard-required: a fabricated price/style
+   would be worse than rejecting); residence: `nearestAirports: []`,
+   `capacity`/`spaces`/`price`/`seasonality`/etc. zeroed/empty structs — Offsite
+   Outpost casts `residencesForSite("offsite")` directly to its `Venue` type
+   with no hydration step, and reads several of these fields without optional
+   chaining (a real crash risk on a minimal row, not just a cosmetic gap).
+4. **URL-liveness gate — NEW, DONE.** `src/verify-url.ts`'s `verifyUrlLive` +
+   `validateResearchedRowLive` require a real 2xx/3xx HTTP response on
+   `sourceUrl` (8s timeout, HEAD→GET fallback, redirects followed) before a
+   row counts as valid — a real-looking-but-dead/wrong URL can no longer
+   reach a PR. Opt-in via `researchGap`'s `liveUrlCheck` (threaded from
+   `runExpansion`); the CLI below arms it by default (`--skip-live-check` to
+   opt out for a supervised run against already-verified candidates). The
+   plain SYNC `validateResearchedRow` is unchanged and remains what every
+   existing test / interactive session uses.

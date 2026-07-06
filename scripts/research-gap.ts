@@ -15,6 +15,7 @@
 
 import type { GapTask } from "./gap-queue";
 import { validateResearchedRow, type ResearchedRow } from "../src/research-schema";
+import { validateResearchedRowLive, type UrlLiveResult } from "../src/verify-url";
 
 /**
  * A researcher takes a fully-built research prompt and returns candidate
@@ -23,6 +24,21 @@ import { validateResearchedRow, type ResearchedRow } from "../src/research-schem
  * parallel-research-fanout discipline; in tests it's a deterministic mock.
  */
 export type Researcher = (prompt: string) => Promise<unknown[]>;
+
+export interface ResearchGapOptions {
+  /**
+   * Item 3 of the arm-time hardening: when true, every candidate that
+   * survives the sync honesty firewall is ALSO required to have a live
+   * (2xx/3xx) `sourceUrl` before counting as valid — a real-looking-but-dead
+   * URL is rejected, not just shape-checked. Defaults to `false`, the
+   * sync-only behavior every existing test/interactive caller relies on.
+   * Opt-in for the unattended engine (`run-expansion.ts`'s CLI arms this).
+   */
+  liveUrlCheck?: boolean;
+  /** Injected live-URL verifier for tests / a custom fetch policy. Defaults
+   *  to `verifyUrlLive` itself. Ignored when `liveUrlCheck` is falsy. */
+  verifyUrl?: (url: string) => Promise<UrlLiveResult>;
+}
 
 export interface ResearchGapResult {
   /** Validated, real-shaped rows (the ok:true survivors). */
@@ -79,21 +95,36 @@ export function buildResearchPrompt(task: GapTask): string {
  * rejected count + per-reject reasons. Never throws on a bad candidate — a
  * fabricated/malformed row is a reject, not a crash.
  */
-export async function researchGap(task: GapTask, researcher: Researcher): Promise<ResearchGapResult> {
+export async function researchGap(
+  task: GapTask,
+  researcher: Researcher,
+  opts: ResearchGapOptions = {},
+): Promise<ResearchGapResult> {
   const prompt = buildResearchPrompt(task);
   const candidates = await researcher(prompt);
 
   const rows: ResearchedRow[] = [];
   const rejections: { index: number; reasons: string[] }[] = [];
 
-  candidates.forEach((candidate, index) => {
-    const res = validateResearchedRow(candidate);
-    if (res.ok) {
-      rows.push(res.row);
-    } else {
-      rejections.push({ index, reasons: res.reasons });
+  if (opts.liveUrlCheck) {
+    for (const [index, candidate] of candidates.entries()) {
+      const res = await validateResearchedRowLive(candidate, { verifyUrl: opts.verifyUrl });
+      if (res.ok) {
+        rows.push(res.row);
+      } else {
+        rejections.push({ index, reasons: res.reasons });
+      }
     }
-  });
+  } else {
+    candidates.forEach((candidate, index) => {
+      const res = validateResearchedRow(candidate);
+      if (res.ok) {
+        rows.push(res.row);
+      } else {
+        rejections.push({ index, reasons: res.reasons });
+      }
+    });
+  }
 
   return { rows, rejected: rejections.length, rejections };
 }

@@ -56,7 +56,9 @@ import {
   type ResearchedResidenceRow,
 } from "../src/research-schema";
 import { deriveRouting } from "../src/tagging-rules";
+import { SHARED_GOLF_COURSES } from "../src/golf-courses";
 import type { SharedGolfCourse } from "../src/golf-courses";
+import { SHARED_RESIDENCES } from "../src/residences";
 import type { SharedResidence } from "../src/residences";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -85,10 +87,33 @@ export interface IngestOptions {
   runGates?: () => GateResult;
 }
 
+/**
+ * A candidate that was NEVER appended because its identity already exists —
+ * either in the target sanctioned expansion file (a venue researched again
+ * across two monthly runs) or in the regen-only base dataset (a venue the
+ * curated data already carries). Reported explicitly (Item 1 of the arm-time
+ * hardening) — never silently dropped, so an unattended monthly run's log /
+ * PR-body builder can always see exactly why a row didn't land.
+ */
+export interface SkippedDuplicate {
+  dataset: "golf" | "residence";
+  /** Human-readable identity of the skipped candidate (name+city, or id). */
+  identity: string;
+  reason: string;
+}
+
 export interface IngestResult {
   accepted: number;
   rejected: number;
   reasons: string[];
+  /**
+   * Candidates that passed validation + shape-conversion but were skipped
+   * because their identity already exists in the expansion file or the base
+   * dataset — see `SkippedDuplicate`. Always `[]` when nothing was skipped.
+   * Every entry here is ALSO counted in `rejected` and has a matching line in
+   * `reasons` (belt-and-suspenders — no separate silent bookkeeping).
+   */
+  skippedDuplicates: SkippedDuplicate[];
   /**
    * The exact `ResearchedRow`s that PASSED validation AND shape-conversion
    * AND every gate, and were actually written to a sanctioned expansion
@@ -147,6 +172,54 @@ function writeArrayFile(path: string, parsed: ParsedArrayFile, arr: unknown[]): 
   writeFileSync(path, parsed.prefix + JSON.stringify(arr) + parsed.suffix);
 }
 
+// ─── dedup identity (Item 1: skip an already-present venue, never re-append) ─
+//
+// golf      → (name, city), case-insensitive.
+// residence → id, case-insensitive (residence.id is required — see
+//             REQUIRED_FIELDS.residence in research-schema.ts); falls back to
+//             (name, region) case-insensitive if id is ever absent (defensive
+//             — not reachable via the honesty-firewall validator today, kept
+//             for interface robustness / direct callers of the converter).
+
+function norm(s: string): string {
+  return s.trim().toLowerCase();
+}
+
+function golfIdentityKey(name: string, city: string): string {
+  return `${norm(name)}|${norm(city)}`;
+}
+
+function residenceIdentityKey(id: string | undefined, name: string, region: string): string {
+  if (typeof id === "string" && id.trim()) return `id:${norm(id)}`;
+  return `nr:${norm(name)}|${norm(region)}`;
+}
+
+/** Collect identity keys out of a heterogeneous array of unknown-shaped
+ *  objects (base-dataset rows, or the raw JSON parsed from an expansion
+ *  file) — tolerant of any row missing the identity fields (skipped, not
+ *  thrown on). */
+function collectGolfIdentities(items: readonly unknown[]): Set<string> {
+  const set = new Set<string>();
+  for (const item of items) {
+    const o = item as { name?: unknown; city?: unknown };
+    if (typeof o?.name === "string" && typeof o?.city === "string") {
+      set.add(golfIdentityKey(o.name, o.city));
+    }
+  }
+  return set;
+}
+
+function collectResidenceIdentities(items: readonly unknown[]): Set<string> {
+  const set = new Set<string>();
+  for (const item of items) {
+    const o = item as { id?: unknown; name?: unknown; region?: unknown };
+    if (typeof o?.name === "string" && typeof o?.region === "string") {
+      set.add(residenceIdentityKey(typeof o?.id === "string" ? o.id : undefined, o.name, o.region));
+    }
+  }
+  return set;
+}
+
 // ─── canonical-shape conversion (correct-by-construction routing) ─────────
 
 type ConvertResult<T> = { ok: true; row: T } | { ok: false; reason: string };
@@ -164,17 +237,25 @@ type ConvertResult<T> = { ok: true; row: T } | { ok: false; reason: string };
  * regardless of content.
  */
 function toGolfCourse(row: ResearchedGolfRow): ConvertResult<SharedGolfCourse> {
+  // greenFeeRange / style are substantive commercial/categorical FACTS about
+  // the course — there is no neutral default for "how much does it cost" or
+  // "what style of course is it" that isn't a fabrication, so a row missing
+  // either is still hard-rejected (unchanged from before Item 2).
   const missing: string[] = [];
   if (row.greenFeeRange === undefined) missing.push("greenFeeRange");
   if (typeof row.style !== "string" || !row.style.trim()) missing.push("style");
-  if (typeof row.walkable !== "boolean") missing.push("walkable");
-  if (typeof row.driveMinutes !== "number") missing.push("driveMinutes");
   if (missing.length > 0) {
     return {
       ok: false,
       reason: `golf row "${row.name}" is missing required shape field(s) for SharedGolfCourse: ${missing.join(", ")}`,
     };
   }
+  // driveMinutes / walkable ARE relaxed to SAFE, neutral defaults (Item 2 —
+  // UI-field defaults): a minimal researched row that only has the honesty-
+  // firewall's required fields must not be rejected outright over these.
+  // `driveMinutes: 0` and `walkable: false` are non-fabricated, conservative
+  // placeholders (HHQ's `HhqCourse` reads both directly, no `?`/fallback on
+  // its end) — never a fake specific like an invented rating would be.
 
   const routing = deriveRouting({ kind: "golf-course" });
   const sites: SharedGolfCourse["sites"] =
@@ -194,8 +275,8 @@ function toGolfCourse(row: ResearchedGolfRow): ConvertResult<SharedGolfCourse> {
     tier: row.tier,
     greenFeeRange: row.greenFeeRange as [number, number],
     style: row.style,
-    walkable: row.walkable as boolean,
-    driveMinutes: row.driveMinutes as number,
+    walkable: typeof row.walkable === "boolean" ? row.walkable : false,
+    driveMinutes: typeof row.driveMinutes === "number" ? row.driveMinutes : 0,
     highlight: row.highlight,
     sites,
     products,
@@ -209,6 +290,42 @@ function toGolfCourse(row: ResearchedGolfRow): ConvertResult<SharedGolfCourse> {
 
   return { ok: true, row: course };
 }
+
+/**
+ * Item 2 — UI-field defaults for residence. `residencesForSite("offsite")`
+ * is consumed by Offsite Outpost as `residencesForSite(...) as unknown as
+ * Venue[]` — a DIRECT CAST, no per-field hydration step for offsite venues
+ * (unlike its lighter "wizard pool" tier, which IS hydrated with defaults).
+ * OO's engine (`generate.ts`) reads `v.capacity.min/.max`, `v.seasonality.*`,
+ * `v.price.perPersonPerNight.*`, `v.goodFor.includes(...)`,
+ * `v.signatureExperiences.includes(...)`, and `v.spaces.breakout` WITHOUT
+ * optional chaining — any of these left `undefined` on a minimal researched
+ * row is a real production TypeError (`Cannot read properties of undefined`)
+ * the moment that venue is scored/rendered, not just a cosmetic gap.
+ *
+ * These defaults are all neutral/empty (0, "", [], false) — NEVER an
+ * invented specific fact (no fake capacity numbers, no fake pricing, no fake
+ * "great room seats 250"). A residence written with these defaults simply
+ * scores as "unknown fit" everywhere (capacity 0–0 never matches a real
+ * headcount; price band $0 never wins a price comparison) rather than
+ * crashing OR silently claiming a fact nobody verified.
+ */
+const RESIDENCE_UI_DEFAULTS: Record<string, unknown> = {
+  nearestAirports: [],
+  summary: "",
+  whySpecial: "",
+  capacity: { min: 0, max: 0, sleepsOnsite: 0 },
+  spaces: { general: "", breakout: "", outdoor: "" },
+  dining: "",
+  signatureExperiences: [],
+  seasonality: { bestMonths: "", offPeak: "" },
+  price: { perPersonPerNight: { low: 0, high: 0 }, buyoutNote: "", indicative: true },
+  logistics: "",
+  accessibility: "",
+  goodFor: [],
+  tags: [],
+  imageQuery: "",
+};
 
 /**
  * ResearchedResidenceRow → SharedResidence. Unlike golf, `wizards` IS a real
@@ -225,6 +342,7 @@ function toResidence(row: ResearchedResidenceRow): ConvertResult<SharedResidence
   const products = Array.isArray(rowProducts) && rowProducts.length > 0 ? rowProducts : (routing.core.products as string[]);
 
   const residence: SharedResidence = {
+    ...RESIDENCE_UI_DEFAULTS,
     ...rest,
     id: row.id,
     name: row.name,
@@ -268,15 +386,14 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
   const runGates = opts.runGates ?? defaultRunGates;
 
   const reasons: string[] = [];
+  const skippedDuplicates: SkippedDuplicate[] = [];
   let rejected = 0;
 
-  const validGolf: SharedGolfCourse[] = [];
-  const validResidence: SharedResidence[] = [];
-  // Parallel to validGolf/validResidence — the ORIGINAL ResearchedRow (same
-  // object reference as validateResearchedRow's input) for every row that
-  // survives shape-conversion. Threaded through as IngestResult.acceptedRows
-  // once the batch is actually kept (Step 4/4b below).
-  const acceptedRows: ResearchedRow[] = [];
+  // Candidates surviving validation + shape-conversion, BEFORE dedup — kept
+  // paired with their source ResearchedRow so a later duplicate-skip can
+  // still report/exclude the right one.
+  const golfCandidates: { source: ResearchedRow; course: SharedGolfCourse }[] = [];
+  const residenceCandidates: { source: ResearchedRow; residence: SharedResidence }[] = [];
 
   // ── Step 1: validate every row through the honesty firewall ─────────────
   for (const row of rows) {
@@ -294,8 +411,7 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
         reasons.push(`rejected (shape): ${conv.reason}`);
         continue;
       }
-      validGolf.push(conv.row);
-      acceptedRows.push(v.row);
+      golfCandidates.push({ source: v.row, course: conv.row });
     } else {
       const conv = toResidence(v.row);
       if (!conv.ok) {
@@ -303,13 +419,83 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
         reasons.push(`rejected (shape): ${conv.reason}`);
         continue;
       }
-      validResidence.push(conv.row);
-      acceptedRows.push(v.row);
+      residenceCandidates.push({ source: v.row, residence: conv.row });
     }
   }
 
+  // ── Step 2.5: dedup before append (Item 1) ───────────────────────────────
+  // Identity already existing in EITHER the sanctioned expansion file OR the
+  // regen-only base dataset is skipped — reported via `skippedDuplicates` +
+  // a matching `reasons` line, counted in `rejected`, never silently
+  // dropped. Also dedups WITHIN this batch (two researched rows for the same
+  // venue in one run): first occurrence wins.
+  //
+  // The expansion file is read here (not just inside the Step 3 try) so the
+  // parsed contents can be reused for the actual write below — one read, no
+  // staleness risk (single-threaded, nothing else can mutate it in between).
+  let golfParsed: ParsedArrayFile | undefined;
+  const validGolf: SharedGolfCourse[] = [];
+  const acceptedGolfRows: ResearchedRow[] = [];
+  if (golfCandidates.length > 0) {
+    golfParsed = readArrayFile(golfPath);
+    const existing = new Set<string>([
+      ...collectGolfIdentities(SHARED_GOLF_COURSES),
+      ...collectGolfIdentities(golfParsed.arr),
+    ]);
+    for (const { source, course } of golfCandidates) {
+      const key = golfIdentityKey(course.name, course.city);
+      if (existing.has(key)) {
+        rejected++;
+        const identity = `${course.name} (${course.city})`;
+        skippedDuplicates.push({
+          dataset: "golf",
+          identity,
+          reason: `duplicate of an existing golf course (matched name+city, case-insensitive)`,
+        });
+        reasons.push(`skipped duplicate (golf): "${identity}" already exists in the dataset`);
+        continue;
+      }
+      existing.add(key);
+      validGolf.push(course);
+      acceptedGolfRows.push(source);
+    }
+  }
+
+  let residenceParsed: ParsedArrayFile | undefined;
+  const validResidence: SharedResidence[] = [];
+  const acceptedResidenceRows: ResearchedRow[] = [];
+  if (residenceCandidates.length > 0) {
+    residenceParsed = readArrayFile(residencePath);
+    const existing = new Set<string>([
+      ...collectResidenceIdentities(SHARED_RESIDENCES),
+      ...collectResidenceIdentities(residenceParsed.arr),
+    ]);
+    for (const { source, residence } of residenceCandidates) {
+      const key = residenceIdentityKey(residence.id, residence.name, residence.region);
+      if (existing.has(key)) {
+        rejected++;
+        const identity = residence.id || `${residence.name} (${residence.region})`;
+        skippedDuplicates.push({
+          dataset: "residence",
+          identity,
+          reason: `duplicate of an existing residence (matched id, case-insensitive)`,
+        });
+        reasons.push(`skipped duplicate (residence): "${identity}" already exists in the dataset`);
+        continue;
+      }
+      existing.add(key);
+      validResidence.push(residence);
+      acceptedResidenceRows.push(source);
+    }
+  }
+
+  // acceptedRows: same object references as the corresponding `rows` entries
+  // (no cloning) — golf then residence, not necessarily the original submit
+  // order (no caller relies on cross-dataset ordering; see IngestResult doc).
+  const acceptedRows: ResearchedRow[] = [...acceptedGolfRows, ...acceptedResidenceRows];
+
   if (validGolf.length === 0 && validResidence.length === 0) {
-    return { accepted: 0, rejected, reasons, acceptedRows: [] };
+    return { accepted: 0, rejected, reasons, acceptedRows: [], skippedDuplicates };
   }
 
   // ── Step 3: transactional append — capture prior contents before ANY write
@@ -317,18 +503,16 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
   const expectedCounts: { path: string; expectedLen: number }[] = [];
 
   try {
-    if (validGolf.length > 0) {
-      const parsed = readArrayFile(golfPath);
-      backups.push({ path: golfPath, prevContent: parsed.raw });
-      const merged = [...parsed.arr, ...validGolf];
-      writeArrayFile(golfPath, parsed, merged);
+    if (validGolf.length > 0 && golfParsed) {
+      backups.push({ path: golfPath, prevContent: golfParsed.raw });
+      const merged = [...golfParsed.arr, ...validGolf];
+      writeArrayFile(golfPath, golfParsed, merged);
       expectedCounts.push({ path: golfPath, expectedLen: merged.length });
     }
-    if (validResidence.length > 0) {
-      const parsed = readArrayFile(residencePath);
-      backups.push({ path: residencePath, prevContent: parsed.raw });
-      const merged = [...parsed.arr, ...validResidence];
-      writeArrayFile(residencePath, parsed, merged);
+    if (validResidence.length > 0 && residenceParsed) {
+      backups.push({ path: residencePath, prevContent: residenceParsed.raw });
+      const merged = [...residenceParsed.arr, ...validResidence];
+      writeArrayFile(residencePath, residenceParsed, merged);
       expectedCounts.push({ path: residencePath, expectedLen: merged.length });
     }
 
@@ -357,12 +541,18 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
       throw new GateFailure(`gate "${gate.failedGate ?? "verify/audit"}" failed:\n${gate.output.slice(0, 4000)}`);
     }
 
-    return { accepted: validGolf.length + validResidence.length, rejected, reasons, acceptedRows };
+    return { accepted: validGolf.length + validResidence.length, rejected, reasons, acceptedRows, skippedDuplicates };
   } catch (e) {
     // ── Step 5: roll back EVERY touched file to its exact prior contents ──
     for (const b of backups) writeFileSync(b.path, b.prevContent);
     const msg = e instanceof Error ? e.message : String(e);
     reasons.push(`batch rejected + rolled back: ${msg}`);
-    return { accepted: 0, rejected: rejected + validGolf.length + validResidence.length, reasons, acceptedRows: [] };
+    return {
+      accepted: 0,
+      rejected: rejected + validGolf.length + validResidence.length,
+      reasons,
+      acceptedRows: [],
+      skippedDuplicates,
+    };
   }
 }

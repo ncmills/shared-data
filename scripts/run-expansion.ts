@@ -32,6 +32,16 @@
  * module NEVER passes `push:true`. The monthly launchd plist that drives it
  * ships DISARMED (a file in `deploy/`, never `launchctl load`ed).
  *
+ * ── URL-liveness gate (arm-time hardening, Item 3) ──────────────────────────
+ * The CLI below is the actual unattended entrypoint, so it arms
+ * `liveUrlCheck` by default — every researched row's `sourceUrl` must
+ * resolve live (2xx/3xx via `src/verify-url.ts`'s `verifyUrlLive`) or it's
+ * rejected before ever reaching `ingestResearched`. `runExpansion()` the
+ * *library function* still defaults `liveUrlCheck` to `false` (unchanged
+ * sync-only behavior every existing test relies on) — pass `--skip-live-check`
+ * to the CLI to opt out for a supervised run against candidates already
+ * fetched/verified moments earlier in the same session.
+ *
  * Run (manual):  npx tsx scripts/run-expansion.ts --top-k=1 --dry-run
  * Test:          npx tsx --test scripts/run-expansion.test.ts
  */
@@ -45,6 +55,7 @@ import { researchGap, type Researcher } from "./research-gap";
 import { ingestResearched, type IngestResult } from "./ingest-researched";
 import { proposePr, type ProposePrOptions, type ProposePrResult } from "./propose-pr";
 import type { ResearchedRow } from "../src/research-schema";
+import type { UrlLiveResult } from "../src/verify-url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(HERE, "..");
@@ -124,6 +135,17 @@ export interface RunExpansionOptions {
   researcher: Researcher;
   /** Deterministic label → branch name `expand/<label>` + PR artifact path. */
   label: string;
+  /**
+   * Item 3 of the arm-time hardening: when true, every researched row is
+   * additionally required to have a LIVE (2xx/3xx) `sourceUrl` before it's
+   * counted as valid — threaded straight to `researchGap`'s `liveUrlCheck`.
+   * Defaults to `false` (unchanged sync-only behavior every existing test
+   * relies on). The CLI's real unattended entrypoint below sets this `true`.
+   */
+  liveUrlCheck?: boolean;
+  /** Injected live-URL verifier for tests / a custom fetch policy. Ignored
+   *  when `liveUrlCheck` is falsy. */
+  verifyUrl?: (url: string) => Promise<UrlLiveResult>;
 
   // ── injection seams (default to the real impls / real gap-queue.json) ─────
   /** Override the gap queue directly (tests). Defaults to reading
@@ -191,7 +213,10 @@ export async function runExpansion(opts: RunExpansionOptions): Promise<RunResult
   const perTask: { task: GapTask; rows: ResearchedRow[] }[] = [];
   let rejectedCandidates = 0;
   for (const task of tasksConsidered) {
-    const res = await researchGap(task, opts.researcher);
+    const res = await researchGap(task, opts.researcher, {
+      liveUrlCheck: opts.liveUrlCheck,
+      verifyUrl: opts.verifyUrl,
+    });
     rejectedCandidates += res.rejected;
     say(
       `  gap ${task.id}: ${res.rows.length} valid row(s), ${res.rejected} rejected ` +
@@ -407,6 +432,13 @@ if (isMain) {
   const dryRun = args["dry-run"] === true;
   const label = String(args["label"] ?? `expansion-${new Date().toISOString().slice(0, 10)}`);
   const candidatesPath = typeof args["candidates"] === "string" ? args["candidates"] : undefined;
+  // Item 3: the CLI is the actual unattended entrypoint (the monthly launchd
+  // job runs THIS), so it arms the live URL-liveness check by default — a
+  // real-looking-but-dead/wrong sourceUrl must not reach a PR with no human
+  // in the loop. `--skip-live-check` is an explicit escape hatch for a
+  // supervised run against candidates a session has already fetched/verified
+  // itself (e.g. WebFetch'd them moments earlier).
+  const liveUrlCheck = args["skip-live-check"] !== true;
 
   if (!candidatesPath) {
     console.error(
@@ -424,6 +456,7 @@ if (isMain) {
     rowCap,
     dryRun,
     label,
+    liveUrlCheck,
     researcher: fixedResearcherFromFile(candidatesPath),
   })
     .then((res) => {

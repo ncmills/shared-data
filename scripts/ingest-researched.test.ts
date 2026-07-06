@@ -46,6 +46,18 @@ const GOOD_GOLF: ResearchedRow = {
   citations: ["https://www.ingest-test-fixture-course.golf/about"],
 };
 
+/** Read back the JSON array literal an expansion-fixture file was written
+ *  with. Anchors on the assignment's `= [ ... ];` (end-of-file), NOT the
+ *  first `[` in the file — the type annotation (`SharedGolfCourse[]`) also
+ *  contains a `[]` earlier in the line, which a naive `/\[[\s\S]*\]/` would
+ *  greedily span into, corrupting the parse. */
+function readWrittenArray(path: string): unknown[] {
+  const raw = readFileSync(path, "utf-8");
+  const m = raw.match(/=\s*(\[[\s\S]*\])\s*;?\s*$/);
+  if (!m) throw new Error(`readWrittenArray: could not locate the array assignment in ${path}`);
+  return JSON.parse(m[1]);
+}
+
 /** Spawn a fresh `tsx` process to read `backfillUniverse()` STRAIGHT off disk
  *  (no ESM module-cache risk — see task-15-report.md) and return the matching
  *  golf row's derived `postWizards`, or null if not found. */
@@ -136,6 +148,279 @@ test("REJECTS an invalid row (no sourceUrl) by validation, before ever touching 
 
   const after = readFileSync(DEFAULT_GOLF_EXPANSION_PATH, "utf-8");
   assert.equal(after, before, "an invalid row must never touch the expansion file");
+});
+
+// ─── Item 1: dedup before append ────────────────────────────────────────────
+// A venue researched twice (e.g. across two monthly runs, or already present
+// in the regen-only base dataset) must be SKIPPED, not double-appended — and
+// the skip must be REPORTED, never silent. Identity: golf = (name, city)
+// case-insensitive; residence = id (or (name, region) if no id).
+
+test("dedup: a golf row matching an EXISTING row already in the injected expansion file is skipped, not appended", () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-dedup-"));
+  const tmpGolfPath = join(tmpDir, "golf-fixture.ts");
+  const existingCourse = {
+    name: "Existing Fixture Course",
+    city: "Somewhere",
+    state: "MN",
+    region: "Midwest",
+    tier: "value",
+    greenFeeRange: [30, 60],
+    style: "parkland",
+    walkable: true,
+    driveMinutes: 15,
+    highlight: "Already in the expansion file.",
+    sites: ["tdf", "offsite", "handicap"],
+    products: ["golf-trip"],
+  };
+  const initialContent =
+    `import type { SharedGolfCourse } from "../src/golf-courses";\n\n` +
+    `export const SHARED_GOLF_COURSES_HHQ_MERGE: SharedGolfCourse[] = ${JSON.stringify([existingCourse])};\n`;
+  writeFileSync(tmpGolfPath, initialContent);
+
+  try {
+    // Same venue, different case in both name and city — must still match.
+    const dupeRow: ResearchedRow = {
+      ...GOOD_GOLF,
+      name: "EXISTING FIXTURE COURSE",
+      city: "somewhere",
+    };
+    const result = ingestResearched([dupeRow], { golfFilePath: tmpGolfPath });
+
+    assert.equal(result.accepted, 0);
+    assert.equal(result.rejected, 1);
+    assert.deepEqual(result.acceptedRows, []);
+    assert.equal(result.skippedDuplicates.length, 1);
+    assert.equal(result.skippedDuplicates[0].dataset, "golf");
+    assert.ok(result.reasons.some((r) => /duplicate/i.test(r)));
+
+    const after = readFileSync(tmpGolfPath, "utf-8");
+    assert.equal(after, initialContent, "the file must be untouched — dedup happens before any write");
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test("dedup: a golf row matching a course already in the BASE dataset (SHARED_GOLF_COURSES) is skipped", () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-dedup-base-"));
+  const tmpGolfPath = join(tmpDir, "golf-fixture.ts");
+  const initialContent =
+    `import type { SharedGolfCourse } from "../src/golf-courses";\n\n` +
+    `export const SHARED_GOLF_COURSES_HHQ_MERGE: SharedGolfCourse[] = [];\n`;
+  writeFileSync(tmpGolfPath, initialContent);
+
+  try {
+    // "TPC Scottsdale (Stadium Course)" / "Scottsdale" is a REAL base-dataset
+    // entry (SHARED_GOLF_COURSES) — never appended anywhere, must still dedupe.
+    const dupeRow: ResearchedRow = {
+      ...GOOD_GOLF,
+      name: "tpc scottsdale (stadium course)",
+      city: "SCOTTSDALE",
+    };
+    const result = ingestResearched([dupeRow], { golfFilePath: tmpGolfPath });
+
+    assert.equal(result.accepted, 0);
+    assert.equal(result.rejected, 1);
+    assert.equal(result.skippedDuplicates.length, 1);
+    const after = readFileSync(tmpGolfPath, "utf-8");
+    assert.equal(after, initialContent, "the (empty) expansion file must be untouched");
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test("dedup: a residence row matching an existing base-dataset id (SHARED_RESIDENCES) is skipped", () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-dedup-residence-"));
+  const tmpResidencePath = join(tmpDir, "residence-fixture.ts");
+  const initialContent =
+    `import type { SharedResidence } from "../src/residences";\n\n` +
+    `export const SHARED_RESIDENCES_EXPANSION: SharedResidence[] = [];\n`;
+  writeFileSync(tmpResidencePath, initialContent);
+
+  try {
+    // "brush-creek-ranch" is a REAL id already in SHARED_RESIDENCES — id match
+    // must win even though name/region differ from the original.
+    const dupeRow: ResearchedRow = {
+      dataset: "residence",
+      id: "Brush-Creek-Ranch",
+      name: "A Totally Different Name",
+      setting: "ranch",
+      region: "Somewhere Else",
+      country: "USA",
+      sourceUrl: "https://www.ingest-test-fixture-residence.example/",
+      citations: ["https://www.ingest-test-fixture-residence.example/about"],
+    };
+    const result = ingestResearched([dupeRow], { residenceFilePath: tmpResidencePath });
+
+    assert.equal(result.accepted, 0);
+    assert.equal(result.rejected, 1);
+    assert.equal(result.skippedDuplicates.length, 1);
+    assert.equal(result.skippedDuplicates[0].dataset, "residence");
+    const after = readFileSync(tmpResidencePath, "utf-8");
+    assert.equal(after, initialContent);
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test("dedup: two identical golf rows in the SAME batch — only the first lands, the second is reported as a duplicate", () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-dedup-intrabatch-"));
+  const tmpGolfPath = join(tmpDir, "golf-fixture.ts");
+  const initialContent =
+    `import type { SharedGolfCourse } from "../src/golf-courses";\n\n` +
+    `export const SHARED_GOLF_COURSES_HHQ_MERGE: SharedGolfCourse[] = [];\n`;
+  writeFileSync(tmpGolfPath, initialContent);
+
+  try {
+    const name = `Ingest Test Intra-Batch Course ${Date.now()}`;
+    const rowA: ResearchedRow = { ...GOOD_GOLF, name };
+    const rowB: ResearchedRow = { ...GOOD_GOLF, name: name.toUpperCase() };
+    const result = ingestResearched([rowA, rowB], {
+      golfFilePath: tmpGolfPath,
+      runGates: () => ({ ok: true, output: "" }),
+    });
+
+    assert.equal(result.accepted, 1);
+    assert.equal(result.rejected, 1);
+    assert.equal(result.acceptedRows.length, 1);
+    assert.equal(result.skippedDuplicates.length, 1);
+
+    const after = readWrittenArray(tmpGolfPath);
+    assert.equal(after.length, 1, "only one of the two identical rows should have landed");
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+// ─── Item 2: safe UI-field defaults for a minimal ResearchedRow ─────────────
+// A minimal row may omit optional fields the live wizard UIs read directly
+// (no crash-safe fallback on their end) — the canonical row WRITTEN must
+// carry neutral/empty defaults instead of leaving them undefined, WITHOUT
+// fabricating any specific fact (no fake ratings, no fake pricing).
+
+test("golf UI defaults: a row missing driveMinutes/walkable lands with SAFE defaults (0 / false), not rejected", () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-defaults-golf-"));
+  const tmpGolfPath = join(tmpDir, "golf-fixture.ts");
+  const initialContent =
+    `import type { SharedGolfCourse } from "../src/golf-courses";\n\n` +
+    `export const SHARED_GOLF_COURSES_HHQ_MERGE: SharedGolfCourse[] = [];\n`;
+  writeFileSync(tmpGolfPath, initialContent);
+
+  try {
+    const { driveMinutes: _dm, walkable: _w, ...minimal } = GOOD_GOLF as Record<string, unknown>;
+    const result = ingestResearched([minimal as unknown as ResearchedRow], {
+      golfFilePath: tmpGolfPath,
+      runGates: () => ({ ok: true, output: "" }),
+    });
+
+    assert.equal(result.accepted, 1, "a row missing only driveMinutes/walkable must NOT be rejected");
+    const written = readWrittenArray(tmpGolfPath);
+    assert.equal(written.length, 1);
+    assert.equal(written[0].driveMinutes, 0, "driveMinutes must default to a safe neutral 0, not be undefined");
+    assert.equal(written[0].walkable, false, "walkable must default to false (conservative), not be undefined");
+    assert.equal(written[0].rating, undefined, "rating must stay OMITTED, never a fabricated number");
+    assert.equal(written[0].googleRating, undefined, "googleRating must stay OMITTED, never fabricated");
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test("golf still REJECTS a row missing greenFeeRange or style (no safe default exists for fabricated pricing/categorization)", () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-defaults-golf-required-"));
+  const tmpGolfPath = join(tmpDir, "golf-fixture.ts");
+  writeFileSync(
+    tmpGolfPath,
+    `import type { SharedGolfCourse } from "../src/golf-courses";\n\n` +
+      `export const SHARED_GOLF_COURSES_HHQ_MERGE: SharedGolfCourse[] = [];\n`,
+  );
+  try {
+    const { greenFeeRange: _gfr, ...missingPrice } = GOOD_GOLF as Record<string, unknown>;
+    const result = ingestResearched([missingPrice as unknown as ResearchedRow], { golfFilePath: tmpGolfPath });
+    assert.equal(result.accepted, 0);
+    assert.ok(result.reasons.some((r) => /greenFeeRange/.test(r)));
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test("residence UI defaults: a minimal row lands with SAFE structural defaults consumers read directly (no crash)", () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-defaults-residence-"));
+  const tmpResidencePath = join(tmpDir, "residence-fixture.ts");
+  writeFileSync(
+    tmpResidencePath,
+    `import type { SharedResidence } from "../src/residences";\n\n` +
+      `export const SHARED_RESIDENCES_EXPANSION: SharedResidence[] = [];\n`,
+  );
+  try {
+    const minimalRow: ResearchedRow = {
+      dataset: "residence",
+      id: `ingest-test-minimal-residence-${Date.now()}`,
+      name: "Ingest Test Minimal Residence",
+      setting: "countryside",
+      region: "Test Region",
+      country: "USA",
+      sourceUrl: "https://www.ingest-test-minimal-residence.example/",
+      citations: ["https://www.ingest-test-minimal-residence.example/about"],
+    };
+    const result = ingestResearched([minimalRow], {
+      residenceFilePath: tmpResidencePath,
+      runGates: () => ({ ok: true, output: "" }),
+    });
+
+    assert.equal(result.accepted, 1);
+    const written = readWrittenArray(tmpResidencePath);
+    assert.equal(written.length, 1);
+    const r = written[0];
+    assert.deepEqual(r.nearestAirports, [], "nearestAirports must default to [] (OO reads it via [0]?.code)");
+    assert.deepEqual(r.capacity, { min: 0, max: 0, sleepsOnsite: 0 }, "capacity must default to a neutral zeroed struct — OO reads v.capacity.min/.max directly, no optional chaining");
+    assert.deepEqual(r.goodFor, [], "goodFor must default to [] — OO reads v.goodFor.includes(...) directly");
+    assert.deepEqual(r.signatureExperiences, [], "signatureExperiences must default to [] — OO reads .includes(...) directly");
+    assert.deepEqual(r.seasonality, { bestMonths: "", offPeak: "" }, "seasonality must default to empty strings — OO reads v.seasonality.bestMonths/.offPeak directly");
+    assert.deepEqual(r.price, { perPersonPerNight: { low: 0, high: 0 }, buyoutNote: "", indicative: true }, "price must default to a neutral zeroed struct — OO reads v.price.perPersonPerNight.low/.high directly");
+    assert.equal(r.dining, "");
+    assert.equal(r.logistics, "");
+    assert.equal(r.accessibility, "");
+    assert.equal(r.whySpecial, "");
+    assert.equal(r.summary, "");
+    assert.deepEqual(r.tags, []);
+    assert.equal(r.imageQuery, "");
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test("residence UI defaults: an explicitly-supplied optional field WINS over the default", () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-defaults-residence-override-"));
+  const tmpResidencePath = join(tmpDir, "residence-fixture.ts");
+  writeFileSync(
+    tmpResidencePath,
+    `import type { SharedResidence } from "../src/residences";\n\n` +
+      `export const SHARED_RESIDENCES_EXPANSION: SharedResidence[] = [];\n`,
+  );
+  try {
+    const row: ResearchedRow = {
+      dataset: "residence",
+      id: `ingest-test-override-residence-${Date.now()}`,
+      name: "Ingest Test Override Residence",
+      setting: "countryside",
+      region: "Test Region",
+      country: "USA",
+      sourceUrl: "https://www.ingest-test-override-residence.example/",
+      citations: ["https://www.ingest-test-override-residence.example/about"],
+      capacity: { min: 20, max: 60, sleepsOnsite: 60 },
+      dining: "Real researched dining note.",
+    } as unknown as ResearchedRow;
+    const result = ingestResearched([row], {
+      residenceFilePath: tmpResidencePath,
+      runGates: () => ({ ok: true, output: "" }),
+    });
+    assert.equal(result.accepted, 1);
+    const written = readWrittenArray(tmpResidencePath);
+    assert.deepEqual(written[0].capacity, { min: 20, max: 60, sleepsOnsite: 60 });
+    assert.equal(written[0].dining, "Real researched dining note.");
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
 });
 
 test("rollback mechanism: an injected gate failure restores an injected (temp) expansion file exactly", () => {

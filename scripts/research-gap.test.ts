@@ -88,3 +88,55 @@ test("researchGap tolerates a researcher returning an empty list", async () => {
   assert.equal(result.rows.length, 0);
   assert.equal(result.rejected, 0);
 });
+
+// ─── liveUrlCheck (opt-in, for the unattended engine — Item 3) ─────────────
+// NO network here either: `verifyUrl` is injected. Default (no opts) must
+// behave EXACTLY as before (sync-only), proven by the tests above still
+// passing unchanged.
+
+test("researchGap with liveUrlCheck:true additionally rejects a row whose sourceUrl is not live", async () => {
+  const researcher: Researcher = async () => [
+    validCandidate("Cabot Cliffs", "https://www.cabotcapebreton.com/"),
+    validCandidate("Dead Link Course", "https://www.dead-link-course.example/"),
+  ];
+  const result = await researchGap(GOLF_TASK, researcher, {
+    liveUrlCheck: true,
+    verifyUrl: async (url) =>
+      url.includes("dead-link") ? { ok: false, status: 404, reason: "non-2xx/3xx final status: 404" } : { ok: true, status: 200 },
+  });
+  assert.equal(result.rows.length, 1);
+  assert.equal(result.rows[0].name, "Cabot Cliffs");
+  assert.equal(result.rejected, 1);
+  assert.ok(result.rejections.some((r) => r.reasons.some((reason) => /sourceUrl is not live/.test(reason))));
+});
+
+test("researchGap with liveUrlCheck:true never calls the live verifier for a row that already fails sync validation", async () => {
+  let calls = 0;
+  const researcher: Researcher = async () => [
+    // invalid: no sourceUrl at all — must be rejected before any live check
+    { dataset: "golf", name: "No URL Course", region: "International", tier: "budget" },
+  ];
+  const result = await researchGap(GOLF_TASK, researcher, {
+    liveUrlCheck: true,
+    verifyUrl: async () => {
+      calls++;
+      return { ok: true, status: 200 };
+    },
+  });
+  assert.equal(result.rows.length, 0);
+  assert.equal(result.rejected, 1);
+  assert.equal(calls, 0, "the live verifier must never run for a row rejected by sync validation");
+});
+
+test("researchGap without liveUrlCheck (default) never invokes a live verifier even if one is supplied", async () => {
+  let calls = 0;
+  const researcher: Researcher = async () => [validCandidate("Cabot Cliffs", "https://www.cabotcapebreton.com/")];
+  const result = await researchGap(GOLF_TASK, researcher, {
+    verifyUrl: async () => {
+      calls++;
+      return { ok: true, status: 200 };
+    },
+  });
+  assert.equal(result.rows.length, 1);
+  assert.equal(calls, 0, "liveUrlCheck defaults to false — the sync-only path every existing caller relies on");
+});
