@@ -15,8 +15,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { runExpansion } from "./run-expansion";
+import { runExpansion, deriveCliConfig } from "./run-expansion";
 import type { RunExpansionOptions } from "./run-expansion";
+import type { UrlLiveResult } from "../src/verify-url";
 import type { GapTask } from "./gap-queue";
 import type { ResearchedRow } from "../src/research-schema";
 import type { IngestResult } from "./ingest-researched";
@@ -364,4 +365,104 @@ test("PR body reflects only rows that ACTUALLY landed at ingest, not the pre-ing
     !call.citations?.includes("https://crail.example/about"),
     "dropped row's citation must NOT appear in the PR body",
   );
+});
+
+// ─── 7. --auto mode wiring (ARM-B): real researcher + live-URL ON + push ON ──
+
+test("deriveCliConfig(--auto) implies real researcher + live-URL gate + push ON", () => {
+  const cfg = deriveCliConfig({ auto: true, "top-k": "3", "row-cap": "15" });
+  assert.equal(cfg.auto, true);
+  assert.equal(cfg.useClaudeResearcher, true, "--auto uses the real claude researcher");
+  assert.equal(cfg.liveUrlCheck, true, "--auto arms the live-URL gate");
+  assert.equal(cfg.pushPr, true, "--auto (non-dry) pushes a real PR");
+  assert.equal(cfg.topK, 3);
+  assert.equal(cfg.rowCap, 15);
+});
+
+test("deriveCliConfig(--auto --dry-run) researches but NEVER pushes", () => {
+  const cfg = deriveCliConfig({ auto: true, "dry-run": true });
+  assert.equal(cfg.dryRun, true);
+  assert.equal(cfg.useClaudeResearcher, true, "still uses the real researcher to smoke it");
+  assert.equal(cfg.liveUrlCheck, true);
+  assert.equal(cfg.pushPr, false, "a dry run MUST NOT push a PR");
+});
+
+test("deriveCliConfig(default, no --auto) is local-only: no researcher, no push, live-URL still armed", () => {
+  const cfg = deriveCliConfig({ "top-k": "1" });
+  assert.equal(cfg.auto, false);
+  assert.equal(cfg.useClaudeResearcher, false, "default mode wires NO live researcher");
+  assert.equal(cfg.pushPr, false, "default mode is LOCAL-only (never pushes)");
+  assert.equal(cfg.liveUrlCheck, true, "live-URL gate armed by default");
+});
+
+test("deriveCliConfig(--skip-live-check) opts out of the live-URL gate (non-auto only)", () => {
+  const cfg = deriveCliConfig({ "skip-live-check": true });
+  assert.equal(cfg.liveUrlCheck, false);
+});
+
+test("runExpansion(pushPr:true) threads push:true into propose (the --auto real-PR path)", async () => {
+  const propose = spyPropose();
+  const researcher = mockResearcher({ [GOLF_TASK.id]: [golfRow("Leven", "https://leven.example/")] });
+
+  await runExpansion(
+    baseOpts({
+      topK: 1,
+      label: "auto-run",
+      gapQueue: [GOLF_TASK],
+      researcher,
+      pushPr: true,
+      ingest: spyIngest().fn,
+      propose: propose.fn,
+    }),
+  );
+
+  assert.equal(propose.calls.length, 1);
+  assert.equal(propose.calls[0].push, true, "--auto must push a real PR (push:true)");
+});
+
+test("runExpansion(--auto --dry-run equivalent) never ingests/proposes even with pushPr wiring", async () => {
+  const ingest = spyIngest();
+  const propose = spyPropose();
+  const researcher = mockResearcher({ [GOLF_TASK.id]: [golfRow("Leven", "https://leven.example/")] });
+
+  const res = await runExpansion(
+    baseOpts({
+      topK: 1,
+      dryRun: true, // deriveCliConfig sets pushPr:false when dry, but prove the guard regardless
+      pushPr: false,
+      gapQueue: [GOLF_TASK],
+      researcher,
+      ingest: ingest.fn,
+      propose: propose.fn,
+    }),
+  );
+
+  assert.equal(ingest.calls.length, 0, "no ingest on --auto --dry-run");
+  assert.equal(propose.calls.length, 0, "no branch/PR on --auto --dry-run");
+  assert.equal(res.pr, undefined);
+  assert.equal(res.researchedRows.length, 1, "but it still researched + reported");
+});
+
+test("runExpansion(liveUrlCheck:true) drives the injected live-URL verifier (the --auto gate)", async () => {
+  const checked: string[] = [];
+  const verifyUrl = async (url: string): Promise<UrlLiveResult> => {
+    checked.push(url);
+    return { ok: true, status: 200 };
+  };
+  const researcher = mockResearcher({ [GOLF_TASK.id]: [golfRow("Leven", "https://leven.example/")] });
+
+  const res = await runExpansion(
+    baseOpts({
+      topK: 1,
+      gapQueue: [GOLF_TASK],
+      researcher,
+      liveUrlCheck: true,
+      verifyUrl,
+      ingest: spyIngest().fn,
+      propose: spyPropose().fn,
+    }),
+  );
+
+  assert.ok(checked.includes("https://leven.example/"), "the live-URL gate actually fetched the row's sourceUrl");
+  assert.equal(res.ingestedRows.length, 1, "a live row survives the gate");
 });

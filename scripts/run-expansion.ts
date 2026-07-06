@@ -52,6 +52,7 @@ import { fileURLToPath } from "node:url";
 
 import type { GapTask } from "./gap-queue";
 import { researchGap, type Researcher } from "./research-gap";
+import { claudeResearcher } from "./researcher-claude";
 import { ingestResearched, type IngestResult } from "./ingest-researched";
 import { proposePr, type ProposePrOptions, type ProposePrResult } from "./propose-pr";
 import type { ResearchedRow } from "../src/research-schema";
@@ -146,6 +147,14 @@ export interface RunExpansionOptions {
   /** Injected live-URL verifier for tests / a custom fetch policy. Ignored
    *  when `liveUrlCheck` is falsy. */
   verifyUrl?: (url: string) => Promise<UrlLiveResult>;
+  /**
+   * When true, a non-dry run proposes a REAL PR (`proposePr({push:true})` —
+   * `git push` + `gh pr create`). Defaults to `false` (LOCAL-only, the
+   * historical go-live constraint every existing test relies on). ONLY the
+   * `--auto` CLI path sets this `true`, and only on a non-dry run. `--auto
+   * --dry-run` never reaches propose at all, so no PR is ever pushed on a dry
+   * run regardless of this flag. */
+  pushPr?: boolean;
 
   // ── injection seams (default to the real impls / real gap-queue.json) ─────
   /** Override the gap queue directly (tests). Defaults to reading
@@ -378,9 +387,12 @@ export async function runExpansion(opts: RunExpansionOptions): Promise<RunResult
     gapTasks: tasksAddressed,
     rowCountsByDataset,
     citations,
-    push: false,
+    push: opts.pushPr === true,
   });
-  say(`  proposed LOCAL PR on branch ${pr.branch} → artifact ${pr.bodyPath} (push:false)`);
+  say(
+    `  proposed ${opts.pushPr === true ? "PUSHED" : "LOCAL"} PR on branch ${pr.branch} → ` +
+      `artifact ${pr.bodyPath} (push:${opts.pushPr === true})`,
+  );
 
   return {
     label: opts.label,
@@ -424,40 +436,113 @@ function fixedResearcherFromFile(path: string): Researcher {
   return async () => candidates;
 }
 
-const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
-if (isMain) {
-  const args = parseArgs(process.argv.slice(2));
+// ─── CLI config derivation (pure + exported so the wiring is unit-tested) ────
+
+/**
+ * The two-mode contract of the CLI:
+ *
+ *   DEFAULT (no `--auto`) — local-only / researcher-required. No live web
+ *     research agent is wired: you MUST supply `--candidates=<file>` of already
+ *     web-verified rows. The live-URL gate is armed by default (opt out with
+ *     `--skip-live-check`). Never pushes — proposes a LOCAL PR (`push:false`).
+ *
+ *   `--auto` — the UNATTENDED autonomy mode the monthly launchd job runs.
+ *     Implies ALL of: real researcher (`claudeResearcher`) + live-URL gate ON
+ *     + push ON (`proposePr({push:true})` opens a real PR). `--auto --dry-run`
+ *     still does the research + validate + report but NEVER ingests, branches,
+ *     or pushes (dryRun short-circuits before ingest), so it is the safe way to
+ *     smoke the real researcher without opening a PR.
+ */
+export interface CliConfig {
+  topK: number;
+  rowCap: number;
+  dryRun: boolean;
+  label: string;
+  auto: boolean;
+  /** Real PR push — true ONLY when `--auto` AND not a dry run. */
+  pushPr: boolean;
+  /** Live-URL liveness gate — on in `--auto`, and on by default otherwise
+   *  (unless `--skip-live-check`). */
+  liveUrlCheck: boolean;
+  /** Use the real headless-claude researcher (true in `--auto`). */
+  useClaudeResearcher: boolean;
+  /** Supervised path: JSON file of pre-verified candidate rows (non-auto). */
+  candidatesPath?: string;
+}
+
+export function deriveCliConfig(args: Record<string, string | boolean>): CliConfig {
   const topK = Number(args["top-k"] ?? 1);
   const rowCap = Number(args["row-cap"] ?? 10);
   const dryRun = args["dry-run"] === true;
+  const auto = args["auto"] === true;
   const label = String(args["label"] ?? `expansion-${new Date().toISOString().slice(0, 10)}`);
   const candidatesPath = typeof args["candidates"] === "string" ? args["candidates"] : undefined;
-  // Item 3: the CLI is the actual unattended entrypoint (the monthly launchd
-  // job runs THIS), so it arms the live URL-liveness check by default — a
-  // real-looking-but-dead/wrong sourceUrl must not reach a PR with no human
-  // in the loop. `--skip-live-check` is an explicit escape hatch for a
-  // supervised run against candidates a session has already fetched/verified
-  // itself (e.g. WebFetch'd them moments earlier).
-  const liveUrlCheck = args["skip-live-check"] !== true;
 
-  if (!candidatesPath) {
-    console.error(
-      "run-expansion: no --candidates=<file> given and no live web-research agent is wired into the CLI.\n" +
-        "  This is BY DESIGN — the monthly launchd job ships DISARMED. To run for real, either:\n" +
-        "    1. supply web-verified rows: npx tsx scripts/run-expansion.ts --top-k=1 --candidates=path.json\n" +
-        "    2. or drive runExpansion() from a session that wires a real researcher (see docs/expansion-engine.md).\n" +
-        "  Exiting without ingesting.",
-    );
-    process.exit(dryRun ? 0 : 1);
+  if (auto) {
+    // --auto implies: real researcher + live-URL gate ON + push ON.
+    // A dry run overrides push (research+report only, no ingest/branch/PR).
+    return {
+      topK,
+      rowCap,
+      dryRun,
+      label,
+      auto: true,
+      pushPr: !dryRun,
+      liveUrlCheck: true,
+      useClaudeResearcher: true,
+      candidatesPath,
+    };
   }
 
-  runExpansion({
+  // Default (local-only): live-URL gate armed unless explicitly skipped, never
+  // pushes, requires a --candidates file (no live researcher wired).
+  return {
     topK,
     rowCap,
     dryRun,
     label,
-    liveUrlCheck,
-    researcher: fixedResearcherFromFile(candidatesPath),
+    auto: false,
+    pushPr: false,
+    liveUrlCheck: args["skip-live-check"] !== true,
+    useClaudeResearcher: false,
+    candidatesPath,
+  };
+}
+
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
+if (isMain) {
+  const cfg = deriveCliConfig(parseArgs(process.argv.slice(2)));
+
+  // Resolve the researcher for the chosen mode.
+  let researcher: Researcher;
+  if (cfg.useClaudeResearcher) {
+    // --auto: the real, unattended web-research backend.
+    console.error(
+      `run-expansion --auto: real headless-claude researcher, live-URL gate ON, ` +
+        `push ${cfg.pushPr ? "ON (opens a real PR)" : "OFF (dry run)"}.`,
+    );
+    researcher = claudeResearcher({ log: (m) => console.error(m) });
+  } else if (cfg.candidatesPath) {
+    researcher = fixedResearcherFromFile(cfg.candidatesPath);
+  } else {
+    console.error(
+      "run-expansion: no --auto and no --candidates=<file> given — no researcher is wired.\n" +
+        "  Run UNATTENDED for real:  npx tsx scripts/run-expansion.ts --auto --top-k=3 --row-cap=15\n" +
+        "  Or supply web-verified rows: npx tsx scripts/run-expansion.ts --top-k=1 --candidates=path.json\n" +
+        "  Or smoke the real researcher safely: npx tsx scripts/run-expansion.ts --auto --dry-run --top-k=1\n" +
+        "  Exiting without ingesting.",
+    );
+    process.exit(cfg.dryRun ? 0 : 1);
+  }
+
+  runExpansion({
+    topK: cfg.topK,
+    rowCap: cfg.rowCap,
+    dryRun: cfg.dryRun,
+    label: cfg.label,
+    liveUrlCheck: cfg.liveUrlCheck,
+    pushPr: cfg.pushPr,
+    researcher,
   })
     .then((res) => {
       console.log(

@@ -17,9 +17,13 @@
   │  Cadence: monthly, Day 6 ~09:30 — the day AFTER the Day-5 SEO fleet      │
   │  agent (com.secondnick.seo-parity) so fresh coverage feeds SEO.          │
   │                                                                          │
-  │  NOTE: the CLI has NO live researcher wired (see docs/expansion-engine   │
-  │  .md). Arming this as-is runs the disarmed-safe path (exits without      │
-  │  ingesting) unless a real researcher / --candidates file is wired in.    │
+  │  MODE: `--auto` — the UNATTENDED autonomy path (ARM-B). Implies real     │
+  │  headless-claude researcher (`scripts/researcher-claude.ts` → `claude    │
+  │  -p`, web research), live-URL gate ON, and PUSH ON (opens a real PR via  │
+  │  `gh pr create`). Because it PUSHES + opens a PR when armed, keep this    │
+  │  DISARMED until Nick decides. Smoke it safely first (no PR) with:        │
+  │    npx tsx scripts/run-expansion.ts --auto --dry-run --top-k=1           │
+  │  Requires: a logged-in `claude` CLI + `gh` auth on this machine.         │
   └─────────────────────────────────────────────────────────────────────────┘
 -->
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -28,12 +32,21 @@
     <key>Label</key>
     <string>com.secondnick.cite-cache-expansion</string>
 
+    <!--
+      Login shell (`zsh -l`) so the user's profile PATH (npx via nvm/homebrew,
+      `claude` in ~/.local/bin) is on PATH; `cd` into the repo; run the
+      UNATTENDED `--auto` path. The script defaults `label` to
+      `expansion-<ISO date>` when none is given.
+    -->
     <key>ProgramArguments</key>
     <array>
         <string>/bin/zsh</string>
         <string>-lc</string>
-        <string>cd /Users/bignick/shared-data &amp;&amp; /usr/bin/env npx tsx scripts/run-expansion.ts --top-k=1 --row-cap=10 --label=expansion-$(date +%%Y-%%m-%%d)</string>
+        <string>export PATH="$HOME/.local/bin:$PATH"; cd /Users/bignick/shared-data &amp;&amp; exec npx tsx scripts/run-expansion.ts --auto --top-k=3 --row-cap=15</string>
     </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/bignick/shared-data</string>
 
     <key>StartCalendarInterval</key>
     <dict>
