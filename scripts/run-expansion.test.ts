@@ -71,6 +71,10 @@ function residenceRow(id: string, url: string): ResearchedRow {
     setting: "alpine",
     region: "Middle East",
     country: "Lebanon",
+    // capacity + price are hard-required for residences (ARM-A no-fabrication
+    // fix): OO renders these directly, so a real venue must carry real values.
+    capacity: { min: 8, max: 20 },
+    price: { perPersonPerNight: { low: 350, high: 700 } },
     sourceUrl: url,
     citations: [`${url}about`],
   } as ResearchedRow;
