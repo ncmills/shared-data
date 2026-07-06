@@ -1,0 +1,1022 @@
+[
+  {
+    "id": "handicap:golfRegion=International;tier=budget",
+    "dataset": "golf",
+    "cell": {
+      "golfRegion": "International",
+      "tier": "budget"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "bestman",
+      "offsite-retreat",
+      "offsite-outing",
+      "handicap",
+      "tdf"
+    ],
+    "leverageScore": 15
+  },
+  {
+    "id": "tdf:golfRegion=International;tier=budget",
+    "dataset": "golf",
+    "cell": {
+      "golfRegion": "International",
+      "tier": "budget"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "bestman",
+      "offsite-retreat",
+      "offsite-outing",
+      "handicap",
+      "tdf"
+    ],
+    "leverageScore": 15
+  },
+  {
+    "id": "handicap:golfRegion=International;tier=solid",
+    "dataset": "golf",
+    "cell": {
+      "golfRegion": "International",
+      "tier": "solid"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "bestman",
+      "offsite-retreat",
+      "offsite-outing",
+      "handicap",
+      "tdf"
+    ],
+    "leverageScore": 10
+  },
+  {
+    "id": "tdf:golfRegion=International;tier=solid",
+    "dataset": "golf",
+    "cell": {
+      "golfRegion": "International",
+      "tier": "solid"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "bestman",
+      "offsite-retreat",
+      "offsite-outing",
+      "handicap",
+      "tdf"
+    ],
+    "leverageScore": 10
+  },
+  {
+    "id": "offsite-retreat:setting=alpine;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "alpine",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=alpine;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "alpine",
+      "worldRegion": "Africa"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=alpine;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "alpine",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=castle;worldRegion=North America",
+    "dataset": "residence",
+    "cell": {
+      "setting": "castle",
+      "worldRegion": "North America"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=castle;worldRegion=Latin America & Caribbean",
+    "dataset": "residence",
+    "cell": {
+      "setting": "castle",
+      "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=castle;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "castle",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=castle;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "castle",
+      "worldRegion": "Africa"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=castle;worldRegion=Asia-Pacific",
+    "dataset": "residence",
+    "cell": {
+      "setting": "castle",
+      "worldRegion": "Asia-Pacific"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=castle;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "castle",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=coastal;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "coastal",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=coastal;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "coastal",
+      "worldRegion": "Africa"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=coastal;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "coastal",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=countryside;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "countryside",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=countryside;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "countryside",
+      "worldRegion": "Africa"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=countryside;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "countryside",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=desert;worldRegion=Latin America & Caribbean",
+    "dataset": "residence",
+    "cell": {
+      "setting": "desert",
+      "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=desert;worldRegion=Europe",
+    "dataset": "residence",
+    "cell": {
+      "setting": "desert",
+      "worldRegion": "Europe"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=desert;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "desert",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=island;worldRegion=North America",
+    "dataset": "residence",
+    "cell": {
+      "setting": "island",
+      "worldRegion": "North America"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=island;worldRegion=Europe",
+    "dataset": "residence",
+    "cell": {
+      "setting": "island",
+      "worldRegion": "Europe"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=island;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "island",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=island;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "island",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=lake;worldRegion=Latin America & Caribbean",
+    "dataset": "residence",
+    "cell": {
+      "setting": "lake",
+      "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=lake;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "lake",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=lake;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "lake",
+      "worldRegion": "Africa"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=lake;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "lake",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=links;worldRegion=Latin America & Caribbean",
+    "dataset": "residence",
+    "cell": {
+      "setting": "links",
+      "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=links;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "links",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=links;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "links",
+      "worldRegion": "Africa"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=links;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "links",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=palace;worldRegion=North America",
+    "dataset": "residence",
+    "cell": {
+      "setting": "palace",
+      "worldRegion": "North America"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=palace;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "palace",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=ranch;worldRegion=Europe",
+    "dataset": "residence",
+    "cell": {
+      "setting": "ranch",
+      "worldRegion": "Europe"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=ranch;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "ranch",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=ranch;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "ranch",
+      "worldRegion": "Africa"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=ranch;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "ranch",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=safari;worldRegion=North America",
+    "dataset": "residence",
+    "cell": {
+      "setting": "safari",
+      "worldRegion": "North America"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=safari;worldRegion=Latin America & Caribbean",
+    "dataset": "residence",
+    "cell": {
+      "setting": "safari",
+      "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=safari;worldRegion=Europe",
+    "dataset": "residence",
+    "cell": {
+      "setting": "safari",
+      "worldRegion": "Europe"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=safari;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "safari",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=safari;worldRegion=Asia-Pacific",
+    "dataset": "residence",
+    "cell": {
+      "setting": "safari",
+      "worldRegion": "Asia-Pacific"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=safari;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "safari",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=ski-resort;worldRegion=Latin America & Caribbean",
+    "dataset": "residence",
+    "cell": {
+      "setting": "ski-resort",
+      "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=ski-resort;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "ski-resort",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=ski-resort;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "ski-resort",
+      "worldRegion": "Africa"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=ski-resort;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "ski-resort",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=tropical;worldRegion=Europe",
+    "dataset": "residence",
+    "cell": {
+      "setting": "tropical",
+      "worldRegion": "Europe"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=tropical;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "tropical",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=tropical;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "tropical",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=urban;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "urban",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=urban;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "urban",
+      "worldRegion": "Africa"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=urban;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "urban",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=vineyard;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "vineyard",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=vineyard;worldRegion=Other",
+    "dataset": "residence",
+    "cell": {
+      "setting": "vineyard",
+      "worldRegion": "Other"
+    },
+    "deficit": 3,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 6
+  },
+  {
+    "id": "offsite-retreat:setting=alpine;worldRegion=Latin America & Caribbean",
+    "dataset": "residence",
+    "cell": {
+      "setting": "alpine",
+      "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "offsite-retreat:setting=coastal;worldRegion=Latin America & Caribbean",
+    "dataset": "residence",
+    "cell": {
+      "setting": "coastal",
+      "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "offsite-retreat:setting=countryside;worldRegion=Latin America & Caribbean",
+    "dataset": "residence",
+    "cell": {
+      "setting": "countryside",
+      "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "offsite-retreat:setting=desert;worldRegion=Asia-Pacific",
+    "dataset": "residence",
+    "cell": {
+      "setting": "desert",
+      "worldRegion": "Asia-Pacific"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "offsite-retreat:setting=island;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "island",
+      "worldRegion": "Africa"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "offsite-retreat:setting=palace;worldRegion=Latin America & Caribbean",
+    "dataset": "residence",
+    "cell": {
+      "setting": "palace",
+      "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "offsite-retreat:setting=palace;worldRegion=Middle East",
+    "dataset": "residence",
+    "cell": {
+      "setting": "palace",
+      "worldRegion": "Middle East"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "offsite-retreat:setting=palace;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "palace",
+      "worldRegion": "Africa"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "offsite-retreat:setting=ranch;worldRegion=Asia-Pacific",
+    "dataset": "residence",
+    "cell": {
+      "setting": "ranch",
+      "worldRegion": "Asia-Pacific"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "offsite-retreat:setting=ski-resort;worldRegion=Asia-Pacific",
+    "dataset": "residence",
+    "cell": {
+      "setting": "ski-resort",
+      "worldRegion": "Asia-Pacific"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "offsite-retreat:setting=tropical;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "tropical",
+      "worldRegion": "Africa"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "offsite-retreat:setting=urban;worldRegion=Latin America & Caribbean",
+    "dataset": "residence",
+    "cell": {
+      "setting": "urban",
+      "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "offsite-retreat:setting=countryside;worldRegion=Asia-Pacific",
+    "dataset": "residence",
+    "cell": {
+      "setting": "countryside",
+      "worldRegion": "Asia-Pacific"
+    },
+    "deficit": 1,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 2
+  },
+  {
+    "id": "offsite-retreat:setting=ranch;worldRegion=Latin America & Caribbean",
+    "dataset": "residence",
+    "cell": {
+      "setting": "ranch",
+      "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 1,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "leverageScore": 2
+  }
+]
