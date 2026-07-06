@@ -113,3 +113,9 @@ Covers: per-dataset breakdown (the seam), rowCap enforcement with reported
 drops, dryRun zero-side-effects (injected ingest/propose spies), the
 push:false LOCAL-only gate, and the empty-batch / rolled-back-gate → no-PR
 paths. No network, no git, no real-file writes.
+
+## Arm-time prerequisites (before `launchctl load`)
+
+1. **Fix ingest dedup** — `ingestResearched` appends unconditionally; add dedup by `(name,city)`/`id` before append so a venue researched across two monthly runs is not double-counted (harmless while disarmed + human-in-loop, latent in a recurring engine — final-review finding #9).
+2. **Wire a real researcher backend** (e.g. headless `claude -p`) — the disarmed CLI fails closed (no ingest) without one.
+3. **Backfill optional wizard-UI fields** on ingested rows (minimal ResearchedRow set omits `driveMinutes`/`capacity`/etc. the live wizard UI expects).
