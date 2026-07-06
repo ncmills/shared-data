@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  com.secondnick.cite-cache-expansion.plist — Task 17 recurring expansion engine.
+
+  ┌─────────────────────────────────────────────────────────────────────────┐
+  │  NOT LOADED — this is a FILE in the repo, DISARMED by design.            │
+  │                                                                          │
+  │  To ARM (only when Nick decides):                                        │
+  │    cp deploy/com.secondnick.cite-cache-expansion.plist \                 │
+  │       ~/Library/LaunchAgents/com.secondnick.cite-cache-expansion.plist   │
+  │    launchctl load ~/Library/LaunchAgents/com.secondnick.cite-cache-expansion.plist
+  │                                                                          │
+  │  To DISARM:                                                              │
+  │    launchctl unload ~/Library/LaunchAgents/com.secondnick.cite-cache-expansion.plist
+  │    rm ~/Library/LaunchAgents/com.secondnick.cite-cache-expansion.plist   │
+  │                                                                          │
+  │  Cadence: monthly, Day 6 ~09:30 — the day AFTER the Day-5 SEO fleet      │
+  │  agent (com.secondnick.seo-parity) so fresh coverage feeds SEO.          │
+  │                                                                          │
+  │  NOTE: the CLI has NO live researcher wired (see docs/expansion-engine   │
+  │  .md). Arming this as-is runs the disarmed-safe path (exits without      │
+  │  ingesting) unless a real researcher / --candidates file is wired in.    │
+  └─────────────────────────────────────────────────────────────────────────┘
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.secondnick.cite-cache-expansion</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/zsh</string>
+        <string>-lc</string>
+        <string>cd /Users/bignick/shared-data &amp;&amp; /usr/bin/env npx tsx scripts/run-expansion.ts --top-k=1 --row-cap=10 --label=expansion-$(date +%%Y-%%m-%%d)</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Day</key>
+        <integer>6</integer>
+        <key>Hour</key>
+        <integer>9</integer>
+        <key>Minute</key>
+        <integer>30</integer>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/bignick/shared-data/docs/pending-prs/expansion-run.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/bignick/shared-data/docs/pending-prs/expansion-run.err.log</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>
