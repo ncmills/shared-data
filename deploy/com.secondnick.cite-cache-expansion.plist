@@ -14,8 +14,9 @@
   │    launchctl unload ~/Library/LaunchAgents/com.secondnick.cite-cache-expansion.plist
   │    rm ~/Library/LaunchAgents/com.secondnick.cite-cache-expansion.plist   │
   │                                                                          │
-  │  Cadence: monthly, Day 6 ~09:30 — the day AFTER the Day-5 SEO fleet      │
-  │  agent (com.secondnick.seo-parity) so fresh coverage feeds SEO.          │
+  │  Cadence: WEEKLY, Mondays ~09:30 (Weekday=1). The starved-cell queue    │
+  │  depletes faster at this cadence — runs taper to fewer/zero rows as      │
+  │  thin cells fill (loop-until-dry); that's expected, not a failure.       │
   │                                                                          │
   │  MODE: `--auto` — the UNATTENDED autonomy path (ARM-B). Implies real     │
   │  headless-claude researcher (`scripts/researcher-claude.ts` → `claude    │
@@ -50,8 +51,8 @@
 
     <key>StartCalendarInterval</key>
     <dict>
-        <key>Day</key>
-        <integer>6</integer>
+        <key>Weekday</key>
+        <integer>1</integer>
         <key>Hour</key>
         <integer>9</integer>
         <key>Minute</key>
