@@ -1,40 +1,8 @@
 {
-  "generatedAt": "2026-07-06T01:45:28.988Z",
+  "generatedAt": "2026-07-06T02:55:30.079Z",
   "underTagged": [],
   "orphaned": [],
   "starved": [
-    {
-      "wizard": "handicap",
-      "cell": {
-        "golfRegion": "International",
-        "tier": "solid"
-      },
-      "count": 1
-    },
-    {
-      "wizard": "handicap",
-      "cell": {
-        "golfRegion": "International",
-        "tier": "budget"
-      },
-      "count": 0
-    },
-    {
-      "wizard": "tdf",
-      "cell": {
-        "golfRegion": "International",
-        "tier": "solid"
-      },
-      "count": 1
-    },
-    {
-      "wizard": "tdf",
-      "cell": {
-        "golfRegion": "International",
-        "tier": "budget"
-      },
-      "count": 0
-    },
     {
       "wizard": "offsite-retreat",
       "cell": {
@@ -57,31 +25,7 @@
         "setting": "alpine",
         "worldRegion": "Africa"
       },
-      "count": 0
-    },
-    {
-      "wizard": "offsite-retreat",
-      "cell": {
-        "setting": "alpine",
-        "worldRegion": "Other"
-      },
-      "count": 0
-    },
-    {
-      "wizard": "offsite-retreat",
-      "cell": {
-        "setting": "castle",
-        "worldRegion": "North America"
-      },
-      "count": 0
-    },
-    {
-      "wizard": "offsite-retreat",
-      "cell": {
-        "setting": "castle",
-        "worldRegion": "Latin America & Caribbean"
-      },
-      "count": 0
+      "count": 1
     },
     {
       "wizard": "offsite-retreat",
