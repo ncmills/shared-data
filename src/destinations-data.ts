@@ -161,6 +161,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Cup Café", cuisine: "Brunch", priceRange: "$$", highlight: "Inside Hotel Congress, prickly-pear mimosa", bestFor: "brunch", groupFriendly: true, brands: ["both"] },
     ],
     activities: [
+      { name: "Tanque Verde Ranch desert horseback ride", type: "horseback-riding", duration: "1.5 hr", pricePerPerson: [75, 130], groupMin: 4, groupMax: 8, highlight: "Guided saddle ride across a historic 1868 guest ranch near Saguaro National Park — sunrise or golden-hour sunset.", bestFor: "morning", brands: ["both"], url: "https://www.tanqueverderanch.com/activities/sunrise-sunset-rides" },
       { name: "Sabino Canyon tram", type: "tour", duration: "3 hr", pricePerPerson: [25,50], groupMin: 2, groupMax: 30, highlight: "Saguaro Park desert trams + waterfalls", bestFor: "morning", brands: ["both"] },
       { name: "Mt. Lemmon scenic drive", type: "scenic-overlook", duration: "5 hr", pricePerPerson: [0,40], groupMin: 2, groupMax: 14, highlight: "9k feet, pine forest at the top", bestFor: "afternoon", brands: ["both"] },
       { name: "Hot-air balloon at sunrise", type: "tour", duration: "4 hr", pricePerPerson: [220,340], groupMin: 4, groupMax: 12, highlight: "Saguaro forest under the basket", bestFor: "splurge morning", brands: ["both"] },
@@ -258,6 +259,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Beta Cafe", cuisine: "Brunch", priceRange: "$$", highlight: "Mountain-town breakfast + climbers", bestFor: "brunch", groupFriendly: true, brands: ["both"] },
     ],
     activities: [
+      { name: "Cedar Mountain Trail Rides", type: "horseback-riding", duration: "1-2 hr", pricePerPerson: [40, 90], groupMin: 4, groupMax: 12, highlight: "Guided ride to the top of Cedar Mountain overlooking Cody and the Bighorn Basin (summer season).", bestFor: "morning", brands: ["both"], url: "https://www.codyyellowstone.org/activities/horseback-rides-at-cedar-mountain-trail-rides/" },
       { name: "Yellowstone east-entrance day", type: "tour", duration: "10 hr", pricePerPerson: [180,340], groupMin: 4, groupMax: 12, highlight: "50 minutes to the gate, all-day driving loop", bestFor: "must-do", brands: ["both"] },
       { name: "Cody Nite Rodeo", type: "sports-event", duration: "2 hr", pricePerPerson: [25,50], groupMin: 4, groupMax: 30, highlight: "Every summer night since 1938", bestFor: "first night", brands: ["both"] },
       { name: "Whitewater raft Shoshone Canyon", type: "rafting", duration: "4 hr", pricePerPerson: [90,160], groupMin: 6, groupMax: 14, highlight: "Class III rapids + bald eagle sightings", bestFor: "active day", brands: ["both"] },
@@ -768,6 +770,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Doodles", cuisine: "Brunch", priceRange: "$$", highlight: "Eggs benedict + farm pancakes", bestFor: "brunch", groupFriendly: true, brands: ["both"] },
     ],
     activities: [
+      { name: "Kentucky Horse Park guided trail ride", type: "horseback-riding", duration: "35 min", pricePerPerson: [20, 45], groupMin: 4, groupMax: 12, highlight: "Guided trail ride around the 1,200-acre Kentucky Horse Park — the Horse Capital of the World.", bestFor: "morning", brands: ["both"], url: "https://kyhorsepark.com/explore/horseback-pony-rides/" },
       { name: "Bourbon Trail van day", type: "distillery-tour", duration: "8 hr", pricePerPerson: [180,340], groupMin: 4, groupMax: 14, highlight: "Woodford + Wild Turkey + Buffalo Trace", bestFor: "must-do", brands: ["both"] },
       { name: "Keeneland race meet", type: "sports-event", duration: "5 hr", pricePerPerson: [60,180], groupMin: 4, groupMax: 30, highlight: "April + October meets, paddock walks", bestFor: "all-day social", brands: ["both"] },
       { name: "Horse-farm tour Castle Hill", type: "farm-tour", duration: "2 hr", pricePerPerson: [50,90], groupMin: 4, groupMax: 16, highlight: "Thoroughbred breeding farm visits", bestFor: "morning", brands: ["both"] },
