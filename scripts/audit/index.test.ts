@@ -182,11 +182,16 @@ test("FULL RUN: the canonical universe reports zero regressions against the comm
   assert.equal(result.exitCode, 0);
 });
 
-test("FULL RUN: the current universe matches the known-good counts from the task brief (0 under-tagged, 0 orphaned, 72 starved)", () => {
+test("FULL RUN: the current universe matches the known-good counts (0 under-tagged, 0 orphaned, 65 starved)", () => {
+  // Starved dropped 72 → 65 when the sanctioned golf/residence expansion
+  // (github:ncmills/shared-data#expand/true, +18 rows: golf+5, residence+13)
+  // filled several previously-thin cells — notably International×budget golf,
+  // which went 0 → 3 courses in ALL_GOLF_COURSES and is no longer starved.
+  // under-tagged/orphaned stay at 0 (no reachability regressions).
   const result = runAudit({ writeFiles: false });
   assert.equal(result.underTagged.length, 0);
   assert.equal(result.orphaned.length, 0);
-  assert.equal(result.starved.length, 72);
+  assert.equal(result.starved.length, 65);
 });
 
 test("FULL RUN: runAudit() writes docs/coverage-matrix.md and docs/audit-report.json with expected top-level shape", () => {

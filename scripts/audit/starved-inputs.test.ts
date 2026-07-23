@@ -122,12 +122,13 @@ test("FULL RUN: the canonical real universe reports the starved-input count", ()
   }
 });
 
-test("CROSS-CHECK: real universe surfaces the known-thin golf cell (International × budget) for handicap + tdf", () => {
-  // scan-gaps.ts ranks International as the thinnest tdf/golf region and
-  // budget as the rarest tier globally (50/994 courses). The real
-  // SHARED_GOLF_COURSES has ZERO International×budget courses — this must
-  // surface as starved for both handicap and tdf (identical ENGINE_READS,
-  // see src/engine-reads.ts).
+test("CROSS-CHECK: International × budget golf — once the thinnest tdf/handicap cell — is now covered by the sanctioned expansion, so the counter no longer flags it starved", () => {
+  // scan-gaps.ts historically ranked International × budget as the thinnest
+  // tdf/handicap golf cell (SHARED_GOLF_COURSES had ZERO). The sanctioned
+  // expansion (ALL_GOLF_COURSES, +expand/true) filled it to 3 International×
+  // budget courses — at threshold 3 the cell clears, so findStarved must NOT
+  // report it for handicap or tdf anymore. This is the counter correctly
+  // agreeing with the (now-improved) real coverage, not a regression.
   const starved = findStarved(3);
   const handicapHit = starved.find(
     (s) => s.wizard === "handicap" && s.cell.golfRegion === "International" && s.cell.tier === "budget",
@@ -135,9 +136,8 @@ test("CROSS-CHECK: real universe surfaces the known-thin golf cell (Internationa
   const tdfHit = starved.find(
     (s) => s.wizard === "tdf" && s.cell.golfRegion === "International" && s.cell.tier === "budget",
   );
-  assert.ok(handicapHit, "expected International×budget to be starved for handicap");
-  assert.ok(tdfHit, "expected International×budget to be starved for tdf");
-  assert.equal(handicapHit!.count, 0);
+  assert.equal(handicapHit, undefined, "International×budget should no longer be starved for handicap (filled by expansion)");
+  assert.equal(tdfHit, undefined, "International×budget should no longer be starved for tdf (filled by expansion)");
 });
 
 test("CROSS-CHECK: real universe surfaces palace/castle/links residence settings as starved somewhere", () => {
