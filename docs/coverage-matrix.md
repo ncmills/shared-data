@@ -4,7 +4,7 @@ Rows = wizard, columns = dataset. Cell = real reachable row count in the canonic
 
 | wizard | party | golf | residence | tdf-destination | moh-local | bestman-local | oo-experience | oo-outing |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bestman | 5136 | 999 | 0 | 0 | 0 | 91 | 0 | 0 |
+| bestman | 5137 | 999 | 0 | 0 | 0 | 91 | 0 | 0 |
 | moh | 4854 | 0 | 0 | 0 | 50 | 0 | 0 | 0 |
 | tdf | 0 | 999 | 0 | 234 | 0 | 0 | 0 | 0 |
 | offsite-retreat | 0 | 999 | 341 | 0 | 0 | 0 | 158 | 0 |
