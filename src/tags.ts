@@ -82,6 +82,11 @@ export const ACTIVITY_AUDIENCE_TAGS: Record<string, UniverseAudience[]> = {
   "pool-party": ["bachelor", "bachelorette"],
   "silent-disco": ["bachelor", "bachelorette"],
   "brunch-crawl": ["bachelor", "bachelorette"],
+  // A hired private second line (brass band + NOPD escort) is a bachelor-party
+  // centerpiece — kept off corporate (offsite-outing) per Nick 2026-07-22: the
+  // EVENT stays Best Man HQ even though NOLA housing crosses to OO/HHQ/MOH.
+  // (Widen to include "bachelorette" if MOH should ever surface it.)
+  "second-line-parade": ["bachelor"],
 };
 
 export function activityAudiences(type: string): UniverseAudience[] {
