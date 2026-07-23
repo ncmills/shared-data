@@ -13,8 +13,9 @@
  *    the old Offsite overlay's keep-condition (audiences includes "corporate").
  *  - `audiences` reproduces the old overlay's per-item audience computation
  *    (activityAudiences(type) / nightlifeAudiences(vibe) / ALL for dining).
- *  Lodging/transport carry no `brands` and were never brand- or audience-
- *  filtered by any overlay, so they are tagged for all party-consuming wizards.
+ *  Lodging/transport carry no `brands` and reach every wizard whose engine
+ *  reads party-venue data — party brands + offsite-outing + offsite-retreat
+ *  (NOT handicap; see HOUSING_WIZARDS). Housing is trip-type-agnostic.
  */
 
 import type {
@@ -104,18 +105,27 @@ function bakeDining(destId: string, d: CanonicalDining): CanonicalDining {
   });
 }
 
-// Lodging/transport: never brand- or audience-filtered by any overlay → all
-// party-consuming wizards. (No `brands` field on these types.)
-const PARTY_WIZARDS: WizardTag[] = ["bestman", "moh", "offsite-outing"];
+// Lodging/transport are trip-type-agnostic: a group hotel/house or a shuttle is
+// valid housing / getting-around for ANY plan. Unlike events, they reach every
+// wizard whose ENGINE actually READS party-venue data (src/engine-reads.ts):
+// the two party brands, offsite-outing, AND offsite-retreat. Nick 2026-07-22:
+// "the NOLA housing can be used in OO / HHQ / MOH even if the events cannot."
+// NOTE handicap (HHQ) is intentionally NOT here: per ENGINE_READS it reads only
+// golf-course/golf-destination, so tagging party-lodging for it would be an
+// ORPHAN (tag with no reader — the coverage audit rejects it). Giving HHQ this
+// housing needs either wiring handicap to read party-venue or sourcing its
+// lodging from residences — a decision flagged to Nick, not silently tagged.
+// Never brand- or audience-filtered by any overlay (no `brands`).
+const HOUSING_WIZARDS: WizardTag[] = ["bestman", "moh", "offsite-outing", "offsite-retreat"];
 const ALL_AUD: AudienceTag[] = ["corporate", "clients", "bachelor", "bachelorette"];
-const PARTY_PRODUCTS: ProductTag[] = ["bach-party", "bachelorette", "outing"];
+const HOUSING_PRODUCTS: ProductTag[] = ["bach-party", "bachelorette", "outing", "retreat"];
 
 function bakeLodging(destId: string, l: CanonicalLodging): CanonicalLodging {
   return applyOverride(`${destId}|lodging|${l.name}`, {
     ...l,
-    wizards: PARTY_WIZARDS,
+    wizards: HOUSING_WIZARDS,
     audiences: ALL_AUD,
-    products: PARTY_PRODUCTS,
+    products: HOUSING_PRODUCTS,
     priceTier: tierFromPerNight(l.pricePerNight),
   });
 }
@@ -123,9 +133,9 @@ function bakeLodging(destId: string, l: CanonicalLodging): CanonicalLodging {
 function bakeTransport(destId: string, t: CanonicalTransport): CanonicalTransport {
   return applyOverride(`${destId}|transport|${t.name}`, {
     ...t,
-    wizards: PARTY_WIZARDS,
+    wizards: HOUSING_WIZARDS,
     audiences: ALL_AUD,
-    products: PARTY_PRODUCTS,
+    products: HOUSING_PRODUCTS,
   });
 }
 
