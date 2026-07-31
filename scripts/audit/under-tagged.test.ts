@@ -49,7 +49,7 @@ test("SYNTHETIC: a fully-consistent row (core ⊆ post) is NOT reported", () => 
     id: "synthetic-golf-1",
     kind: "golf-course",
     coreWizards: ["handicap"],
-    postWizards: ["tdf", "handicap"],
+    postWizards: ["handicap"],
   });
 
   assert.deepEqual(findUnderTaggedIn([consistent]), []);

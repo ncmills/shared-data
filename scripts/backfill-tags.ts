@@ -11,7 +11,8 @@
  * ── Why a load-time DERIVED view, not a source edit ──────────────────────────
  * Golf (`golf-courses.ts`), residences, locals and tdf-destinations are REGEN-ONLY
  * ("DO NOT hand-edit") and several are PINNED by `verify-universe.ts` (e.g.
- * tdf-dest.wizards must equal ["tdf"] exactly; golf.sites ⊆ {tdf,offsite,handicap}).
+ * golf-dest.wizards must equal ["handicap"] exactly; golf.sites ⊆ {tdf,offsite,handicap}
+ * — the tdf SITE tag is legacy data, the tdf WIZARD is retired).
  * Baking extra `wizards` INTO those rows would either require editing regen-only
  * data or break those pinned invariants. So — per the task's explicit fallback —
  * we produce a parallel EXPORTED backfilled view (`backfillUniverse()`) and never
@@ -27,7 +28,7 @@
  *   - residences   — pre from products (offsite-retreat[/outing]); core is
  *                    [offsite-retreat, offsite-outing] → retreat-only residences GAIN
  *                    offsite-outing (OO outing reads residences live, Task 6).
- *   - tdf-dests    — pre = ["tdf"]; core (golf-destination) adds `handicap`.
+ *   - golf-dests   — pre = ["handicap"]; core (golf-destination) is `handicap`.
  *   - locals       — brand-scoped destinations; no other engine reads another brand's
  *                    locals, so there is NO cross-tag. core = pre (single brand).
  *   - OO exp/outing— already carry offsite core; corporate-coded → no party cross-tag.
@@ -90,10 +91,19 @@ export interface BackfilledRow {
   expand: { wizards: WizardTag[]; reason: string }[];
 }
 
-/** legacy golf `sites` → wizard vocabulary (mirrors count-by-wizard mapping). */
+/**
+ * Legacy golf `sites` → wizard vocabulary.
+ *
+ * The `tdf` SITE tag is still baked into the 994-row regenerated
+ * `golf-courses.ts` and the ingest default, but the tdf WIZARD is retired
+ * (2026-07-31) — all golf routes to Handicap HQ now. So the tdf site maps onto
+ * `handicap` rather than disappearing, which keeps every legacy-tagged course
+ * reaching HHQ without a 994-row data migration. `uniq` collapses the overlap
+ * with an explicit `handicap` site.
+ */
 function sitesToWizards(sites: string[] = []): WizardTag[] {
   const w: WizardTag[] = [];
-  if (sites.includes("tdf")) w.push("tdf");
+  if (sites.includes("tdf")) w.push("handicap");
   if (sites.includes("offsite")) w.push("offsite-retreat", "offsite-outing");
   if (sites.includes("handicap")) w.push("handicap");
   return uniq(w);

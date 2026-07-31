@@ -193,7 +193,7 @@ test("FULL RUN: the canonical real universe reports the starved-input count", ()
   }
 });
 
-test("CROSS-CHECK: International × budget golf — once the thinnest tdf/handicap cell — is now covered by the sanctioned expansion, so the counter no longer flags it starved", () => {
+test("CROSS-CHECK: International × budget golf — once the thinnest handicap cell — is now covered by the sanctioned expansion, so the counter no longer flags it starved", () => {
   // scan-gaps.ts historically ranked International × budget as the thinnest
   // tdf/handicap golf cell (SHARED_GOLF_COURSES had ZERO). The sanctioned
   // expansion (ALL_GOLF_COURSES, +expand/true) filled it to 3 International×
@@ -204,11 +204,7 @@ test("CROSS-CHECK: International × budget golf — once the thinnest tdf/handic
   const handicapHit = starved.find(
     (s) => s.wizard === "handicap" && s.cell.golfRegion === "International" && s.cell.tier === "budget",
   );
-  const tdfHit = starved.find(
-    (s) => s.wizard === "tdf" && s.cell.golfRegion === "International" && s.cell.tier === "budget",
-  );
   assert.equal(handicapHit, undefined, "International×budget should no longer be starved for handicap (filled by expansion)");
-  assert.equal(tdfHit, undefined, "International×budget should no longer be starved for tdf (filled by expansion)");
 });
 
 test("CROSS-CHECK: real universe surfaces palace/castle/links residence settings as starved somewhere", () => {

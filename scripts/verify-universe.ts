@@ -7,7 +7,7 @@
  *   3. denylist integrity — corporate-eligible (offsite-outing) iff audiences⊇corporate
  *   4. forbidden-leak    — the Offsite overlay emits ZERO non-corporate items
  *   5. per-entity routing — golf→sites⊆{tdf,offsite}; residences→offsite;
- *                           tdf-dests→[tdf]; moh/bestman locals→their wizard
+ *                           golf-dests→[handicap]; moh/bestman locals→their wizard
  *
  * Run: npx tsx scripts/verify-universe.ts  (exits non-zero on any violation).
  * This is the gate the monthly growth agents must pass before any auto-commit,
@@ -117,7 +117,8 @@ for (const r of residencesForSite("offsite")) {
     if (w !== "offsite-retreat" && w !== "offsite-outing") fail(`residence ${r.id}: bad wizard "${w}"`);
 }
 for (const t of SHARED_TDF_DESTINATIONS) {
-  if (JSON.stringify(t.wizards) !== JSON.stringify(["tdf"])) fail(`tdf-dest ${t.id}: wizards != [tdf]`);
+  if (JSON.stringify(t.wizards) !== JSON.stringify(["handicap"]))
+    fail(`golf-dest ${t.id}: wizards != [handicap] (got ${JSON.stringify(t.wizards)})`);
 }
 for (const m of mohLocals()) if (!(m.wizards ?? []).includes("moh")) fail(`moh-local ${m.id}: missing moh wizard`);
 // moh-locals bypass applyMohOverlay's golf filter (they merge straight into MOH's

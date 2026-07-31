@@ -16,19 +16,26 @@
  */
 
 /**
- * The six consumer wizards. Offsite is one domain, two wizards.
+ * The five consumer wizards. Offsite is one domain, two wizards.
  *
  * THIS ARRAY IS THE SOURCE OF TRUTH — `WizardTag` is derived from it, not the
  * other way round. Every guard that needs to enumerate wizards at RUNTIME
  * (verify-universe's vocabulary set, the audit's per-wizard counters, the
  * "is every map keyed by every wizard" tests) reads this array, so adding a
- * seventh wizard updates all of them at once instead of leaving a hand-copied
- * literal behind. A hardcoded list of these names anywhere else is a bug.
+ * wizard updates all of them at once instead of leaving a hand-copied literal
+ * behind. A hardcoded list of these names anywhere else is a bug.
+ *
+ * RETIRED — `tdf` (2026-07-31). The golf-trip wizard moved to Handicap HQ in
+ * the 2026-07-02 split; tourdefore.com became a personal golf site + pro shop
+ * and imports nothing from this package. The tag lingered as "legacy/back-compat"
+ * and cost real accuracy: 999 golf-course + 234 golf-destination rows were
+ * routed to a consumer that does not exist, and the coverage audit enumerated a
+ * 36-cell input space for a product nobody ships. ALL golf now routes to
+ * `handicap`. See SiteTag below — the tdf SITE tag is a separate, still-live axis.
  */
 export const ALL_WIZARD_TAGS = [
   "bestman",
   "moh",
-  "tdf",
   "offsite-retreat",
   "offsite-outing",
   "handicap",
@@ -36,7 +43,17 @@ export const ALL_WIZARD_TAGS = [
 
 export type WizardTag = (typeof ALL_WIZARD_TAGS)[number];
 
-/** Brand domains (derived from wizards; kept for back-compat with golf/residence `sites`). */
+/**
+ * Brand domains (kept for back-compat with golf/residence `sites`).
+ *
+ * NOTE `"tdf"` survives HERE even though the tdf WIZARD is retired. These are
+ * two different axes: `sites` is a legacy data-level label baked into the
+ * 994-row regenerated `golf-courses.ts` (do-not-hand-edit) and the ingest
+ * default, while `wizards` is the routing key. Rewriting 994 generated rows to
+ * drop the label would be a data migration with no routing benefit — nothing
+ * routes on `sites` except `siteWizards()` in backfill-tags, which now maps
+ * the tdf site onto `handicap`.
+ */
 export type SiteTag = "moh" | "bestman" | "tdf" | "offsite" | "handicap";
 
 export type ProductTag =

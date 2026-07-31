@@ -94,10 +94,11 @@ test("a corporate-only outing-template does not expand to any party wizard", () 
   expect(r.expand.flatMap(e => e.wizards)).toEqual([]);
 });
 
-test("golf-destination core is tdf + handicap, expand is offsite only (never a party brand)", () => {
+test("golf-destination core is handicap only, expand is offsite only (never a party brand)", () => {
+  // Was `tdf + handicap` until the tdf wizard was retired (2026-07-31) —
+  // tourdefore.com no longer consumes shared-data, so all golf routes to HHQ.
   const r = deriveRouting({ kind: "golf-destination" });
-  expect(r.core.wizards).toContain("tdf");
-  expect(r.core.wizards).toContain("handicap");
+  expect(r.core.wizards).toEqual(["handicap"]);
   const allWizards = [...r.core.wizards, ...r.expand.flatMap(e => e.wizards)];
   expect(allWizards).not.toContain("bestman");
   expect(allWizards).not.toContain("moh");

@@ -60,5 +60,4 @@ export const ENGINE_READS: Record<WizardTag, EntityKind[]> = {
   "offsite-retreat": ["residence", "experience", "party-venue", "golf-course"],
   "offsite-outing": ["residence", "experience", "outing-template", "party-venue", "golf-course"],
   handicap: ["golf-course", "golf-destination"],
-  tdf: ["golf-course", "golf-destination"],
 };

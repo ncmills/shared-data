@@ -145,7 +145,7 @@ export function deriveRouting(input: RoutingInput): Routing {
       // Honor HQ (brand guard; see partyFitWizards: golf → [bestman], never moh).
       return {
         core: {
-          wizards: ["tdf", "offsite-retreat", "offsite-outing", "handicap", "bestman"],
+          wizards: ["offsite-retreat", "offsite-outing", "handicap", "bestman"],
           audiences: ["corporate", "clients", "bachelor"],
           products: ["golf-trip", "retreat", "outing"],
         },
@@ -214,7 +214,7 @@ export function deriveRouting(input: RoutingInput): Routing {
 
     case "golf-destination":
       return {
-        core: { wizards: ["tdf", "handicap"], audiences: ALL_AUD, products: ["golf-trip"] },
+        core: { wizards: ["handicap"], audiences: ALL_AUD, products: ["golf-trip"] },
         expand: [
           { wizards: ["offsite-retreat", "offsite-outing"], reason: "a golf destination's town has corporate-usable courses/dining — needs OO engine to read TDF destinations" },
         ],

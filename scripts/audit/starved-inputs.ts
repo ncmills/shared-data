@@ -195,7 +195,6 @@ export const STARVED_CELL_COUNTERS: Record<WizardTag, CellCounterFactory> = {
   bestman: countPartyDestinations,
   moh: countPartyDestinations,
   handicap: countGolfCourses,
-  tdf: countGolfCourses,
   "offsite-retreat": countResidences,
   "offsite-outing": countCorporatePartyRows,
 };

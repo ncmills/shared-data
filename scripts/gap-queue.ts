@@ -83,7 +83,6 @@ const WIZARD_TO_STARVED_KIND: Record<WizardTag, EntityKind> = {
   moh: "party-venue",
   "offsite-outing": "party-venue",
   handicap: "golf-course",
-  tdf: "golf-course",
   "offsite-retreat": "residence",
 };
 
