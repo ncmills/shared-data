@@ -36,13 +36,12 @@ import { backfillUniverse, type BackfilledRow } from "../backfill-tags";
 import {
   sharedDestinations,
   SHARED_GOLF_COURSES,
-  SHARED_GOLF_COURSES_HHQ_MERGE,
   residencesForSite,
 } from "../../src/index";
 import type { CanonicalDestination } from "../../src/destinations-types";
 import type { SharedGolfCourse } from "../../src/golf-courses";
 import type { SharedResidence } from "../../src/residences";
-import type { WizardTag } from "../../src/tags";
+import { ALL_WIZARD_TAGS, type WizardTag } from "../../src/tags";
 import { WIZARD_INPUT_SPACE, worldRegionForCountry } from "../../src/wizard-input-space";
 
 export interface Starved {
@@ -111,76 +110,134 @@ function eligibleResidenceIds(rows: BackfilledRow[], wizard: WizardTag): Set<str
 }
 
 /**
+ * How one wizard's cells are counted. A factory (rather than a plain
+ * per-cell function) so the per-wizard eligibility set is computed ONCE and
+ * reused across that wizard's whole cross product, exactly as the original
+ * loop did.
+ *
+ * Every counter takes the `wizard` it is counting FOR and must use it — none
+ * may close over a hardcoded wizard name (see `STARVED_CELL_COUNTERS`).
+ */
+type CellCounterFactory = (
+  universe: StarvedUniverse,
+  wizard: WizardTag,
+) => (axisAValue: string, axisBValue: string) => number;
+
+/** region × partyVibe — destinations in the region, tagged for this wizard,
+ *  whose `vibes` include the axis vibe. */
+const countPartyDestinations: CellCounterFactory = ({ rows, destinations }, wizard) => {
+  const eligible = eligiblePartyDestIds(rows, wizard);
+  return (region, vibe) =>
+    destinations.filter(
+      (d) =>
+        d.region === region &&
+        d.vibes.includes(vibe as CanonicalDestination["vibes"][number]) &&
+        eligible.has(d.id),
+    ).length;
+};
+
+/** golfRegion × tier — golf courses in the region+tier, tagged for this wizard. */
+const countGolfCourses: CellCounterFactory = ({ rows, golfCourses }, wizard) => {
+  const eligible = eligibleGolfKeys(rows, wizard);
+  return (golfRegion, tier) =>
+    golfCourses.filter(
+      (c) => c.region === golfRegion && c.tier === tier && eligible.has(golfCourseKey(c)),
+    ).length;
+};
+
+/** setting × worldRegion — residences matching, tagged for this wizard. */
+const countResidences: CellCounterFactory = ({ rows, residences }, wizard) => {
+  const eligible = eligibleResidenceIds(rows, wizard);
+  return (setting, worldRegion) =>
+    residences.filter(
+      (res) =>
+        res.setting === setting &&
+        worldRegionForCountry(res.country) === worldRegion &&
+        eligible.has(res.id),
+    ).length;
+};
+
+/**
+ * region × audience — corporate-eligible party-venue ROWS (not destinations)
+ * in the region, tagged for this wizard, whose audiences include the axis
+ * audience. The wizard's other ENGINE_READS kinds (experience/outing-template/
+ * residence/golf-course) carry no structured region field in the shared
+ * schema, so this cell is scoped to the one region-keyed kind (see
+ * wizard-input-space.ts).
+ */
+const countCorporatePartyRows: CellCounterFactory = ({ rows, destinations }, wizard) => {
+  const destRegion = new Map<string, string>(destinations.map((d) => [d.id, d.region]));
+  return (region, audience) => {
+    let count = 0;
+    for (const r of rows) {
+      if (r.dataset !== "party" || r.kind !== "party-venue") continue;
+      if (!r.postWizards.includes(wizard)) continue;
+      if (!r.audiences.includes(audience as (typeof r.audiences)[number])) continue;
+      if (destRegion.get(destIdOf(r.id)) !== region) continue;
+      count++;
+    }
+    return count;
+  };
+};
+
+/**
+ * Which counter each wizard uses. `Record<WizardTag, …>` + the typecheck gate
+ * (`npm run typecheck`, run in CI) makes a NEW wizard a compile error here.
+ *
+ * This replaced an if/else chain whose trailing `else` hardcoded
+ * "offsite-outing": a seventh wizard fell into it silently, was counted
+ * against corporate party rows, and was reported under its own name — a
+ * wrong answer that looked like a real one. There is no `else` to fall into
+ * now, and no counter may hardcode a wizard name (each receives the wizard it
+ * is counting for and filters on THAT).
+ */
+export const STARVED_CELL_COUNTERS: Record<WizardTag, CellCounterFactory> = {
+  bestman: countPartyDestinations,
+  moh: countPartyDestinations,
+  handicap: countGolfCourses,
+  tdf: countGolfCourses,
+  "offsite-retreat": countResidences,
+  "offsite-outing": countCorporatePartyRows,
+};
+
+/**
  * Core enumerator, parameterized on a `StarvedUniverse` so it's independently
  * testable with a synthetic/stripped universe (see starved-inputs.test.ts)
  * without touching the real data files.
  */
 export function findStarvedIn(universe: StarvedUniverse, threshold = 3): Starved[] {
-  const { rows, destinations, golfCourses, residences } = universe;
   const out: Starved[] = [];
 
-  const wizards = Object.keys(WIZARD_INPUT_SPACE) as WizardTag[];
-
-  for (const wizard of wizards) {
+  // Iterate the tag vocabulary, NOT `Object.keys(WIZARD_INPUT_SPACE)`: keying
+  // off the map means a wizard missing from the map is silently never
+  // audited. Iterating the vocabulary turns that into a loud failure.
+  for (const wizard of ALL_WIZARD_TAGS) {
     const axes = WIZARD_INPUT_SPACE[wizard];
-    const [axisA, axisB] = axes;
+    const [axisA, axisB] = axes ?? [];
+    if (!axisA || !axisB) {
+      throw new Error(
+        `starved-inputs: wizard "${wizard}" has no two-axis entry in WIZARD_INPUT_SPACE — ` +
+          `add one (src/wizard-input-space.ts) so its input space is actually audited.`,
+      );
+    }
 
-    if (wizard === "bestman" || wizard === "moh") {
-      // region × partyVibe — count = destinations in the region, tagged for
-      // this wizard, whose `vibes` include the axis vibe.
-      const eligible = eligiblePartyDestIds(rows, wizard);
-      for (const region of axisA.values) {
-        for (const vibe of axisB.values) {
-          const count = destinations.filter(
-            (d) => d.region === region && d.vibes.includes(vibe as CanonicalDestination["vibes"][number]) && eligible.has(d.id),
-          ).length;
-          if (count < threshold) out.push({ wizard, cell: { region, partyVibe: vibe }, count });
-        }
-      }
-    } else if (wizard === "handicap" || wizard === "tdf") {
-      // golfRegion × tier — count = golf courses in the region+tier, tagged
-      // for this wizard.
-      const eligible = eligibleGolfKeys(rows, wizard);
-      for (const golfRegion of axisA.values) {
-        for (const tier of axisB.values) {
-          const count = golfCourses.filter(
-            (c) => c.region === golfRegion && c.tier === tier && eligible.has(golfCourseKey(c)),
-          ).length;
-          if (count < threshold) out.push({ wizard, cell: { golfRegion, tier }, count });
-        }
-      }
-    } else if (wizard === "offsite-retreat") {
-      // setting × worldRegion — count = residences matching, tagged for
-      // this wizard.
-      const eligible = eligibleResidenceIds(rows, wizard);
-      for (const setting of axisA.values) {
-        for (const worldRegion of axisB.values) {
-          const count = residences.filter(
-            (res) => res.setting === setting && worldRegionForCountry(res.country) === worldRegion && eligible.has(res.id),
-          ).length;
-          if (count < threshold) out.push({ wizard, cell: { setting, worldRegion }, count });
-        }
-      }
-    } else {
-      // offsite-outing: region × audience — count = corporate-eligible
-      // party-venue ROWS (not destinations) in the region, tagged for this
-      // wizard, whose audiences include the axis audience. OO's other
-      // ENGINE_READS kinds (experience/outing-template/residence/golf-course)
-      // carry no structured region field in the shared schema, so this cell
-      // is scoped to the one region-keyed kind (see wizard-input-space.ts).
-      const destRegion = new Map<string, string>(destinations.map((d) => [d.id, d.region]));
-      for (const region of axisA.values) {
-        for (const audience of axisB.values) {
-          let count = 0;
-          for (const r of rows) {
-            if (r.dataset !== "party" || r.kind !== "party-venue") continue;
-            if (!r.postWizards.includes("offsite-outing")) continue;
-            if (!r.audiences.includes(audience as (typeof r.audiences)[number])) continue;
-            if (destRegion.get(destIdOf(r.id)) !== region) continue;
-            count++;
-          }
-          if (count < threshold) out.push({ wizard, cell: { region, audience }, count });
-        }
+    // Runtime twin of the compile-time exhaustiveness above: `tsx` strips
+    // types, so scripts and tests run with no compiler in the loop.
+    const makeCounter = STARVED_CELL_COUNTERS[wizard];
+    if (!makeCounter) {
+      throw new Error(
+        `starved-inputs: no cell counter registered for wizard "${wizard}" — ` +
+          `add one to STARVED_CELL_COUNTERS rather than letting it fall through to another wizard's counter.`,
+      );
+    }
+    const count = makeCounter(universe, wizard);
+
+    for (const a of axisA.values) {
+      for (const b of axisB.values) {
+        const n = count(a, b);
+        // Cell keys come from the axis names themselves, so a cell can never
+        // be labeled with another wizard's axis names.
+        if (n < threshold) out.push({ wizard, cell: { [axisA.name]: a, [axisB.name]: b }, count: n });
       }
     }
   }
@@ -194,7 +251,9 @@ export function findStarved(threshold = 3): Starved[] {
     {
       rows: backfillUniverse(),
       destinations: sharedDestinations,
-      golfCourses: [...SHARED_GOLF_COURSES, ...SHARED_GOLF_COURSES_HHQ_MERGE],
+      // Already the merged set (base + sanctioned ingest) — see src/golf.ts.
+      // Do NOT re-spread the merge overlay here; that double-counts it.
+      golfCourses: SHARED_GOLF_COURSES,
       residences: residencesForSite("offsite"),
     },
     threshold,

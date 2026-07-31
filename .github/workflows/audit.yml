@@ -20,6 +20,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Runs FIRST: the Record<WizardTag, …> maps that decide what each wizard
+      # reads are only enforced by the compiler. Without this step they were
+      # editor-only decoration — a missing key read back `undefined` at runtime
+      # and every other step below happily passed.
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Run test suite
         run: npx tsx --test $(find scripts src -name "*.test.ts")
 

@@ -14,6 +14,7 @@ import assert from "node:assert/strict";
 
 import { findOrphaned, findOrphanedIn, ENGINE_READS, type Orphaned } from "./orphaned";
 import { backfillUniverse, type BackfilledRow } from "../backfill-tags";
+import { ALL_WIZARD_TAGS } from "../../src/tags";
 
 function fakeRow(overrides: Partial<BackfilledRow>): BackfilledRow {
   return {
@@ -119,6 +120,17 @@ test("FULL RUN: the canonical baked universe reports the orphaned-cite count", (
 });
 
 test("ENGINE_READS is keyed by every WizardTag", () => {
-  const wizards = Object.keys(ENGINE_READS).sort();
-  assert.deepEqual(wizards, ["bestman", "handicap", "moh", "offsite-outing", "offsite-retreat", "tdf"]);
+  // Compared against the tag vocabulary, NOT a hand-copied list of the six
+  // current names: this must fail when a new wizard is missing from the map,
+  // not merely when the set of wizards changes. A literal here breaks on the
+  // day a seventh wizard is added even if ENGINE_READS was updated correctly,
+  // which trains people to "fix" it by editing the literal — the exact way a
+  // genuinely-missing key gets waved through.
+  assert.deepEqual(Object.keys(ENGINE_READS).sort(), [...ALL_WIZARD_TAGS].sort());
+  for (const wizard of ALL_WIZARD_TAGS) {
+    assert.ok(
+      Array.isArray(ENGINE_READS[wizard]) && ENGINE_READS[wizard].length > 0,
+      `ENGINE_READS["${wizard}"] must list at least one EntityKind the wizard's engine reads`,
+    );
+  }
 });

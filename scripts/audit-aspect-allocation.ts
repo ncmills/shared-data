@@ -16,6 +16,7 @@ import {
   SHARED_GOLF_COURSES,
   SHARED_RESIDENCES,
   SHARED_TDF_DESTINATIONS,
+  ALL_WIZARD_TAGS,
 } from "../src/index";
 
 type Wiz = string;
@@ -27,7 +28,9 @@ const pct = (n: number, d: number) => d ? `${Math.round((100 * n) / d)}%` : "—
 // ── A. Per-aspect wizard allocation across all party destinations ──────────
 console.log("# Per-aspect allocation audit — shared cache\n");
 console.log("## A. Party aspects → which projects (wizards) each ITEM reaches\n");
-const ALL_WIZ = ["bestman", "moh", "offsite-outing", "offsite-retreat", "tdf", "handicap"];
+// Derived, never hand-copied — a wizard missing here is silently absent from
+// every column of this allocation table.
+const ALL_WIZ: readonly string[] = ALL_WIZARD_TAGS;
 const header = ["aspect", "items", ...ALL_WIZ, "orphan(0)"].join("\t");
 console.log(header);
 const aspectItems: Record<string, any[]> = {};

@@ -241,10 +241,15 @@ function toGolfCourse(row: ResearchedGolfRow): ConvertResult<SharedGolfCourse> {
   // the course — there is no neutral default for "how much does it cost" or
   // "what style of course is it" that isn't a fabrication, so a row missing
   // either is still hard-rejected (unchanged from before Item 2).
+  // Narrowed into locals (rather than cast at the use site) so the typecheck
+  // can SEE that this guard makes both fields non-undefined below — a cast
+  // would re-open exactly the silent-undefined hole this guard exists to close.
+  const greenFeeRange = row.greenFeeRange;
+  const style = typeof row.style === "string" && row.style.trim() ? row.style : undefined;
   const missing: string[] = [];
-  if (row.greenFeeRange === undefined) missing.push("greenFeeRange");
-  if (typeof row.style !== "string" || !row.style.trim()) missing.push("style");
-  if (missing.length > 0) {
+  if (greenFeeRange === undefined) missing.push("greenFeeRange");
+  if (style === undefined) missing.push("style");
+  if (greenFeeRange === undefined || style === undefined) {
     return {
       ok: false,
       reason: `golf row "${row.name}" is missing required shape field(s) for SharedGolfCourse: ${missing.join(", ")}`,
@@ -273,8 +278,8 @@ function toGolfCourse(row: ResearchedGolfRow): ConvertResult<SharedGolfCourse> {
     state: row.state,
     region: row.region,
     tier: row.tier,
-    greenFeeRange: row.greenFeeRange as [number, number],
-    style: row.style,
+    greenFeeRange,
+    style,
     walkable: typeof row.walkable === "boolean" ? row.walkable : false,
     driveMinutes: typeof row.driveMinutes === "number" ? row.driveMinutes : 0,
     highlight: row.highlight,

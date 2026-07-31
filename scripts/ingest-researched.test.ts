@@ -51,7 +51,10 @@ const GOOD_GOLF: ResearchedRow = {
  *  first `[` in the file — the type annotation (`SharedGolfCourse[]`) also
  *  contains a `[]` earlier in the line, which a naive `/\[[\s\S]*\]/` would
  *  greedily span into, corrupting the parse. */
-function readWrittenArray(path: string): unknown[] {
+// Rows are read back out of a written .ts file as raw JSON, so they are shaped
+// but not statically typed — an indexable record is the honest type here, and
+// it lets the assertions below read fields under `npm run typecheck`.
+function readWrittenArray(path: string): Record<string, any>[] {
   const raw = readFileSync(path, "utf-8");
   const m = raw.match(/=\s*(\[[\s\S]*\])\s*;?\s*$/);
   if (!m) throw new Error(`readWrittenArray: could not locate the array assignment in ${path}`);
@@ -137,7 +140,7 @@ test("REJECTS + ROLLS BACK a golf row hand-forced to a brand-breaking site tag (
 
 test("REJECTS an invalid row (no sourceUrl) by validation, before ever touching a file", () => {
   const before = readFileSync(DEFAULT_GOLF_EXPANSION_PATH, "utf-8");
-  const { sourceUrl: _drop, ...rest } = GOOD_GOLF as Record<string, unknown>;
+  const { sourceUrl: _drop, ...rest } = GOOD_GOLF as unknown as Record<string, unknown>;
 
   const result = ingestResearched([rest as unknown as ResearchedRow]);
 
@@ -309,7 +312,7 @@ test("golf UI defaults: a row missing driveMinutes/walkable lands with SAFE defa
   writeFileSync(tmpGolfPath, initialContent);
 
   try {
-    const { driveMinutes: _dm, walkable: _w, ...minimal } = GOOD_GOLF as Record<string, unknown>;
+    const { driveMinutes: _dm, walkable: _w, ...minimal } = GOOD_GOLF as unknown as Record<string, unknown>;
     const result = ingestResearched([minimal as unknown as ResearchedRow], {
       golfFilePath: tmpGolfPath,
       runGates: () => ({ ok: true, output: "" }),
@@ -336,7 +339,7 @@ test("golf still REJECTS a row missing greenFeeRange or style (no safe default e
       `export const SHARED_GOLF_COURSES_HHQ_MERGE: SharedGolfCourse[] = [];\n`,
   );
   try {
-    const { greenFeeRange: _gfr, ...missingPrice } = GOOD_GOLF as Record<string, unknown>;
+    const { greenFeeRange: _gfr, ...missingPrice } = GOOD_GOLF as unknown as Record<string, unknown>;
     const result = ingestResearched([missingPrice as unknown as ResearchedRow], { golfFilePath: tmpGolfPath });
     assert.equal(result.accepted, 0);
     assert.ok(result.reasons.some((r) => /greenFeeRange/.test(r)));

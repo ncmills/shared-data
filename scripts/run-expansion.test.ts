@@ -97,7 +97,7 @@ function spyIngest(): { fn: (rows: ResearchedRow[]) => IngestResult; calls: Rese
   const calls: ResearchedRow[][] = [];
   const fn = (rows: ResearchedRow[]): IngestResult => {
     calls.push(rows);
-    return { accepted: rows.length, rejected: 0, reasons: [], acceptedRows: rows };
+    return { accepted: rows.length, rejected: 0, reasons: [], acceptedRows: rows, skippedDuplicates: [] };
   };
   return { fn, calls };
 }
@@ -291,6 +291,7 @@ test("when the ingest gate accepts 0 rows, no PR is proposed", async () => {
         rejected: 1,
         reasons: ["batch rejected + rolled back: gate failed"],
         acceptedRows: [],
+        skippedDuplicates: [],
       }),
       propose: propose.fn,
     }),
@@ -337,7 +338,13 @@ test("PR body reflects only rows that ACTUALLY landed at ingest, not the pre-ing
         `rejected (shape): golf row "${(r as { name: string }).name}" is missing required shape field(s) ` +
         `for SharedGolfCourse: style`,
     );
-    return { accepted: accepted.length, rejected: droppedRows.length, reasons, acceptedRows: accepted };
+    return {
+      accepted: accepted.length,
+      rejected: droppedRows.length,
+      reasons,
+      acceptedRows: accepted,
+      skippedDuplicates: [],
+    };
   };
 
   const res = await runExpansion(

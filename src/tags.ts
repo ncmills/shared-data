@@ -15,14 +15,26 @@
  * back-compat and are DERIVED from / kept in sync with the axes above.
  */
 
-/** The five consumer wizards. Offsite is one domain, two wizards. */
-export type WizardTag =
-  | "bestman"
-  | "moh"
-  | "tdf"
-  | "offsite-retreat"
-  | "offsite-outing"
-  | "handicap";
+/**
+ * The six consumer wizards. Offsite is one domain, two wizards.
+ *
+ * THIS ARRAY IS THE SOURCE OF TRUTH — `WizardTag` is derived from it, not the
+ * other way round. Every guard that needs to enumerate wizards at RUNTIME
+ * (verify-universe's vocabulary set, the audit's per-wizard counters, the
+ * "is every map keyed by every wizard" tests) reads this array, so adding a
+ * seventh wizard updates all of them at once instead of leaving a hand-copied
+ * literal behind. A hardcoded list of these names anywhere else is a bug.
+ */
+export const ALL_WIZARD_TAGS = [
+  "bestman",
+  "moh",
+  "tdf",
+  "offsite-retreat",
+  "offsite-outing",
+  "handicap",
+] as const;
+
+export type WizardTag = (typeof ALL_WIZARD_TAGS)[number];
 
 /** Brand domains (derived from wizards; kept for back-compat with golf/residence `sites`). */
 export type SiteTag = "moh" | "bestman" | "tdf" | "offsite" | "handicap";
@@ -34,12 +46,17 @@ export type ProductTag =
   | "retreat"
   | "outing";
 
-export type AudienceTag =
-  | "bachelor"
-  | "bachelorette"
-  | "corporate"
-  | "clients"
-  | "internal";
+/** Source of truth for the audience vocabulary — same rule as
+ *  `ALL_WIZARD_TAGS`: runtime guards derive their set from here. */
+export const ALL_AUDIENCE_TAGS = [
+  "bachelor",
+  "bachelorette",
+  "corporate",
+  "clients",
+  "internal",
+] as const;
+
+export type AudienceTag = (typeof ALL_AUDIENCE_TAGS)[number];
 
 /**
  * Back-compat alias. The pre-tags universe used `UniverseAudience` (no

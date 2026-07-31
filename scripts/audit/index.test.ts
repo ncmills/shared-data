@@ -182,16 +182,35 @@ test("FULL RUN: the canonical universe reports zero regressions against the comm
   assert.equal(result.exitCode, 0);
 });
 
-test("FULL RUN: the current universe matches the known-good counts (0 under-tagged, 0 orphaned, 65 starved)", () => {
-  // Starved dropped 72 → 65 when the sanctioned golf/residence expansion
-  // (github:ncmills/shared-data#expand/true, +18 rows: golf+5, residence+13)
-  // filled several previously-thin cells — notably International×budget golf,
-  // which went 0 → 3 courses in ALL_GOLF_COURSES and is no longer starved.
-  // under-tagged/orphaned stay at 0 (no reachability regressions).
+test("FULL RUN: the current universe is clean (0 under-tagged, 0 orphaned) and starved never exceeds the committed baseline", () => {
+  // under-tagged / orphaned are true invariants — the correct assertion is
+  // the absolute 0, and any nonzero value is a real reachability regression.
+  //
+  // Starved is NOT an invariant: it's a DISCOVERY count that legitimately moves
+  // whenever the catalog grows (72 → 65 when the sanctioned golf/residence
+  // expansion filled several thin cells). This used to assert `=== 65`, which
+  // had already drifted once and does nothing the regression gate doesn't
+  // already do better: `docs/audit-baseline.json` tracks starvation PER CELL,
+  // so it catches "a different cell got worse" — which an aggregate count can
+  // hide entirely (one cell improving while another regresses nets to zero).
+  //
+  // So: assert the direction against the committed baseline (starvation must
+  // never grow) and let `computeRegressions` own the per-cell detail. Catalog
+  // growth makes this pass by getting better, not by needing a number edited.
   const result = runAudit({ writeFiles: false });
-  assert.equal(result.underTagged.length, 0);
-  assert.equal(result.orphaned.length, 0);
-  assert.equal(result.starved.length, 65);
+  assert.equal(result.underTagged.length, 0, "under-tagged must stay at 0 — a nonzero value is a real regression");
+  assert.equal(result.orphaned.length, 0, "orphaned must stay at 0 — a nonzero value is a real regression");
+
+  const committed = JSON.parse(
+    readFileSync(join(DOCS_DIR, "audit-baseline.json"), "utf-8"),
+  ) as AuditBaseline;
+  const baselineStarvedCells = Object.keys(committed.starvedCells).length;
+  assert.ok(
+    result.starved.length <= baselineStarvedCells,
+    `starved cells (${result.starved.length}) must not exceed the committed baseline (${baselineStarvedCells}); ` +
+      `run \`npx tsx scripts/audit/index.ts --update-baseline\` only when the increase is understood and intended`,
+  );
+  assert.equal(result.regressions.length, 0, `no per-cell regressions vs the baseline: ${JSON.stringify(result.regressions)}`);
 });
 
 test("FULL RUN: runAudit() writes docs/coverage-matrix.md and docs/audit-report.json with expected top-level shape", () => {
