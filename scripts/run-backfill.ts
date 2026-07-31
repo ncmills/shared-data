@@ -30,10 +30,14 @@ export interface RunBackfillOptions
   extends Omit<RunExpansionOptions<BackfillTask>, "research" | "gapQueue" | "gapQueuePath"> {
   /** Task list. Defaults to the live queue built from the real universe. */
   tasks?: BackfillTask[];
+  /** Venues per research call. See `BackfillQueueOptions.maxVenuesPerTask` —
+   *  an unbounded task times the researcher out and the fail-safe hides it. */
+  maxVenuesPerTask?: number;
 }
 
 export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<BackfillTask>> {
-  const tasks = opts.tasks ?? buildBackfillQueue().tasks;
+  const tasks =
+    opts.tasks ?? buildBackfillQueue(undefined, { maxVenuesPerTask: opts.maxVenuesPerTask ?? 8 }).tasks;
 
   return runExpansion<BackfillTask>({
     ...opts,
@@ -68,13 +72,28 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const dryRun = args.get("dry-run") === "true";
   const liveUrlCheck = args.get("live-url-check") === "true";
 
-  // The real researcher is only imported for a live run — a dry run should not
-  // need the `claude` CLI present.
-  const researcher = dryRun
+  // A DRY RUN STILL RESEARCHES. That is the whole point of it: you want to see
+  // what the researcher actually returns, and how much of it survives the
+  // honesty firewall + drift guard, BEFORE anything touches a file. `dryRun`
+  // skips ingest and the branch, not the research.
+  //
+  // `--no-research` is the separate, cheaper switch for exercising only the
+  // plumbing (and it does not need the `claude` CLI present).
+  const noResearch = args.get("no-research") === "true";
+  const researcher = noResearch
     ? async () => []
-    : (await import("./researcher-claude")).claudeResearcher();
+    : (await import("./researcher-claude")).claudeResearcher({
+        // WIRE THE DIAGNOSTIC LOG. `claudeResearcher` is fail-safe by design —
+        // it returns [] on a timeout, a non-zero exit, or a parse failure — so
+        // without this a silent failure and a genuine "found nothing" are
+        // indistinguishable, and the run reports "0 researched, 0 rejected"
+        // either way. Absence of a measurement is not a passing measurement.
+        log: (m: string) => console.log(`  ${m}`),
+        timeoutMs: num("researcher-timeout-ms", 180_000),
+      });
 
-  const q = buildBackfillQueue();
+  const maxVenuesPerTask = num("max-venues-per-task", 8);
+  const q = buildBackfillQueue(undefined, { maxVenuesPerTask });
   console.log(
     `run-backfill: ${q.totalUnsourced} of ${q.totalRows} party rows unsourced ` +
       `across ${q.tasks.length} task(s)\n`,
@@ -87,10 +106,33 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     dryRun,
     liveUrlCheck,
     researcher,
+    maxVenuesPerTask,
   });
 
+  // Print what was actually sourced. On a dry run this IS the deliverable —
+  // a summary line alone cannot be reviewed, and "n rows sourced" is exactly
+  // the kind of number this repo has learned not to trust without seeing the
+  // rows behind it.
+  if (res.researchedRows.length > 0) {
+    console.log(`\nrows that survived research (${res.researchedRows.length}):`);
+    for (const r of res.researchedRows) {
+      const row = r as unknown as Record<string, unknown>;
+      console.log(`  ${row.destinationId}/${row.category}  ${row.name}`);
+      console.log(`      -> ${row.url ?? row.sourceUrl}`);
+    }
+  }
+
+  if (res.rejections.length > 0) {
+    console.log(`\nrejected candidates (${res.rejections.length}):`);
+    for (const r of res.rejections) {
+      console.log(`  ${r.taskId} [#${r.index}]`);
+      for (const reason of r.reasons) console.log(`      ${reason}`);
+    }
+  }
+
   console.log(
-    `\nrun-backfill[${label}]: ${res.ingestedRows.length} row(s) ingested, ` +
+    `\nrun-backfill[${label}]: ${res.researchedRows.length} researched, ` +
+      `${dryRun ? "0 ingested (DRY RUN)" : `${res.ingestedRows.length} row(s) ingested`}, ` +
       `${res.rejectedCandidates} candidate(s) rejected, ` +
       `${res.droppedByCap.length} task(s) trimmed by the cap`,
   );

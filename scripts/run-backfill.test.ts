@@ -171,3 +171,24 @@ test("threads the live-URL check through to research", async () => {
   assert.ok(verified > 0, "liveUrlCheck must actually reach the verifier");
   assert.equal(res.ingestedRows.length, 0, "dead sources must not land");
 });
+
+test("surfaces WHY each candidate was rejected, not just how many", async () => {
+  // A bare count is unreviewable: "1 rejected" gives no way to tell a drifted
+  // venue from a dead URL from a fabricated one, and those need different
+  // responses. Observed on the first real run — 1 of 5 candidates rejected,
+  // with no way to see which or why.
+  const driftingResearcher = async (prompt: string) => {
+    const task = TASKS.find((t) => prompt.includes(t.destinationId))!;
+    return [patchFor(task, "A Venue Nobody Asked About")];
+  };
+
+  const res = await runBackfill({ ...baseOpts, researcher: driftingResearcher });
+
+  assert.equal(res.rejectedCandidates, 2);
+  assert.equal(res.rejections.length, 2, "every rejection must be reportable");
+  assert.ok(
+    res.rejections.every((r) => r.taskId && r.reasons.length > 0),
+    "each carries its task and at least one reason",
+  );
+  assert.match(res.rejections[0].reasons.join(" "), /drift/i);
+});

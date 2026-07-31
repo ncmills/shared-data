@@ -165,3 +165,46 @@ test("reports the wizards that benefit, for prioritisation", () => {
   const q = buildBackfillQueue([dest("a-mn", { activities: [activity("A1")] })]);
   assert.deepEqual(q.tasks[0].wizardsServed.sort(), ["bestman", "moh"]);
 });
+
+// ─── chunking ───────────────────────────────────────────────────────────────
+//
+// A task is one research call. Observed 2026-07-31: a 25-venue New York task
+// timed out `claude -p` at 180s and the fail-safe returned [], which the run
+// then reported as "0 researched, 0 rejected" — indistinguishable from finding
+// nothing. Bounding the work unit is the fix; a longer timeout alone just moves
+// the cliff.
+
+test("splits a category with more venues than the chunk size", () => {
+  const many = Array.from({ length: 25 }, (_, i) => activity(`Venue ${i + 1}`));
+  const q = buildBackfillQueue([dest("a-mn", { activities: many })], { maxVenuesPerTask: 10 });
+
+  assert.equal(q.tasks.length, 3, "25 venues at 10 per task = 3 tasks");
+  assert.deepEqual(
+    q.tasks.map((t) => t.venues.length).sort((x, y) => y - x),
+    [10, 10, 5],
+  );
+});
+
+test("chunking loses no venue and keeps ids unique", () => {
+  const many = Array.from({ length: 25 }, (_, i) => activity(`Venue ${i + 1}`));
+  const q = buildBackfillQueue([dest("a-mn", { activities: many })], { maxVenuesPerTask: 10 });
+
+  const seen = q.tasks.flatMap((t) => t.venues);
+  assert.equal(seen.length, 25, "no venue may be dropped by chunking");
+  assert.equal(new Set(seen).size, 25, "and none duplicated across chunks");
+  assert.equal(new Set(q.tasks.map((t) => t.id)).size, q.tasks.length, "ids stay unique");
+});
+
+test("chunking does not distort the totals", () => {
+  const many = Array.from({ length: 25 }, (_, i) => activity(`Venue ${i + 1}`));
+  const q = buildBackfillQueue([dest("a-mn", { activities: many })], { maxVenuesPerTask: 10 });
+
+  assert.equal(q.totalUnsourced, 25);
+  assert.equal(q.totalRows, 25);
+});
+
+test("no chunk size means one task per category, as before", () => {
+  const many = Array.from({ length: 25 }, (_, i) => activity(`Venue ${i + 1}`));
+  const q = buildBackfillQueue([dest("a-mn", { activities: many })]);
+  assert.equal(q.tasks.length, 1);
+});

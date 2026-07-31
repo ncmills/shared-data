@@ -134,6 +134,15 @@ export interface RunResult<T extends ExpansionTask = GapTask> {
   droppedAtIngest: DroppedIngestRow[];
   /** How many research candidates the validator rejected (no fabrication). */
   rejectedCandidates: number;
+  /**
+   * WHY each candidate was rejected, with the task it came from.
+   *
+   * A bare count is unreviewable — it cannot distinguish a drifted venue from
+   * a dead URL from a fabricated one, and those need different responses. The
+   * first real backfill run rejected 1 of 5 candidates and there was no way to
+   * see which or why. Same no-silent-truncation principle as `droppedByCap`.
+   */
+  rejections: { taskId: string; index: number; reasons: string[] }[];
   /** The ingest gate's result — undefined on a dry run (ingest not called). */
   ingestResult?: IngestResult;
   /** The local PR artifact — undefined on a dry run or an empty batch. */
@@ -253,6 +262,7 @@ export async function runExpansion<T extends ExpansionTask = GapTask>(
   // ── Step 1: research each considered task (validated survivors only) ──────
   const perTask: { task: T; rows: ResearchedRow[] }[] = [];
   let rejectedCandidates = 0;
+  const rejections: { taskId: string; index: number; reasons: string[] }[] = [];
   for (const task of tasksConsidered) {
     const res = opts.research
       ? await opts.research(task)
@@ -261,6 +271,9 @@ export async function runExpansion<T extends ExpansionTask = GapTask>(
           verifyUrl: opts.verifyUrl,
         });
     rejectedCandidates += res.rejected;
+    for (const r of res.rejections ?? []) {
+      rejections.push({ taskId: task.id, index: r.index, reasons: r.reasons });
+    }
     say(
       `  ${opts.taskNoun ?? "gap"} ${task.id}: ${res.rows.length} valid row(s), ${res.rejected} rejected ` +
         `(${task.deficit === undefined ? "" : `deficit=${task.deficit}, `}leverage=${task.leverageScore})`,
@@ -315,6 +328,7 @@ export async function runExpansion<T extends ExpansionTask = GapTask>(
       droppedByCap,
       droppedAtIngest: [],
       rejectedCandidates,
+      rejections,
       logs,
     };
   }
@@ -333,6 +347,7 @@ export async function runExpansion<T extends ExpansionTask = GapTask>(
       droppedByCap,
       droppedAtIngest: [],
       rejectedCandidates,
+      rejections,
       logs,
     };
   }
@@ -401,6 +416,7 @@ export async function runExpansion<T extends ExpansionTask = GapTask>(
       droppedByCap,
       droppedAtIngest,
       rejectedCandidates,
+      rejections,
       ingestResult,
       logs,
     };
@@ -439,6 +455,7 @@ export async function runExpansion<T extends ExpansionTask = GapTask>(
     droppedByCap,
     droppedAtIngest,
     rejectedCandidates,
+    rejections,
     ingestResult,
     pr,
     logs,

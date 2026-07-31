@@ -1,0 +1,946 @@
+- generic [active] [ref=f15e1]:
+  - generic [ref=f15e2]:
+    - generic:
+      - generic:
+        - generic [ref=f15e3]:
+          - generic [ref=f15e5]:
+            - generic [ref=f15e7]:
+              - generic [ref=f15e8]:
+                - link "Skip to main content" [ref=f15e9] [cursor=pointer]:
+                  - /url: "#main"
+                - button " Menu text" [ref=f15e10] [cursor=pointer]:
+                  - generic [ref=f15e11]: 
+                  - generic [ref=f15e12]: Menu text
+              - generic [ref=f15e13]:
+                - list [ref=f15e14]:
+                  - listitem [ref=f15e15]:
+                    - button "Sign in or Join" [ref=f15e16] [cursor=pointer]:
+                      - generic [ref=f15e17]: 
+                  - text:  
+                - link "Marriott Bonvoy" [ref=f15e19] [cursor=pointer]:
+                  - /url: https://www.marriott.com/default.mi
+                  - generic [ref=f15e20]:  
+            - text:               
+          - text: 
+        - text: 
+    - generic:
+      - generic:
+        - generic [ref=f15e22]:
+          - generic [ref=f15e23]:
+            - generic [ref=f15e25]:
+              - link [ref=f15e28] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/overview/
+                - img "St. Regis Logo" [ref=f15e29]
+              - list [ref=f15e31]:
+                - listitem [ref=f15e32]:
+                  - link "Overview" [ref=f15e33] [cursor=pointer]:
+                    - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/overview/
+                - listitem [ref=f15e34]:
+                  - link "Rooms" [ref=f15e35] [cursor=pointer]:
+                    - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/rooms/
+                - listitem [ref=f15e36]:
+                  - link "Dining" [ref=f15e37] [cursor=pointer]:
+                    - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/dining/
+                - listitem [ref=f15e38]:
+                  - link "Spa" [ref=f15e39] [cursor=pointer]:
+                    - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/spa/
+                - listitem [ref=f15e40]:
+                  - link "Experiences" [ref=f15e41] [cursor=pointer]:
+                    - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/experiences/
+                - listitem [ref=f15e42]:
+                  - link "Events" [ref=f15e43] [cursor=pointer]:
+                    - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/events/
+                - listitem [ref=f15e44]:
+                  - link "Gallery" [ref=f15e45] [cursor=pointer]:
+                    - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/photos/
+            - generic [ref=f15e47]:
+              - generic [ref=f15e48]:
+                - heading "The St. Regis Atlanta" [level=3] [ref=f15e49]
+                - generic [ref=f15e51]:
+                  - generic [ref=f15e80]:
+                    - generic [ref=f15e81]: "4.4"
+                    - generic [ref=f15e82]: •
+                    - link "1052 Reviews" [ref=f15e83] [cursor=pointer]:
+                      - /url: javascript:void(0)
+                  - text: 
+              - generic [ref=f15e84]:
+                - generic [ref=f15e85]:
+                  - generic [ref=f15e86]: 
+                  - link "VIEW MAP" [ref=f15e88] [cursor=pointer]:
+                    - /url: https://www.google.com/maps/search/?api=1&query=33.8399750%2C-84.3825080&hl=en-US
+                - generic [ref=f15e89]:
+                  - generic [ref=f15e90]: 
+                  - link "Contact us at phone +1 404-563-7900" [ref=f15e92] [cursor=pointer]:
+                    - /url: tel:+1%20404-563-7900%20
+                    - text: +1 404-563-7900
+                - text: ❯
+          - generic [ref=f15e93]:
+            - text: 
+            - generic [ref=f15e94]:
+              - generic [ref=f15e95]:
+                - generic [ref=f15e96]:
+                  - generic [ref=f15e97]: 
+                  - generic [ref=f15e98]: DATES
+                  - generic [ref=f15e99]: (1 NIGHT)
+                - generic [ref=f15e101] [cursor=pointer]:
+                  - text: Fri, Jul 31
+                  - generic [ref=f15e102]: 
+                  - text: Sat, Aug 01
+              - text: 
+            - generic [ref=f15e104]:
+              - generic [ref=f15e105]: Rooms & Guests
+              - button "Select number of guests dropdown" [ref=f15e106] [cursor=pointer]:
+                - generic [ref=f15e107]: 1 Room, 1 Adult
+                - text: 
+                - generic [ref=f15e108]: 
+              - text: 
+            - generic [ref=f15e110]:
+              - generic [ref=f15e111]: Special Rates
+              - button "Lowest Regular Rate " [ref=f15e112] [cursor=pointer]:
+                - generic [ref=f15e113]: Lowest Regular Rate
+                - text: 
+                - generic [ref=f15e114]: 
+              - text: 
+            - button "View Rates" [ref=f15e116] [cursor=pointer]
+        - text: 
+    - main [ref=f15e118]:
+      - generic [ref=f15e121]:
+        - generic [ref=f15e123]:
+          - generic [ref=f15e125]:
+            - generic [ref=f15e129]:
+              - list [ref=f15e132]:
+                - listitem "Slide 3 of 3" [ref=f15e133]:
+                  - img "Downstairs Lobby Area" [ref=f15e136]
+                - listitem "Slide 1 of 3" [ref=f15e137]:
+                  - img "Hotel in Buckhead, Atlanta, GA" [ref=f15e140]
+                - listitem "Slide 2 of 3" [ref=f15e141]:
+                  - img "Pool and Outdoor Lounge View" [ref=f15e144]
+                - listitem "Slide 3 of 3" [ref=f15e145]:
+                  - img "Downstairs Lobby Area" [ref=f15e148]
+                - listitem "Slide 1 of 3" [ref=f15e149]:
+                  - img "Hotel in Buckhead, Atlanta, GA" [ref=f15e152]
+              - generic [ref=f15e153]:
+                - generic [ref=f15e155]:
+                  - generic [ref=f15e156]:
+                    - button "Previous" [ref=f15e158] [cursor=pointer]:
+                      - generic [ref=f15e159]: 
+                      - text: Previous
+                    - generic [ref=f15e161]:
+                      - button "0"
+                      - button "1"
+                      - button "2"
+                    - button "Next" [ref=f15e163] [cursor=pointer]:
+                      - text: Next
+                      - generic [ref=f15e164]: 
+                  - generic [ref=f15e166]: 01 / 03
+                - generic [ref=f15e167]:
+                  - text: "|"
+                  - link "Gallery" [ref=f15e168] [cursor=pointer]:
+                    - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/photos/
+            - text: 
+          - generic [ref=f15e170]:
+            - generic [ref=f15e173]:
+              - heading "Welcome to The St. Regis Atlanta" [level=1] [ref=f15e174]
+              - heading "Experience our luxury hotel in Buckhead, Atlanta" [level=2] [ref=f15e175]
+              - paragraph [ref=f15e176]:
+                - paragraph [ref=f15e177]:
+                  - text: Discover an unrivaled 5-star experience at St. Regis Atlanta, an AAA five-diamond Buckhead, Atlanta luxury hotel. Re-imagined guest rooms and suites are appointed with residential polish, while the three-story Maisonette adds a collection of contemporary meeting and event space to an already impressive offering. Experience the resort-style Pool Piazza and indulge in exquisite hotel dining, including
+                  - generic [ref=f15e178]:
+                    - text: ...
+                    - button "See More" [ref=f15e179] [cursor=pointer]
+            - article [ref=f15e184]:
+              - paragraph [ref=f15e185]: Awards
+              - generic [ref=f15e186]:
+                - generic [ref=f15e189]:
+                  - img "Forbes 5 star gold logo" [ref=f15e191]
+                  - generic [ref=f15e192]: 2026 Forbes Travel Guide Five Star Award
+                - generic [ref=f15e195]:
+                  - img "2026 Forbes Verified Responsible logo" [ref=f15e197]
+                  - generic [ref=f15e198]: Forbes VERIFIED™ Responsible Hospitality Award
+            - generic [ref=f15e202]:
+              - generic [ref=f15e205]:
+                - heading "Bespoke ETRO Shopping Experience" [level=2] [ref=f15e206]
+                - paragraph [ref=f15e208]: Experience the exclusive collaboration between The St. Regis Atlanta and ETRO at the Pool Piazza, where vibrant design meets timeless elegance. Extend your stay with a bespoke in-suite shopping experience or a private boutique appointment. Available by reservation only and subject to availability.
+                - link "Learn More link opens in new tab" [ref=f15e210] [cursor=pointer]:
+                  - /url: https://thestregisatlanta-inquire.realtimereservation.com/services/ETROExperienceInquire
+                  - text: Learn More
+              - img "View of Lounge Area by the pool" [ref=f15e214]
+            - generic [ref=f15e218]:
+              - generic [ref=f15e221]:
+                - heading "The Pinnacle of Hospitality in Atlanta" [level=2] [ref=f15e222]
+                - paragraph [ref=f15e224]: The St. Regis Atlanta and ATLAS are proud to earn Forbes Travel Guide Five-Star ratings for 2026, celebrating our teams’ dedication to exceptional service, personalized experiences, and refined dining. The Spa at The St. Regis Atlanta also received a Forbes Four-Star rating, reflecting our commitment to wellness, thoughtful care, and elevated guest experiences.
+              - img "Entrance View" [ref=f15e228]
+            - generic [ref=f15e232]:
+              - generic [ref=f15e235]:
+                - heading "Enhance Your Stay at The St. Regis Atlanta" [level=2] [ref=f15e236]
+                - paragraph [ref=f15e238]: Indulgence begins with Curated Experiences designed to enrich your stay at The St. Regis Atlanta. Whether you are a current guest, planning a future visit, or wishing to gift a one-of-a-kind experience to a loved one at our Buckhead, Atlanta luxury hotel begin your journey of bespoke luxury here.
+                - link "Learn More link opens in new tab" [ref=f15e240] [cursor=pointer]:
+                  - /url: https://thestregisatlanta.realtimereservation.com/
+                  - text: Learn More
+              - img "St. Regis Macarons" [ref=f15e244]
+            - generic [ref=f15e248]:
+              - heading "Rooms & Suites" [level=3] [ref=f15e250]
+              - generic [ref=f15e253]:
+                - list [ref=f15e255]:
+                  - listitem [ref=f15e256]:
+                    - generic [ref=f15e257]:
+                      - generic [ref=f15e258]:
+                        - button " Expand Icon" [ref=f15e259] [cursor=pointer]:
+                          - generic [ref=f15e260]: 
+                          - generic [ref=f15e261]: Expand Icon
+                        - img "Metropolitan Suite Living Room" [ref=f15e263]
+                      - generic [ref=f15e264]:
+                        - link "Metropolitan Suite " [ref=f15e265] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=ONBR
+                          - generic [ref=f15e266]: Metropolitan Suite
+                          - generic [ref=f15e267]: 
+                        - button "View Rates" [ref=f15e269] [cursor=pointer]
+                  - listitem [ref=f15e270]:
+                    - generic [ref=f15e271]:
+                      - generic [ref=f15e272]:
+                        - button " Expand Icon" [ref=f15e273] [cursor=pointer]:
+                          - generic [ref=f15e274]: 
+                          - generic [ref=f15e275]: Expand Icon
+                        - img "Caroline Astor Suite Bedroom" [ref=f15e277]
+                      - generic [ref=f15e278]:
+                        - link "Caroline Astor Terrace " [ref=f15e279] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=PKST
+                          - generic [ref=f15e280]: Caroline Astor Terrace
+                          - generic [ref=f15e281]: 
+                        - button "View Rates" [ref=f15e283] [cursor=pointer]
+                  - listitem [ref=f15e284]:
+                    - generic [ref=f15e285]:
+                      - generic [ref=f15e286]:
+                        - button " Expand Icon" [ref=f15e287] [cursor=pointer]:
+                          - generic [ref=f15e288]: 
+                          - generic [ref=f15e289]: Expand Icon
+                        - img "St. Regis Suite Bedroom" [ref=f15e291]
+                      - generic [ref=f15e292]:
+                        - link "St. Regis Suite " [ref=f15e293] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=PSTE
+                          - generic [ref=f15e294]: St. Regis Suite
+                          - generic [ref=f15e295]: 
+                        - button "View Rates" [ref=f15e297] [cursor=pointer]
+                  - listitem [ref=f15e298]:
+                    - generic [ref=f15e299]:
+                      - generic [ref=f15e300]:
+                        - button " Expand Icon" [ref=f15e301] [cursor=pointer]:
+                          - generic [ref=f15e302]: 
+                          - generic [ref=f15e303]: Expand Icon
+                        - img "Superior King Bedroom" [ref=f15e305]
+                      - generic [ref=f15e306]:
+                        - link "Superior " [ref=f15e307] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=SRPM
+                          - generic [ref=f15e308]: Superior
+                          - generic [ref=f15e309]: 
+                        - button "View Rates" [ref=f15e311] [cursor=pointer]
+                  - listitem [ref=f15e312]:
+                    - generic [ref=f15e313]:
+                      - generic [ref=f15e314]:
+                        - button " Expand Icon" [ref=f15e315] [cursor=pointer]:
+                          - generic [ref=f15e316]: 
+                          - generic [ref=f15e317]: Expand Icon
+                        - img "Queen/Queen Superior Guest Room" [ref=f15e319]
+                      - generic [ref=f15e320]:
+                        - link "Superior " [ref=f15e321] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=SUPW
+                          - generic [ref=f15e322]: Superior
+                          - generic [ref=f15e323]: 
+                        - button "View Rates" [ref=f15e325] [cursor=pointer]
+                  - listitem [ref=f15e326]:
+                    - generic [ref=f15e327]:
+                      - generic [ref=f15e328]:
+                        - button " Expand Icon" [ref=f15e329] [cursor=pointer]:
+                          - generic [ref=f15e330]: 
+                          - generic [ref=f15e331]: Expand Icon
+                        - img "Deluxe King Bedroom" [ref=f15e333]
+                      - generic [ref=f15e334]:
+                        - link "Deluxe " [ref=f15e335] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=DKNG
+                          - generic [ref=f15e336]: Deluxe
+                          - generic [ref=f15e337]: 
+                        - button "View Rates" [ref=f15e339] [cursor=pointer]
+                  - listitem [ref=f15e340]:
+                    - generic [ref=f15e341]:
+                      - generic [ref=f15e342]:
+                        - button " Expand Icon" [ref=f15e343] [cursor=pointer]:
+                          - generic [ref=f15e344]: 
+                          - generic [ref=f15e345]: Expand Icon
+                        - img "Queen/Queen Deluxe Guest Room" [ref=f15e347]
+                      - generic [ref=f15e348]:
+                        - link "Deluxe " [ref=f15e349] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=DQUE
+                          - generic [ref=f15e350]: Deluxe
+                          - generic [ref=f15e351]: 
+                        - button "View Rates" [ref=f15e353] [cursor=pointer]
+                  - listitem [ref=f15e354]:
+                    - generic [ref=f15e355]:
+                      - generic [ref=f15e356]:
+                        - button " Expand Icon" [ref=f15e357] [cursor=pointer]:
+                          - generic [ref=f15e358]: 
+                          - generic [ref=f15e359]: Expand Icon
+                        - img "Deluxe King Bedroom" [ref=f15e361]
+                      - generic [ref=f15e362]:
+                        - link "Grand Deluxe Terrace " [ref=f15e363] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=KGLG
+                          - generic [ref=f15e364]: Grand Deluxe Terrace
+                          - generic [ref=f15e365]: 
+                        - button "View Rates" [ref=f15e367] [cursor=pointer]
+                  - listitem [ref=f15e368]:
+                    - generic [ref=f15e369]:
+                      - generic [ref=f15e370]:
+                        - button " Expand Icon" [ref=f15e371] [cursor=pointer]:
+                          - generic [ref=f15e372]: 
+                          - generic [ref=f15e373]: Expand Icon
+                        - img "King Metropolitan Suite" [ref=f15e375]
+                      - generic [ref=f15e376]:
+                        - link "Metropolitan Suite " [ref=f15e377] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=ONBE
+                          - generic [ref=f15e378]: Metropolitan Suite
+                          - generic [ref=f15e379]: 
+                        - button "View Rates" [ref=f15e381] [cursor=pointer]
+                  - listitem [ref=f15e382]:
+                    - generic [ref=f15e383]:
+                      - generic [ref=f15e384]:
+                        - button " Expand Icon" [ref=f15e385] [cursor=pointer]:
+                          - generic [ref=f15e386]: 
+                          - generic [ref=f15e387]: Expand Icon
+                        - img "Metropolitan Suite Living Room" [ref=f15e389]
+                      - generic [ref=f15e390]:
+                        - link "Metropolitan Suite " [ref=f15e391] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=ONBR
+                          - generic [ref=f15e392]: Metropolitan Suite
+                          - generic [ref=f15e393]: 
+                        - button "View Rates" [ref=f15e395] [cursor=pointer]
+                  - listitem [ref=f15e396]:
+                    - generic [ref=f15e397]:
+                      - generic [ref=f15e398]:
+                        - button " Expand Icon" [ref=f15e399] [cursor=pointer]:
+                          - generic [ref=f15e400]: 
+                          - generic [ref=f15e401]: Expand Icon
+                        - img "Caroline Astor Suite Bedroom" [ref=f15e403]
+                      - generic [ref=f15e404]:
+                        - link "Caroline Astor Terrace " [ref=f15e405] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=PKST
+                          - generic [ref=f15e406]: Caroline Astor Terrace
+                          - generic [ref=f15e407]: 
+                        - button "View Rates" [ref=f15e409] [cursor=pointer]
+                  - listitem [ref=f15e410]:
+                    - generic [ref=f15e411]:
+                      - generic [ref=f15e412]:
+                        - button " Expand Icon" [ref=f15e413] [cursor=pointer]:
+                          - generic [ref=f15e414]: 
+                          - generic [ref=f15e415]: Expand Icon
+                        - img "St. Regis Suite Bedroom" [ref=f15e417]
+                      - generic [ref=f15e418]:
+                        - link "St. Regis Suite " [ref=f15e419] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=PSTE
+                          - generic [ref=f15e420]: St. Regis Suite
+                          - generic [ref=f15e421]: 
+                        - button "View Rates" [ref=f15e423] [cursor=pointer]
+                  - listitem [ref=f15e424]:
+                    - generic [ref=f15e425]:
+                      - generic [ref=f15e426]:
+                        - button " Expand Icon" [ref=f15e427] [cursor=pointer]:
+                          - generic [ref=f15e428]: 
+                          - generic [ref=f15e429]: Expand Icon
+                        - img "Superior King Bedroom" [ref=f15e431]
+                      - generic [ref=f15e432]:
+                        - link "Superior " [ref=f15e433] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=SRPM
+                          - generic [ref=f15e434]: Superior
+                          - generic [ref=f15e435]: 
+                        - button "View Rates" [ref=f15e437] [cursor=pointer]
+                  - listitem [ref=f15e438]:
+                    - generic [ref=f15e439]:
+                      - generic [ref=f15e440]:
+                        - button " Expand Icon" [ref=f15e441] [cursor=pointer]:
+                          - generic [ref=f15e442]: 
+                          - generic [ref=f15e443]: Expand Icon
+                        - img "Queen/Queen Superior Guest Room" [ref=f15e445]
+                      - generic [ref=f15e446]:
+                        - link "Superior " [ref=f15e447] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=SUPW
+                          - generic [ref=f15e448]: Superior
+                          - generic [ref=f15e449]: 
+                        - button "View Rates" [ref=f15e451] [cursor=pointer]
+                  - listitem [ref=f15e452]:
+                    - generic [ref=f15e453]:
+                      - generic [ref=f15e454]:
+                        - button " Expand Icon" [ref=f15e455] [cursor=pointer]:
+                          - generic [ref=f15e456]: 
+                          - generic [ref=f15e457]: Expand Icon
+                        - img "Deluxe King Bedroom" [ref=f15e459]
+                      - generic [ref=f15e460]:
+                        - link "Deluxe " [ref=f15e461] [cursor=pointer]:
+                          - /url: /en-us/hotels/atlxr-the-st-regis-atlanta/rooms/#roomPoolCode=DKNG
+                          - generic [ref=f15e462]: Deluxe
+                          - generic [ref=f15e463]: 
+                        - button "View Rates" [ref=f15e465] [cursor=pointer]
+                - generic [ref=f15e466]:
+                  - generic [ref=f15e467]:
+                    - text: 
+                    - list [ref=f15e468]:
+                      - listitem [ref=f15e469]
+                      - listitem [ref=f15e470]
+                      - listitem [ref=f15e471]
+                      - listitem [ref=f15e472]
+                      - listitem [ref=f15e473]
+                      - listitem [ref=f15e474]
+                      - listitem [ref=f15e475]
+                      - listitem [ref=f15e476]
+                      - listitem [ref=f15e477]
+                    - text: 
+                  - generic [ref=f15e478]: / 09
+                  - generic:
+                    - button "Prev" [ref=f15e479] [cursor=pointer]:
+                      - generic [ref=f15e480]: 
+                    - button "Next" [ref=f15e481] [cursor=pointer]:
+                      - generic [ref=f15e482]: 
+            - generic [ref=f15e486]:
+              - generic [ref=f15e488]:
+                - img "Empire Suite Living Room" [ref=f15e489]
+                - generic [ref=f15e490]:
+                  - heading "Take a Virtual Tour" [level=2] [ref=f15e491]
+                  - paragraph [ref=f15e492]: Take a tour of our luxury Atlanta hotel in Buckhead and begin planning your next stay at The St. Regis Atlanta.
+                  - button "View Tour" [ref=f15e493] [cursor=pointer]
+              - generic: 
+            - generic [ref=f15e496]:
+              - generic:
+                - generic:
+                  - heading "Butler Service" [level=3]
+                  - generic: St. Regis Butler Service has been a treasured hallmark of the St. Regis experience for more than one hundred years.
+            - generic [ref=f15e500]:
+              - generic [ref=f15e503]:
+                - heading "The St. Regis Atlanta Butler Service" [level=2] [ref=f15e504]
+                - generic [ref=f15e505]: As one of the hallmarks of the St. Regis brand experience, guests can expect an elevated level of discreet, anticipatory service from the St. Regis Butlers at this Buckhead hotel. Available any time, day or night, the St. Regis Butlers are at the ready to provide personalized comforts for each guest, from packing and unpacking of clothing to shoe shines, garment pressing, and beyond. It is their pleasure.
+                - link "Learn More" [ref=f15e507] [cursor=pointer]:
+                  - /url: https://thestregisatlanta.realtimereservation.com/
+              - img "Rose Petal Bed" [ref=f15e511]
+            - generic [ref=f15e514]:
+              - generic:
+                - generic:
+                  - heading "Events at The St. Regis Atlanta" [level=3]
+            - generic [ref=f15e517]:
+              - generic:
+                - generic:
+                  - generic:
+                    - paragraph: Embrace Luxury
+                    - heading "Bespoke Weddings" [level=3]
+                    - paragraph:
+                      - paragraph:
+                        - text: The St. Regis Atlanta is one of Atlanta's most sought-after venues to host a one-of-a-kind wedding. Showcasing luxury, resort-style amenities, opulent accommodations and anticipatory service, guests find our indoor and outdoor wedding venues befitting of Buckhead's status as one of the country's most affluent communities. Choose the perfect venue for your reception and experience a hundred-year legacy
+                        - generic:
+                          - text: ...
+                          - button "See More"
+                    - link "Learn More":
+                      - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/events/
+                  - generic:
+                    - generic:
+                      - generic:
+                        - generic:
+                          - group
+                          - group
+                          - group:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - img "The Maisonette – Pavilion"
+                          - group
+                          - group
+                          - group
+                          - group
+                          - group
+                          - group
+                          - group
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - button "Prev":
+                              - generic: 
+                        - list:
+                          - listitem
+                          - listitem
+                          - listitem
+                          - listitem
+                        - generic:
+                          - generic:
+                            - button "Next":
+                              - generic: 
+                      - generic:
+                        - button "1": "01"
+                        - generic: /
+                        - button "4": "04"
+            - generic [ref=f15e521]:
+              - region:
+                - generic:
+                  - generic:
+                    - group:
+                      - generic:
+                        - tabpanel "Slide 1 of 5":
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - img "Astor Court"
+                                - generic:
+                                  - generic:
+                                    - paragraph: On-Site Dining
+                                    - heading "Astor Court" [level=3]
+                                    - paragraph: Astor Court offers seasonal and traditional favorites, along with contemporary Southern selections. Whether for brunch, lunch, or the beloved Afternoon Tea, we invite guests to savor the moment at our Buckhead Atlanta restaurants
+                                    - generic:
+                                      - link "Explore":
+                                        - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/dining/#astor-court
+                    - group:
+                      - generic:
+                        - tabpanel:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - paragraph: On-Site Dining
+                                    - heading [level=3]: Atlas Buckhead
+                                    - paragraph: This Fobes Five Star and Michelin star restaurant in Buckhead, Atlanta is a sophisticated culinary experience for guests and locals alike, offering a cultured and inviting venue with an extraordinary collection of 20th-century modern art.
+                                    - generic:
+                                      - link:
+                                        - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/dining/#atlas-buckhead
+                                        - text: Explore
+                    - group:
+                      - generic:
+                        - tabpanel:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - paragraph: On-Site Dining
+                                    - heading [level=3]: Poolside Piazza
+                                    - paragraph: Open for the season, enjoy 5-star service and attention to detail at our poolside Buckhead bar in Atlanta. Relax and dine by the pool in a casual yet refined atmosphere with favorite classics and Southern specialties.
+                                    - generic:
+                                      - link:
+                                        - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/dining/#poolside-piazza
+                                        - text: Explore
+                    - group:
+                      - generic:
+                        - tabpanel:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - paragraph: On-Site Dining
+                                    - heading [level=3]: The St. Regis Bar
+                                    - paragraph: The St. Regis Bar is where luminaries gather for cocktails and small plates. A terrace offers comfortable seating along a fireplace. Buckhead’s cherished bar has additional seating in the former Wine Room for watching sporting events or entertainment.
+                                    - generic:
+                                      - link:
+                                        - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/dining/#the-st--regis-bar
+                                        - text: Explore
+                    - group:
+                      - generic:
+                        - tabpanel:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - paragraph: On-Site Dining
+                                    - heading [level=3]: The Garden Room
+                                    - paragraph: The Garden Room is an immersive garden bar and fine dining experience known as an enchanted escape in Atlanta. This Buckhead Atlanta restaurant, is welcoming in its beauty and appealing through its casual approach.
+                                    - generic:
+                                      - link:
+                                        - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/dining/#the-garden-room
+                                        - text: Explore
+                - generic:
+                  - generic:
+                    - generic:
+                      - generic:
+                        - button "Prev":
+                          - generic: 
+                    - list:
+                      - listitem
+                      - listitem
+                      - listitem
+                      - listitem
+                      - listitem
+                    - generic:
+                      - generic:
+                        - button "Next":
+                          - generic: 
+                  - generic:
+                    - button "1": "01"
+                    - generic: /
+                    - button "5": "05"
+            - generic [ref=f15e524]:
+              - generic:
+                - generic:
+                  - heading "The St. Regis Atlanta Spa" [level=3]
+                  - generic: Our luxury Atlanta hotel spa is an oasis of refinement and tranquility in the heart of Atlanta's Buckhead.
+            - generic [ref=f15e528]:
+              - generic [ref=f15e531]:
+                - paragraph [ref=f15e532]: The St. Regis Atlanta Spa
+                - heading "Relax and Rejuvenate" [level=2] [ref=f15e533]
+                - generic [ref=f15e534]: Clients can spend a day enjoying a curated selection of highly effective facials, body treatments, massages, waxing and nail services, many of which are conducted exclusively using a results-oriented skincare line.
+                - link "Learn More" [ref=f15e536] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/experiences/
+              - img "The St. Regis Atlanta Spa - Sauna" [ref=f15e540]
+            - generic [ref=f15e544]:
+              - generic [ref=f15e547]:
+                - heading "Fitness Facility" [level=2] [ref=f15e548]
+                - generic [ref=f15e549]: Located on the 7th floor of our hotel in Buckhead, Atlanta, guests will find everything required for a complete and satisfying workout in our impeccable Athletic Club - without ever having to leave the hotel.
+                - link "Learn More" [ref=f15e551] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/experiences/
+              - img "St. Regis Athletic Club" [ref=f15e555]
+            - generic [ref=f15e561]:
+              - img "Entrance View" [ref=f15e564]
+              - generic [ref=f15e566]:
+                - heading "Concierge Services" [level=2] [ref=f15e567]
+                - paragraph [ref=f15e568]
+                - paragraph [ref=f15e569]: Offered 24 hours a day, the concierge service at our 5-star hotel in Buckhead stands ready to make any and all arrangements guests desire. Guests have access to excellent golf courses in the area, and the concierge is pleased to assist with tee times, transportation, equipment, and any other needs.
+            - generic [ref=f15e576]:
+              - generic [ref=f15e578]:
+                - generic [ref=f15e579]:
+                  - heading "Offers & Packages" [level=2] [ref=f15e580]
+                  - text: 
+                - generic:
+                  - generic:
+                    - list
+                  - text:  
+              - generic [ref=f15e582]:
+                - heading "Hotel Exclusives" [level=3] [ref=f15e583]
+                - generic [ref=f15e584]:
+                  - generic [ref=f15e585]:
+                    - heading "Events at The St. Regis Atlanta" [level=4] [ref=f15e586]
+                    - paragraph [ref=f15e587]: With a variety of events happening at The St. Regis Atlanta, there is never a shortage of hotel activities to partake in. Explore all that we have to offer and allow us to assist in creating meaningful memories for you and yours.
+                  - link "Learn More" [ref=f15e589] [cursor=pointer]:
+                    - /url: https://www.atstregisatlanta.com/
+                    - text: Learn More 
+            - generic [ref=f15e594]:
+              - heading "FEATURED AMENITIES ON-SITE" [level=2] [ref=f15e597]
+              - navigation [ref=f15e600]:
+                - tablist [ref=f15e601]:
+                  - tab "Property Amenities (8)" [ref=f15e602] [cursor=pointer]
+                  - tab "Room Amenities (3)" [ref=f15e604] [cursor=pointer]
+                  - tab "Hotel Services (7)" [ref=f15e606] [cursor=pointer]
+                  - tab "View All (18)" [ref=f15e608] [cursor=pointer]
+              - generic [ref=f15e611]:
+                - heading "Property Amenities On-Site" [level=3] [ref=f15e612]
+                - paragraph [ref=f15e613]:
+                  - generic [ref=f15e614]: 
+                  - generic [ref=f15e615]: included amenities (2)
+              - list [ref=f15e618]:
+                - listitem [ref=f15e619]:
+                  - generic [ref=f15e620]: 
+                  - paragraph [ref=f15e622]:
+                    - link "Sustainability" [ref=f15e623] [cursor=pointer]:
+                      - /url: "#sustainability"
+                - listitem [ref=f15e624]:
+                  - generic [ref=f15e625]: 
+                  - generic [ref=f15e626]:
+                    - paragraph [ref=f15e627]:
+                      - link "Restaurant On-Site" [ref=f15e628] [cursor=pointer]:
+                        - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/dining/
+                    - paragraph [ref=f15e629]: 5 Restaurants
+                - listitem [ref=f15e630]:
+                  - generic [ref=f15e631]: 
+                  - paragraph [ref=f15e633]: Gift Shop
+                - listitem [ref=f15e634]:
+                  - generic [ref=f15e635]: 
+                  - generic [ref=f15e636]:
+                    - paragraph [ref=f15e637]:
+                      - button "Outdoor Pool" [ref=f15e638] [cursor=pointer]
+                      - generic [ref=f15e639]: 
+                    - paragraph [ref=f15e640]: Complimentary
+                - listitem [ref=f15e641]:
+                  - generic [ref=f15e642]: 
+                  - paragraph [ref=f15e644]:
+                    - link "Meeting Space" [ref=f15e645] [cursor=pointer]:
+                      - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/events/
+                - listitem [ref=f15e646]:
+                  - generic [ref=f15e647]: 
+                  - paragraph [ref=f15e649]:
+                    - button "Spa" [ref=f15e650] [cursor=pointer]
+                - listitem [ref=f15e651]:
+                  - generic [ref=f15e652]: 
+                  - generic [ref=f15e653]:
+                    - paragraph [ref=f15e654]:
+                      - button "Fitness Center" [ref=f15e655] [cursor=pointer]
+                      - generic [ref=f15e656]: 
+                    - paragraph [ref=f15e657]: Complimentary
+                - listitem [ref=f15e658]:
+                  - generic [ref=f15e659]: 
+                  - paragraph [ref=f15e661]: On-Site Laundry
+                - text:             
+            - generic [ref=f15e666]:
+              - generic:
+                - article:
+                  - generic:
+                    - generic:
+                      - heading "More Ways to Enjoy Your Stay" [level=2]
+                      - generic:
+                        - generic:
+                          - tablist "More Ways to Enjoy Your Stay":
+                            - tab "Spa"
+                            - tab "Fitness"
+                            - tab "Swimming"
+                          - generic:
+                            - tabpanel:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - img "The St. Regis Atlanta Spa - Men's Relaxation Room"
+                                  - generic:
+                                    - generic:
+                                      - paragraph: Spa
+                                      - heading "The Spa at The St. Regis Atlanta" [level=2]
+                                      - paragraph: The Forbes Four-Star Spa at The St. Regis Atlanta offers guests and residents a personalized menu of facials, body treatments, massages, and nail services, featuring exclusive, results-oriented skincare for a truly elevated wellness experience.
+                                      - generic:
+                                        - link "Book":
+                                          - /url: https://na.spatime.com/sras7900/10496848/spa-service/service-group
+                                        - link "Learn More ":
+                                          - /url: "#."
+                            - text:     
+            - generic [ref=f15e670]:
+              - generic:
+                - generic:
+                  - generic: OUR LOCATION
+                  - heading "GETTING HERE" [level=3]
+                  - generic:
+                    - paragraph: The St. Regis Atlanta
+                    - paragraph: Eighty-Eight West Paces Ferry Road, Atlanta, Georgia, USA, 30305
+                  - generic:
+                    - text: "Tel:"
+                    - link "+1 404-563-7900":
+                      - /url: tel:+1%20404-563-7900%20
+                  - generic:
+                    - generic:
+                      - button " Hartsfield-Jackson Atlanta International Airport ":
+                        - generic: 
+                        - text: Hartsfield-Jackson Atlanta International Airport
+                        - generic: 
+                      - text: 
+                    - generic:
+                      - button " Dekalb-Peachtree Airport ":
+                        - generic: 
+                        - text: Dekalb-Peachtree Airport
+                        - generic: 
+                      - text: 
+                    - generic:
+                      - button " Other Transportation ":
+                        - generic: 
+                        - text: Other Transportation
+                        - generic: 
+                      - text:   
+                - generic:
+                  - region "map"
+            - generic [ref=f15e674]:
+              - generic [ref=f15e675]:
+                - heading "WHAT TO EXPECT" [level=2] [ref=f15e676]
+                - heading "Plan and Prepare for your Stay" [level=3] [ref=f15e677]
+              - link "Learn More" [ref=f15e679] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/redirectwte/ATLXR
+            - generic [ref=f15e685]:
+              - img "Exterior" [ref=f15e688]
+              - generic [ref=f15e690]:
+                - heading "Private Transfers" [level=2] [ref=f15e691]
+                - paragraph [ref=f15e692]
+                - paragraph [ref=f15e693]: The hotel offers complimentary transportation with a driver and a luxury car within a two-mile radius. Should guests wish to reserve airport service or a limousine for extended trips, the concierge will be happy to make arrangements.
+            - generic [ref=f15e698]:
+              - text:  ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★  
+              - generic [ref=f15e702]:
+                - heading "Property Details" [level=3] [ref=f15e703]
+                - generic [ref=f15e704]:
+                  - button "Hotel Information " [expanded] [ref=f15e706] [cursor=pointer]:
+                    - text: Hotel Information
+                    - generic [ref=f15e707]: 
+                  - button "General Information " [ref=f15e709] [cursor=pointer]:
+                    - text: General Information
+                    - generic [ref=f15e710]: 
+                  - button "Accessibility Information " [ref=f15e712] [cursor=pointer]:
+                    - text: Accessibility Information
+                    - generic [ref=f15e713]: 
+                  - button "Sustainability Information " [ref=f15e715] [cursor=pointer]:
+                    - text: Sustainability Information
+                    - generic [ref=f15e716]: 
+          - generic [ref=f15e717]:
+            - generic [ref=f15e721]:
+              - heading "Frequently Asked Questions" [level=3] [ref=f15e722]
+              - generic [ref=f15e723]:
+                - button "What are the check-in and check-out times at The St. Regis Atlanta? " [ref=f15e725] [cursor=pointer]:
+                  - text: What are the check-in and check-out times at The St. Regis Atlanta?
+                  - generic [ref=f15e726]: 
+                - button "Does The St. Regis Atlanta allow pets? " [ref=f15e728] [cursor=pointer]:
+                  - text: Does The St. Regis Atlanta allow pets?
+                  - generic [ref=f15e729]: 
+                - button "What are the parking options at The St. Regis Atlanta? " [ref=f15e731] [cursor=pointer]:
+                  - text: What are the parking options at The St. Regis Atlanta?
+                  - generic [ref=f15e732]: 
+                - button "What property amenities are available at The St. Regis Atlanta? " [ref=f15e734] [cursor=pointer]:
+                  - text: What property amenities are available at The St. Regis Atlanta?
+                  - generic [ref=f15e735]: 
+                - button "Does The St. Regis Atlanta have in-room Wi-Fi? " [ref=f15e737] [cursor=pointer]:
+                  - text: Does The St. Regis Atlanta have in-room Wi-Fi?
+                  - generic [ref=f15e738]: 
+                - button "What is the closest airport near The St. Regis Atlanta? " [ref=f15e740] [cursor=pointer]:
+                  - text: What is the closest airport near The St. Regis Atlanta?
+                  - generic [ref=f15e741]: 
+                - button "Does The St. Regis Atlanta have electric vehicle charging stations? " [ref=f15e743] [cursor=pointer]:
+                  - text: Does The St. Regis Atlanta have electric vehicle charging stations?
+                  - generic [ref=f15e744]: 
+            - link "Marriott Bonvoy app logo Unlock your stay with the Marriott Bonvoy™ App " [ref=f15e748] [cursor=pointer]:
+              - /url: https://mobile-app.marriott.com/en-us
+              - generic [ref=f15e750]:
+                - img "Marriott Bonvoy app logo" [ref=f15e752]
+                - paragraph [ref=f15e753]: Unlock your stay with the Marriott Bonvoy™ App
+                - generic [ref=f15e754]: 
+        - generic [ref=f15e755]:
+          - generic [ref=f15e757]:
+            - heading "The St. Regis Atlanta" [level=2] [ref=f15e758]
+            - generic [ref=f15e759]:
+              - generic [ref=f15e762]:
+                - link "Overview" [ref=f15e763] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/overview/
+                - link "Rooms" [ref=f15e764] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/rooms/
+                - link "Dining" [ref=f15e765] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/dining/
+                - link "Spa" [ref=f15e766] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/spa/
+                - link "Experiences" [ref=f15e767] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/experiences/
+                - link "Events" [ref=f15e768] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/events/
+                - link "Gallery" [ref=f15e769] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlxr-the-st-regis-atlanta/photos/
+              - generic [ref=f15e770]:
+                - generic [ref=f15e772]:
+                  - paragraph [ref=f15e773]: Eighty-Eight West Paces Ferry Road,
+                  - paragraph [ref=f15e774]: Atlanta, Georgia, USA, 30305
+                - paragraph [ref=f15e776]: "Fax: +1 404-563-7905"
+          - navigation "Breadcrumb" [ref=f15e780]:
+            - list [ref=f15e781]:
+              - listitem [ref=f15e782]:
+                - link " Marriott Bonvoy" [ref=f15e783] [cursor=pointer]:
+                  - /url: https://www.marriott.com/default.mi
+                  - text: 
+                  - generic [ref=f15e784]: Marriott Bonvoy
+              - listitem [ref=f15e785]:
+                - link " USA" [ref=f15e786] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/destinations/united-states.mi
+                  - text: 
+                  - generic [ref=f15e787]: USA
+              - listitem [ref=f15e788]:
+                - link " Georgia" [ref=f15e789] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/destinations/united-states/georgia.mi
+                  - text: 
+                  - generic [ref=f15e790]: Georgia
+              - listitem [ref=f15e791]:
+                - link " Atlanta" [ref=f15e792] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/destinations/united-states/georgia/atlanta.mi
+                  - text: 
+                  - generic [ref=f15e793]: Atlanta
+              - listitem [ref=f15e794]:
+                - generic [ref=f15e795]: The St. Regis Atlanta
+      - generic [ref=f15e804]:
+        - generic [ref=f15e806]:
+          - generic [ref=f15e807]:
+            - heading [level=2] [ref=f15e808] [cursor=pointer]:
+              - button "Top Destinations " [ref=f15e809]:
+                - text: Top Destinations
+                - generic: 
+            - text:                                       
+          - generic [ref=f15e810]:
+            - heading [level=2] [ref=f15e811] [cursor=pointer]:
+              - button "For Guests " [ref=f15e812]:
+                - text: For Guests
+                - generic: 
+            - text:          
+          - generic [ref=f15e813]:
+            - heading [level=2] [ref=f15e814] [cursor=pointer]:
+              - button "Our Company " [ref=f15e815]:
+                - text: Our Company
+                - generic: 
+            - text:            
+        - generic [ref=f15e817]:
+          - generic [ref=f15e818] [cursor=pointer]: Follow us
+          - list [ref=f15e819]:
+            - listitem [ref=f15e820]:
+              - link " Facebook" [ref=f15e821] [cursor=pointer]:
+                - /url: https://www.facebook.com/marriottbonvoy
+                - text: 
+                - generic [ref=f15e822]: Facebook
+            - listitem [ref=f15e823]:
+              - link " Instagram" [ref=f15e824] [cursor=pointer]:
+                - /url: https://www.instagram.com/marriottbonvoy/
+                - text: 
+                - generic [ref=f15e825]: Instagram
+            - listitem [ref=f15e826]:
+              - link " Twitter" [ref=f15e827] [cursor=pointer]:
+                - /url: https://twitter.com/marriottbonvoy
+                - text: 
+                - generic [ref=f15e828]: Twitter
+            - listitem [ref=f15e829]:
+              - link " Linkedin" [ref=f15e830] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/marriott-international
+                - text: 
+                - generic [ref=f15e831]: Linkedin
+            - listitem [ref=f15e832]:
+              - link " Youtube" [ref=f15e833] [cursor=pointer]:
+                - /url: https://www.youtube.com/marriott
+                - text: 
+                - generic [ref=f15e834]: Youtube
+        - generic [ref=f15e835]:
+          - generic [ref=f15e836]:
+            - generic [ref=f15e837]:
+              - paragraph [ref=f15e839]: © 1996 – 2026 Marriott International, Inc. All rights reserved. Marriott Proprietary Information
+              - button " English" [ref=f15e841] [cursor=pointer]:
+                - generic [ref=f15e842]: 
+                - generic [ref=f15e843]: English
+            - generic [ref=f15e845]:
+              - generic [ref=f15e846]:
+                - link "Tracking Preferences" [ref=f15e847] [cursor=pointer]:
+                  - /url: javascript:void(0)
+                - generic [ref=f15e848]: 
+              - link "Careers " [ref=f15e849] [cursor=pointer]:
+                - /url: https://careers.marriott.com
+                - text: Careers
+                - generic [ref=f15e850]: 
+              - generic [ref=f15e851]: Opens a new window
+              - link "Terms of Use " [ref=f15e852] [cursor=pointer]:
+                - /url: /about/terms-of-use.mi
+                - text: Terms of Use
+                - generic [ref=f15e853]: 
+              - link "Program Terms & Conditions " [ref=f15e854] [cursor=pointer]:
+                - /url: /loyalty/terms/default.mi
+                - text: Program Terms & Conditions
+                - generic [ref=f15e855]: 
+              - link "Privacy Center " [ref=f15e856] [cursor=pointer]:
+                - /url: /about/privacy.mi
+                - text: Privacy Center
+                - generic [ref=f15e857]: 
+              - link "Digital Accessibility " [ref=f15e858] [cursor=pointer]:
+                - /url: /digital-accessibility.mi
+                - text: Digital Accessibility
+                - generic [ref=f15e859]: 
+              - link "Sustainability in the Supply Chain " [ref=f15e860] [cursor=pointer]:
+                - /url: /marriott-brands/sustainabilitysupplychain.mi
+                - text: Sustainability in the Supply Chain
+                - generic [ref=f15e861]: 
+              - link "Site Map " [ref=f15e862] [cursor=pointer]:
+                - /url: /sitemap.mi
+                - text: Site Map
+                - generic [ref=f15e863]: 
+              - link "Hotel Site Map " [ref=f15e864] [cursor=pointer]:
+                - /url: /hotel-sitemap
+                - text: Hotel Site Map
+                - generic [ref=f15e865]: 
+              - link "Help " [ref=f15e866] [cursor=pointer]:
+                - /url: https://help.marriott.com/s/
+                - text: Help
+                - generic [ref=f15e867]: 
+              - generic [ref=f15e868]: Opens a new window
+            - generic [ref=f15e869]: prod31,10FED12E-1318-5E0A-8E2E-46A45D1BC963,rel-R24.9.4
+          - text: 
+  - text:      

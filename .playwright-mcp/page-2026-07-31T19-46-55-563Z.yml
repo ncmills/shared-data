@@ -1,0 +1,654 @@
+- generic [active] [ref=e1]:
+  - link "SKIP TO MAIN CONTENT" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - navigation "Top Navigation" [ref=e3]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic "Focus reset to top of page"
+        - generic [ref=e7]:
+          - link "All Hotels and Resorts" [ref=e8] [cursor=pointer]:
+            - /url: /find_a_hotel_or_resort/
+          - button "Person - Sign In" [ref=e12] [cursor=pointer]:
+            - generic [ref=e13]: 
+            - text: Sign In
+          - combobox "Select language" [ref=e15] [cursor=pointer]:
+            - option "English" [selected]
+            - option "简体中文"
+          - combobox [ref=e19] [cursor=pointer]:
+            - option "USD" [selected]
+            - option "AED"
+            - option "ARS"
+            - option "AUD"
+            - option "AZN"
+            - option "BHD"
+            - option "BRL"
+            - option "BSD"
+            - option "CAD"
+            - option "CHF"
+            - option "CLP"
+            - option "CNY"
+            - option "COP"
+            - option "CRC"
+            - option "CZK"
+            - option "DKK"
+            - option "EGP"
+            - option "EUR"
+            - option "GBP"
+            - option "HKD"
+            - option "HUF"
+            - option "IDR"
+            - option "ILS"
+            - option "INR"
+            - option "JOD"
+            - option "JPY"
+            - option "KRW"
+            - option "KWD"
+            - option "LBP"
+            - option "MAD"
+            - option "MOP"
+            - option "MUR"
+            - option "MVR"
+            - option "MXN"
+            - option "MYR"
+            - option "NOK"
+            - option "NZD"
+            - option "QAR"
+            - option "RUB"
+            - option "SAR"
+            - option "SCR"
+            - option "SEK"
+            - option "SGD"
+            - option "SYP"
+            - option "THB"
+            - option "TND"
+            - option "TRY"
+            - option "TWD"
+            - option "TZS"
+            - option "UYU"
+            - option "VND"
+            - option "XCD"
+            - option "XPF"
+            - option "ZAR"
+        - generic [ref=e20]:
+          - link " Go to the Four Seasons home page" [ref=e21] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e22]:
+              - text: 
+              - generic [ref=e23]: Go to the Four Seasons home page
+          - generic [ref=e24]:
+            - link "Four Seasons Hotel Atlanta" [ref=e25] [cursor=pointer]:
+              - /url: /atlanta/
+            - navigation "Main Links Navigation" [ref=e27]:
+              - list [ref=e28]:
+                - listitem [ref=e29]:
+                  - link "Hotel Overview" [ref=e31] [cursor=pointer]:
+                    - /url: /atlanta/
+                - listitem [ref=e32]:
+                  - link "Accommodations" [ref=e34] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/
+                - listitem [ref=e35]:
+                  - link "Offers" [ref=e37] [cursor=pointer]:
+                    - /url: /atlanta/offers/
+                - listitem [ref=e38]:
+                  - link "Experiences" [ref=e40] [cursor=pointer]:
+                    - /url: /atlanta/experiences/
+                - listitem:
+                  - button "More..." [ref=e41] [cursor=pointer]
+          - button "view cart" [ref=e44] [cursor=pointer]:
+            - generic [ref=e47]: Cart
+          - link "Check Rates" [expanded] [ref=e49] [cursor=pointer]:
+            - /url: https://reservations.fourseasons.com/en?cawConfig.customBooker=true&generalReservationForm.locationId=ATL411
+      - dialog [ref=e53]:
+        - form "Check Rates and Availability" [ref=e59]:
+          - generic [ref=e60]:
+            - generic [ref=e61]:
+              - generic "Selected Dates July 31 2026 to August 1 2026" [ref=e62]: Check in — Check out
+              - button "Selected Dates July 31 2026 to August 1 2026" [ref=e66]:
+                - generic [ref=e69]:
+                  - generic [ref=e70]: Selected Dates July 31 2026 to August 1 2026
+                  - generic [ref=e71]: 07/31/2026
+                  - generic [ref=e73]: "-"
+                  - generic [ref=e75]: 08/01/2026
+            - generic [ref=e78]:
+              - generic "1 Room - 2 Adults" [ref=e79]: Guests
+              - button "1 Room - 2 Adults" [ref=e82]
+            - generic [ref=e85]:
+              - generic [ref=e86]: Promo
+              - textbox "Promo" [ref=e88]:
+                - /placeholder: Promo Code
+            - button "Check Rates" [ref=e90] [cursor=pointer]
+            - button "Hide the Check Rates and Availability form" [expanded] [ref=e91] [cursor=pointer]:
+              - generic [ref=e92]: Hide
+    - generic:
+      - option "English" [selected]
+      - option "简体中文"
+      - option "USD" [selected]
+      - option "AED"
+      - option "ARS"
+      - option "AUD"
+      - option "AZN"
+      - option "BHD"
+      - option "BRL"
+      - option "BSD"
+      - option "CAD"
+      - option "CHF"
+      - option "CLP"
+      - option "CNY"
+      - option "COP"
+      - option "CRC"
+      - option "CZK"
+      - option "DKK"
+      - option "EGP"
+      - option "EUR"
+      - option "GBP"
+      - option "HKD"
+      - option "HUF"
+      - option "IDR"
+      - option "ILS"
+      - option "INR"
+      - option "JOD"
+      - option "JPY"
+      - option "KRW"
+      - option "KWD"
+      - option "LBP"
+      - option "MAD"
+      - option "MOP"
+      - option "MUR"
+      - option "MVR"
+      - option "MXN"
+      - option "MYR"
+      - option "NOK"
+      - option "NZD"
+      - option "QAR"
+      - option "RUB"
+      - option "SAR"
+      - option "SCR"
+      - option "SEK"
+      - option "SGD"
+      - option "SYP"
+      - option "THB"
+      - option "TND"
+      - option "TRY"
+      - option "TWD"
+      - option "TZS"
+      - option "UYU"
+      - option "VND"
+      - option "XCD"
+      - option "XPF"
+      - option "ZAR"
+  - generic [ref=e93]:
+    - generic [ref=e94]:
+      - generic [ref=e98]:
+        - generic [ref=e99]:
+          - generic [ref=e100]:
+            - text: Four Seasons Hotel
+            - heading "Atlanta" [level=1] [ref=e101]
+            - generic [ref=e102]: 75 Fourteenth Street NE, Atlanta, Georgia 30309 U.S.A.
+          - generic [ref=e103]:
+            - link "Please call us 1 (404) 881-9898" [ref=e104] [cursor=pointer]:
+              - /url: tel:14048819898
+              - text: 1 (404) 881-9898
+            - link "Location" [ref=e105] [cursor=pointer]:
+              - /url: /atlanta/getting-here/
+            - link "Contact Us" [ref=e106] [cursor=pointer]:
+              - /url: /atlanta/contact-us/
+        - generic [ref=e107]:
+          - button " Previous slide" [disabled]:
+            - text: 
+            - generic: Previous slide
+          - generic [ref=e111]:
+            - link " Location" [ref=e113] [cursor=pointer]:
+              - /url: /atlanta/getting-here/
+              - generic [ref=e114]: 
+              - generic [ref=e115]: Location
+            - link " Accommodations" [ref=e117] [cursor=pointer]:
+              - /url: /atlanta/accommodations/
+              - generic [ref=e118]: 
+              - generic [ref=e119]: Accommodations
+            - link " Photos & Videos" [ref=e121] [cursor=pointer]:
+              - /url: /atlanta/photos-and-videos/
+              - generic [ref=e122]: 
+              - generic [ref=e123]: Photos & Videos
+            - link " Facilities & Amenities" [ref=e125] [cursor=pointer]:
+              - /url: /atlanta/services-and-amenities/
+              - generic [ref=e126]: 
+              - generic [ref=e127]: Facilities & Amenities
+            - generic [ref=e128]:
+              - link:
+                - /url: /atlanta/dining/
+                - generic: 
+                - generic: Dining
+            - generic [ref=e129]:
+              - link:
+                - /url: /atlanta/spa/
+                - generic: 
+                - generic: Spa
+          - button " Next slide" [ref=e130] [cursor=pointer]:
+            - text: 
+            - generic [ref=e131]: Next slide
+      - text:        
+      - button " Play or pause video" [ref=e136] [cursor=pointer]:
+        - text: 
+        - generic [ref=e137]: Play or pause video
+    - generic [ref=e138]: SCROLL TO DISCOVER MORE
+    - text:            
+  - main [ref=e139]:
+    - generic [ref=e140]:
+      - generic [ref=e142]:
+        - heading "Modern luxury steeped in southern charm" [level=2] [ref=e144]
+        - generic [ref=e145]: Meet us in Atlanta, and we’ll show you what it means to have fun, Southern-style. Our vibrant capital city is the living, breathing cultural heart of the American South, where world-renowned chefs, business moguls and celebrities flock for work and play. Our luxury hotel in Midtown Atlanta puts you just steps from the renowned High Museum of Art, eclectic Peachtree Street and the sprawling green spaces of Piedmont Park. Enjoy breakfast on the atrium bridge before heading out to explore the city, or stay in for a healthy dose of self-care in our serene Spa. However you spend the day, make sure to end your night with dinner and drinks at Bar Margot.
+      - generic [ref=e147]:
+        - heading "Accommodations" [level=2] [ref=e149]
+        - list [ref=e151]:
+          - generic [ref=e153]:
+            - listitem [ref=e154]:
+              - generic [ref=e158]:
+                - heading "Deluxe Room" [level=3] [ref=e160]
+                - generic [ref=e161]: Watch as the city lights up the night sky from these upper-floor rooms.
+                - generic [ref=e162]:
+                  - link "Deluxe Room - Check Rates" [ref=e163] [cursor=pointer]:
+                    - /url: https://reservations.fourseasons.com/en?hotelCode=ATL411&roomOwsCodes=A1K
+                    - text: Check Rates
+                  - link "Deluxe Room - Details" [ref=e164] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/guest_rooms/deluxe_city_view_room/
+                    - text: Details
+            - listitem [ref=e165]:
+              - generic [ref=e169]:
+                - heading [level=3] [ref=e171]: Midtown Suite
+                - generic [ref=e172]: Wall-to-wall windows, soothing shades of grey, bold pops of colour and a curated art collection make these new residential-style suites an inspiring place to which to return at the end of a busy day.
+                - generic [ref=e173]:
+                  - link [ref=e174] [cursor=pointer]:
+                    - /url: https://reservations.fourseasons.com/en?hotelCode=ATL411&roomOwsCodes=M1K
+                    - text: Check Rates
+                  - link [ref=e175] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/suites/midtown_suite/
+                    - text: Details
+            - listitem [ref=e176]:
+              - generic [ref=e180]:
+                - heading [level=3] [ref=e182]: One-Bedroom Suite
+                - generic [ref=e183]: Invite friends up for a nightcap in your spacious living room without sacrificing any privacy thanks to the solid-wood door that separates the bedroom in these classically styled suites.
+                - generic [ref=e184]:
+                  - link [ref=e185] [cursor=pointer]:
+                    - /url: https://reservations.fourseasons.com/en?hotelCode=ATL411&roomOwsCodes=T1K
+                    - text: Check Rates
+                  - link [ref=e186] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/suites/one_bedroom_suite/
+                    - text: Details
+            - listitem [ref=e187]:
+              - generic [ref=e191]:
+                - heading [level=3] [ref=e193]: Presidential Suite
+                - generic [ref=e194]: A gleaming marble foyer welcomes you to this opulent, top-floor suite, featuring an oversized living and dining area ideal for entertaining, a fully stocked kitchen, a palatial master bedroom and hardwood floors throughout that make it feel like home.
+                - link [ref=e196] [cursor=pointer]:
+                  - /url: /atlanta/accommodations/specialty-suites/presidential-suite/
+                  - text: Details
+            - listitem [ref=e197]:
+              - generic [ref=e201]:
+                - heading [level=3] [ref=e203]: Superior City-View Room
+                - generic [ref=e204]: Rich earth tones create an elegant ambience in these classically styled rooms, located in the heart of our Hotel.
+                - generic [ref=e205]:
+                  - link [ref=e206] [cursor=pointer]:
+                    - /url: https://reservations.fourseasons.com/en?hotelCode=ATL411&roomOwsCodes=B1K
+                    - text: Check Rates
+                  - link [ref=e207] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/guest_rooms/superior_city_view_room/
+                    - text: Details
+            - listitem [ref=e208]:
+              - generic [ref=e212]:
+                - heading [level=3] [ref=e214]: Deluxe Room
+                - generic [ref=e215]: Watch as the city lights up the night sky from these upper-floor rooms.
+                - generic [ref=e216]:
+                  - link [ref=e217] [cursor=pointer]:
+                    - /url: https://reservations.fourseasons.com/en?hotelCode=ATL411&roomOwsCodes=A1K
+                    - text: Check Rates
+                  - link [ref=e218] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/guest_rooms/deluxe_city_view_room/
+                    - text: Details
+            - listitem [ref=e219]:
+              - generic [ref=e223]:
+                - heading [level=3] [ref=e225]: Midtown Suite
+                - generic [ref=e226]: Wall-to-wall windows, soothing shades of grey, bold pops of colour and a curated art collection make these new residential-style suites an inspiring place to which to return at the end of a busy day.
+                - generic [ref=e227]:
+                  - link [ref=e228] [cursor=pointer]:
+                    - /url: https://reservations.fourseasons.com/en?hotelCode=ATL411&roomOwsCodes=M1K
+                    - text: Check Rates
+                  - link [ref=e229] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/suites/midtown_suite/
+                    - text: Details
+            - listitem [ref=e230]:
+              - generic [ref=e234]:
+                - heading [level=3] [ref=e236]: One-Bedroom Suite
+                - generic [ref=e237]: Invite friends up for a nightcap in your spacious living room without sacrificing any privacy thanks to the solid-wood door that separates the bedroom in these classically styled suites.
+                - generic [ref=e238]:
+                  - link [ref=e239] [cursor=pointer]:
+                    - /url: https://reservations.fourseasons.com/en?hotelCode=ATL411&roomOwsCodes=T1K
+                    - text: Check Rates
+                  - link [ref=e240] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/suites/one_bedroom_suite/
+                    - text: Details
+            - listitem [ref=e241]:
+              - generic [ref=e245]:
+                - heading [level=3] [ref=e247]: Presidential Suite
+                - generic [ref=e248]: A gleaming marble foyer welcomes you to this opulent, top-floor suite, featuring an oversized living and dining area ideal for entertaining, a fully stocked kitchen, a palatial master bedroom and hardwood floors throughout that make it feel like home.
+                - link [ref=e250] [cursor=pointer]:
+                  - /url: /atlanta/accommodations/specialty-suites/presidential-suite/
+                  - text: Details
+            - listitem [ref=e251]:
+              - generic [ref=e255]:
+                - heading [level=3] [ref=e257]: Superior City-View Room
+                - generic [ref=e258]: Rich earth tones create an elegant ambience in these classically styled rooms, located in the heart of our Hotel.
+                - generic [ref=e259]:
+                  - link [ref=e260] [cursor=pointer]:
+                    - /url: https://reservations.fourseasons.com/en?hotelCode=ATL411&roomOwsCodes=B1K
+                    - text: Check Rates
+                  - link [ref=e261] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/guest_rooms/superior_city_view_room/
+                    - text: Details
+            - listitem [ref=e262]:
+              - generic [ref=e266]:
+                - heading [level=3] [ref=e268]: Deluxe Room
+                - generic [ref=e269]: Watch as the city lights up the night sky from these upper-floor rooms.
+                - generic [ref=e270]:
+                  - link [ref=e271] [cursor=pointer]:
+                    - /url: https://reservations.fourseasons.com/en?hotelCode=ATL411&roomOwsCodes=A1K
+                    - text: Check Rates
+                  - link [ref=e272] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/guest_rooms/deluxe_city_view_room/
+                    - text: Details
+            - listitem [ref=e273]:
+              - generic [ref=e277]:
+                - heading [level=3] [ref=e279]: Midtown Suite
+                - generic [ref=e280]: Wall-to-wall windows, soothing shades of grey, bold pops of colour and a curated art collection make these new residential-style suites an inspiring place to which to return at the end of a busy day.
+                - generic [ref=e281]:
+                  - link [ref=e282] [cursor=pointer]:
+                    - /url: https://reservations.fourseasons.com/en?hotelCode=ATL411&roomOwsCodes=M1K
+                    - text: Check Rates
+                  - link [ref=e283] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/suites/midtown_suite/
+                    - text: Details
+            - listitem [ref=e284]:
+              - generic [ref=e288]:
+                - heading [level=3] [ref=e290]: One-Bedroom Suite
+                - generic [ref=e291]: Invite friends up for a nightcap in your spacious living room without sacrificing any privacy thanks to the solid-wood door that separates the bedroom in these classically styled suites.
+                - generic [ref=e292]:
+                  - link [ref=e293] [cursor=pointer]:
+                    - /url: https://reservations.fourseasons.com/en?hotelCode=ATL411&roomOwsCodes=T1K
+                    - text: Check Rates
+                  - link [ref=e294] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/suites/one_bedroom_suite/
+                    - text: Details
+            - listitem [ref=e295]:
+              - generic [ref=e299]:
+                - heading [level=3] [ref=e301]: Presidential Suite
+                - generic [ref=e302]: A gleaming marble foyer welcomes you to this opulent, top-floor suite, featuring an oversized living and dining area ideal for entertaining, a fully stocked kitchen, a palatial master bedroom and hardwood floors throughout that make it feel like home.
+                - link [ref=e304] [cursor=pointer]:
+                  - /url: /atlanta/accommodations/specialty-suites/presidential-suite/
+                  - text: Details
+            - listitem [ref=e305]:
+              - generic [ref=e309]:
+                - heading [level=3] [ref=e311]: Superior City-View Room
+                - generic [ref=e312]: Rich earth tones create an elegant ambience in these classically styled rooms, located in the heart of our Hotel.
+                - generic [ref=e313]:
+                  - link [ref=e314] [cursor=pointer]:
+                    - /url: https://reservations.fourseasons.com/en?hotelCode=ATL411&roomOwsCodes=B1K
+                    - text: Check Rates
+                  - link [ref=e315] [cursor=pointer]:
+                    - /url: /atlanta/accommodations/guest_rooms/superior_city_view_room/
+                    - text: Details
+        - generic [ref=e316]:
+          - button " Previous slide" [ref=e317] [cursor=pointer]:
+            - text: 
+            - generic [ref=e318]: Previous slide
+          - generic [ref=e319]: 1 / 5
+          - button " Next slide" [ref=e321] [cursor=pointer]:
+            - text: 
+            - generic [ref=e322]: Next slide
+        - text:  
+      - generic [ref=e326]:
+        - generic [ref=e327]:
+          - heading "Featured Offers" [level=3] [ref=e328]
+          - link "All Offers" [ref=e330] [cursor=pointer]:
+            - /url: /atlanta/offers/
+        - generic:
+          - generic [ref=e332]:
+            - link "Experience More – Spending Credit - view offer":
+              - /url: /atlanta/offers/experience-more/
+            - link "Experience More – Spending Credit - view offer" [ref=e333] [cursor=pointer]:
+              - /url: /atlanta/offers/experience-more/
+            - generic:
+              - paragraph: Experience More – Spending Credit
+              - paragraph: Experience something unforgettable with a spending credit designed to elevate your stay.
+              - link "Experience More – Spending Credit - view offer" [ref=e336] [cursor=pointer]:
+                - /url: /atlanta/offers/experience-more/
+                - text: view offer
+          - generic [ref=e338]:
+            - link "Bed and Breakfast - view offer":
+              - /url: /atlanta/offers/bed_and_breakfast/
+            - link "Bed and Breakfast - view offer" [ref=e339] [cursor=pointer]:
+              - /url: /atlanta/offers/bed_and_breakfast/
+            - generic:
+              - paragraph: Bed and Breakfast
+              - paragraph: Start each day with a signature Four Seasons breakfast.
+              - link "Bed and Breakfast - view offer" [ref=e342] [cursor=pointer]:
+                - /url: /atlanta/offers/bed_and_breakfast/
+                - text: view offer
+          - generic [ref=e344]:
+            - link "Stay Longer – Third Night Free - view offer":
+              - /url: /atlanta/offers/stay_longer_third_night_free/
+            - link "Stay Longer – Third Night Free - view offer" [ref=e345] [cursor=pointer]:
+              - /url: /atlanta/offers/stay_longer_third_night_free/
+            - generic:
+              - paragraph: Stay Longer – Third Night Free
+              - paragraph: Receive a complimentary third night.
+              - link "Stay Longer – Third Night Free - view offer" [ref=e348] [cursor=pointer]:
+                - /url: /atlanta/offers/stay_longer_third_night_free/
+                - text: view offer
+      - heading "Discover Atlanta" [level=2] [ref=e353]
+      - list [ref=e357]:
+        - generic [ref=e359]:
+          - listitem [ref=e360]:
+            - text: 
+            - link "Wonders of Wildlife at Zoo Atlanta Wonders of Wildlife at Zoo Atlanta  6 hours Spend an enchanting day discovering wildlife and endangered species from around the globe at Zoo Atlanta, home to more than 1,000 animals. Meet one of North America's largest populations of gorillas and enjoy a rare opportunity to see giant pandas. From USD 42/person" [ref=e364] [cursor=pointer]:
+              - /url: /atlanta/experiences/local-experiences/wonders-of-wildlife-at-zoo-atlanta?_s_icmp=shpcart_experiences_carousel/
+              - img "Wonders of Wildlife at Zoo Atlanta" [ref=e367]
+              - generic [ref=e368]:
+                - heading "Wonders of Wildlife at Zoo Atlanta" [level=3] [ref=e369]
+                - generic [ref=e371]:
+                  - generic [ref=e372]: 
+                  - generic [ref=e373]: 6 hours
+                - generic [ref=e374]: Spend an enchanting day discovering wildlife and endangered species from around the globe at Zoo Atlanta, home to more than 1,000 animals. Meet one of North America's largest populations of gorillas and enjoy a rare opportunity to see giant pandas.
+                - generic [ref=e375]: From USD 42/person
+          - listitem [ref=e376]:
+            - text: 
+            - link "Day in the Gardens Day in the Gardens  All year round, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday Surround yourself with the lush natural tableau of the Atlanta Botanical Garden. Boasting 30 acres (12 hectares) of botanical bliss, the garden features a vast array of plant life and art displays. Open year round, the Garden showcases rotating exotic displays that flourish with each season. From USD 43/person" [ref=e380] [cursor=pointer]:
+              - /url: /atlanta/experiences/local-experiences/day-in-the-gardens?_s_icmp=shpcart_experiences_carousel/
+              - img "Day in the Gardens" [ref=e383]
+              - generic [ref=e384]:
+                - heading "Day in the Gardens" [level=3] [ref=e385]
+                - generic [ref=e387]:
+                  - generic [ref=e388]: 
+                  - generic [ref=e389]: All year round, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+                - generic [ref=e390]: Surround yourself with the lush natural tableau of the Atlanta Botanical Garden. Boasting 30 acres (12 hectares) of botanical bliss, the garden features a vast array of plant life and art displays. Open year round, the Garden showcases rotating exotic displays that flourish with each season.
+                - generic [ref=e391]: From USD 43/person
+          - listitem [ref=e392]:
+            - link "Georgia Aquarium Georgia Aquarium Explore the ocean depths at the largest aquarium in the United States. The Georgia Aquarium exhibits hundreds of aquatic species and thousands of animals across its seven major galleries, including whale sharks and giant manta rays – species not exhibited in the same venue anywhere else in the country. From USD 80/person" [ref=e396] [cursor=pointer]:
+              - /url: /atlanta/experiences/local-experiences/georgia-aquarium?_s_icmp=shpcart_experiences_carousel/
+              - img "Georgia Aquarium" [ref=e399]
+              - generic [ref=e400]:
+                - heading "Georgia Aquarium" [level=3] [ref=e401]
+                - generic [ref=e402]: Explore the ocean depths at the largest aquarium in the United States. The Georgia Aquarium exhibits hundreds of aquatic species and thousands of animals across its seven major galleries, including whale sharks and giant manta rays – species not exhibited in the same venue anywhere else in the country.
+                - generic [ref=e403]: From USD 80/person
+        - button "Previous" [disabled]: 
+        - button "Next" [disabled]: 
+      - link "Discover More" [ref=e407] [cursor=pointer]:
+        - /url: /atlanta/discover/
+      - generic [ref=e408]:
+        - heading "Atlanta by Four Seasons" [level=1] [ref=e409]
+        - generic [ref=e410]:
+          - list [ref=e411]:
+            - listitem [ref=e412]:
+              - generic [ref=e418]:
+                - generic [ref=e419]:
+                  - generic [ref=e420]:
+                    - heading "Spring in Atlanta" [level=3] [ref=e421]
+                    - generic [ref=e422]: Escape to Four Seasons Hotel Atlanta this spring and enjoy warm days, blooming gardens and a calendar filled with seasonal events.
+                  - link "Spring in Atlanta - Plan Your Spring activities" [ref=e424] [cursor=pointer]:
+                    - /url: /atlanta/seasonal/spring-and-summer/
+                    - text: Plan Your Spring activities
+                - text:  
+            - listitem [ref=e425]:
+              - generic [ref=e426]:
+                - img "A silhouette of a person cheering at a football stadium." [ref=e430]
+                - generic [ref=e431]:
+                  - generic [ref=e432]:
+                    - generic [ref=e433]:
+                      - heading "Hotel Near Mercedes-Benz Stadium" [level=3] [ref=e434]
+                      - generic [ref=e435]: Just a 10-minute drive from Mercedes-Benz Stadium, Four Seasons Hotel Atlanta offers a luxury Midtown retreat near the city’s biggest matches and events, with watch parties and exclusive stadium access.
+                    - link "Hotel Near Mercedes-Benz Stadium - Plan Your Big Game Stay" [ref=e437] [cursor=pointer]:
+                      - /url: /atlanta/services-and-amenities/hotel-near-mercedes-benz-stadium/
+                      - text: Plan Your Big Game Stay
+                  - text:  
+            - listitem [ref=e438]:
+              - generic [ref=e444]:
+                - generic [ref=e445]:
+                  - generic [ref=e446]:
+                    - heading "A Touch of Paris in Midtown Atlanta" [level=3] [ref=e447]
+                    - generic [ref=e448]: Experience Brasserie Margot, a modern French restaurant in Atlanta offering all-day dining in the heart of Midtown. Enjoy expertly crafted dishes, a vibrant cocktail menu and a chic, welcoming atmosphere perfect for any occasion.
+                  - link "A Touch of Paris in Midtown Atlanta - Indulge at French restaurant in Atlanta" [ref=e450] [cursor=pointer]:
+                    - /url: /atlanta/dining/restaurants/brasserie-margot/
+                    - text: Indulge at French restaurant in Atlanta
+                - text:  
+            - listitem [ref=e451]:
+              - generic [ref=e457]:
+                - generic [ref=e458]:
+                  - generic [ref=e459]:
+                    - heading "Your Dream Wedding Awaits" [level=3] [ref=e460]
+                    - generic [ref=e461]: "Your special day can be everything you imagine – and more. With the exclusive attention of our dedicated wedding manager you’re free to stay focused on what’s most important: friends, family and loved ones."
+                  - link "Your Dream Wedding Awaits - Celebrate your wedding in Atlanta" [ref=e463] [cursor=pointer]:
+                    - /url: /atlanta/weddings/
+                    - text: Celebrate your wedding in Atlanta
+                - text:  
+          - text:  
+      - generic [ref=e464]:
+        - generic [ref=e465]:
+          - heading "Bar Margot" [level=2] [ref=e466]
+          - generic [ref=e467]: Clever cocktails, creative small plates and a rockin’ vinyl collection – including everything from Stereolab to Miles Davis – exude an offbeat elegance befitting of the enigmatic anti-heroine for whom the bar is named.
+        - link "Details" [ref=e468] [cursor=pointer]:
+          - /url: /atlanta/dining/lounges/bar_margot/
+        - img "Guests socialize in curved booths, at cocktail tables in front of bar in busy Bar Margot lounge" [ref=e471]
+    - button "Chat with us" [ref=e472] [cursor=pointer]:
+      - img "Chat icon" [ref=e473]
+  - contentinfo [ref=e474]:
+    - generic [ref=e475]:
+      - img "Four Seasons Hotels and resorts" [ref=e477]
+      - generic [ref=e478]:
+        - navigation [ref=e479]:
+          - heading "About" [level=4] [ref=e480]
+          - list "About" [ref=e481]:
+            - listitem [ref=e482]:
+              - link "About Us" [ref=e483] [cursor=pointer]:
+                - /url: https://www.fourseasons.com/about_four_seasons/
+            - listitem [ref=e484]:
+              - link "Four Seasons for Good" [ref=e485] [cursor=pointer]:
+                - /url: /landing-pages/corporate/esg/
+            - listitem [ref=e486]:
+              - link "Health and Safety" [ref=e487] [cursor=pointer]:
+                - /url: /leadwithcare/
+            - listitem [ref=e488]:
+              - link "Careers" [ref=e489] [cursor=pointer]:
+                - /url: https://careers.fourseasons.com
+            - listitem [ref=e490]:
+              - link "Contact Us" [ref=e491] [cursor=pointer]:
+                - /url: /contact-us/
+        - navigation [ref=e492]:
+          - heading "Reservations" [level=4] [ref=e493]
+          - list "Reservations" [ref=e494]:
+            - listitem [ref=e495]:
+              - link "Request an Invoice" [ref=e496] [cursor=pointer]:
+                - /url: https://www.fourseasons.com/folio-request/
+            - listitem [ref=e497]:
+              - link "Find a Reservation" [ref=e498] [cursor=pointer]:
+                - /url: https://reservations.fourseasons.com/find-reservations
+            - listitem [ref=e499]:
+              - link "Email Preferences" [ref=e500] [cursor=pointer]:
+                - /url: https://www.fourseasons.com/email-sign-up/
+        - navigation [ref=e501]:
+          - heading "News" [level=4] [ref=e502]
+          - list "News" [ref=e503]:
+            - listitem [ref=e504]:
+              - link "Press Room" [ref=e505] [cursor=pointer]:
+                - /url: https://press.fourseasons.com/
+            - listitem [ref=e506]:
+              - link "New Openings" [ref=e507] [cursor=pointer]:
+                - /url: https://www.fourseasons.com/newopenings/
+            - listitem [ref=e508]:
+              - link "Magazine" [ref=e509] [cursor=pointer]:
+                - /url: https://www.fourseasons.com/magazine/
+            - listitem [ref=e510]:
+              - link "Newsletter" [ref=e511] [cursor=pointer]:
+                - /url: /email-sign-up/
+        - navigation [ref=e512]:
+          - heading "More" [level=4] [ref=e513]
+          - list "More" [ref=e514]:
+            - listitem [ref=e515]:
+              - link "Private Jet" [ref=e516] [cursor=pointer]:
+                - /url: https://www.fourseasons.com/privatejet/
+            - listitem [ref=e517]:
+              - link "Yachts" [ref=e518] [cursor=pointer]:
+                - /url: https://www.fourseasonsyachts.com/?utm_source=fshr&utm_medium=web&utm_campaign=yachtsfooter
+            - listitem [ref=e519]:
+              - link "Residences" [ref=e520] [cursor=pointer]:
+                - /url: /residences/private_residences/
+            - listitem [ref=e521]:
+              - link "Villa & Residence Rentals" [ref=e522] [cursor=pointer]:
+                - /url: /villa-residence-rentals/
+            - listitem [ref=e523]:
+              - link "Gift Cards" [ref=e524] [cursor=pointer]:
+                - /url: https://fourseasons.buyatab.com/custom/fourseasons/giftcard/
+      - generic [ref=e526]:
+        - list [ref=e527]:
+          - listitem [ref=e528]:
+            - link " facebook" [ref=e529] [cursor=pointer]:
+              - /url: https://www.facebook.com/FourSeasons
+              - text: 
+              - generic [ref=e530]: facebook
+          - listitem [ref=e531]:
+            - link " instagram" [ref=e532] [cursor=pointer]:
+              - /url: https://www.instagram.com/fourseasons/
+              - text: 
+              - generic [ref=e533]: instagram
+          - listitem [ref=e534]:
+            - link " youtube" [ref=e535] [cursor=pointer]:
+              - /url: https://www.youtube.com/fourseasons
+              - text: 
+              - generic [ref=e536]: youtube
+        - separator [ref=e537]
+        - combobox "Select language" [ref=e539] [cursor=pointer]:
+          - option "English" [selected]
+          - option "简体中文"
+        - navigation "legal" [ref=e540]:
+          - list [ref=e541]:
+            - listitem [ref=e542]:
+              - link "Legal Notice" [ref=e543] [cursor=pointer]:
+                - /url: /legal/
+              - text: •
+            - listitem [ref=e544]:
+              - link "Privacy Notice" [ref=e545] [cursor=pointer]:
+                - /url: /privacy/
+              - text: •
+            - listitem [ref=e546]:
+              - button "Cookie Settings" [ref=e547] [cursor=pointer]
+              - text: •
+            - listitem [ref=e548]:
+              - link "Do Not Sell My Personal Information" [ref=e549] [cursor=pointer]:
+                - /url: /content/fshr/pages/en/do-not-sell-my-personal-information
+              - text: •
+            - listitem [ref=e550]:
+              - link "Accessibility Policy" [ref=e551] [cursor=pointer]:
+                - /url: /legal/accessibility-policy/
+              - text: •
+            - listitem [ref=e552]:
+              - link "Modern Slavery Statement" [ref=e553] [cursor=pointer]:
+                - /url: /content/dam/fourseasons/images/web/FSH/PDFs/Four-Seasons-2026-Modern-Slavery-Statement.pdf
+          - paragraph [ref=e554]: ©Four Seasons Hotels Limited 1997-2026. All Rights Reserved.
+  - iframe [ref=e555]:
+    

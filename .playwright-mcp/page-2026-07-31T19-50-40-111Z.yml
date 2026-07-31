@@ -1,0 +1,813 @@
+- generic [ref=f38e2]:
+  - generic:
+    - generic:
+      - generic [ref=f38e3]:
+        - generic [ref=f38e5]:
+          - generic [ref=f38e7]:
+            - generic [ref=f38e8]:
+              - link "Skip to main content" [ref=f38e9] [cursor=pointer]:
+                - /url: "#main"
+              - button " Menu text" [ref=f38e10] [cursor=pointer]:
+                - generic [ref=f38e11]: 
+                - generic [ref=f38e12]: Menu text
+            - generic [ref=f38e13]:
+              - list [ref=f38e14]:
+                - listitem [ref=f38e15]:
+                  - button "Sign in or Join" [ref=f38e16] [cursor=pointer]:
+                    - generic [ref=f38e17]: 
+                - text:  
+              - link "Marriott Bonvoy" [ref=f38e19] [cursor=pointer]:
+                - /url: https://www.marriott.com/default.mi
+                - generic [ref=f38e20]:  
+          - text:               
+        - text: 
+      - text: 
+  - generic:
+    - generic:
+      - generic [ref=f38e22]:
+        - generic [ref=f38e23]:
+          - generic [ref=f38e25]:
+            - link [ref=f38e28] [cursor=pointer]:
+              - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/overview/
+              - img "Tribute Portfolio" [ref=f38e29]
+            - list [ref=f38e31]:
+              - listitem [ref=f38e32]:
+                - link "Overview" [ref=f38e33] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/overview/
+              - listitem [ref=f38e34]:
+                - link "Rooms" [ref=f38e35] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/rooms/
+              - listitem [ref=f38e36]:
+                - link "Suites" [ref=f38e37] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/rooms/suites/
+              - listitem [ref=f38e38]:
+                - link "Dining" [ref=f38e39] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/dining/
+              - listitem [ref=f38e40]:
+                - link "Experiences" [ref=f38e41] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/experiences/
+              - listitem [ref=f38e42]:
+                - link "Events" [ref=f38e43] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/events/
+              - listitem [ref=f38e44]:
+                - link "Gallery" [ref=f38e45] [cursor=pointer]:
+                  - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/photos/
+          - generic [ref=f38e47]:
+            - generic [ref=f38e48]:
+              - heading "The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel" [level=3] [ref=f38e49]
+              - generic [ref=f38e51]:
+                - generic [ref=f38e80]:
+                  - generic [ref=f38e81]: "4.4"
+                  - generic [ref=f38e82]: •
+                  - link "220 Reviews" [ref=f38e83] [cursor=pointer]:
+                    - /url: javascript:void(0)
+                - text: 
+            - generic [ref=f38e84]:
+              - generic [ref=f38e85]:
+                - generic [ref=f38e86]: 
+                - link "VIEW MAP" [ref=f38e88] [cursor=pointer]:
+                  - /url: https://www.google.com/maps/search/?api=1&query=33.8526140%2C-84.3813500&hl=en-US
+              - generic [ref=f38e89]:
+                - generic [ref=f38e90]: 
+                - link "Contact us at phone +1 404-869-1100" [ref=f38e92] [cursor=pointer]:
+                  - /url: tel:+1%20404-869-1100%20
+                  - text: +1 404-869-1100
+              - text: ❯
+        - generic [ref=f38e93]:
+          - text: 
+          - generic [ref=f38e94]:
+            - generic [ref=f38e95]:
+              - generic [ref=f38e96]:
+                - generic [ref=f38e97]: 
+                - generic [ref=f38e98]: DATES
+                - generic [ref=f38e99]: (1 NIGHT)
+              - generic [ref=f38e101] [cursor=pointer]:
+                - text: Fri, Jul 31
+                - generic [ref=f38e102]: 
+                - text: Sat, Aug 01
+            - text: 
+          - generic [ref=f38e104]:
+            - generic [ref=f38e105]: Rooms & Guests
+            - button "Select number of guests dropdown" [ref=f38e106] [cursor=pointer]:
+              - generic [ref=f38e107]: 1 Room, 1 Adult
+              - text: 
+              - generic [ref=f38e108]: 
+            - text: 
+          - generic [ref=f38e110]:
+            - generic [ref=f38e111]: Special Rates
+            - button "Lowest Regular Rate " [ref=f38e112] [cursor=pointer]:
+              - generic [ref=f38e113]: Lowest Regular Rate
+              - text: 
+              - generic [ref=f38e114]: 
+            - text: 
+          - button "View Rates" [ref=f38e116] [cursor=pointer]
+      - text: 
+  - main [ref=f38e118]:
+    - generic [ref=f38e121]:
+      - generic [ref=f38e123]:
+        - generic [ref=f38e125]:
+          - generic [ref=f38e129]:
+            - list [ref=f38e132]:
+              - listitem "Slide 9 of 9" [ref=f38e133]:
+                - img "Maharaja Suite" [ref=f38e136]
+              - listitem "Slide 1 of 9" [ref=f38e137]:
+                - img "The Burgess Exterior" [ref=f38e140]
+              - listitem "Slide 2 of 9" [ref=f38e141]:
+                - img "King Bedroom" [ref=f38e144]
+              - listitem "Slide 3 of 9" [ref=f38e145]:
+                - img "Lobby" [ref=f38e148]
+              - listitem "Slide 4 of 9" [ref=f38e149]:
+                - img "Hotel Lobby" [ref=f38e152]
+              - listitem "Slide 5 of 9" [ref=f38e153]:
+                - img "The Library" [ref=f38e156]
+              - listitem "Slide 6 of 9" [ref=f38e157]:
+                - img "Fia" [ref=f38e160]
+              - listitem "Slide 7 of 9" [ref=f38e161]:
+                - img "Mr B Bar" [ref=f38e164]
+              - listitem "Slide 8 of 9" [ref=f38e165]:
+                - img "Fiji Suite Bedroom" [ref=f38e168]
+              - listitem "Slide 9 of 9" [ref=f38e169]:
+                - img "Maharaja Suite" [ref=f38e172]
+              - listitem "Slide 1 of 9" [ref=f38e173]:
+                - img "The Burgess Exterior" [ref=f38e176]
+            - generic [ref=f38e177]:
+              - generic [ref=f38e178]:
+                - button " Previous" [ref=f38e180] [cursor=pointer]:
+                  - generic [ref=f38e181]: 
+                  - generic [ref=f38e182]: Previous
+                - generic [ref=f38e183]:
+                  - button "0" [ref=f38e184]
+                  - button "1" [ref=f38e186]
+                  - button "2" [ref=f38e188]
+                  - button "3" [ref=f38e190]
+                  - button "4" [ref=f38e192]
+                  - button "5" [ref=f38e194]
+                  - button "6" [ref=f38e196]
+                  - button "7" [ref=f38e198]
+                  - button "8" [ref=f38e200]
+                - button " Next" [ref=f38e203] [cursor=pointer]:
+                  - generic [ref=f38e204]: 
+                  - generic [ref=f38e205]: Next
+              - link " Gallery" [ref=f38e206] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/photos/
+                - generic [ref=f38e207]: 
+                - generic [ref=f38e208]: Gallery
+          - text: 
+        - generic [ref=f38e210]:
+          - generic [ref=f38e213]:
+            - heading "Welcome to The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel" [level=1] [ref=f38e214]
+            - heading "Elevate your profile in Buckhead, Atlanta" [level=2] [ref=f38e215]
+            - paragraph [ref=f38e216]:
+              - paragraph [ref=f38e217]:
+                - text: Experience the perfect fusion of style, comfort and convenience at The Burgess Hotel Atlanta, A Tribute Portfolio Hotel, where every moment is a celebration of life's finest pleasures. The Burgess indulges you in an unforgettable luxury experience that transcends time in the moment. The hotel's carefully curated interiors boast bespoke furnishings, original artwork, and exquisite finds from Asia and
+                - generic [ref=f38e218]:
+                  - text: ...
+                  - button "See More" [ref=f38e219] [cursor=pointer]
+            - text:  
+          - generic [ref=f38e223]:
+            - generic [ref=f38e226]:
+              - heading "Award-Winning Excellence in the Heart of Buckhead" [level=2] [ref=f38e227]
+              - paragraph [ref=f38e229]: "We’re honored to share that our hotel has been proudly named a 2024 Hotel of the Year within the U.S. & Canada Full-Service Franchise portfolio — a recognition that celebrates our team’s dedication and the meaningful moments shared with our guests each day. Adding to this achievement, The MICHELIN Guide to Buckhead in Atlanta, Georgia has named us #1 on Buckhead’s Best Hotels list, further affirming our commitment to delivering exceptional hospitality. Thank you for being part of our story. Your continued trust and connection inspire everything we do."
+              - button "See More" [ref=f38e232] [cursor=pointer]
+            - img "The Library" [ref=f38e236]
+          - generic [ref=f38e241]:
+            - heading "Rooms & Suites" [level=3] [ref=f38e242]
+            - paragraph [ref=f38e243]: Discover extraordinary room and suite options, where uniqueness and opulence converge.
+          - generic [ref=f38e247]:
+            - generic [ref=f38e250]:
+              - paragraph [ref=f38e251]: Our Story
+              - heading "About The Burgess Hotel" [level=2] [ref=f38e252]
+              - generic [ref=f38e253]: As world travelers, it has been the dream of the Jokhis to share the story of their travels through hospitality. Thus was The Burgess Hotel born, a Tribute Portfolio Hotel and Buckhead’s first boutique hotel. Inspired by a desire to live fully “in the moment,” this full-service lifestyle property veers away from the status quo and toward a more personal experience. It’s equal parts charismatic and playful, adorned with eye-catching colors and original artifacts from Asia and beyond. The design scheme is bespoke and eclectic. Lavish and inviting. Graced with original paintings and digital collages by the owner’s artist-daughter, Jessica. It all converges into a cosmopolitan elegance you’ve never seen, an aesthetic that embraces art and leisure – without feeling extravagant. The Jokhis consider The Burgess Hotel an extension of their home, and they welcome you into its thoughtfully designed rooms with open arms.
+              - button "See More" [ref=f38e255] [cursor=pointer]
+            - img "Lobby" [ref=f38e259]
+          - generic [ref=f38e263]:
+            - generic [ref=f38e266]:
+              - paragraph [ref=f38e267]: Spotlight on the Owners
+              - heading "Pioneers in the High-End Buckhead Hotel Scene" [level=2] [ref=f38e268]
+              - generic [ref=f38e269]: The perfect marriage of timeless cultural treasures and contemporary style, The Burgess Hotel reflects the eclecticism and personal styles of the hotel owners. Burges helms the kitchen as Executive Chef at Fia Restaurant, bringing to every plate his culinary expertise from Johnson & Wales and the skills he refined as a caterer to the United Nations and exclusive New York social circles. Freny’s, a Rhode Island School of Design graduate, with an eye for fashionable interiors, sourced some of the hotel's furnishings from their favorite travels. This boutique experience is complemented by the remarkable artwork from Jessica Jokhi, creating an atmosphere unlike any other in the affluent neighborhood of Buckhead.
+              - button "See More" [ref=f38e271] [cursor=pointer]
+            - img "Lobby - Long Table" [ref=f38e275]
+          - generic [ref=f38e278]:
+            - generic:
+              - generic:
+                - generic:
+                  - paragraph: Our Home Is Yours, Too
+                  - heading "We Invite You to Be Part of Our Story" [level=3]
+                  - paragraph:
+                    - paragraph:
+                      - text: The Burgess Hotel is every bit as unique as you are. Just browse the international artwork that we’ve collected from our travels. You’ll see that our unique keepsakes, beautiful furnishings, and stunning artwork – including colorful and thought-provoking paintings and digital collages by the owners’ daughter – tell our personal family stories. As our guest, you become part of them, because we view
+                      - generic:
+                        - text: ...
+                        - button "See More"
+                - region:
+                  - generic:
+                    - button "1": "01"
+                    - list:
+                      - listitem
+                      - listitem
+                      - listitem
+                    - button "3": "03"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - group
+                        - group
+                        - group:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "The Library"
+                        - group
+                        - group
+                        - group
+                        - group
+                        - group
+                  - generic:
+                    - button "Prev": 
+                    - button "Next": 
+          - generic [ref=f38e281]:
+            - generic [ref=f38e283]:
+              - generic [ref=f38e284]:
+                - heading "Offers & Packages" [level=2] [ref=f38e285]
+                - text: 
+              - generic:
+                - generic:
+                  - list
+                - text:  
+            - text: 
+          - generic [ref=f38e289]:
+            - region:
+              - generic:
+                - generic:
+                  - group:
+                    - generic:
+                      - tabpanel "Slide 1 of 4":
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - img "Fia Restaurant"
+                              - generic:
+                                - generic:
+                                  - paragraph: Where Culinary Excellence Meets Family Dining
+                                  - heading "Fia Restaurant" [level=3]
+                                  - paragraph: "Named the #1 hotel restaurant in Buckhead, Atlanta, Fia is a warm and welcoming Mediterranean restaurant in Buckhead created by Chef/Owner Burges Jokhi. Serving breakfast and dinner."
+                                  - generic:
+                                    - link "Explore":
+                                      - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/dining/#fia-restaurant
+                  - group:
+                    - generic:
+                      - tabpanel:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - paragraph: Where Culinary Excellence Meets Family Dining
+                                  - heading [level=3]: Fia Patio
+                                  - paragraph: Enjoy a beautiful evening at our Mediterranean restaurant in Buckhead Atlanta with a cocktail on this casual outdoor patio serving the full dinner menu from Fia restaurant.
+                                  - generic:
+                                    - link:
+                                      - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/dining/#fia-patio
+                                      - text: Explore
+                  - group:
+                    - generic:
+                      - tabpanel:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - paragraph: Where Culinary Excellence Meets Family Dining
+                                  - heading [level=3]: Private Dining
+                                  - paragraph: Elevate your fine dining in Buckhead, Atlanta experience with our private dining rooms. The Dynasty Room is perfect for gatherings of up to 12 guests. For larger events of up to 35, the Mosaic Room offers a stunning ambiance for unforgettable celebrations
+                                  - generic:
+                                    - link:
+                                      - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/dining/#private-dining
+                                      - text: Explore
+                  - group:
+                    - generic:
+                      - tabpanel:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - paragraph: Where Culinary Excellence Meets Family Dining
+                                  - heading [level=3]: Mr. B. Bar
+                                  - paragraph: Visit our cocktail bar in Atlanta to enjoy majestic crafted drinks and mingle with Buckhead locals. Mr. B. is designed for slow sips & long talks while enjoying the beautiful photographs of the Himalayas.
+                                  - generic:
+                                    - link:
+                                      - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/dining/#mr--b--bar
+                                      - text: Explore
+              - generic:
+                - button "Prev": 
+                - generic: 01/04
+                - button "Next": 
+          - generic [ref=f38e292]:
+            - generic [ref=f38e293]: Asian Treasures From the Owners’ Personal Collection
+            - generic [ref=f38e294]:
+              - generic [ref=f38e295]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img "The Library"
+                  - generic:
+                    - generic:
+                      - heading "Balinese Tribal Lion Bench" [level=3]
+                      - paragraph: Handcrafted by village artisans in Indonesia, this Tribal Lion Bench is a proud find from Bali. It was carved from a single length of hardwood, with four solid wooden legs completing the piece. Animals are part of daily life in these remote regions, so they often appear in wood carving, textiles, and other art. The spiral and circular details were etched to reflect traditional designs typical of West Timor.
+              - generic [ref=f38e296]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img "Lobby"
+                  - generic:
+                    - generic:
+                      - heading "Front Desk Mother of Pearl Inlay" [level=3]
+                      - paragraph: This custom piece came to us from India. The mother of pearl was harvested from the sea, carefully cut from the inner shell layer of a mollusk. Its iridescence is its most stunning quality, though it is also quite strong and resilient. You can find this type of decorative furniture in many East Asian and Middle Eastern homes. Our grandparents’ homes had pieces much like this.
+              - generic [ref=f38e297]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img "Dynasty Private Dining Room"
+                  - generic:
+                    - generic:
+                      - heading "Traditional Chinese Brush Paintings" [level=3]
+                      - paragraph: Chinese brush painting is one of the oldest forms of artistic expression in China. The pair on either side of the front entrance have been in our family for many years. Kuku Bunshah, mother of The Burgess Hotel owner, Freny Jokhi, painted these cherished pieces of art when she lived in Hong Kong. Though Kuku was a commercial artist, she worked with many different mediums.
+            - button "See More" [ref=f38e299] [cursor=pointer]
+          - generic [ref=f38e302]:
+            - generic:
+              - generic:
+                - generic:
+                  - paragraph: Step Into Another World
+                  - heading "Suites That Transport You to Faraway Lands" [level=3]
+                  - paragraph:
+                    - paragraph:
+                      - text: The seven luxurious suites and the penthouse offer an exciting and dynamic window into the travels of Burgess Hotel owners Burges and Freny Jokhi. Each suite has its own international personality, inspired by the cultures and traditions of a destination that the couple has explored. Amid spaces inspired by China, Morocco, India, Bali, Fiji, Arabia, London, and an African Safari, you’ll be embraced
+                      - generic:
+                        - text: ...
+                        - button "See More"
+                  - link "Learn More":
+                    - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/rooms/suites/
+                - region:
+                  - generic:
+                    - button "1": "01"
+                    - list:
+                      - listitem
+                      - listitem
+                      - listitem
+                      - listitem
+                      - listitem
+                      - listitem
+                    - button "6": "06"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - group
+                        - group
+                        - group:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "Dragon Suite"
+                        - group
+                        - group
+                        - group
+                        - group
+                        - group
+                        - group
+                        - group
+                        - group
+                        - group
+                        - group
+                        - group
+                  - generic:
+                    - button "Prev": 
+                    - button "Next": 
+          - generic [ref=f38e305]:
+            - generic:
+              - generic:
+                - generic:
+                  - paragraph: The Library
+                  - heading "Make Yourself at Home in This Cozy Corner" [level=3]
+                  - paragraph:
+                    - paragraph:
+                      - text: Our library is a bibliophile’s and adventurer’s dream. Its titles, blue monochrome bookshelves, and explorer’s atmosphere were curated for the curious reader in all of us. There’s no resisting the pull of this tranquil, book-lined retreat of comfortable furnishings faced by a custom-made marble fireplace flanked by sculpted goddesses. This reading sanctuary was inspired by the exciting life of Keki
+                      - generic:
+                        - text: ...
+                        - button "See More"
+                - generic:
+                  - generic:
+                    - button "1": "01"
+                    - list:
+                      - listitem
+                      - listitem
+                      - listitem
+                      - listitem
+                    - button "4": "04"
+                  - generic:
+                    - generic:
+                      - generic:
+                        - group
+                        - group
+                        - group:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img "Library Fireplace"
+                        - group
+                        - group
+                        - group
+                        - group
+                        - group
+                        - group
+                        - group
+                  - generic:
+                    - button "Prev": 
+                    - button "Next": 
+          - generic [ref=f38e309]:
+            - generic [ref=f38e312]:
+              - heading "OpenTable Diner’s Choice Award Winner" [level=2] [ref=f38e313]
+              - generic [ref=f38e314]: "Fia Restaurant at The Burgess Hotel, is the proud winner of the OpenTable Diners’ Choice Award for 2020, 2021, 2022, 2023, 2024 and 2025, and named the #1 hotel restaurant in Atlanta."
+              - link "Learn More link opens in new tab" [ref=f38e316] [cursor=pointer]:
+                - /url: https://www.fiaatlanta.com/
+                - text: Learn More
+            - img "Pork Belly Grits menu item" [ref=f38e320]
+          - generic [ref=f38e324]:
+            - generic [ref=f38e327]:
+              - paragraph [ref=f38e328]: Meetings & Events
+              - heading "Your Next Memorable Gathering Starts Here" [level=2] [ref=f38e329]
+              - generic [ref=f38e330]: Whether you are here for a board meeting, a team meeting, a bridal shower or a family reunion, The Burgess Hotel is an ideal boutique setting for your gathering. Our expert planning team ensures your event runs seamlessly, freeing you up to be fully present for your agenda – or your celebration. Custom high-end catering, state-of-the-art audio-visual equipment, video conferencing, and fun group outings tell just part of the story of all we can arrange for your distinctive event. Reserve the 345-square-foot Dynasty Room as a VIP Boardroom or for private dining up to 12. Its eclectic design touches are sure to energize your meeting. Choose the elegant 874-square-foot Mosaic Room for a larger group – up to 50 theater style.
+              - button "See More" [ref=f38e332] [cursor=pointer]
+              - link "Learn More" [ref=f38e334] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/events/
+            - img "Mosaic Room classroom style" [ref=f38e338]
+          - generic [ref=f38e342]:
+            - generic [ref=f38e345]:
+              - paragraph [ref=f38e346]: Buckhead's First Boutique Hotel
+              - heading "Ideally Situated for Exploration" [level=2] [ref=f38e347]
+              - generic [ref=f38e348]: The Burgess Hotel is located at the end of Piedmont Road in Buckhead, giving you quick access to Atlanta to the south, just six miles away. We’re well-positioned for leisure and business travelers, right in the heart of Atlanta’s elegant Buckhead neighborhood minutes from the financial center. World-class dining, art galleries, entertainment, sporting venues, and shopping are all nearby, and popular lunch spots are a short walk from our door. Explore further afield in Atlanta. Stroll the pathways of the breathtaking Botanical Garden. Hop on the thrilling Skyview Atlanta Ferris wheel. Eat and shop your way through the Ponce City Market. And visit fascinating museums and historic homes. The Burgess Hotel in Buckhead puts you at the center of it all.
+              - button "See More" [ref=f38e350] [cursor=pointer]
+              - link "Learn More" [ref=f38e352] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/experiences/
+            - img "Buckhead" [ref=f38e356]
+          - generic [ref=f38e360]:
+            - generic [ref=f38e363]:
+              - paragraph [ref=f38e364]: About the Design of Our Boutique Hotel
+              - heading "Inspired by Global Travels, Grounded by a Sense of Home" [level=2] [ref=f38e365]
+              - generic [ref=f38e366]: "The Burgess Hotel, the first boutique hotel to open its doors in the elegant Buckhead neighborhood of Atlanta, was inspired by two seemingly disparate design ideas: to create a sense of home and to reflect the life of travel enjoyed by the owners. These colorful and inspiring collectibles reflect not only life experiences – but also remarkable artifacts and artwork. They are proud to bring them all to life in an eclectic, contemporary, and invigorating hotel that evokes a spirit of adventure and discovery. From the thoughtfully designed open-concept lobby to each individual guest room and internationally themed suite and luxurious penthouse, you’ll admire treasures from around the globe – in a warm atmosphere that feels very much like home."
+              - button "See More" [ref=f38e368] [cursor=pointer]
+            - img "Maharaja Suite" [ref=f38e372]
+          - generic [ref=f38e378]:
+            - generic [ref=f38e379]:
+              - heading "What to Expect" [level=2] [ref=f38e380]
+              - heading "Plan and Prepare for your Stay" [level=3] [ref=f38e381]
+            - link "Learn More" [ref=f38e383] [cursor=pointer]:
+              - /url: https://www.marriott.com/en-us/redirectwte/ATLNT
+          - generic [ref=f38e388]:
+            - heading "FEATURED AMENITIES ON-SITE" [level=2] [ref=f38e391]
+            - navigation [ref=f38e394]:
+              - tablist [ref=f38e395]:
+                - tab "Property Amenities (12)" [ref=f38e396] [cursor=pointer]
+                - tab "Room Amenities (2)" [ref=f38e398] [cursor=pointer]
+                - tab "Hotel Services (4)" [ref=f38e400] [cursor=pointer]
+                - tab "View All (18)" [ref=f38e402] [cursor=pointer]
+            - generic [ref=f38e405]:
+              - heading "Property Amenities On-Site" [level=3] [ref=f38e406]
+              - paragraph [ref=f38e407]:
+                - generic [ref=f38e408]: 
+                - generic [ref=f38e409]: included amenity (1)
+            - list [ref=f38e412]:
+              - listitem [ref=f38e413]:
+                - generic [ref=f38e414]: 
+                - paragraph [ref=f38e416]:
+                  - link "Sustainability" [ref=f38e417] [cursor=pointer]:
+                    - /url: "#sustainability"
+              - listitem [ref=f38e418]:
+                - generic [ref=f38e419]: 
+                - generic [ref=f38e420]:
+                  - paragraph [ref=f38e421]:
+                    - link "Restaurant On-Site" [ref=f38e422] [cursor=pointer]:
+                      - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/dining/
+                  - paragraph [ref=f38e423]: 3 Restaurants
+              - listitem [ref=f38e424]:
+                - generic [ref=f38e425]: 
+                - paragraph [ref=f38e427]: Convenience Store
+              - listitem [ref=f38e428]:
+                - generic [ref=f38e429]: 
+                - paragraph [ref=f38e431]:
+                  - button "Outdoor Pool" [ref=f38e432] [cursor=pointer]
+              - listitem [ref=f38e433]:
+                - generic [ref=f38e434]: 
+                - generic [ref=f38e435]:
+                  - paragraph [ref=f38e436]: Fresh Linen Provided
+                  - paragraph [ref=f38e437]: All Rooms/Suites
+              - listitem [ref=f38e438]:
+                - generic [ref=f38e439]: 
+                - generic [ref=f38e440]:
+                  - paragraph [ref=f38e441]:
+                    - link "On-Site Bar" [ref=f38e442] [cursor=pointer]:
+                      - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/dining/
+                  - paragraph [ref=f38e443]: 1 Bar
+              - listitem [ref=f38e444]:
+                - generic [ref=f38e445]: 
+                - paragraph [ref=f38e447]: Business Center
+              - listitem [ref=f38e448]:
+                - generic [ref=f38e449]: 
+                - paragraph [ref=f38e451]:
+                  - link "Meeting Space" [ref=f38e452] [cursor=pointer]:
+                    - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/events/
+              - listitem [ref=f38e453]:
+                - generic [ref=f38e454]: 
+                - generic [ref=f38e455]:
+                  - paragraph [ref=f38e456]:
+                    - button "Fitness Center" [ref=f38e457] [cursor=pointer]
+                    - generic [ref=f38e458]: 
+                  - paragraph [ref=f38e459]: Complimentary
+              - listitem [ref=f38e460]:
+                - generic [ref=f38e461]: 
+                - paragraph [ref=f38e463]: On-Site Laundry
+              - listitem [ref=f38e464]:
+                - generic [ref=f38e465]: 
+                - paragraph [ref=f38e467]: No Fire Pit + Grill Grate
+              - listitem [ref=f38e468]:
+                - generic [ref=f38e469]: 
+                - paragraph [ref=f38e471]: No Chairs + Picnic Table
+              - text:         
+          - generic [ref=f38e474]:
+            - generic:
+              - article:
+                - generic:
+                  - generic:
+                    - heading "More Ways to Enjoy Your Stay" [level=2]
+                    - generic:
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - img "Fitness Center Peloton Bike"
+                          - generic:
+                            - generic:
+                              - paragraph: Fitness
+                              - heading "Fitness Center" [level=2]
+                              - paragraph: Located at lobby level, it features state-of-the-art equipment including a Peloton bike.
+                              - generic:
+                                - link "Learn More ":
+                                  - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/overview/#.
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - img "Outdoor Pool"
+                          - generic:
+                            - generic:
+                              - paragraph: Swimming
+                              - heading "Swimming Pool" [level=2]
+                              - generic:
+                                - link "Learn More ":
+                                  - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/overview/#.
+          - generic [ref=f38e478]:
+            - generic:
+              - generic:
+                - generic: OUR LOCATION
+                - heading "GETTING HERE" [level=3]
+                - generic:
+                  - paragraph: The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel
+                  - paragraph: 3600 Piedmont Road NE, Atlanta, Georgia, USA, 30305
+                - generic:
+                  - text: "Tel:"
+                  - link "+1 404-869-1100":
+                    - /url: tel:+1%20404-869-1100%20
+                - generic:
+                  - generic:
+                    - button " Hartsfield-Jackson Atlanta International Airport ":
+                      - generic: 
+                      - text: Hartsfield-Jackson Atlanta International Airport
+                      - generic: 
+                    - text: 
+                  - generic:
+                    - button " Dekalb-Peachtree Airport ":
+                      - generic: 
+                      - text: Dekalb-Peachtree Airport
+                      - generic: 
+                    - text: 
+                  - generic:
+                    - button " Other Transportation ":
+                      - generic: 
+                      - text: Other Transportation
+                      - generic: 
+                    - text:   
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img "The Burgess"
+                  - generic:
+                    - heading "Seamless Travel" [level=4]
+                    - paragraph: The Burgess Hotel, Atlanta offers effortless access to Atlanta International Airport and MARTA. Leave your car with valet parking at $35 per day.
+                - region "map"
+          - article [ref=f38e483]:
+            - paragraph [ref=f38e484]: Awards
+            - generic [ref=f38e488]:
+              - img "2025_OpenTable_DC_sq" [ref=f38e490]
+              - generic [ref=f38e491]: OpenTable Diners' Choice Award 2025 - FIA Restaurant
+          - generic [ref=f38e492]:
+            - text:  ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★  
+            - generic [ref=f38e496]:
+              - heading "Property Details" [level=3] [ref=f38e497]
+              - generic [ref=f38e498]:
+                - button "Hotel Information " [expanded] [ref=f38e500] [cursor=pointer]:
+                  - text: Hotel Information
+                  - generic [ref=f38e501]: 
+                - button "General Information " [ref=f38e503] [cursor=pointer]:
+                  - text: General Information
+                  - generic [ref=f38e504]: 
+                - button "Accessibility Information " [ref=f38e506] [cursor=pointer]:
+                  - text: Accessibility Information
+                  - generic [ref=f38e507]: 
+                - button "Sustainability Information " [ref=f38e509] [cursor=pointer]:
+                  - text: Sustainability Information
+                  - generic [ref=f38e510]: 
+        - generic [ref=f38e511]:
+          - generic [ref=f38e515]:
+            - heading "Frequently Asked Questions" [level=3] [ref=f38e516]
+            - generic [ref=f38e517]:
+              - button "What are the check-in and check-out times at The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel? " [ref=f38e519] [cursor=pointer]:
+                - text: What are the check-in and check-out times at The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel?
+                - generic [ref=f38e520]: 
+              - button "Does The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel allow pets? " [ref=f38e522] [cursor=pointer]:
+                - text: Does The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel allow pets?
+                - generic [ref=f38e523]: 
+              - button "What are the parking options at The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel? " [ref=f38e525] [cursor=pointer]:
+                - text: What are the parking options at The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel?
+                - generic [ref=f38e526]: 
+              - button "What property amenities are available at The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel? " [ref=f38e528] [cursor=pointer]:
+                - text: What property amenities are available at The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel?
+                - generic [ref=f38e529]: 
+              - button "Does The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel have in-room Wi-Fi? " [ref=f38e531] [cursor=pointer]:
+                - text: Does The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel have in-room Wi-Fi?
+                - generic [ref=f38e532]: 
+              - button "What is the closest airport near The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel? " [ref=f38e534] [cursor=pointer]:
+                - text: What is the closest airport near The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel?
+                - generic [ref=f38e535]: 
+              - button "Does The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel have electric vehicle charging stations? " [ref=f38e537] [cursor=pointer]:
+                - text: Does The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel have electric vehicle charging stations?
+                - generic [ref=f38e538]: 
+          - link "Marriott Bonvoy app logo Unlock your stay with the Marriott Bonvoy™ App " [ref=f38e542] [cursor=pointer]:
+            - /url: https://mobile-app.marriott.com/en-us
+            - generic [ref=f38e544]:
+              - img "Marriott Bonvoy app logo" [ref=f38e546]
+              - paragraph [ref=f38e547]: Unlock your stay with the Marriott Bonvoy™ App
+              - generic [ref=f38e548]: 
+      - generic [ref=f38e549]:
+        - generic [ref=f38e551]:
+          - heading "THE BURGESS HOTEL, ATLANTA, A TRIBUTE PORTFOLIO™ HOTEL" [level=2] [ref=f38e552]
+          - generic [ref=f38e553]:
+            - generic [ref=f38e556]:
+              - link "Overview" [ref=f38e557] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/overview/
+              - link "Rooms" [ref=f38e558] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/rooms/
+              - link "Suites" [ref=f38e559] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/rooms/suites/
+              - link "Dining" [ref=f38e560] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/dining/
+              - link "Experiences" [ref=f38e561] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/experiences/
+              - link "Events" [ref=f38e562] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/events/
+              - link "Gallery" [ref=f38e563] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/hotels/atlnt-the-burgess-hotel-atlanta-a-tribute-portfolio-hotel/photos/
+            - generic [ref=f38e564]:
+              - generic [ref=f38e566]:
+                - paragraph [ref=f38e567]: 3600 Piedmont Road NE,
+                - paragraph [ref=f38e568]: Atlanta, Georgia, USA, 30305
+              - generic [ref=f38e569]:
+                - 'link "Toll Free: +1-404-869-1100" [ref=f38e570] [cursor=pointer]':
+                  - /url: "tel: +1-404-869-1100"
+                - paragraph [ref=f38e571]: "Fax: +1 404-869-1900"
+        - navigation "Breadcrumb" [ref=f38e575]:
+          - list [ref=f38e576]:
+            - listitem [ref=f38e577]:
+              - link " Marriott Bonvoy" [ref=f38e578] [cursor=pointer]:
+                - /url: https://www.marriott.com/default.mi
+                - text: 
+                - generic [ref=f38e579]: Marriott Bonvoy
+            - listitem [ref=f38e580]:
+              - link " USA" [ref=f38e581] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/destinations/united-states.mi
+                - text: 
+                - generic [ref=f38e582]: USA
+            - listitem [ref=f38e583]:
+              - link " Georgia" [ref=f38e584] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/destinations/united-states/georgia.mi
+                - text: 
+                - generic [ref=f38e585]: Georgia
+            - listitem [ref=f38e586]:
+              - link " Atlanta" [ref=f38e587] [cursor=pointer]:
+                - /url: https://www.marriott.com/en-us/destinations/united-states/georgia/atlanta.mi
+                - text: 
+                - generic [ref=f38e588]: Atlanta
+            - listitem [ref=f38e589]:
+              - generic [ref=f38e590]: The Burgess Hotel, Atlanta, a Tribute Portfolio Hotel
+    - generic [ref=f38e599]:
+      - generic [ref=f38e601]:
+        - generic [ref=f38e602]:
+          - heading [level=2] [ref=f38e603] [cursor=pointer]:
+            - button "Top Destinations " [ref=f38e604]:
+              - text: Top Destinations
+              - generic: 
+          - text:                                       
+        - generic [ref=f38e605]:
+          - heading [level=2] [ref=f38e606] [cursor=pointer]:
+            - button "For Guests " [ref=f38e607]:
+              - text: For Guests
+              - generic: 
+          - text:          
+        - generic [ref=f38e608]:
+          - heading [level=2] [ref=f38e609] [cursor=pointer]:
+            - button "Our Company " [ref=f38e610]:
+              - text: Our Company
+              - generic: 
+          - text:            
+      - generic [ref=f38e612]:
+        - generic [ref=f38e613] [cursor=pointer]: Follow us
+        - list [ref=f38e614]:
+          - listitem [ref=f38e615]:
+            - link " Facebook" [ref=f38e616] [cursor=pointer]:
+              - /url: https://www.facebook.com/marriottbonvoy
+              - text: 
+              - generic [ref=f38e617]: Facebook
+          - listitem [ref=f38e618]:
+            - link " Instagram" [ref=f38e619] [cursor=pointer]:
+              - /url: https://www.instagram.com/marriottbonvoy/
+              - text: 
+              - generic [ref=f38e620]: Instagram
+          - listitem [ref=f38e621]:
+            - link " Twitter" [ref=f38e622] [cursor=pointer]:
+              - /url: https://twitter.com/marriottbonvoy
+              - text: 
+              - generic [ref=f38e623]: Twitter
+          - listitem [ref=f38e624]:
+            - link " Linkedin" [ref=f38e625] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/marriott-international
+              - text: 
+              - generic [ref=f38e626]: Linkedin
+          - listitem [ref=f38e627]:
+            - link " Youtube" [ref=f38e628] [cursor=pointer]:
+              - /url: https://www.youtube.com/marriott
+              - text: 
+              - generic [ref=f38e629]: Youtube
+      - generic [ref=f38e630]:
+        - generic [ref=f38e631]:
+          - generic [ref=f38e632]:
+            - paragraph [ref=f38e634]: © 1996 – 2026 Marriott International, Inc. All rights reserved. Marriott Proprietary Information
+            - button " English" [ref=f38e636] [cursor=pointer]:
+              - generic [ref=f38e637]: 
+              - generic [ref=f38e638]: English
+          - generic [ref=f38e640]:
+            - generic [ref=f38e641]:
+              - link "Tracking Preferences" [ref=f38e642] [cursor=pointer]:
+                - /url: javascript:void(0)
+              - generic [ref=f38e643]: 
+            - link "Careers " [ref=f38e644] [cursor=pointer]:
+              - /url: https://careers.marriott.com
+              - text: Careers
+              - generic [ref=f38e645]: 
+            - generic [ref=f38e646]: Opens a new window
+            - link "Terms of Use " [ref=f38e647] [cursor=pointer]:
+              - /url: /about/terms-of-use.mi
+              - text: Terms of Use
+              - generic [ref=f38e648]: 
+            - link "Program Terms & Conditions " [ref=f38e649] [cursor=pointer]:
+              - /url: /loyalty/terms/default.mi
+              - text: Program Terms & Conditions
+              - generic [ref=f38e650]: 
+            - link "Privacy Center " [ref=f38e651] [cursor=pointer]:
+              - /url: /about/privacy.mi
+              - text: Privacy Center
+              - generic [ref=f38e652]: 
+            - link "Digital Accessibility " [ref=f38e653] [cursor=pointer]:
+              - /url: /digital-accessibility.mi
+              - text: Digital Accessibility
+              - generic [ref=f38e654]: 
+            - link "Sustainability in the Supply Chain " [ref=f38e655] [cursor=pointer]:
+              - /url: /marriott-brands/sustainabilitysupplychain.mi
+              - text: Sustainability in the Supply Chain
+              - generic [ref=f38e656]: 
+            - link "Site Map " [ref=f38e657] [cursor=pointer]:
+              - /url: /sitemap.mi
+              - text: Site Map
+              - generic [ref=f38e658]: 
+            - link "Hotel Site Map " [ref=f38e659] [cursor=pointer]:
+              - /url: /hotel-sitemap
+              - text: Hotel Site Map
+              - generic [ref=f38e660]: 
+            - link "Help " [ref=f38e661] [cursor=pointer]:
+              - /url: https://help.marriott.com/s/
+              - text: Help
+              - generic [ref=f38e662]: 
+            - generic [ref=f38e663]: Opens a new window
+          - generic [ref=f38e664]: prod31,10FED12E-1318-5E0A-8E2E-46A45D1BC963,rel-R24.9.4
+        - text: 

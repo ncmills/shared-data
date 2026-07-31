@@ -62,6 +62,19 @@ export interface BackfillQueue {
 export interface BackfillQueueOptions {
   /** Return at most this many tasks. The withheld count is always reported. */
   limit?: number;
+  /**
+   * Split a category's venues into tasks of at most this many.
+   *
+   * ONE TASK IS ONE RESEARCH CALL, so this bounds how much a single
+   * `claude -p` invocation has to verify. Observed 2026-07-31: a 25-venue New
+   * York task blew the 180s researcher timeout, and because `claudeResearcher`
+   * is fail-safe it returned `[]` — which the run reported as "0 researched,
+   * 0 rejected", indistinguishable from genuinely finding nothing. Bounding
+   * the unit is the fix; raising the timeout alone just moves the cliff.
+   *
+   * Unset means one task per category, the original behaviour.
+   */
+  maxVenuesPerTask?: number;
 }
 
 const CATEGORIES: readonly { category: PartyVenueCategory; field: keyof CanonicalDestination }[] = [
@@ -96,16 +109,27 @@ export function buildBackfillQueue(
       totalUnsourced += missing.length;
 
       const wizardsServed = [...new Set(missing.flatMap((r) => r.wizards ?? []))].sort();
-      tasks.push({
-        id: `url-backfill:${dest.id}:${category}`,
-        destinationId: dest.id,
-        city: dest.city,
-        state: dest.state,
-        category,
-        venues: missing.map((r) => r.name),
-        wizardsServed,
-        leverageScore: missing.length * Math.max(1, wizardsServed.length),
-      });
+      const names = missing.map((r) => r.name);
+      const size = opts.maxVenuesPerTask && opts.maxVenuesPerTask > 0 ? opts.maxVenuesPerTask : names.length;
+
+      // Chunked, never truncated — every venue lands in exactly one task.
+      const chunkCount = Math.max(1, Math.ceil(names.length / size));
+      for (let i = 0; i < chunkCount; i++) {
+        const venues = names.slice(i * size, (i + 1) * size);
+        if (venues.length === 0) continue;
+        tasks.push({
+          id: chunkCount === 1
+            ? `url-backfill:${dest.id}:${category}`
+            : `url-backfill:${dest.id}:${category}#${i + 1}`,
+          destinationId: dest.id,
+          city: dest.city,
+          state: dest.state,
+          category,
+          venues,
+          wizardsServed,
+          leverageScore: venues.length * Math.max(1, wizardsServed.length),
+        });
+      }
     }
   }
 
@@ -126,7 +150,7 @@ export function buildBackfillQueue(
 
 // ─── CLI ────────────────────────────────────────────────────────────────────
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const q = buildBackfillQueue();
+  const q = buildBackfillQueue(undefined, { maxVenuesPerTask: 8 });
   const pct = q.totalRows === 0 ? 0 : ((q.totalRows - q.totalUnsourced) / q.totalRows) * 100;
   console.log(`backfill-queue — party rows with no followable source\n`);
   console.log(
