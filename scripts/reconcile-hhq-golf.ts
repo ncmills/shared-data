@@ -23,8 +23,39 @@
  */
 import { SHARED_GOLF_COURSES, type SharedGolfCourse } from "../src/golf-courses";
 import { SHARED_TDF_DESTINATIONS } from "../src/tdf-destinations";
-// HHQ's editorial overlay is a standalone data module (no runtime imports).
-import { GOLF_ATLAS } from "/Users/bignick/handicap-hq/src/data/golf-atlas";
+
+// HHQ's editorial overlay lives in a DIFFERENT REPO. This used to be a static
+// `import ... from "/Users/bignick/handicap-hq/src/data/golf-atlas"` — an
+// absolute path into a sibling checkout, which meant this file only compiled on
+// one laptop. It went unnoticed because nothing typechecked the repo; the very
+// first CI typecheck run failed on it.
+//
+// Resolved at RUNTIME instead, so the script stays type-checked everywhere and
+// its cross-repo dependency is explicit and fails with a readable message. Only
+// `marqueeCourses` is consumed, so that's all this declares.
+const HHQ_GOLF_ATLAS_PATH =
+  process.env.HHQ_GOLF_ATLAS_PATH ?? "/Users/bignick/handicap-hq/src/data/golf-atlas.ts";
+
+interface AtlasPilgrimage {
+  marqueeCourses: string[];
+}
+
+async function loadGolfAtlas(): Promise<AtlasPilgrimage[]> {
+  try {
+    const mod = (await import(HHQ_GOLF_ATLAS_PATH)) as { GOLF_ATLAS?: AtlasPilgrimage[] };
+    if (!mod.GOLF_ATLAS) throw new Error(`module has no GOLF_ATLAS export`);
+    return mod.GOLF_ATLAS;
+  } catch (err) {
+    throw new Error(
+      `reconcile-hhq-golf: could not load Handicap HQ's golf atlas from "${HHQ_GOLF_ATLAS_PATH}".\n` +
+        `This is a LOCAL, cross-repo reconciliation script — it needs a Handicap HQ checkout.\n` +
+        `Set HHQ_GOLF_ATLAS_PATH to <handicap-hq>/src/data/golf-atlas.ts and re-run.\n` +
+        `Cause: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
+}
+
+const GOLF_ATLAS = await loadGolfAtlas();
 
 const norm = (s: string) => s.trim().toLowerCase();
 const key = (name: string, city: string) => `${norm(name)}||${norm(city)}`;
