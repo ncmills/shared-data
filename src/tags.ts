@@ -44,12 +44,29 @@
  * manufacture ~30 cells that measure the same universe twice. The split lives
  * in the site's wizard UI, not here.
  *
- * ⚠️ UNMERGED-BY-DESIGN. `friendsmoon` and `engagedmoon` are tags for consumers
- * that DO NOT EXIST YET. That is precisely what the `tdf` retirement above was
- * cleaning up, so this branch is deliberately held out of `main` until a real
- * site consumes it (see the plan's Phase 3 gate). Tags are inert without a
- * consumer, so holding costs nothing; merging early would re-create the exact
- * accounting error `tdf` was retired for.
+ * ⚠️ TAGGED AHEAD OF THEIR CONSUMERS — ON PURPOSE. Nick's call, 2026-07-31.
+ *
+ * `friendsmoon` and `engagedmoon` are tags for sites that DO NOT EXIST YET.
+ * This was deliberately held out of `main` for exactly that reason — it is the
+ * shape of the `tdf` mistake the retirement above cleaned up — and was then
+ * merged as a considered decision, not an oversight. The intent: tag the data
+ * NOW so that when either wizard is built it reads a universe that is already
+ * routed, instead of needing a tagging pass at build time.
+ *
+ * WHAT THIS COSTS, so nobody rediscovers it as a bug:
+ *   - the coverage matrix counts ~5,705 party rows per wizard against
+ *     consumers that render nothing;
+ *   - the starved-input audit enumerates ~30 cells for products nobody ships.
+ * Those numbers are REAL but currently MEANINGLESS. Do not tune data to close
+ * them, and do not read a "starved" friendsmoon/engagedmoon cell as work to do
+ * until the site exists. Tags are inert without a consumer — nothing renders
+ * from these, and no runtime behaviour depends on them.
+ *
+ * DO NOT "clean these up" on the grounds that they have no reader. That is the
+ * tdf argument, and it was heard and overruled here. If either site is KILLED
+ * at its gate (see the plan's Phase 3 / Phase 5 gates), remove that brand's tag
+ * then — and note that a clean revert of the original commit is no longer
+ * possible, because later commits build on this file.
  */
 export const ALL_WIZARD_TAGS = [
   "bestman",
