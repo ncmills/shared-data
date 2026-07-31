@@ -34,6 +34,7 @@ import {
   nightlifeAudiences,
   isGeneralAudience,
   wizardsFromBrands,
+  wizardsForActivity,
   audiencesFromBrands,
   productsFromBrands,
   tierFromDollarSigns,
@@ -91,11 +92,10 @@ function applyOverride<T extends object>(key: string, base: T): T {
 
 function bakeActivity(destId: string, a: CanonicalActivity): CanonicalActivity {
   const audiences = activityAudiences(a.type) as AudienceTag[];
-  const wizards = uniq([
-    ...wizardsFromBrands(a.brands as Brand[]),
-    ...outingWizards(audiences),
-    ...moonWizards(audiences),
-  ]);
+  // Single derivation, shared with the brand-rule path — see wizardsForActivity
+  // in tags.ts for why the bake must not compute this itself (golf was reaching
+  // moh here while tagging-rules.ts forbade it).
+  const wizards = wizardsForActivity(a.type, a.brands as Brand[]);
   const products = uniq([
     ...productsFromBrands(a.brands as Brand[]),
     ...outingProducts(audiences),

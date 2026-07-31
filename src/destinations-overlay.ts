@@ -58,6 +58,12 @@ export const BESTMAN_ACTIVITY_TYPES = new Set([
   "sunset-cruise","rooftop-bar","skiing","biking","kayaking","rafting","snorkeling",
   "canyoneering","zip-lining","horseback-riding","dog-sledding","adventure-park",
   "tour","walking-tour","scenic-overlook","farm-tour","beach-hangout",
+  // Added 2026-07-31. The New Orleans private second line (brass band + NOPD
+  // escort) was authored 2026-07-22 as a deliberate Best Man HQ centerpiece —
+  // tags.ts records "the EVENT stays Best Man HQ" — and correctly tagged
+  // ["bestman"]. But the type was never added here, so applyBestmanOverlay
+  // dropped it and it had NEVER rendered. Found by scripts/new-data-report.ts.
+  "second-line-parade",
 ]);
 
 /** Strip the universe tag fields (+ brands) so output matches the pre-bake shape. */

@@ -219,6 +219,34 @@ export function audiencesFromBrands(brands: Brand[]): AudienceTag[] {
   return out;
 }
 
+/** Golf, by the coarse category map — not by string-matching the type name. */
+function isGolfType(type: string): boolean {
+  return (CATEGORY_OF[type] ?? []).includes("golf");
+}
+
+/**
+ * THE single derivation of an activity's wizards. Both the per-item bake
+ * (destinations-bake.ts, which writes the tags every consumer reads) and the
+ * brand-rule check now go through here, so they cannot drift apart.
+ *
+ * They HAD drifted: `deriveRouting` applied `partyFitWizards` — which hard-blocks
+ * golf from Maid of Honor HQ — while `bakeActivity` derived wizards from the
+ * row's `brands` alone and never consulted it. Four rows typed `golf` and
+ * branded `["both"]` were baked with `moh`, contradicting a rule this repo
+ * asserts in `tagging-rules.ts` and enforces again in MOH's own `check-no-golf`
+ * prebuild. Nothing leaked, because `MOH_ACTIVITY_TYPES` omits `golf` and the
+ * overlay dropped them a layer later — but a tag that survives only because
+ * something downstream filters it is a latent bug, not a safe one.
+ */
+export function wizardsForActivity(type: string, brands: Brand[]): WizardTag[] {
+  const audiences = activityAudiences(type) as AudienceTag[];
+  // Golf is a bachelor + corporate thing and NEVER a bachelorette one.
+  const party = wizardsFromBrands(brands).filter((w) => !(w === "moh" && isGolfType(type)));
+  const outing: WizardTag[] = audiences.includes("corporate") ? ["offsite-outing"] : [];
+  const moon: WizardTag[] = isGeneralAudience(audiences) ? ["friendsmoon", "engagedmoon"] : [];
+  return Array.from(new Set([...party, ...outing, ...moon]));
+}
+
 export function productsFromBrands(brands: Brand[]): ProductTag[] {
   const out: ProductTag[] = [];
   if (brands.includes("bestman") || brands.includes("both")) out.push("bach-party");

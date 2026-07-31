@@ -15,7 +15,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { ALL_WIZARD_TAGS, ALL_AUDIENCE_TAGS } from "./tags";
+import { ALL_WIZARD_TAGS, ALL_AUDIENCE_TAGS, wizardsForActivity } from "./tags";
 import { ENGINE_READS } from "./engine-reads";
 import { WIZARD_INPUT_SPACE } from "./wizard-input-space";
 
@@ -100,5 +100,47 @@ test("no file spells out the COMPLETE wizard vocabulary as a literal list", () =
     offenders,
     [],
     `these lines spell out the complete wizard vocabulary; import ALL_WIZARD_TAGS instead:\n  ${offenders.join("\n  ")}`,
+  );
+});
+
+// ---------------------------------------------------------------------------
+// TAGGING CORRECTNESS — the bake must not contradict the brand guard.
+//
+// Two sources decide an activity's wizards, and until 2026-07-31 they
+// disagreed. `deriveRouting` (tagging-rules.ts, the BACKFILL/growth path)
+// applies `partyFitWizards`, which hard-blocks golf from Maid of Honor HQ.
+// `bakeActivity` (destinations-bake.ts, the path that actually WRITES the tags
+// every consumer reads) derived wizards from the row's `brands` alone and never
+// consulted that guard. So four rows typed `golf` and branded `["both"]` were
+// baked with `moh` in their wizards, in direct contradiction of a rule the repo
+// asserts elsewhere and enforces in MOH's own prebuild (check-no-golf).
+//
+// Nothing leaked — MOH_ACTIVITY_TYPES omits `golf`, so the overlay dropped them
+// downstream — but the cached tag was wrong, and a tag that survives only
+// because something later filters it is a latent bug, not a safe one.
+test("golf never reaches moh through the bake, even when the row is branded both", () => {
+  assert.equal(
+    wizardsForActivity("golf", ["both"]).includes("moh"),
+    false,
+    "golf is not a bachelorette activity — the bake must apply the same guard deriveRouting does",
+  );
+  assert.equal(
+    wizardsForActivity("golf", ["both"]).includes("bestman"),
+    true,
+    "golf still reaches Best Man HQ",
+  );
+});
+
+test("a non-golf activity branded both still reaches both party brands", () => {
+  const w = wizardsForActivity("spa", ["both"]);
+  assert.ok(w.includes("moh"), "the golf guard must not over-reach");
+  assert.ok(w.includes("bestman"));
+});
+
+test("golf branded moh-only reaches NO party brand rather than silently keeping moh", () => {
+  assert.deepEqual(
+    wizardsForActivity("golf", ["moh"]).filter((x) => x === "moh" || x === "bestman"),
+    [],
+    "a golf row branded moh is a data error; the guard drops it rather than honouring it",
   );
 });
