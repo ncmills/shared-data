@@ -272,9 +272,24 @@ export function deriveBranchName(dataset: string, label: string): string {
 // ─── sanctioned files this step commits (mirrors Task 15's write targets +
 //     the audit artifacts its gate run regenerates) ────────────────────────
 
+/**
+ * Every SANCTIONED INGEST TARGET, plus the generated docs.
+ *
+ * ⚠️ ADD A NEW WRITE PATH HERE THE SAME DAY YOU ADD IT TO `ingest-researched.ts`.
+ * A target missing from this list is not staged, so `proposePr` produces a
+ * commit whose message announces a row count with NO ROWS BEHIND IT, and the
+ * ingested data is silently left as an uncommitted working-tree change.
+ *
+ * That is not hypothetical: the first real URL-backfill run (2026-07-31)
+ * ingested 21 party-venue patches and committed
+ * "expand: +21 row(s) (party-venue-patch+21)" containing only the audit report
+ * and the PR body. `propose-pr.test.ts` now fails if a target is missing.
+ */
 export const DEFAULT_FILES_TO_COMMIT = [
   "src/golf-courses-hhq-merge.ts",
   "src/residences-expansion.ts",
+  "src/party-venues-expansion.ts",
+  "src/party-venue-patches.ts",
   "docs/coverage-matrix.md",
   "docs/audit-report.json",
 ];
