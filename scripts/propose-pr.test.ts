@@ -27,6 +27,7 @@ import {
   diffCoverageMatrix,
   deriveBranchName,
   proposePr,
+  DEFAULT_FILES_TO_COMMIT,
   type CommandRunner,
   type CommandResult,
 } from "./propose-pr";
@@ -289,4 +290,32 @@ test("proposePr uses an explicit branch name verbatim when provided (does not re
     });
     assert.equal(result.branch, "expand/my-explicit-branch");
   });
+});
+
+// ─── the sanctioned-file list must cover EVERY write path ──────────────────
+//
+// Found the hard way 2026-07-31: the first real backfill run ingested 21 patch
+// rows, and `proposePr` produced a commit titled "expand: +21 row(s)" that
+// contained the audit doc and the PR body and NOT ONE DATA ROW. The patches sat
+// uncommitted in the working tree. `DEFAULT_FILES_TO_COMMIT` knew about golf and
+// residences but not the two party write paths added the same day.
+//
+// That is this repo's signature failure wearing a new hat — a report claiming
+// success while the data never landed. This test fails if a future write path
+// is added without its sanctioned file being staged.
+test("DEFAULT_FILES_TO_COMMIT covers every sanctioned ingest target", () => {
+  const targets = [
+    "src/golf-courses-hhq-merge.ts",
+    "src/residences-expansion.ts",
+    "src/party-venues-expansion.ts",
+    "src/party-venue-patches.ts",
+  ];
+
+  for (const t of targets) {
+    assert.ok(
+      DEFAULT_FILES_TO_COMMIT.includes(t),
+      `${t} is an ingest target but proposePr would never stage it — a run would ` +
+        `commit a row count with no rows behind it`,
+    );
+  }
 });
