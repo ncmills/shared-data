@@ -16,7 +16,7 @@
  */
 
 /**
- * The five consumer wizards. Offsite is one domain, two wizards.
+ * The seven consumer wizards. Offsite is one domain, two wizards.
  *
  * THIS ARRAY IS THE SOURCE OF TRUTH — `WizardTag` is derived from it, not the
  * other way round. Every guard that needs to enumerate wizards at RUNTIME
@@ -33,6 +33,40 @@
  * 36-cell input space for a product nobody ships. ALL golf now routes to
  * `handicap`, and the `tdf` SITE label was migrated onto `handicap` in the data
  * too (see SiteTag below) — no trace of the retired brand remains in routing.
+ *
+ * WHY FRIENDSMOON IS ONE TAG, NOT TWO. Friendsmoon (friendsmoon.com) ships a
+ * SPLIT wizard — a "crew" path (a just-married couple + 4–16 friends) and a
+ * "couples" path (3–6 couples). Offsite is split into two TAGS because its two
+ * paths read different `EntityKind`s (retreat → residence, outing →
+ * party-venue). Friendsmoon's two paths read the SAME party-venue data and
+ * differ only by group size and room pairing — query-time filters, not
+ * routing. Splitting the tag would triple the starved-cell surface and
+ * manufacture ~30 cells that measure the same universe twice. The split lives
+ * in the site's wizard UI, not here.
+ *
+ * ⚠️ TAGGED AHEAD OF THEIR CONSUMERS — ON PURPOSE. Nick's call, 2026-07-31.
+ *
+ * `friendsmoon` and `engagedmoon` are tags for sites that DO NOT EXIST YET.
+ * This was deliberately held out of `main` for exactly that reason — it is the
+ * shape of the `tdf` mistake the retirement above cleaned up — and was then
+ * merged as a considered decision, not an oversight. The intent: tag the data
+ * NOW so that when either wizard is built it reads a universe that is already
+ * routed, instead of needing a tagging pass at build time.
+ *
+ * WHAT THIS COSTS, so nobody rediscovers it as a bug:
+ *   - the coverage matrix counts ~5,705 party rows per wizard against
+ *     consumers that render nothing;
+ *   - the starved-input audit enumerates ~30 cells for products nobody ships.
+ * Those numbers are REAL but currently MEANINGLESS. Do not tune data to close
+ * them, and do not read a "starved" friendsmoon/engagedmoon cell as work to do
+ * until the site exists. Tags are inert without a consumer — nothing renders
+ * from these, and no runtime behaviour depends on them.
+ *
+ * DO NOT "clean these up" on the grounds that they have no reader. That is the
+ * tdf argument, and it was heard and overruled here. If either site is KILLED
+ * at its gate (see the plan's Phase 3 / Phase 5 gates), remove that brand's tag
+ * then — and note that a clean revert of the original commit is no longer
+ * possible, because later commits build on this file.
  */
 export const ALL_WIZARD_TAGS = [
   "bestman",
@@ -40,6 +74,8 @@ export const ALL_WIZARD_TAGS = [
   "offsite-retreat",
   "offsite-outing",
   "handicap",
+  "friendsmoon",
+  "engagedmoon",
 ] as const;
 
 export type WizardTag = (typeof ALL_WIZARD_TAGS)[number];
@@ -54,15 +90,32 @@ export type WizardTag = (typeof ALL_WIZARD_TAGS)[number];
  * `handicap` to compensate. The rows were migrated (`sites:["tdf","offsite"]`
  * -> `["handicap","offsite"]`, 994 golf + 5 ingest + 234 destinations) so the
  * label now names the site that actually renders them.
+ *
+ * `friendsmoon` / `engagedmoon` are listed because the wizards exist in the
+ * vocabulary, but NO ROW carries either as a `sites` value yet — the axis is
+ * only on golf + residence rows, and neither wizard reads those kinds (see
+ * ENGINE_READS). Add rows here only alongside a real reader, per the tdf lesson
+ * directly above.
  */
-export type SiteTag = "moh" | "bestman" | "offsite" | "handicap";
+export type SiteTag =
+  | "moh"
+  | "bestman"
+  | "offsite"
+  | "handicap"
+  | "friendsmoon"
+  | "engagedmoon";
 
 export type ProductTag =
   | "bach-party"
   | "bachelorette"
   | "golf-trip"
   | "retreat"
-  | "outing";
+  | "outing"
+  // Named for the TRIP, not the brand, matching every sibling above
+  // (`bach-party`, not `bestman`). `friends-trip` covers both Friendsmoon
+  // paths; `proposal-trip` is Engagedmoon's.
+  | "friends-trip"
+  | "proposal-trip";
 
 /** Source of truth for the audience vocabulary — same rule as
  *  `ALL_WIZARD_TAGS`: runtime guards derive their set from here. */
@@ -128,6 +181,34 @@ export function activityAudiences(type: string): UniverseAudience[] {
   return ACTIVITY_AUDIENCE_TAGS[type] ?? ALL_AUDIENCES;
 }
 
+/**
+ * GENERAL-AUDIENCE PREDICATE — "the per-type taxonomy did not restrict this to
+ * bachelor/bachelorette staples."
+ *
+ * `ACTIVITY_AUDIENCE_TAGS` above is a RESTRICT-list: an unlisted type defaults
+ * to every audience, and the ~11 listed types (poker-night, boudoir, casino,
+ * pole-class, drag-brunch, …) are the party-locked ones. So "carries corporate"
+ * is, mechanically, the same signal as "is not party-locked" — 1,958 of 2,161
+ * activity rows.
+ *
+ * Friendsmoon and Engagedmoon need exactly that signal, and reading
+ * `audiences.includes("corporate")` at their call sites would read as though a
+ * honeymoon were a corporate offsite. This names the predicate for what it
+ * actually tests so those call sites stay honest.
+ *
+ * It deliberately does NOT widen `UniverseAudience` with `friends`/`couple`
+ * audiences: that type is the narrower back-compat union Offsite Outpost
+ * imports, and widening it would change OO's types for no routing gain. These
+ * two wizards need no audience of their own — they need the absence of a
+ * party lock.
+ */
+export function isGeneralAudience(audiences: readonly AudienceTag[]): boolean {
+  // Typed on the WIDER union so both `activityAudiences()` output
+  // (UniverseAudience[], no `internal`) and baked `audiences` (AudienceTag[])
+  // pass without a cast. UniverseAudience is a strict subset of AudienceTag.
+  return audiences.includes("corporate");
+}
+
 /** Nightlife is audience-tagged by vibe: an "unhinged" room isn't corporate. */
 export function nightlifeAudiences(vibe: string): UniverseAudience[] {
   return vibe === "unhinged" ? ["bachelor", "bachelorette"] : ALL_AUDIENCES;
@@ -153,6 +234,34 @@ export function audiencesFromBrands(brands: Brand[]): AudienceTag[] {
   if (brands.includes("bestman") || brands.includes("both")) out.push("bachelor");
   if (brands.includes("moh") || brands.includes("both")) out.push("bachelorette");
   return out;
+}
+
+/** Golf, by the coarse category map — not by string-matching the type name. */
+function isGolfType(type: string): boolean {
+  return (CATEGORY_OF[type] ?? []).includes("golf");
+}
+
+/**
+ * THE single derivation of an activity's wizards. Both the per-item bake
+ * (destinations-bake.ts, which writes the tags every consumer reads) and the
+ * brand-rule check now go through here, so they cannot drift apart.
+ *
+ * They HAD drifted: `deriveRouting` applied `partyFitWizards` — which hard-blocks
+ * golf from Maid of Honor HQ — while `bakeActivity` derived wizards from the
+ * row's `brands` alone and never consulted it. Four rows typed `golf` and
+ * branded `["both"]` were baked with `moh`, contradicting a rule this repo
+ * asserts in `tagging-rules.ts` and enforces again in MOH's own `check-no-golf`
+ * prebuild. Nothing leaked, because `MOH_ACTIVITY_TYPES` omits `golf` and the
+ * overlay dropped them a layer later — but a tag that survives only because
+ * something downstream filters it is a latent bug, not a safe one.
+ */
+export function wizardsForActivity(type: string, brands: Brand[]): WizardTag[] {
+  const audiences = activityAudiences(type) as AudienceTag[];
+  // Golf is a bachelor + corporate thing and NEVER a bachelorette one.
+  const party = wizardsFromBrands(brands).filter((w) => !(w === "moh" && isGolfType(type)));
+  const outing: WizardTag[] = audiences.includes("corporate") ? ["offsite-outing"] : [];
+  const moon: WizardTag[] = isGeneralAudience(audiences) ? ["friendsmoon", "engagedmoon"] : [];
+  return Array.from(new Set([...party, ...outing, ...moon]));
 }
 
 export function productsFromBrands(brands: Brand[]): ProductTag[] {

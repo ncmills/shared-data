@@ -25,7 +25,7 @@
  */
 
 import type { WizardTag, AudienceTag, ProductTag } from "./tags";
-import { activityAudiences, nightlifeAudiences, CATEGORY_OF } from "./tags";
+import { activityAudiences, nightlifeAudiences, isGeneralAudience, CATEGORY_OF } from "./tags";
 
 export type EntityKind =
   | "party-venue" // activity/dining/nightlife/lodging/transport on a destination
@@ -117,16 +117,25 @@ export function deriveRouting(input: RoutingInput): Routing {
             ? (activityAudiences(activityType ?? "") as AudienceTag[])
             : ALL_AUD;
       const corporate = aud.includes("corporate");
+      // Same predicate as the per-item bake (`moonWizards` in
+      // destinations-bake.ts): friendsmoon/engagedmoon reach any party-venue row
+      // the per-type taxonomy did not lock to a bachelor/bachelorette staple.
+      // These two files MUST agree — `scripts/audit/orphaned.ts` cross-checks
+      // that every (kind, coreWizard) pair this function emits appears in
+      // ENGINE_READS[coreWizard], and the bake is what actually writes the tags.
+      const general = isGeneralAudience(aud);
       const core: Routing["core"] = {
         wizards: uniq([
           ...partyWizardsFromBrands(brands),
           ...(corporate ? (["offsite-outing"] as WizardTag[]) : []),
+          ...(general ? (["friendsmoon", "engagedmoon"] as WizardTag[]) : []),
         ]),
         audiences: aud,
         products: uniq([
           ...(brands?.some((b) => b === "bestman" || b === "both") ? (["bach-party"] as ProductTag[]) : []),
           ...(brands?.some((b) => b === "moh" || b === "both") ? (["bachelorette"] as ProductTag[]) : []),
           ...(corporate ? (["outing"] as ProductTag[]) : []),
+          ...(general ? (["friends-trip", "proposal-trip"] as ProductTag[]) : []),
         ]),
       };
       return { core, expand: [] };

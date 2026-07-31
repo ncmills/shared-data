@@ -20,6 +20,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { withRealGateLock } from "./real-gate-lock";
 import { ingestResearched, DEFAULT_GOLF_EXPANSION_PATH } from "./ingest-researched";
 import type { ResearchedRow } from "../src/research-schema";
 
@@ -82,7 +83,7 @@ function golfRowPostWizards(name: string, city: string, state: string): string[]
   }
 }
 
-test("ACCEPTS a valid golf row; it appears in ALL_GOLF_COURSES tagged handicap+bestman via backfillUniverse", () => {
+test("ACCEPTS a valid golf row; it appears in ALL_GOLF_COURSES tagged handicap+bestman via backfillUniverse", async () => await withRealGateLock(() => {
   const before = readFileSync(DEFAULT_GOLF_EXPANSION_PATH, "utf-8");
   const name = `Ingest Test Happy Path Course ${Date.now()}`;
   try {
@@ -103,9 +104,9 @@ test("ACCEPTS a valid golf row; it appears in ALL_GOLF_COURSES tagged handicap+b
     // idempotency: restore the real sanctioned file to its pre-test content
     writeFileSync(DEFAULT_GOLF_EXPANSION_PATH, before);
   }
-});
+}));
 
-test("REJECTS + ROLLS BACK a golf row hand-forced to a brand-breaking site tag (verify-universe gate)", () => {
+test("REJECTS + ROLLS BACK a golf row hand-forced to a brand-breaking site tag (verify-universe gate)", async () => await withRealGateLock(() => {
   const before = readFileSync(DEFAULT_GOLF_EXPANSION_PATH, "utf-8");
   try {
     // "moh" is not a valid golf `sites` value (only handicap/offsite) —
@@ -136,9 +137,9 @@ test("REJECTS + ROLLS BACK a golf row hand-forced to a brand-breaking site tag (
   } finally {
     writeFileSync(DEFAULT_GOLF_EXPANSION_PATH, before);
   }
-});
+}));
 
-test("REJECTS an invalid row (no sourceUrl) by validation, before ever touching a file", () => {
+test("REJECTS an invalid row (no sourceUrl) by validation, before ever touching a file", async () => await withRealGateLock(() => {
   const before = readFileSync(DEFAULT_GOLF_EXPANSION_PATH, "utf-8");
   const { sourceUrl: _drop, ...rest } = GOOD_GOLF as unknown as Record<string, unknown>;
 
@@ -151,7 +152,7 @@ test("REJECTS an invalid row (no sourceUrl) by validation, before ever touching 
 
   const after = readFileSync(DEFAULT_GOLF_EXPANSION_PATH, "utf-8");
   assert.equal(after, before, "an invalid row must never touch the expansion file");
-});
+}));
 
 // ─── Item 1: dedup before append ────────────────────────────────────────────
 // A venue researched twice (e.g. across two monthly runs, or already present
@@ -526,6 +527,72 @@ test("rollback mechanism: an injected gate failure restores an injected (temp) e
 
     const after = readFileSync(tmpGolfPath, "utf-8");
     assert.equal(after, initialContent, "injected temp fixture must be restored byte-identically on gate failure");
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// PROVENANCE MUST SURVIVE INGEST.
+//
+// `validateResearchedRow` hard-requires a real `sourceUrl` and >=1 `citations`
+// on every researched row, and `verifyUrlLive` network-checks the sourceUrl on
+// the unattended path. All of that rigour was then THROWN AWAY for residences:
+// `toResidence` destructured `sourceUrl` and `citations` off and dropped them,
+// so provenance existed only as a gate artifact. That is why residences were
+// 0 of 341 with a url while golf — which persists it via
+// `url: row.url ?? row.sourceUrl` — was 877 of 999.
+//
+// It matters beyond bookkeeping: Offsite Outpost renders residences into live
+// copy, and a claim a reader cannot follow to a source is exactly the kind of
+// unverifiable specific this repo's honesty rules exist to prevent. Re-deriving
+// the citation later is impossible — the researching agent is long gone.
+test("residence ingest PERSISTS provenance (sourceUrl -> url, citations kept)", () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-provenance-residence-"));
+  const tmpResidencePath = join(tmpDir, "residence-fixture.ts");
+  writeFileSync(
+    tmpResidencePath,
+    `import type { SharedResidence } from "../src/residences";\n\n` +
+      `export const SHARED_RESIDENCES_EXPANSION: SharedResidence[] = [];\n`,
+  );
+  try {
+    const row: ResearchedRow = {
+      dataset: "residence",
+      id: `ingest-test-provenance-residence-${Date.now()}`,
+      name: "Ingest Test Provenance Residence",
+      setting: "vineyard",
+      region: "Test Region",
+      country: "USA",
+      capacity: { min: 10, max: 40, sleepsOnsite: 40 },
+      price: { perPersonPerNight: { low: 400, high: 800 } },
+      sourceUrl: "https://www.ingest-test-provenance-residence.example/",
+      citations: [
+        "https://www.ingest-test-provenance-residence.example/about",
+        "https://www.ingest-test-provenance-residence.example/rooms",
+      ],
+    } as unknown as ResearchedRow;
+
+    const result = ingestResearched([row], {
+      residenceFilePath: tmpResidencePath,
+      runGates: () => ({ ok: true, output: "" }),
+    });
+    assert.equal(result.accepted, 1);
+
+    const written = readWrittenArray(tmpResidencePath)[0];
+    assert.equal(
+      written.url,
+      "https://www.ingest-test-provenance-residence.example/",
+      "sourceUrl must land on the row as `url` — same contract golf already honours",
+    );
+    assert.deepEqual(
+      written.citations,
+      [
+        "https://www.ingest-test-provenance-residence.example/about",
+        "https://www.ingest-test-provenance-residence.example/rooms",
+      ],
+      "citations must be persisted, not discarded as a gate artifact",
+    );
+    assert.equal(written.dataset, undefined, "the dataset discriminator is still stripped");
   } finally {
     rmSync(tmpDir, { recursive: true, force: true });
   }

@@ -32,7 +32,9 @@ import {
   type ProductTag,
   activityAudiences,
   nightlifeAudiences,
+  isGeneralAudience,
   wizardsFromBrands,
+  wizardsForActivity,
   audiencesFromBrands,
   productsFromBrands,
   tierFromDollarSigns,
@@ -60,6 +62,29 @@ const outingWizards = (audiences: AudienceTag[]): WizardTag[] =>
 const outingProducts = (audiences: AudienceTag[]): ProductTag[] =>
   audiences.includes("corporate") ? ["outing"] : [];
 
+/**
+ * Friendsmoon + Engagedmoon reach every row the per-type taxonomy did NOT lock
+ * to a bachelor/bachelorette staple — see `isGeneralAudience` in tags.ts for
+ * why that predicate is the right one and why it is not spelled
+ * `includes("corporate")` here.
+ *
+ * This is a per-ITEM gate, so a Nashville honky-tonk crawl can reach Friendsmoon
+ * while the same city's boudoir shoot does not. The ~203 party-locked rows
+ * (poker-night 67, brunch-crawl 29, cigar-bar 26, drag-brunch 20, casino 19,
+ * pool-party 19, boudoir 16, …) are excluded automatically and permanently by
+ * the taxonomy, with no denylist to maintain here.
+ *
+ * Engagedmoon is tagged on the same signal even though most rows carry
+ * `groupMin: 4` and a proposal trip is a party of two. That is correct: TAG ≠
+ * SURFACED (see engine-reads.ts). Group size is an engine-side filter on
+ * `groupMin`/`groupMax`, not a routing decision — encoding it here would bake a
+ * query into the cache and make the row invisible to any future two-person use.
+ */
+const moonWizards = (audiences: AudienceTag[]): WizardTag[] =>
+  isGeneralAudience(audiences) ? ["friendsmoon", "engagedmoon"] : [];
+const moonProducts = (audiences: AudienceTag[]): ProductTag[] =>
+  isGeneralAudience(audiences) ? ["friends-trip", "proposal-trip"] : [];
+
 function applyOverride<T extends object>(key: string, base: T): T {
   const o = TAG_OVERRIDES[key];
   return o ? { ...base, ...o } : base;
@@ -67,8 +92,15 @@ function applyOverride<T extends object>(key: string, base: T): T {
 
 function bakeActivity(destId: string, a: CanonicalActivity): CanonicalActivity {
   const audiences = activityAudiences(a.type) as AudienceTag[];
-  const wizards = uniq([...wizardsFromBrands(a.brands as Brand[]), ...outingWizards(audiences)]);
-  const products = uniq([...productsFromBrands(a.brands as Brand[]), ...outingProducts(audiences)]);
+  // Single derivation, shared with the brand-rule path — see wizardsForActivity
+  // in tags.ts for why the bake must not compute this itself (golf was reaching
+  // moh here while tagging-rules.ts forbade it).
+  const wizards = wizardsForActivity(a.type, a.brands as Brand[]);
+  const products = uniq([
+    ...productsFromBrands(a.brands as Brand[]),
+    ...outingProducts(audiences),
+    ...moonProducts(audiences),
+  ]);
   return applyOverride(`${destId}|activity|${a.name}`, {
     ...a,
     wizards,
@@ -80,8 +112,16 @@ function bakeActivity(destId: string, a: CanonicalActivity): CanonicalActivity {
 
 function bakeNightlife(destId: string, n: CanonicalNightlife): CanonicalNightlife {
   const audiences = nightlifeAudiences(n.vibe) as AudienceTag[];
-  const wizards = uniq([...wizardsFromBrands(n.brands as Brand[]), ...outingWizards(audiences)]);
-  const products = uniq([...productsFromBrands(n.brands as Brand[]), ...outingProducts(audiences)]);
+  const wizards = uniq([
+    ...wizardsFromBrands(n.brands as Brand[]),
+    ...outingWizards(audiences),
+    ...moonWizards(audiences),
+  ]);
+  const products = uniq([
+    ...productsFromBrands(n.brands as Brand[]),
+    ...outingProducts(audiences),
+    ...moonProducts(audiences),
+  ]);
   return applyOverride(`${destId}|nightlife|${n.name}`, {
     ...n,
     wizards,
@@ -94,8 +134,16 @@ function bakeNightlife(destId: string, n: CanonicalNightlife): CanonicalNightlif
 function bakeDining(destId: string, d: CanonicalDining): CanonicalDining {
   // Dining is all-audience (corporate-eligible) by default.
   const audiences = ["corporate", "clients", "bachelor", "bachelorette"] as AudienceTag[];
-  const wizards = uniq([...wizardsFromBrands(d.brands as Brand[]), "offsite-outing" as WizardTag]);
-  const products = uniq([...productsFromBrands(d.brands as Brand[]), "outing" as ProductTag]);
+  const wizards = uniq([
+    ...wizardsFromBrands(d.brands as Brand[]),
+    "offsite-outing" as WizardTag,
+    ...moonWizards(audiences),
+  ]);
+  const products = uniq([
+    ...productsFromBrands(d.brands as Brand[]),
+    "outing" as ProductTag,
+    ...moonProducts(audiences),
+  ]);
   return applyOverride(`${destId}|dining|${d.name}`, {
     ...d,
     wizards,
@@ -116,9 +164,29 @@ function bakeDining(destId: string, d: CanonicalDining): CanonicalDining {
 // housing needs either wiring handicap to read party-venue or sourcing its
 // lodging from residences — a decision flagged to Nick, not silently tagged.
 // Never brand- or audience-filtered by any overlay (no `brands`).
-const HOUSING_WIZARDS: WizardTag[] = ["bestman", "moh", "offsite-outing", "offsite-retreat"];
+// friendsmoon/engagedmoon join for the same reason the four above are here: a
+// group house, a boutique hotel room or an airport shuttle is valid housing and
+// getting-around for ANY trip type, and both wizards' ENGINE_READS include
+// party-venue. This is the single cheapest reach in the repo — 771 lodging +
+// 462 transport rows become available to both new sites with zero new data and
+// zero research.
+const HOUSING_WIZARDS: WizardTag[] = [
+  "bestman",
+  "moh",
+  "offsite-outing",
+  "offsite-retreat",
+  "friendsmoon",
+  "engagedmoon",
+];
 const ALL_AUD: AudienceTag[] = ["corporate", "clients", "bachelor", "bachelorette"];
-const HOUSING_PRODUCTS: ProductTag[] = ["bach-party", "bachelorette", "outing", "retreat"];
+const HOUSING_PRODUCTS: ProductTag[] = [
+  "bach-party",
+  "bachelorette",
+  "outing",
+  "retreat",
+  "friends-trip",
+  "proposal-trip",
+];
 
 function bakeLodging(destId: string, l: CanonicalLodging): CanonicalLodging {
   return applyOverride(`${destId}|lodging|${l.name}`, {

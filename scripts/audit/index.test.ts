@@ -18,9 +18,11 @@ import {
   runAudit,
   buildBaseline,
   buildCoverageMatrix,
+  renderCoverageMatrixMd,
   computeRegressions,
   type AuditBaseline,
 } from "./index";
+import { ALL_WIZARD_TAGS } from "../../src/tags";
 import type { UnderTagged } from "./under-tagged";
 import type { Orphaned } from "./orphaned";
 import type { Starved } from "./starved-inputs";
@@ -232,4 +234,39 @@ test("FULL RUN: runAudit() writes docs/coverage-matrix.md and docs/audit-report.
   assert.ok(Array.isArray(report.starved));
   assert.ok(Array.isArray(report.regressions));
   assert.equal(typeof report.exitCode, "number");
+});
+
+// ---------------------------------------------------------------------------
+// The coverage matrix must cover EVERY wizard.
+//
+// Regression guard for a real false-green found 2026-07-31 while adding the
+// friendsmoon/engagedmoon wizards: `ALL_WIZARDS` in index.ts was a hand-copied
+// literal of the then-six names. A seventh and eighth wizard were absent from
+// it, so `buildCoverageMatrix` never created their rows and the `!(w in matrix)
+// continue` guard at the row loop silently dropped every one of their tags.
+// The audit then reported "0 under-tagged, 0 orphaned, 65 starved — no
+// regressions" and rendered a matrix with no row for either wizard. Green, and
+// wrong: it certified coverage for wizards it had not looked at.
+//
+// Typecheck cannot catch this — `ALL_WIZARDS` is a `WizardTag[]`, not a
+// `Record<WizardTag, …>`, so a missing member is a shorter array, not a type
+// error. Only a runtime assertion against the tag vocabulary closes it.
+test("coverage matrix is keyed by every WizardTag", () => {
+  const matrix = buildCoverageMatrix([]);
+  assert.deepEqual(
+    Object.keys(matrix).sort(),
+    [...ALL_WIZARD_TAGS].sort(),
+    "buildCoverageMatrix must emit a row per wizard — a wizard missing here is " +
+      "invisible to the audit and reads as fully covered",
+  );
+});
+
+test("rendered coverage matrix has a row per wizard", () => {
+  const md = renderCoverageMatrixMd(buildCoverageMatrix([]), [], []);
+  for (const wizard of ALL_WIZARD_TAGS) {
+    assert.ok(
+      md.includes(`| ${wizard} |`),
+      `coverage-matrix.md is missing a row for "${wizard}"`,
+    );
+  }
 });

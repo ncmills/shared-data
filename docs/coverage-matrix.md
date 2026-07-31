@@ -9,6 +9,8 @@ Rows = wizard, columns = dataset. Cell = real reachable row count in the canonic
 | offsite-retreat | 1233 | 999 | 341 | 0 | 0 | 0 | 158 | 0 |
 | offsite-outing | 5705 | 999 | 341 | 0 | 0 | 0 | 158 | 107 |
 | handicap | 0 | 999 | 0 | 234 | 0 | 0 | 0 | 0 |
+| friendsmoon | 5705 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| engagedmoon | 5705 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Starved-cell summary (input-space cells below threshold, per wizard)
 
@@ -17,6 +19,8 @@ Rows = wizard, columns = dataset. Cell = real reachable row count in the canonic
 - **offsite-retreat**: 65 starved cell(s)
 - **offsite-outing**: 0 starved cell(s)
 - **handicap**: 0 starved cell(s)
+- **friendsmoon**: 0 starved cell(s)
+- **engagedmoon**: 0 starved cell(s)
 
 ## Regression gate
 
