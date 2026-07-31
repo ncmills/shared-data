@@ -28,15 +28,23 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(HERE, "..");
 const PATCHES_PATH = join(HERE, "party-venue-patches.ts");
 
-/** A real curated activity that ALREADY renders on MOH — so if the patched
- *  field goes missing, the patch path is at fault, not the taxonomy. */
+/**
+ * A real curated activity that ALREADY renders on MOH — so if a patched field
+ * goes missing, the patch path is at fault, not the taxonomy or the overlay
+ * allowlist. Also required to be UNSOURCED, because the backfill-chain test
+ * below needs `buildBackfillQueue` to actually list it.
+ */
 const TARGET = (() => {
   for (const d of sharedDestinations) {
     for (const a of d.activities) {
-      if (a.wizards?.includes("moh") && MOH_ACTIVITY_TYPES.has(a.type)) return { dest: d, activity: a };
+      const url = (a as { url?: unknown }).url;
+      const unsourced = !(typeof url === "string" && url.trim());
+      if (unsourced && a.wizards?.includes("moh") && MOH_ACTIVITY_TYPES.has(a.type)) {
+        return { dest: d, activity: a };
+      }
     }
   }
-  throw new Error("fixture: no MOH-rendering activity found in the universe");
+  throw new Error("fixture: no unsourced MOH-rendering activity found in the universe");
 })();
 
 const PATCH: PartyVenuePatch = {
@@ -56,7 +64,12 @@ function writePatches(raw: string, patches: PartyVenuePatch[]): string {
   return m[1] + JSON.stringify(patches) + (m[3] ?? ";\n");
 }
 
-function observeInFreshProcess(): { lat: number | null; sourceUrl: string | null; rendered: boolean } {
+function observeInFreshProcess(): {
+  lat: number | null;
+  url: string | null;
+  sourceUrl: string | null;
+  rendered: boolean;
+} {
   const script = `
     import { sharedDestinations } from ${JSON.stringify(join(HERE, "index.ts"))};
     import { applyMohOverlay } from ${JSON.stringify(join(HERE, "destinations-overlay.ts"))};
@@ -65,6 +78,7 @@ function observeInFreshProcess(): { lat: number | null; sourceUrl: string | null
     const shown = applyMohOverlay(d).activities.find((a) => a.name === NAME) ?? null;
     console.log(JSON.stringify({
       lat: shown?.lat ?? null,
+      url: shown?.url ?? null,
       sourceUrl: shown?.sourceUrl ?? null,
       rendered: !!shown,
     }));
@@ -111,6 +125,62 @@ test("a patch INGESTED through the real gate renders", async () => {
     assert.equal(seen.rendered, true, "target row stopped rendering after the patch landed");
     assert.equal(seen.lat, 44.9778, "ingested patch did not reach the rendered object");
     assert.equal(seen.sourceUrl, "https://www.patch-ingest-e2e.test/", "provenance lost before render");
+  } finally {
+    for (const [p, content] of before) writeFileSync(p, content);
+  }
+});
+
+/**
+ * The 2B.2 BACKFILL chain, end to end: real queue task → research → real ingest
+ * → rendered page. The researcher is the only stubbed link.
+ *
+ * This lives HERE rather than beside the rest of the backfill tests because
+ * every test that mutates the real `party-venue-patches.ts` must be in ONE
+ * file. Node runs test FILES in parallel, so two files doing
+ * read-append-write on the same shared file is a lost-update race — and when
+ * both scan the universe for "first MOH-rendering activity" they pick the same
+ * target, so one sees the other's row as a duplicate. That failure appeared
+ * only in the aggregate suite and never in isolation.
+ */
+test("the 2B.2 backfill chain reaches a rendered page", async () => {
+  const { buildBackfillQueue } = await import("../scripts/backfill-queue");
+  const { researchBackfill } = await import("../scripts/research-backfill");
+  const { ingestResearched } = await import("../scripts/ingest-researched");
+
+  const BACKFILL_URL = "https://www.backfill-pipeline-proof.test/";
+  const task = buildBackfillQueue().tasks.find(
+    (t) => t.destinationId === TARGET.dest.id && t.category === "activity",
+  );
+  assert.ok(task, "queue raised no activity task for the target destination");
+  assert.ok(task.venues.includes(TARGET.activity.name), "queue did not list the target venue");
+
+  const researched = await researchBackfill(task, async () => [
+    {
+      dataset: "party-venue-patch",
+      destinationId: task.destinationId,
+      category: task.category,
+      name: TARGET.activity.name,
+      url: BACKFILL_URL,
+      sourceUrl: BACKFILL_URL,
+      citations: [`${BACKFILL_URL}about`],
+    },
+  ]);
+  assert.equal(researched.rows.length, 1, JSON.stringify(researched.rejections));
+
+  const touched = [
+    PATCHES_PATH,
+    join(REPO_ROOT, "docs", "coverage-matrix.md"),
+    join(REPO_ROOT, "docs", "audit-report.json"),
+  ];
+  const before = touched.map((p) => [p, readFileSync(p, "utf-8")] as const);
+  try {
+    const res = ingestResearched(researched.rows);
+    assert.equal(res.accepted, 1, `ingest rejected the backfill patch: ${res.reasons.join("; ")}`);
+
+    const seen = observeInFreshProcess();
+    assert.equal(seen.rendered, true, "the row stopped rendering after the backfill");
+    assert.equal(seen.url, BACKFILL_URL, "backfilled URL did not reach the rendered object");
+    assert.equal(seen.sourceUrl, BACKFILL_URL, "provenance did not reach the rendered object");
   } finally {
     for (const [p, content] of before) writeFileSync(p, content);
   }
