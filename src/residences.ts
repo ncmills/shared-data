@@ -19,6 +19,23 @@ export interface SharedResidence {
   /** Wizard routing, derived from products by residencesForSite (offsite-retreat
    *  / offsite-outing). Optional on the raw data; attached by the accessor. */
   wizards?: string[];
+
+  // ── Tier A additions (2026-07-31), all OPTIONAL. Mirrors CanonicalLodging.
+  /** Primary source URL, persisted from the research row's `sourceUrl`. */
+  url?: string;
+  /** Primary-source citations, persisted from the research row. */
+  citations?: string[];
+  lat?: number;
+  lng?: number;
+  /**
+   * Room inventory. 0 of 341 residences carry `perRoom` or any bedroom count,
+   * so room assignment is unanswerable for Offsite retreats today — the same
+   * gap CanonicalLodging has. 241 of 341 rows are 100+ capacity corporate
+   * buyouts, so this also distinguishes the handful that suit a small group.
+   */
+  bedrooms?: number;
+  beds?: number;
+  bathrooms?: number;
   [key: string]: unknown;
 }
 
