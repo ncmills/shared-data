@@ -23,7 +23,7 @@ const GOOD_GOLF: ResearchedRow = {
   walkable: true,
   driveMinutes: 30,
   highlight: "Coore & Crenshaw clifftop links over the Gulf of St. Lawrence.",
-  sites: ["tdf", "handicap"],
+  sites: ["handicap", "offsite"],
   products: ["golf-trip"],
   sourceUrl: "https://www.cabotcapebreton.com/golf/cabot-cliffs/",
   citations: ["https://www.cabotcapebreton.com/golf/cabot-cliffs/"],

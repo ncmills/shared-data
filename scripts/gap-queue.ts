@@ -15,7 +15,7 @@
  *
  * Dataset inference: `findStarvedIn` (starved-inputs.ts) already commits each
  * wizard's cell to exactly one EntityKind when it counts matching rows —
- * bestman/moh/offsite-outing count party-venue rows, handicap/tdf count
+ * bestman/moh/offsite-outing count party-venue rows, handicap counts
  * golf-course rows, offsite-retreat counts residence rows (see
  * `WIZARD_TO_STARVED_KIND` below, mirroring those branches 1:1). That kind is
  * then reverse-looked-up against `ENGINE_READS` to get `wizardsServed`.
@@ -27,7 +27,7 @@
  * not a currently-active penalty.
  *
  * DEDUP: multiple wizards can enumerate the IDENTICAL (dataset, cell) axis —
- * handicap/tdf both walk golfRegion × tier over the golf-course universe;
+ * bestman/moh both walk region × partyVibe over the party-venue universe;
  * bestman/moh both walk region × partyVibe over the party-venue universe.
  * `findStarved` (Task 11) commits each wizard's own cell independently, so
  * the same physical gap can show up as two `Starved` entries with identical
@@ -72,7 +72,7 @@ export interface GapTask {
  * wizard — mirrors the `if/else if` branches in `findStarvedIn`
  * (starved-inputs.ts) 1:1. Two wizards (bestman/moh) share `party-venue`
  * with offsite-outing's corporate-eligible subset of the same kind;
- * handicap/tdf share `golf-course`; offsite-retreat is the sole
+ * bestman also reads `golf-course`; offsite-retreat is the sole
  * `residence` reader among the starved-cell axes (it also reads golf-course
  * per ENGINE_READS, but its INPUT-SPACE cell — setting × worldRegion — is
  * counted against residences only, so that's the dataset a residence gap
@@ -101,7 +101,7 @@ const KIND_TO_DATASET: Record<EntityKind, string> = {
  * Best Man HQ, Maid of Honor HQ) are the sites actually pursuing SEO growth
  * (see `feedback_personal_sites_no_seo`) — they're listed explicitly at 1.0
  * so the seam is documented, not because the value differs from the
- * default. Everything else (including `tdf`, now a personal/no-SEO site)
+ * default. Everything else
  * also resolves to 1.0 via `DEFAULT_SEO_WEIGHT` today. Kept as a per-wizard
  * table (not a constant) so a future differentiation — e.g. down-weighting
  * non-SEO surfaces — is a one-line change here, not a refactor.
@@ -135,7 +135,7 @@ function cellKey(cell: Record<string, string>): string {
 
 /** Stable `id` for a PHYSICAL gap: dataset + sorted "key=value" cell pairs.
  *  Deliberately dataset-based, not wizard-based — multiple wizards can share
- *  the identical (dataset, cell) axis (e.g. handicap/tdf both enumerate
+ *  the identical (dataset, cell) axis (e.g. bestman/moh both enumerate
  *  golfRegion x tier over the same golf-course universe), and a physical gap
  *  must have exactly one id regardless of which wizard(s) surfaced it. */
 function idFor(dataset: string, cell: Record<string, string>): string {
@@ -158,7 +158,7 @@ interface GapGroup {
  *
  * `wizardsServed` is derived purely from the DATASET (a reverse lookup over
  * `ENGINE_READS`), but multiple wizards can enumerate the identical input
- * cell over that same dataset (e.g. handicap/tdf both walk golfRegion x tier
+ * cell over that same dataset (e.g. bestman/moh both walk region x partyVibe
  * over the golf-course universe; bestman/moh both walk region x partyVibe
  * over the party-venue universe). Left un-deduped, that's the SAME physical
  * gap counted twice at an IDENTICAL leverageScore, which would double-process

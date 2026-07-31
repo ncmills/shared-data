@@ -31,7 +31,8 @@
  * and cost real accuracy: 999 golf-course + 234 golf-destination rows were
  * routed to a consumer that does not exist, and the coverage audit enumerated a
  * 36-cell input space for a product nobody ships. ALL golf now routes to
- * `handicap`. See SiteTag below — the tdf SITE tag is a separate, still-live axis.
+ * `handicap`, and the `tdf` SITE label was migrated onto `handicap` in the data
+ * too (see SiteTag below) — no trace of the retired brand remains in routing.
  */
 export const ALL_WIZARD_TAGS = [
   "bestman",
@@ -44,17 +45,17 @@ export const ALL_WIZARD_TAGS = [
 export type WizardTag = (typeof ALL_WIZARD_TAGS)[number];
 
 /**
- * Brand domains (kept for back-compat with golf/residence `sites`).
+ * Brand domains (the `sites` axis carried on golf + residence rows).
  *
- * NOTE `"tdf"` survives HERE even though the tdf WIZARD is retired. These are
- * two different axes: `sites` is a legacy data-level label baked into the
- * 994-row regenerated `golf-courses.ts` (do-not-hand-edit) and the ingest
- * default, while `wizards` is the routing key. Rewriting 994 generated rows to
- * drop the label would be a data migration with no routing benefit — nothing
- * routes on `sites` except `siteWizards()` in backfill-tags, which now maps
- * the tdf site onto `handicap`.
+ * `"tdf"` was REMOVED 2026-07-31 along with the wizard. It had lingered here as
+ * a data-level label on 994 generated golf rows after tourdefore.com stopped
+ * consuming this package, which meant golf data was still named for a brand
+ * that no longer reads it — and `sitesToWizards` had to special-case it onto
+ * `handicap` to compensate. The rows were migrated (`sites:["tdf","offsite"]`
+ * -> `["handicap","offsite"]`, 994 golf + 5 ingest + 234 destinations) so the
+ * label now names the site that actually renders them.
  */
-export type SiteTag = "moh" | "bestman" | "tdf" | "offsite" | "handicap";
+export type SiteTag = "moh" | "bestman" | "offsite" | "handicap";
 
 export type ProductTag =
   | "bach-party"

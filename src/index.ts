@@ -20,7 +20,7 @@ export * from "./destinations-overlay";
 export * from "./golf";
 export * from "./residences";
 export * from "./residences-expansion";
-export * from "./tdf-destinations";
+export * from "./golf-destinations";
 export * from "./moh-locals";
 export * from "./bestman-locals";
 export * from "./oo-atlas";

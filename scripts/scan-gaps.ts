@@ -18,7 +18,7 @@ import {
   sharedDestinations,
   SHARED_GOLF_COURSES,
   SHARED_RESIDENCES,
-  SHARED_TDF_DESTINATIONS,
+  SHARED_GOLF_DESTINATIONS,
   mohLocals,
   bestmanLocals,
   CATEGORY_OF,
@@ -44,7 +44,7 @@ const p = (s = "") => out.push(s);
 
 p("# Universe gap scan — per-wizard coverage");
 p("");
-p(`Universe: ${sharedDestinations.length} party-dests · ${SHARED_GOLF_COURSES.length} courses · ${SHARED_RESIDENCES.length} residences · ${SHARED_TDF_DESTINATIONS.length} tdf-dests · ${mohLocals().length}+${bestmanLocals().length} locals`);
+p(`Universe: ${sharedDestinations.length} party-dests · ${SHARED_GOLF_COURSES.length} courses · ${SHARED_RESIDENCES.length} residences · ${SHARED_GOLF_DESTINATIONS.length} golf-dests · ${mohLocals().length}+${bestmanLocals().length} locals`);
 p("");
 
 // ── Party wizards (bestman / moh) — party-destinations by region ────────────
@@ -67,10 +67,10 @@ p("");
   p("");
 }
 
-// ── tdf — golf destinations by region ───────────────────────────────────────
+// ── handicap — golf destinations by region ──────────────────────────────────
 {
-  const byRegion = countBy(SHARED_TDF_DESTINATIONS, (d) => String(d.region));
-  p("## tdf — golf destinations");
+  const byRegion = countBy(SHARED_GOLF_DESTINATIONS, (d) => String(d.region));
+  p("## handicap — golf destinations");
   p("Thinnest golf regions:");
   for (const [r, n] of thinnest(byRegion)) p(`- **${r}** — ${n} dests${n < THIN_REGION ? " ⚠️ thin" : ""}`);
   const tierCount = countBy(SHARED_GOLF_COURSES, (c) => String(c.tier));

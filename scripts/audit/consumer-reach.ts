@@ -64,14 +64,14 @@ export const CONSUMER_REPOS: { repo: string; wizards: WizardTag[]; note?: string
  */
 export const PROVIDERS: Record<EntityKind, string[]> = {
   "party-venue": ["sharedDestinations", "applyMohOverlay", "applyBestmanOverlay", "applyOutpostOverlay"],
-  // `tdfDestinations` counts as a golf-course provider since 2026-07-31: a
+  // `golfDestinations` counts as a golf-course provider since 2026-07-31: a
   // catalog course carrying a `destinationId` is ATTACHED into that
-  // destination's embedded `courses[]` (see src/tdf-destinations.ts), so it
+  // destination's embedded `courses[]` (see src/golf-destinations.ts), so it
   // reaches a consumer that never imports the flat list. Handicap HQ consumes
   // golf exclusively this way — it renders courses from destinations, and the
   // flat-catalog adapter it used to hold was dead code and has been deleted.
-  "golf-course": ["SHARED_GOLF_COURSES", "ALL_GOLF_COURSES", "coursesForCity", "tdfDestinations"],
-  "golf-destination": ["tdfDestinations", "SHARED_TDF_DESTINATIONS"],
+  "golf-course": ["SHARED_GOLF_COURSES", "ALL_GOLF_COURSES", "coursesForCity", "golfDestinations"],
+  "golf-destination": ["golfDestinations", "SHARED_GOLF_DESTINATIONS"],
   residence: ["residencesForSite", "ALL_RESIDENCES", "SHARED_RESIDENCES"],
   experience: ["ooExperiences", "ooHeroExpAir", "ooPoolExpAir", "ooHeroExpWater", "ooPoolExpWater", "ooHeroExpWinter", "ooPoolExpWinter"],
   "outing-template": ["ooSignatureOutings", "ooHeroOutingsUrban", "ooPoolOutingsUrban"],

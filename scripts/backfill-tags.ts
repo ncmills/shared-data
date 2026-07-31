@@ -9,10 +9,9 @@
  * how residences get their wizard view in `residencesForSite`.
  *
  * ── Why a load-time DERIVED view, not a source edit ──────────────────────────
- * Golf (`golf-courses.ts`), residences, locals and tdf-destinations are REGEN-ONLY
+ * Golf (`golf-courses.ts`), residences, locals and golf-destinations are REGEN-ONLY
  * ("DO NOT hand-edit") and several are PINNED by `verify-universe.ts` (e.g.
- * golf-dest.wizards must equal ["handicap"] exactly; golf.sites ⊆ {tdf,offsite,handicap}
- * — the tdf SITE tag is legacy data, the tdf WIZARD is retired).
+ * golf-dest.wizards must equal ["handicap"] exactly; golf.sites ⊆ {handicap,offsite}).
  * Baking extra `wizards` INTO those rows would either require editing regen-only
  * data or break those pinned invariants. So — per the task's explicit fallback —
  * we produce a parallel EXPORTED backfilled view (`backfillUniverse()`) and never
@@ -48,7 +47,7 @@ import {
   sharedDestinations,
   SHARED_GOLF_COURSES,
   residencesForSite,
-  SHARED_TDF_DESTINATIONS,
+  SHARED_GOLF_DESTINATIONS,
   mohLocals,
   bestmanLocals,
   ooExperiences,
@@ -72,7 +71,7 @@ export type Dataset =
   | "party"
   | "golf"
   | "residence"
-  | "tdf-destination"
+  | "golf-destination"
   | "moh-local"
   | "bestman-local"
   | "oo-experience"
@@ -92,18 +91,12 @@ export interface BackfilledRow {
 }
 
 /**
- * Legacy golf `sites` → wizard vocabulary.
- *
- * The `tdf` SITE tag is still baked into the 994-row regenerated
- * `golf-courses.ts` and the ingest default, but the tdf WIZARD is retired
- * (2026-07-31) — all golf routes to Handicap HQ now. So the tdf site maps onto
- * `handicap` rather than disappearing, which keeps every legacy-tagged course
- * reaching HHQ without a 994-row data migration. `uniq` collapses the overlap
- * with an explicit `handicap` site.
+ * Golf `sites` → wizard vocabulary. A straight 1:1 map now that the retired
+ * `tdf` site label has been migrated onto `handicap` in the data itself
+ * (2026-07-31) — there is no longer a dead brand needing a special case here.
  */
 function sitesToWizards(sites: string[] = []): WizardTag[] {
   const w: WizardTag[] = [];
-  if (sites.includes("tdf")) w.push("handicap");
   if (sites.includes("offsite")) w.push("offsite-retreat", "offsite-outing");
   if (sites.includes("handicap")) w.push("handicap");
   return uniq(w);
@@ -210,12 +203,12 @@ export function backfillUniverse(): BackfilledRow[] {
     );
   }
 
-  // ── tdf destinations (golf-destination) ─────────────────────────────────────
-  for (const t of SHARED_TDF_DESTINATIONS) {
+  // ── golf destinations (golf-destination) ────────────────────────────────────
+  for (const t of SHARED_GOLF_DESTINATIONS) {
     const r = deriveRouting({ kind: "golf-destination" });
     push(
       t.id,
-      "tdf-destination",
+      "golf-destination",
       "golf-destination",
       (t.wizards ?? []) as WizardTag[],
       r.core,
@@ -349,7 +342,7 @@ function writeDocs(rows: BackfilledRow[]) {
   lines.push("- **party** items were already baked with party-venue core at module load (`destinations-bake.ts`); the backfill union is a no-op for them (superset holds trivially).");
   lines.push("- **golf** rows gain `handicap` (HHQ reads courses) AND `bestman` (Best Man HQ reads courses live via `coursesForCity` — golf is intended on BestMan HQ) on top of the `sites`→wizard mapping; golf never routes to `moh` (brand guard).");
   lines.push("- **residences** with products `[retreat]` gain `offsite-outing` (OO outing reads residences live, Task 6).");
-  lines.push("- **tdf-destinations** gain `handicap` (golf-destination core).");
+  lines.push("- **golf-destinations** gain `handicap` (golf-destination core).");
   lines.push("- **locals** are brand-scoped; no engine reads another brand's locals, so they carry no cross-tag and stay single-brand.");
   lines.push("- Baked view is DERIVED at load time; source data rows (regen-only + `verify`-pinned) are never mutated.");
   lines.push("");

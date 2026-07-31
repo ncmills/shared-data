@@ -15,7 +15,7 @@ import {
   sharedDestinations,
   SHARED_GOLF_COURSES,
   SHARED_RESIDENCES,
-  SHARED_TDF_DESTINATIONS,
+  SHARED_GOLF_DESTINATIONS,
   ALL_WIZARD_TAGS,
 } from "../src/index";
 

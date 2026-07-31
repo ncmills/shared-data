@@ -108,7 +108,7 @@ test("ACCEPTS a valid golf row; it appears in ALL_GOLF_COURSES tagged handicap+b
 test("REJECTS + ROLLS BACK a golf row hand-forced to a brand-breaking site tag (verify-universe gate)", () => {
   const before = readFileSync(DEFAULT_GOLF_EXPANSION_PATH, "utf-8");
   try {
-    // "moh" is not a valid golf `sites` value (only tdf/offsite/handicap) —
+    // "moh" is not a valid golf `sites` value (only handicap/offsite) —
     // simulates a hand-forced tag that would let golf leak toward a brand it
     // must never reach. Cast bypasses the SharedGolfCourse["sites"] union at
     // the type level to model an untrusted payload reaching the converter.
@@ -173,7 +173,7 @@ test("dedup: a golf row matching an EXISTING row already in the injected expansi
     walkable: true,
     driveMinutes: 15,
     highlight: "Already in the expansion file.",
-    sites: ["tdf", "offsite", "handicap"],
+    sites: ["handicap", "offsite"],
     products: ["golf-trip"],
   };
   const initialContent =

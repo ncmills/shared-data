@@ -60,7 +60,7 @@ const ALL_DATASETS: Dataset[] = [
   "party",
   "golf",
   "residence",
-  "tdf-destination",
+  "golf-destination",
   "moh-local",
   "bestman-local",
   "oo-experience",

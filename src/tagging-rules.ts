@@ -134,9 +134,8 @@ export function deriveRouting(input: RoutingInput): Routing {
 
     case "golf-course": {
       // Golf is a bachelor + corporate thing. Engines that read courses today:
-      // tdf, offsite-retreat, offsite-outing, handicap (HHQ — the golf wizard;
-      // tdf itself is now a personal site with no wizard, kept here for
-      // back-compat / superset only — never subtracted), AND bestman (Best Man
+      // handicap (Handicap HQ — the golf wizard), offsite-retreat and
+      // offsite-outing, AND bestman (Best Man
       // HQ's plan engine reads courses LIVE via `coursesForCity` in
       // plan-my-party/src/data/query.ts — the same reader Offsite Outpost uses).
       // Golf IS intended on Best Man HQ (Nick, 2026-07-05), so `bestman` is
