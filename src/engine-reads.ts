@@ -40,8 +40,9 @@
  *     — without it, the Task 10 self-consistency cross-check (core routing
  *     vs. ENGINE_READS) fails non-trivially, because `deriveRouting`'s core
  *     for `golf-course` already includes both offsite wizards.
- *   - handicap (handicap-hq) / tdf (legacy/back-compat) → golf-course,
- *     golf-destination.
+ *   - handicap (handicap-hq) → golf-course, golf-destination. The sole golf
+ *     wizard since `tdf` was retired 2026-07-31 (tourdefore.com became a
+ *     personal site + pro shop and consumes nothing from this package).
  */
 
 import type { WizardTag } from "./tags";

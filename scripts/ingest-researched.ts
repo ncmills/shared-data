@@ -59,7 +59,7 @@ import { deriveRouting } from "../src/tagging-rules";
 import { SHARED_GOLF_COURSES } from "../src/golf-courses";
 import type { SharedGolfCourse } from "../src/golf-courses";
 import { SHARED_RESIDENCES } from "../src/residences";
-import { SHARED_TDF_DESTINATIONS } from "../src/tdf-destinations";
+import { SHARED_GOLF_DESTINATIONS } from "../src/golf-destinations";
 import type { SharedResidence } from "../src/residences";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -231,10 +231,10 @@ type ConvertResult<T> = { ok: true; row: T } | { ok: false; reason: string };
  * `bestman`/`handicap`/etc. reach is derived fresh at load time by
  * `deriveRouting`, constant for every golf-course regardless of `sites`). When
  * the row supplies its own `sites`, it is respected here and left for
- * `verify-universe.ts`'s enum guard (`sites ⊆ {tdf,offsite,handicap}`) to
+ * `verify-universe.ts`'s enum guard (`sites ⊆ {handicap,offsite}`) to
  * catch if wrong — the LAST-resort backstop this module's own gate step
  * relies on. When absent, defaults to the full core-derived legacy mapping
- * (tdf/offsite/handicap), which is what every golf course core-routes to
+ * (handicap/offsite), which is what every golf course core-routes to
  * regardless of content.
  */
 function toGolfCourse(row: ResearchedGolfRow): ConvertResult<SharedGolfCourse> {
@@ -267,7 +267,7 @@ function toGolfCourse(row: ResearchedGolfRow): ConvertResult<SharedGolfCourse> {
   const sites: SharedGolfCourse["sites"] =
     Array.isArray(row.sites) && row.sites.length > 0
       ? (row.sites as SharedGolfCourse["sites"])
-      : (["tdf", "offsite", "handicap"] as SharedGolfCourse["sites"]);
+      : (["handicap", "offsite"] as SharedGolfCourse["sites"]);
   const products: SharedGolfCourse["products"] =
     Array.isArray(row.products) && row.products.length > 0
       ? (row.products as SharedGolfCourse["products"])
@@ -280,12 +280,12 @@ function toGolfCourse(row: ResearchedGolfRow): ConvertResult<SharedGolfCourse> {
   // validated here so a typo'd anchor fails LOUDLY at ingest rather than
   // silently attaching to nothing.
   const destinationId = typeof row.destinationId === "string" ? row.destinationId.trim() : undefined;
-  if (destinationId && !SHARED_TDF_DESTINATIONS.some((d) => d.id === destinationId)) {
+  if (destinationId && !SHARED_GOLF_DESTINATIONS.some((d) => d.id === destinationId)) {
     return {
       ok: false,
       reason:
         `golf row "${row.name}" names destinationId "${destinationId}", which is not a real golf-trip destination. ` +
-        `Use an id from SHARED_TDF_DESTINATIONS, or omit it to keep the course catalog-only.`,
+        `Use an id from SHARED_GOLF_DESTINATIONS, or omit it to keep the course catalog-only.`,
     };
   }
 

@@ -18,11 +18,11 @@
  *     vibe is the destination-level `PartyVibe` enum. Both wizards' ENGINE_READS
  *     also include `golf-course` (bestman reads courses live via
  *     `coursesForCity`), but golf is a brand-agnostic pool with no bestman-only
- *     subset — the handicap/tdf golf cells below already surface golf-region
+ *     subset — the handicap golf cells below already surface golf-region
  *     thinness, so it isn't duplicated here as a bestman-specific axis.
- *   - handicap / tdf       — golfRegion × tier over `SHARED_GOLF_COURSES`
- *     (+ the HHQ merge overlay). `tdf` mirrors `handicap`'s ENGINE_READS
- *     exactly (see engine-reads.ts: "tdf... kept here for back-compat /
+ *   - handicap             — golfRegion × tier over `SHARED_GOLF_COURSES`
+ *     (+ the HHQ merge overlay). The sole golf wizard since `tdf` was
+ *     retired 2026-07-31 (see engine-reads.ts). (was: "kept for back-compat /
  *     superset only"), so it gets the same axes rather than an invented one.
  *   - offsite-retreat      — setting × worldRegion over `SHARED_RESIDENCES`.
  *     `setting` is the real enum already on every residence. Residences carry
@@ -55,7 +55,7 @@ export interface InputAxis {
 export const PARTY_REGIONS = ["south", "west", "northeast", "midwest", "international"] as const;
 export const PARTY_VIBES = ["chill", "balanced", "unhinged"] as const;
 
-// ── handicap / tdf — golf courses ───────────────────────────────────────────
+// ── handicap — golf courses ───────────────────────────────────────────
 // Real `region` values present in SHARED_GOLF_COURSES (+ the HHQ merge).
 export const GOLF_REGIONS = [
   "California",
@@ -199,7 +199,7 @@ export const OUTING_AUDIENCES = ["corporate", "clients"] as const;
 
 /**
  * Per-wizard bounded input space. Every wizard gets exactly two axes so the
- * cross product stays small: bestman/moh 5×3=15, handicap/tdf 9×4=36,
+ * cross product stays small: bestman/moh 5×3=15, handicap 9×4=36,
  * offsite-retreat 15×7=105, offsite-outing 5×2=10. ~200 cells total across
  * six wizards — enumerable in milliseconds, no combinatorial blow-up.
  */

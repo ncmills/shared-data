@@ -34,7 +34,7 @@ function validCandidate(name: string, url: string) {
     walkable: true,
     driveMinutes: 30,
     highlight: "A real clifftop links course.",
-    sites: ["tdf", "handicap"],
+    sites: ["handicap", "offsite"],
     products: ["golf-trip"],
     sourceUrl: url,
     citations: [url],

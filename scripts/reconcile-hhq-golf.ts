@@ -6,7 +6,7 @@
  *
  * HHQ's golf data has two surfaces:
  *   1. Destination courses — HHQ renders `allDestinations`, which is sourced
- *      from shared-data's `tdfDestinations()` (SHARED_TDF_DESTINATIONS). Each
+ *      from shared-data's `golfDestinations()` (SHARED_GOLF_DESTINATIONS). Each
  *      destination embeds a `courses[]` array. Those are the concrete courses
  *      the plan engine surfaces.
  *   2. The Golf Atlas overlay — GOLF_ATLAS[].marqueeCourses are course NAMES
@@ -16,13 +16,13 @@
  * Report:
  *   (a) HHQ destination courses (name+city) ABSENT from SHARED_GOLF_COURSES.
  *   (b) Atlas marquee names ABSENT from SHARED_GOLF_COURSES (by name).
- *   (c) Field mismatches for matched courses (shared vs tdf-dest embed).
+ *   (c) Field mismatches for matched courses (shared vs golf-dest embed).
  *
  * (a) is the HHQ-only set to absorb into golf-courses-hhq-merge.ts (real,
  * deduped, tagged "handicap"). Run: npx tsx scripts/reconcile-hhq-golf.ts
  */
 import { SHARED_GOLF_COURSES, type SharedGolfCourse } from "../src/golf-courses";
-import { SHARED_TDF_DESTINATIONS } from "../src/tdf-destinations";
+import { SHARED_GOLF_DESTINATIONS } from "../src/golf-destinations";
 
 // HHQ's editorial overlay lives in a DIFFERENT REPO. This used to be a static
 // `import ... from "/Users/bignick/handicap-hq/src/data/golf-atlas"` — an
@@ -68,7 +68,7 @@ for (const c of SHARED_GOLF_COURSES) {
   sharedByName.set(norm(c.name), c);
 }
 
-// ── HHQ destination courses (from the shared tdf destinations HHQ renders) ──
+// ── HHQ destination courses (from the shared golf destinations HHQ renders) ─
 interface HhqCourseRow {
   name: string;
   city: string;
@@ -77,7 +77,7 @@ interface HhqCourseRow {
   course: Record<string, unknown>;
 }
 const hhqCourses: HhqCourseRow[] = [];
-for (const d of SHARED_TDF_DESTINATIONS as unknown as Array<Record<string, any>>) {
+for (const d of SHARED_GOLF_DESTINATIONS as unknown as Array<Record<string, any>>) {
   for (const c of (d.courses ?? []) as Array<Record<string, unknown>>) {
     hhqCourses.push({
       name: String(c.name),
@@ -149,7 +149,7 @@ for (const h of hhqCourses) {
 // ── report ──
 console.log("=== reconcile-hhq-golf ===");
 console.log(`shared golf courses:        ${SHARED_GOLF_COURSES.length}`);
-console.log(`HHQ destination courses:    ${hhqCourses.length} (across ${SHARED_TDF_DESTINATIONS.length} destinations)`);
+console.log(`HHQ destination courses:    ${hhqCourses.length} (across ${SHARED_GOLF_DESTINATIONS.length} destinations)`);
 console.log(`atlas marquee names:        ${marqueeNames.size}`);
 console.log("");
 console.log(`(a) HHQ-only courses (name+city not in shared): ${missingByKey.length}`);

@@ -4,7 +4,7 @@
 // pages (`/golf-trips/[slug]/courses/[course]`) from each destination's
 // embedded `courses[]`, so a course that exists only in `SHARED_GOLF_COURSES`
 // has no page — 38 of 999 were in exactly that state, including 4 of the 5
-// sanctioned-ingest rows. `destinationId` + `tdfDestinations()` attaches them
+// sanctioned-ingest rows. `destinationId` + `golfDestinations()` attaches them
 // to a real trip so they inherit the surface that already exists.
 //
 // These tests guard the property the golf bug family keeps violating: the data
@@ -13,21 +13,21 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 import {
-  tdfDestinations,
-  SHARED_TDF_DESTINATIONS,
+  golfDestinations,
+  SHARED_GOLF_DESTINATIONS,
   SHARED_GOLF_COURSES_HHQ_MERGE,
 } from "./index";
 
 const embeddedNames = (): Set<string> => {
   const out = new Set<string>();
-  for (const dest of tdfDestinations()) {
+  for (const dest of golfDestinations()) {
     for (const c of ((dest.courses ?? []) as { name: string }[])) out.add(c.name.trim().toLowerCase());
   }
   return out;
 };
 
 test("every sanctioned-ingest course with a destinationId actually RENDERS on that destination", () => {
-  const dests = new Map(tdfDestinations().map((d) => [d.id, d]));
+  const dests = new Map(golfDestinations().map((d) => [d.id, d]));
   for (const course of SHARED_GOLF_COURSES_HHQ_MERGE) {
     if (!course.destinationId) continue;
     const dest = dests.get(course.destinationId);
@@ -41,7 +41,7 @@ test("every sanctioned-ingest course with a destinationId actually RENDERS on th
 });
 
 test("attaching never duplicates a course the destination already embedded", () => {
-  for (const dest of tdfDestinations()) {
+  for (const dest of golfDestinations()) {
     const names = ((dest.courses ?? []) as { name: string }[]).map((c) => c.name.trim().toLowerCase());
     assert.equal(
       new Set(names).size,
@@ -61,14 +61,14 @@ test("attach NEVER fabricates holes/par/yardage to fill the embedded shape", () 
   // one win. Asserting on that row would be testing the curated data, not the
   // attach.
   const preEmbedded = new Set<string>();
-  for (const dest of SHARED_TDF_DESTINATIONS) {
+  for (const dest of SHARED_GOLF_DESTINATIONS) {
     for (const c of ((dest.courses ?? []) as { name: string }[])) preEmbedded.add(c.name.trim().toLowerCase());
   }
   const anchored = SHARED_GOLF_COURSES_HHQ_MERGE.filter(
     (c) => c.destinationId && !preEmbedded.has(c.name.trim().toLowerCase()),
   );
   assert.ok(anchored.length > 0, "expected at least one NEWLY attached researched course");
-  const dests = new Map(tdfDestinations().map((d) => [d.id, d]));
+  const dests = new Map(golfDestinations().map((d) => [d.id, d]));
 
   for (const course of anchored) {
     const dest = dests.get(course.destinationId!)!;
@@ -100,9 +100,9 @@ test("a course with NO destinationId stays catalog-only rather than being guesse
   }
 });
 
-test("tdfDestinations() is otherwise identical to the source (attach only ADDS courses)", () => {
-  const before = SHARED_TDF_DESTINATIONS;
-  const after = tdfDestinations();
+test("golfDestinations() is otherwise identical to the source (attach only ADDS courses)", () => {
+  const before = SHARED_GOLF_DESTINATIONS;
+  const after = golfDestinations();
   assert.equal(after.length, before.length, "attach must not add or drop destinations");
   for (let i = 0; i < before.length; i++) {
     assert.equal(after[i]!.id, before[i]!.id, "destination order must be stable");

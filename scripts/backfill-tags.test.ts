@@ -14,7 +14,7 @@ const isSuperset = <T>(post: T[], pre: T[]) => pre.every((x) => post.includes(x)
 
 test("universe is non-trivial (every dataset represented)", () => {
   const datasets = new Set(rows.map((r) => r.dataset));
-  for (const d of ["party", "golf", "residence", "tdf-destination", "moh-local", "bestman-local"] as const) {
+  for (const d of ["party", "golf", "residence", "golf-destination", "moh-local", "bestman-local"] as const) {
     assert.ok(datasets.has(d), `missing dataset ${d}`);
   }
   assert.ok(rows.length > 7000, `expected a large universe, got ${rows.length}`);
@@ -56,7 +56,7 @@ test("REACH: EVERY golf-destination row routes to handicap", () => {
   //
   // The durable property is REACH, not the delta — every golf destination must
   // end up routed to Handicap HQ, which is the only site that renders them.
-  const golfDests = rows.filter((r) => r.dataset === "tdf-destination");
+  const golfDests = rows.filter((r) => r.dataset === "golf-destination");
   assert.ok(golfDests.length > 0, "expected golf-destination rows in the backfilled universe");
   const unreached = golfDests.filter((r) => !r.postWizards.includes("handicap"));
   assert.deepEqual(

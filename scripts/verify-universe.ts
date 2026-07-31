@@ -6,7 +6,7 @@
  *   2. tag-vocabulary    — wizards/audiences are drawn only from the known vocab
  *   3. denylist integrity — corporate-eligible (offsite-outing) iff audiences⊇corporate
  *   4. forbidden-leak    — the Offsite overlay emits ZERO non-corporate items
- *   5. per-entity routing — golf→sites⊆{tdf,offsite}; residences→offsite;
+ *   5. per-entity routing — golf→sites⊆{handicap,offsite}; residences→offsite;
  *                           golf-dests→[handicap]; moh/bestman locals→their wizard
  *
  * Run: npx tsx scripts/verify-universe.ts  (exits non-zero on any violation).
@@ -21,7 +21,7 @@ import {
   SHARED_GOLF_COURSES,
   ALL_GOLF_COURSES,
   ALL_RESIDENCES,
-  SHARED_TDF_DESTINATIONS,
+  SHARED_GOLF_DESTINATIONS,
   residencesForSite,
   mohLocals,
   bestmanLocals,
@@ -103,7 +103,7 @@ for (const d of sharedDestinations) {
 // 5: per-entity routing
 for (const c of ALL_GOLF_COURSES) {
   if (!c.sites?.length) fail(`golf ${c.name}: empty sites`);
-  for (const s of c.sites ?? []) if (s !== "tdf" && s !== "offsite" && s !== "handicap") fail(`golf ${c.name}: bad site "${s}"`);
+  for (const s of c.sites ?? []) if (s !== "offsite" && s !== "handicap") fail(`golf ${c.name}: bad site "${s}"`);
 }
 // ALL_RESIDENCES = SHARED_RESIDENCES (regen-only) + the Task 15 sanctioned
 // expansion file, so ingested rows get the same "non-empty sites" guard.
@@ -116,7 +116,7 @@ for (const r of residencesForSite("offsite")) {
   for (const w of r.wizards ?? [])
     if (w !== "offsite-retreat" && w !== "offsite-outing") fail(`residence ${r.id}: bad wizard "${w}"`);
 }
-for (const t of SHARED_TDF_DESTINATIONS) {
+for (const t of SHARED_GOLF_DESTINATIONS) {
   if (JSON.stringify(t.wizards) !== JSON.stringify(["handicap"]))
     fail(`golf-dest ${t.id}: wizards != [handicap] (got ${JSON.stringify(t.wizards)})`);
 }
@@ -171,7 +171,7 @@ console.log(`  oo-atlas: ${allOoExp.length} experiences · ${allOoOut.length} ou
 console.log(
   `universe: ${sharedDestinations.length} party-dests (${itemCount} items) · ` +
     `${SHARED_GOLF_COURSES.length} courses · ${ALL_RESIDENCES.length} residences · ` +
-    `${SHARED_TDF_DESTINATIONS.length} tdf-dests · ${mohLocals().length} moh-locals · ` +
+    `${SHARED_GOLF_DESTINATIONS.length} golf-dests · ${mohLocals().length} moh-locals · ` +
     `${bestmanLocals().length} bestman-locals · OO-overlay items checked: ${ooItems}`,
 );
 if (failures) {
