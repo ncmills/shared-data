@@ -39,6 +39,7 @@ import { expansionNortheast } from "./destinations-expansion-northeast";
 import { expansionMidwest } from "./destinations-expansion-midwest";
 import { expansionWest } from "./destinations-expansion-west";
 import { attachPartyVenues } from "./party-venues-attach";
+import { applyPartyVenuePatches } from "./party-venue-patch-apply";
 
 // Every canonical item is baked with universe tags (wizards/audiences/products/
 // priceTier) at module load, so the overlays are pure filters over the tags and
@@ -51,14 +52,25 @@ import { attachPartyVenues } from "./party-venues-attach";
 // whole point: an ingested row is then tagged by the identical code path as a
 // curated one, so no overlay, consumer or audit needs a special case. It throws
 // on an anchor that resolves to nothing rather than dropping the row.
-export const sharedDestinations: CanonicalDestination[] = attachPartyVenues([
-  ...coreDestinations,
-  ...expansionSouth,
-  ...expansionInternational,
-  ...expansionNortheast,
-  ...expansionMidwest,
-  ...expansionWest,
-]).map(bakeDestination);
+// `applyPartyVenuePatches` then ENRICHES existing rows from the flat
+// `party-venue-patches.ts` — coordinates, URLs, regraded `groupMin`, occupancy.
+// The append path above deliberately lets a curated row win a name collision,
+// so it can never enrich one; that is what this second pass is for.
+//
+// The order attach → patch → bake is load-bearing in both joints. Patching
+// after attach lets a venue added this month be enriched next month. Patching
+// before the bake feeds derived tags: a repriced row must not keep a
+// `priceTier` computed from its stale price.
+export const sharedDestinations: CanonicalDestination[] = applyPartyVenuePatches(
+  attachPartyVenues([
+    ...coreDestinations,
+    ...expansionSouth,
+    ...expansionInternational,
+    ...expansionNortheast,
+    ...expansionMidwest,
+    ...expansionWest,
+  ]),
+).map(bakeDestination);
 
 // Golf is the single golf-cite source (Task 3). The regenerated 994-row
 // `golf-courses.ts` (do-not-hand-edit) plus the `golf-courses-hhq-merge.ts`
