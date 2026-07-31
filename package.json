@@ -7,6 +7,7 @@
   "main": "src/index.ts",
   "scripts": {
     "audit": "tsx scripts/audit/index.ts",
+    "reach": "tsx scripts/audit/consumer-reach.ts",
     "test": "tsx --test $(find scripts src -name '*.test.ts')",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "verify": "npm run typecheck && tsx scripts/verify-universe.ts && tsx scripts/check-brand-rules.ts && tsx scripts/audit/index.ts"

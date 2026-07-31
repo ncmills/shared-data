@@ -50,7 +50,14 @@ import type { EntityKind } from "./tagging-rules";
 export const ENGINE_READS: Record<WizardTag, EntityKind[]> = {
   bestman: ["party-venue", "golf-course"],
   moh: ["party-venue"],
-  "offsite-retreat": ["residence", "experience", "outing-template", "party-venue", "golf-course"],
+  // NOT "outing-template": the retreat builder (offsite-outpost
+  // `buildRetreatPlan`) reads residences + experiences + golf, never outing
+  // templates — and `verify-universe` hard-asserts every outing row is tagged
+  // `["offsite-outing"]` exactly, so no outing-template row can ever carry
+  // `offsite-retreat`. `deriveRouting({kind:"outing-template"})` agrees: core
+  // is `offsite-outing` alone. Declaring the read here made this map claim a
+  // consumption that zero rows could ever satisfy (caught 2026-07-31).
+  "offsite-retreat": ["residence", "experience", "party-venue", "golf-course"],
   "offsite-outing": ["residence", "experience", "outing-template", "party-venue", "golf-course"],
   handicap: ["golf-course", "golf-destination"],
   tdf: ["golf-course", "golf-destination"],

@@ -143,7 +143,12 @@ export function applyOutpostOverlay(c: CanonicalDestination): unknown {
   const nightlife = c.nightlife
     .filter(keepAud)
     .map((n) => omitTags(n, ["audiences"]));
-  const dining = c.dining.map((d) => omitTags(d, ["audiences"]));
+  // Filtered like activities/nightlife. It previously passed EVERY dining item
+  // through unfiltered and happened to be correct only because all 1319 dining
+  // items are corporate-tagged today — i.e. the overlay's corporate guarantee
+  // rested on the data, with `verify-universe`'s leak check as the only net.
+  // Behavior-identical as of 2026-07-31 (0 non-corporate dining items).
+  const dining = c.dining.filter(keepAud).map((d) => omitTags(d, ["audiences"]));
   return {
     id: c.id,
     city: c.city,
