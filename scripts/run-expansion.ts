@@ -51,6 +51,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import type { GapTask } from "./gap-queue";
+import type { ResearchGapResult } from "./research-gap";
 import { researchGap, type Researcher } from "./research-gap";
 import { claudeResearcher } from "./researcher-claude";
 import { ingestResearched, type IngestResult } from "./ingest-researched";
@@ -72,9 +73,27 @@ export interface DatasetBreakdown {
   citations: string[];
 }
 
-/** A GapTask that lost one or more researched rows to the row cap. */
-export interface DroppedTask {
-  task: GapTask;
+/**
+ * The minimum a task must expose for this orchestrator to run it.
+ *
+ * Introduced 2026-07-31 so the SAME orchestration (top-K, rowCap with explicit
+ * drop reporting, ingest through the real gate, propose-PR) drives both lanes:
+ * `GapTask` (insert new venues into a starved cell) and `BackfillTask` (enrich
+ * existing rows with a real source). Only two things differ between them —
+ * where the tasks come from and which prompt researches them — and both are
+ * injectable below. Defaulting `T` to `GapTask` keeps every existing caller and
+ * test unchanged.
+ */
+export interface ExpansionTask {
+  id: string;
+  leverageScore: number;
+  /** Insert-lane only: how many rows short the cell is. */
+  deficit?: number;
+}
+
+/** A task that lost one or more researched rows to the row cap. */
+export interface DroppedTask<T extends ExpansionTask = GapTask> {
+  task: T;
   reason: string;
 }
 
@@ -94,13 +113,13 @@ export interface DroppedIngestRow {
   reason: string;
 }
 
-export interface RunResult {
+export interface RunResult<T extends ExpansionTask = GapTask> {
   label: string;
   dryRun: boolean;
   /** The top-K GapTasks this run considered (in gap-queue priority order). */
-  tasksConsidered: GapTask[];
+  tasksConsidered: T[];
   /** GapTasks that actually contributed ≥1 ingested row. */
-  tasksAddressed: GapTask[];
+  tasksAddressed: T[];
   /** Validated rows the researcher produced across all considered tasks. */
   researchedRows: ResearchedRow[];
   /** Rows actually submitted to ingest, after the row cap. */
@@ -108,7 +127,7 @@ export interface RunResult {
   /** Per-dataset rows-added + citations (from the threaded rows). */
   breakdown: DatasetBreakdown[];
   /** GapTasks dropped/trimmed by the row cap, with an explicit reason each. */
-  droppedByCap: DroppedTask[];
+  droppedByCap: DroppedTask<T>[];
   /** Rows that passed research validation + the row cap but were shape-
    *  rejected inside `ingestResearched` (never landed) — always `[]` on a
    *  dry run or when ingest wasn't reached. See `DroppedIngestRow`. */
@@ -125,7 +144,7 @@ export interface RunResult {
 
 // ─── options ────────────────────────────────────────────────────────────────
 
-export interface RunExpansionOptions {
+export interface RunExpansionOptions<T extends ExpansionTask = GapTask> {
   /** How many top gap-queue tasks to attempt this run. */
   topK: number;
   /** Hard ceiling on rows ingested this run (no silent truncation past it). */
@@ -159,7 +178,17 @@ export interface RunExpansionOptions {
   // ── injection seams (default to the real impls / real gap-queue.json) ─────
   /** Override the gap queue directly (tests). Defaults to reading
    *  `docs/gap-queue.json`. */
-  gapQueue?: GapTask[];
+  gapQueue?: T[];
+  /** Task list for a non-gap lane (e.g. the URL backfill). Takes precedence
+   *  over `gapQueue` and the gap-queue file. */
+  tasks?: T[];
+  /** Override how ONE task is researched. Defaults to `researchGap` — the
+   *  insert lane. The backfill lane injects `researchBackfill`. */
+  research?: (task: T) => Promise<ResearchGapResult>;
+  /** What to call a task in the log. Defaults to `"gap"`; the enrich lane
+   *  passes `"backfill"` so a run's output does not claim to be filling gaps
+   *  when it is sourcing existing rows. */
+  taskNoun?: string;
   /** Override the gap-queue file path (defaults to docs/gap-queue.json). */
   gapQueuePath?: string;
   /** Injected ingest gate (tests inject a spy). Defaults to `ingestResearched`. */
@@ -172,12 +201,13 @@ export interface RunExpansionOptions {
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
-function loadGapQueue(opts: RunExpansionOptions): GapTask[] {
+function loadGapQueue<T extends ExpansionTask>(opts: RunExpansionOptions<T>): T[] {
+  if (opts.tasks) return opts.tasks;
   if (opts.gapQueue) return opts.gapQueue;
   const path = opts.gapQueuePath ?? DEFAULT_GAP_QUEUE_PATH;
   const parsed = JSON.parse(readFileSync(path, "utf-8"));
   if (!Array.isArray(parsed)) throw new Error(`run-expansion: gap queue at ${path} is not an array`);
-  return parsed as GapTask[];
+  return parsed as T[];
 }
 
 /** Group the threaded rows by dataset, counting rows + collecting (deduped)
@@ -199,7 +229,9 @@ function breakdownFor(rows: ResearchedRow[]): DatasetBreakdown[] {
 
 // ─── the orchestrator ───────────────────────────────────────────────────────
 
-export async function runExpansion(opts: RunExpansionOptions): Promise<RunResult> {
+export async function runExpansion<T extends ExpansionTask = GapTask>(
+  opts: RunExpansionOptions<T>,
+): Promise<RunResult<T>> {
   const log = opts.log ?? ((m: string) => console.log(m));
   const logs: string[] = [];
   const say = (m: string) => {
@@ -219,17 +251,19 @@ export async function runExpansion(opts: RunExpansionOptions): Promise<RunResult
   );
 
   // ── Step 1: research each considered task (validated survivors only) ──────
-  const perTask: { task: GapTask; rows: ResearchedRow[] }[] = [];
+  const perTask: { task: T; rows: ResearchedRow[] }[] = [];
   let rejectedCandidates = 0;
   for (const task of tasksConsidered) {
-    const res = await researchGap(task, opts.researcher, {
-      liveUrlCheck: opts.liveUrlCheck,
-      verifyUrl: opts.verifyUrl,
-    });
+    const res = opts.research
+      ? await opts.research(task)
+      : await researchGap(task as unknown as GapTask, opts.researcher, {
+          liveUrlCheck: opts.liveUrlCheck,
+          verifyUrl: opts.verifyUrl,
+        });
     rejectedCandidates += res.rejected;
     say(
-      `  gap ${task.id}: ${res.rows.length} valid row(s), ${res.rejected} rejected ` +
-        `(deficit=${task.deficit}, leverage=${task.leverageScore})`,
+      `  ${opts.taskNoun ?? "gap"} ${task.id}: ${res.rows.length} valid row(s), ${res.rejected} rejected ` +
+        `(${task.deficit === undefined ? "" : `deficit=${task.deficit}, `}leverage=${task.leverageScore})`,
     );
     perTask.push({ task, rows: res.rows });
   }
@@ -237,8 +271,8 @@ export async function runExpansion(opts: RunExpansionOptions): Promise<RunResult
 
   // ── Step 2: enforce rowCap in gap-priority order — NO SILENT TRUNCATION ───
   const ingestedRows: ResearchedRow[] = [];
-  const droppedByCap: DroppedTask[] = [];
-  const tasksAddressed: GapTask[] = [];
+  const droppedByCap: DroppedTask<T>[] = [];
+  const tasksAddressed: T[] = [];
   for (const { task, rows } of perTask) {
     const remaining = opts.rowCap - ingestedRows.length;
     if (rows.length === 0) continue;

@@ -39,6 +39,28 @@ import { fileURLToPath } from "node:url";
 
 import type { GapTask } from "./gap-queue";
 
+/**
+ * What the PR body needs from a task. Deliberately wider than `GapTask`: the
+ * same propose-PR path now serves BOTH lanes — the insert lane (`GapTask`, a
+ * starved cell) and the URL-backfill lane (`BackfillTask`, existing rows to
+ * source). Every lane-specific field is optional and rendered only when
+ * present, so a GapTask body is byte-identical to before.
+ */
+export interface PrTask {
+  id: string;
+  leverageScore: number;
+  // insert lane
+  dataset?: string;
+  cell?: Record<string, string>;
+  deficit?: number;
+  wizardsServed?: string[];
+  starvedForWizards?: string[];
+  // backfill lane
+  destinationId?: string;
+  category?: string;
+  venues?: string[];
+}
+
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(HERE, "..");
 
@@ -139,7 +161,7 @@ export function diffCoverageMatrix(beforeMd: string, afterMd: string): CoverageC
 
 export interface PrBodyInput {
   /** GapTasks (Task 13) this batch addressed. */
-  gapTasks: GapTask[];
+  gapTasks: PrTask[];
   /** Rows accepted this batch, per dataset (e.g. { golf: 3, residence: 1 }). */
   rowCountsByDataset: Record<string, number>;
   /** Citation / primary-source URLs backing the added rows. */
@@ -180,10 +202,22 @@ export function buildPrBody(input: PrBodyInput): string {
     lines.push("_No GapTasks recorded for this batch._");
   } else {
     for (const t of gapTasks) {
+      if (t.venues) {
+        // Backfill lane: name the venues that got a source, so a reviewer can
+        // spot-check any claim against the row it now cites.
+        lines.push(
+          `- \`${t.id}\` — ${t.venues.length} venue(s) sourced in ${t.destinationId}/${t.category}, ` +
+            `leverageScore=${t.leverageScore.toFixed(1)}` +
+            (t.wizardsServed && t.wizardsServed.length > 0
+              ? `, servedBy=[${t.wizardsServed.join(", ")}]`
+              : ""),
+        );
+        continue;
+      }
       lines.push(
         `- \`${t.id}\` — dataset=${t.dataset}, cell=${JSON.stringify(t.cell)}, deficit=${t.deficit}, ` +
-          `leverageScore=${t.leverageScore.toFixed(1)}, servedBy=[${t.wizardsServed.join(", ")}]` +
-          (t.starvedForWizards.length > 0 ? `, starvedFor=[${t.starvedForWizards.join(", ")}]` : ""),
+          `leverageScore=${t.leverageScore.toFixed(1)}, servedBy=[${(t.wizardsServed ?? []).join(", ")}]` +
+          ((t.starvedForWizards ?? []).length > 0 ? `, starvedFor=[${(t.starvedForWizards ?? []).join(", ")}]` : ""),
       );
     }
   }
@@ -266,7 +300,7 @@ export interface ProposePrOptions {
    *  is given directly). Defaults to the first key of `rowCountsByDataset`. */
   dataset?: string;
   /** GapTasks (Task 13) this batch addressed. */
-  gapTasks?: GapTask[];
+  gapTasks?: PrTask[];
   /** Rows accepted this batch, per dataset. */
   rowCountsByDataset?: Record<string, number>;
   /** Citation / primary-source URLs backing the added rows. */

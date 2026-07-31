@@ -20,6 +20,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { withRealGateLock } from "./real-gate-lock";
 import { ingestResearched, DEFAULT_GOLF_EXPANSION_PATH } from "./ingest-researched";
 import type { ResearchedRow } from "../src/research-schema";
 
@@ -82,7 +83,7 @@ function golfRowPostWizards(name: string, city: string, state: string): string[]
   }
 }
 
-test("ACCEPTS a valid golf row; it appears in ALL_GOLF_COURSES tagged handicap+bestman via backfillUniverse", () => {
+test("ACCEPTS a valid golf row; it appears in ALL_GOLF_COURSES tagged handicap+bestman via backfillUniverse", async () => await withRealGateLock(() => {
   const before = readFileSync(DEFAULT_GOLF_EXPANSION_PATH, "utf-8");
   const name = `Ingest Test Happy Path Course ${Date.now()}`;
   try {
@@ -103,9 +104,9 @@ test("ACCEPTS a valid golf row; it appears in ALL_GOLF_COURSES tagged handicap+b
     // idempotency: restore the real sanctioned file to its pre-test content
     writeFileSync(DEFAULT_GOLF_EXPANSION_PATH, before);
   }
-});
+}));
 
-test("REJECTS + ROLLS BACK a golf row hand-forced to a brand-breaking site tag (verify-universe gate)", () => {
+test("REJECTS + ROLLS BACK a golf row hand-forced to a brand-breaking site tag (verify-universe gate)", async () => await withRealGateLock(() => {
   const before = readFileSync(DEFAULT_GOLF_EXPANSION_PATH, "utf-8");
   try {
     // "moh" is not a valid golf `sites` value (only handicap/offsite) —
@@ -136,9 +137,9 @@ test("REJECTS + ROLLS BACK a golf row hand-forced to a brand-breaking site tag (
   } finally {
     writeFileSync(DEFAULT_GOLF_EXPANSION_PATH, before);
   }
-});
+}));
 
-test("REJECTS an invalid row (no sourceUrl) by validation, before ever touching a file", () => {
+test("REJECTS an invalid row (no sourceUrl) by validation, before ever touching a file", async () => await withRealGateLock(() => {
   const before = readFileSync(DEFAULT_GOLF_EXPANSION_PATH, "utf-8");
   const { sourceUrl: _drop, ...rest } = GOOD_GOLF as unknown as Record<string, unknown>;
 
@@ -151,7 +152,7 @@ test("REJECTS an invalid row (no sourceUrl) by validation, before ever touching 
 
   const after = readFileSync(DEFAULT_GOLF_EXPANSION_PATH, "utf-8");
   assert.equal(after, before, "an invalid row must never touch the expansion file");
-});
+}));
 
 // ─── Item 1: dedup before append ────────────────────────────────────────────
 // A venue researched twice (e.g. across two monthly runs, or already present

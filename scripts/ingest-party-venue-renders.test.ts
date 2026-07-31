@@ -30,6 +30,7 @@ import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { withRealGateLock } from "./real-gate-lock";
 import { ingestResearched, DEFAULT_PARTY_VENUE_EXPANSION_PATH } from "./ingest-researched";
 import type { ResearchedRow } from "../src/research-schema";
 import { sharedDestinations } from "../src/index";
@@ -111,7 +112,7 @@ const TOUCHED_FILES = [
   join(REPO_ROOT, "docs", "audit-report.json"),
 ];
 
-test("an ingested party row RENDERS through both site overlays, not just the audit", () => {
+test("an ingested party row RENDERS through both site overlays, not just the audit", async () => await withRealGateLock(() => {
   const before = TOUCHED_FILES.map((p) => [p, readFileSync(p, "utf-8")] as const);
   try {
     // Real gates — verify-universe + check-brand-rules + audit, same as an
@@ -129,4 +130,4 @@ test("an ingested party row RENDERS through both site overlays, not just the aud
   } finally {
     for (const [path, content] of before) writeFileSync(path, content);
   }
-});
+}));

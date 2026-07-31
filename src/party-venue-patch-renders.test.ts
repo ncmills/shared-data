@@ -20,6 +20,7 @@ import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { withRealGateLock } from "../scripts/real-gate-lock";
 import { sharedDestinations } from "./index";
 import { MOH_ACTIVITY_TYPES } from "./destinations-overlay";
 import type { PartyVenuePatch } from "./party-venue-patches";
@@ -97,7 +98,7 @@ function observeInFreshProcess(): {
  * side effect, and restoring only the data file leaves committed numbers
  * describing a universe that no longer exists.
  */
-test("a patch INGESTED through the real gate renders", async () => {
+test("a patch INGESTED through the real gate renders", async () => await withRealGateLock(async () => {
   const { ingestResearched } = await import("../scripts/ingest-researched");
   const touched = [
     PATCHES_PATH,
@@ -128,7 +129,7 @@ test("a patch INGESTED through the real gate renders", async () => {
   } finally {
     for (const [p, content] of before) writeFileSync(p, content);
   }
-});
+}));
 
 /**
  * The 2B.2 BACKFILL chain, end to end: real queue task → research → real ingest
@@ -142,7 +143,7 @@ test("a patch INGESTED through the real gate renders", async () => {
  * target, so one sees the other's row as a duplicate. That failure appeared
  * only in the aggregate suite and never in isolation.
  */
-test("the 2B.2 backfill chain reaches a rendered page", async () => {
+test("the 2B.2 backfill chain reaches a rendered page", async () => await withRealGateLock(async () => {
   const { buildBackfillQueue } = await import("../scripts/backfill-queue");
   const { researchBackfill } = await import("../scripts/research-backfill");
   const { ingestResearched } = await import("../scripts/ingest-researched");
@@ -184,9 +185,9 @@ test("the 2B.2 backfill chain reaches a rendered page", async () => {
   } finally {
     for (const [p, content] of before) writeFileSync(p, content);
   }
-});
+}));
 
-test("a patched coordinate RENDERS through the MOH overlay", () => {
+test("a patched coordinate RENDERS through the MOH overlay", async () => await withRealGateLock(() => {
   const before = readFileSync(PATCHES_PATH, "utf-8");
   try {
     writeFileSync(PATCHES_PATH, writePatches(before, [PATCH]));
@@ -203,4 +204,4 @@ test("a patched coordinate RENDERS through the MOH overlay", () => {
   } finally {
     writeFileSync(PATCHES_PATH, before);
   }
-});
+}));
