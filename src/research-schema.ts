@@ -41,8 +41,49 @@ export type ResearchedResidenceRow = { dataset: "residence" } & Partial<SharedRe
   Pick<SharedResidence, "id" | "name" | "setting" | "region" | "country"> &
   Provenance;
 
+/**
+ * The five arrays a party-venue row can land in on a destination.
+ * Explicit, because the ingest target is chosen from this — never sniffed from
+ * the row's other fields.
+ */
+export const PARTY_VENUE_CATEGORIES = [
+  "activity",
+  "dining",
+  "nightlife",
+  "lodging",
+  "transport",
+] as const;
+export type PartyVenueCategory = (typeof PARTY_VENUE_CATEGORIES)[number];
+
+/**
+ * A researched party-venue row — an item on an EXISTING destination.
+ *
+ * Added 2026-07-31. Until then the discriminator accepted only "golf" and
+ * "residence", so the research harness structurally could not supplement the
+ * party universe: ~4,200 rows across 212 destinations were hand-edit-only. That
+ * is the direct cause of the party universe carrying 47 URLs while golf, which
+ * passes through this gate, carries 877 of 999.
+ *
+ * `destinationId` is EXPLICIT and never inferred from a city/state string —
+ * the same rule the golf `destinationId` anchor follows. Matching town names
+ * across an international geography is exactly the silent mis-association this
+ * repo has repeatedly been bitten by. The ingest gate resolves the anchor
+ * against the real universe and fails loudly on a typo; this schema only
+ * asserts it is present and non-blank.
+ */
+export type ResearchedPartyVenueRow = {
+  dataset: "party-venue";
+  destinationId: string;
+  category: PartyVenueCategory;
+  name: string;
+} & Record<string, unknown> &
+  Provenance;
+
 /** Discriminated union of every dataset a research agent can produce. */
-export type ResearchedRow = ResearchedGolfRow | ResearchedResidenceRow;
+export type ResearchedRow =
+  | ResearchedGolfRow
+  | ResearchedResidenceRow
+  | ResearchedPartyVenueRow;
 
 export type ValidationResult =
   | { ok: true; row: ResearchedRow }
@@ -60,6 +101,23 @@ export type ValidationResult =
 const REQUIRED_FIELDS: Record<ResearchedRow["dataset"], string[]> = {
   golf: ["name", "city", "state", "region", "tier", "highlight"],
   residence: ["id", "name", "setting", "region", "country"],
+  // The anchor + identity. Per-category discriminating fields are checked
+  // separately below, because they differ by which array the row lands in.
+  "party-venue": ["destinationId", "category", "name"],
+};
+
+/**
+ * Per-category discriminating fields for a party-venue row. Kept to what makes
+ * the row identifiable and renderable — the bake derives tags, and the ingest
+ * gate defaults genuinely-optional fields — so a real venue is not rejected for
+ * a missing nicety.
+ */
+const PARTY_VENUE_REQUIRED_BY_CATEGORY: Record<PartyVenueCategory, string[]> = {
+  activity: ["type", "highlight"],
+  dining: ["cuisine", "priceRange", "highlight"],
+  nightlife: ["type", "vibe", "priceRange", "highlight"],
+  lodging: ["type", "highlight"],
+  transport: ["type", "highlight"],
 };
 
 /**
@@ -116,7 +174,7 @@ export function validateResearchedRow(input: unknown): ValidationResult {
 
   // ── dataset discriminator ──────────────────────────────────────────────
   const dataset = row.dataset;
-  if (dataset !== "golf" && dataset !== "residence") {
+  if (dataset !== "golf" && dataset !== "residence" && dataset !== "party-venue") {
     return { ok: false, reasons: [`unknown or missing dataset: ${JSON.stringify(dataset)}`] };
   }
 
@@ -164,6 +222,47 @@ export function validateResearchedRow(input: unknown): ValidationResult {
   // commercial pages. So these are hard-required here, with REAL (>0)
   // numbers, at the same tier as golf's greenFeeRange/style — reject rather
   // than let the ingest gate default them to zero.
+  if (dataset === "party-venue") {
+    const category = row.category;
+    if (!PARTY_VENUE_CATEGORIES.includes(category as PartyVenueCategory)) {
+      reasons.push(
+        `party-venue category must be one of ${PARTY_VENUE_CATEGORIES.join("/")}, got ${JSON.stringify(category)}`,
+      );
+    } else {
+      for (const field of PARTY_VENUE_REQUIRED_BY_CATEGORY[category as PartyVenueCategory]) {
+        if (!isNonEmptyString(row[field])) {
+          reasons.push(`missing or blank required ${category} field: ${field}`);
+        } else if (isPlaceholderValue(row[field] as string)) {
+          reasons.push(`placeholder value in ${category} field ${field}: ${row[field]}`);
+        }
+      }
+    }
+
+    // Display-critical numbers, same rule as residence capacity/price: a zero
+    // renders as a confident fabricated "$0" or "fits 0 people", which is worse
+    // than an absent row. Only checked for the categories that carry them.
+    if (category === "activity") {
+      const band = row.pricePerPerson as unknown;
+      const realBand =
+        Array.isArray(band) &&
+        band.length === 2 &&
+        band.every((n) => typeof n === "number" && n > 0) &&
+        (band[0] as number) <= (band[1] as number);
+      if (!realBand) {
+        reasons.push(
+          "activity missing real pricePerPerson ([low, high], both numbers > 0, low <= high)",
+        );
+      }
+      const gMin = row.groupMin;
+      const gMax = row.groupMax;
+      const realGroup =
+        typeof gMin === "number" && typeof gMax === "number" && gMin > 0 && gMax >= gMin;
+      if (!realGroup) {
+        reasons.push("activity missing a real group range (groupMin > 0 and groupMax >= groupMin)");
+      }
+    }
+  }
+
   if (dataset === "residence") {
     const capacity = row.capacity as { min?: unknown; max?: unknown } | undefined;
     const hasRealCapacity =

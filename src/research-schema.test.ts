@@ -181,3 +181,138 @@ test("REJECTS a non-object input", () => {
   assert.equal(validateResearchedRow("nope").ok, false);
   assert.equal(validateResearchedRow(42).ok, false);
 });
+
+// ---------------------------------------------------------------------------
+// PARTY-VENUE dataset. Until 2026-07-31 the discriminator accepted only "golf"
+// and "residence", so the automated research harness structurally COULD NOT
+// supplement the party universe — ~4,200 rows across 212 destinations were
+// hand-edit-only. That is why the party universe carries 47 URLs while golf,
+// which goes through this gate, carries 877.
+//
+// The anchor is an EXPLICIT destinationId, never inferred from city/state —
+// same rule the golf `destinationId` anchor follows, for the same reason:
+// matching town names across an international geography is precisely the silent
+// mis-association this repo keeps getting bitten by.
+test("ACCEPTS a real party-venue activity row", () => {
+  const r = validateResearchedRow({
+    dataset: "party-venue",
+    destinationId: "nashville-tn",
+    category: "activity",
+    name: "Test Real Activity",
+    type: "food-tour",
+    highlight: "A real thing at a real place",
+    pricePerPerson: [60, 120],
+    groupMin: 2,
+    groupMax: 14,
+    sourceUrl: "https://www.example-real-venue.com/",
+    citations: ["https://www.example-real-venue.com/about"],
+  });
+  assert.equal(r.ok, true, r.ok ? "" : r.reasons.join("; "));
+});
+
+test("REJECTS a party-venue row with no destinationId — the anchor is never guessed", () => {
+  const r = validateResearchedRow({
+    dataset: "party-venue",
+    category: "activity",
+    name: "Unanchored Activity",
+    type: "food-tour",
+    highlight: "nowhere",
+    pricePerPerson: [60, 120],
+    groupMin: 2,
+    groupMax: 14,
+    sourceUrl: "https://www.example-real-venue.com/",
+    citations: ["https://www.example-real-venue.com/about"],
+  });
+  assert.equal(r.ok, false);
+  if (!r.ok) assert.ok(r.reasons.some((x) => x.includes("destinationId")), r.reasons.join("; "));
+});
+
+test("REJECTS a party-venue row with an unknown category", () => {
+  const r = validateResearchedRow({
+    dataset: "party-venue",
+    destinationId: "nashville-tn",
+    category: "brunch",
+    name: "Wrong Category",
+    type: "food-tour",
+    highlight: "x",
+    pricePerPerson: [60, 120],
+    groupMin: 2,
+    groupMax: 14,
+    sourceUrl: "https://www.example-real-venue.com/",
+    citations: ["https://www.example-real-venue.com/about"],
+  });
+  assert.equal(r.ok, false);
+  if (!r.ok) assert.ok(r.reasons.some((x) => x.includes("category")), r.reasons.join("; "));
+});
+
+// Mirrors the residence capacity/price rule: display-critical numbers are
+// hard-required and must be REAL, because a zero renders as a confident,
+// fabricated "$0" rather than as missing data.
+test("REJECTS a party-venue activity with zeroed pricePerPerson", () => {
+  const r = validateResearchedRow({
+    dataset: "party-venue",
+    destinationId: "nashville-tn",
+    category: "activity",
+    name: "Zero Priced",
+    type: "food-tour",
+    highlight: "x",
+    pricePerPerson: [0, 0],
+    groupMin: 2,
+    groupMax: 14,
+    sourceUrl: "https://www.example-real-venue.com/",
+    citations: ["https://www.example-real-venue.com/about"],
+  });
+  assert.equal(r.ok, false);
+  if (!r.ok) assert.ok(r.reasons.some((x) => x.includes("pricePerPerson")), r.reasons.join("; "));
+});
+
+test("REJECTS a party-venue activity with an inverted group range", () => {
+  const r = validateResearchedRow({
+    dataset: "party-venue",
+    destinationId: "nashville-tn",
+    category: "activity",
+    name: "Inverted Range",
+    type: "food-tour",
+    highlight: "x",
+    pricePerPerson: [60, 120],
+    groupMin: 20,
+    groupMax: 4,
+    sourceUrl: "https://www.example-real-venue.com/",
+    citations: ["https://www.example-real-venue.com/about"],
+  });
+  assert.equal(r.ok, false);
+  if (!r.ok) assert.ok(r.reasons.some((x) => x.includes("groupMin")), r.reasons.join("; "));
+});
+
+test("ACCEPTS a real party-venue dining row (no group range required)", () => {
+  const r = validateResearchedRow({
+    dataset: "party-venue",
+    destinationId: "nashville-tn",
+    category: "dining",
+    name: "Test Real Restaurant",
+    cuisine: "Southern",
+    priceRange: "$$$",
+    highlight: "A real dining room",
+    sourceUrl: "https://www.example-real-restaurant.com/",
+    citations: ["https://www.example-real-restaurant.com/menu"],
+  });
+  assert.equal(r.ok, true, r.ok ? "" : r.reasons.join("; "));
+});
+
+test("party-venue still enforces provenance", () => {
+  const r = validateResearchedRow({
+    dataset: "party-venue",
+    destinationId: "nashville-tn",
+    category: "dining",
+    name: "No Source",
+    cuisine: "Southern",
+    priceRange: "$$$",
+    highlight: "x",
+    citations: [],
+  });
+  assert.equal(r.ok, false);
+  if (!r.ok) {
+    assert.ok(r.reasons.some((x) => x.includes("sourceUrl")), r.reasons.join("; "));
+    assert.ok(r.reasons.some((x) => x.includes("citations")), r.reasons.join("; "));
+  }
+});

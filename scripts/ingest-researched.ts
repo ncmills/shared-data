@@ -455,7 +455,7 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
         continue;
       }
       golfCandidates.push({ source: v.row, course: conv.row });
-    } else {
+    } else if (v.row.dataset === "residence") {
       const conv = toResidence(v.row);
       if (!conv.ok) {
         rejected++;
@@ -463,6 +463,26 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
         continue;
       }
       residenceCandidates.push({ source: v.row, residence: conv.row });
+    } else {
+      // EXPLICIT dispatch, no trailing else that silently assumes a dataset —
+      // the same shape that let a seventh wizard fall into offsite-outing's
+      // counter in starved-inputs.ts. `party-venue` validates (research-schema
+      // accepts it as of 2026-07-31, so a research agent can gate its own rows
+      // before proposing them) but has NO ingest write path yet: party rows
+      // live nested inside destination objects across six
+      // destinations-expansion-*.ts files, which is a different append than
+      // golf's and residence's flat arrays.
+      //
+      // Failing loudly here is the point. Silently dropping a validated,
+      // URL-verified row would reproduce the exact bug this repo keeps hitting:
+      // a row that passes every gate and reaches no user.
+      rejected++;
+      reasons.push(
+        `rejected (unsupported ingest target): dataset "${v.row.dataset}" validates but has no write path. ` +
+          `Party rows are still hand-edited into src/destinations-expansion-*.ts. ` +
+          `Do NOT silently skip — build the write path or land the row by hand.`,
+      );
+      continue;
     }
   }
 
