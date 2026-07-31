@@ -5,7 +5,15 @@ import assert from "node:assert/strict";
 import { rankExpandSet } from "./rank-expand-set";
 import type { ExpandEntry } from "./backfill-tags";
 
-function entry(overrides: Partial<ExpandEntry>): ExpandEntry {
+/**
+ * `overrides` is deliberately looser than `Partial<ExpandEntry>`: the sort
+ * tests below use abstract placeholder names ("kind-x", "wizard-a") to prove
+ * `rankExpandSet` ranks by leverage GENERICALLY, without depending on any real
+ * kind or wizard. Real names there would imply the algorithm knows about
+ * specific wizards, which is exactly what those tests deny. The looseness is
+ * confined to this fixture builder — production code stays strictly typed.
+ */
+function entry(overrides: Partial<Record<keyof ExpandEntry, string>>): ExpandEntry {
   return {
     id: "fixture-id",
     dataset: "golf" as ExpandEntry["dataset"],
@@ -13,7 +21,7 @@ function entry(overrides: Partial<ExpandEntry>): ExpandEntry {
     targetWizard: "bestman" as ExpandEntry["targetWizard"],
     reason: "fixture reason",
     ...overrides,
-  };
+  } as ExpandEntry;
 }
 
 test("aggregation: rows per (kind, targetWizard) and wizardsAffected per kind are correct", () => {

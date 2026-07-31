@@ -35,10 +35,16 @@ import {
   ooSignatureOutings,
   ooHeroOutingsUrban,
   ooPoolOutingsUrban,
+  ALL_WIZARD_TAGS,
+  ALL_AUDIENCE_TAGS,
 } from "../src/index";
 
-const WIZARDS = new Set(["bestman", "moh", "tdf", "offsite-retreat", "offsite-outing"]);
-const AUDIENCES = new Set(["bachelor", "bachelorette", "corporate", "clients", "internal"]);
+// Derived from the tag vocabulary, never hand-copied. These were hardcoded
+// literals and the wizard set had already drifted — it was missing "handicap",
+// so a legitimately handicap-tagged party item would have been reported as a
+// bad wizard by the very guard meant to protect the vocabulary.
+const WIZARDS: Set<string> = new Set(ALL_WIZARD_TAGS);
+const AUDIENCES: Set<string> = new Set(ALL_AUDIENCE_TAGS);
 
 let failures = 0;
 const fail = (msg: string) => {

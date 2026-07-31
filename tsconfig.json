@@ -1,0 +1,36 @@
+{
+  // Type-CHECK only. shared-data ships as TypeScript source (`main` is
+  // src/index.ts) and every consumer compiles it through its own bundler, so
+  // nothing is emitted here — this config exists purely so `npm run typecheck`
+  // (and the CI step that runs it) turns the repo's type annotations into a
+  // real gate instead of editor-only decoration.
+  //
+  // Why it matters: the universe's routing correctness leans on
+  // `Record<WizardTag, …>` maps (ENGINE_READS, WIZARD_INPUT_SPACE,
+  // WIZARD_TO_STARVED_KIND, CoverageMatrix, the starved-inputs counters).
+  // Without a typecheck, adding a seventh wizard leaves those maps missing a
+  // key and the value reads back `undefined` at runtime instead of failing to
+  // compile. With it, a new wizard is a build error in every map at once.
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "types": ["node"],
+
+    "strict": true,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  },
+  "include": ["src/**/*.ts", "scripts/**/*.ts"],
+  "exclude": ["node_modules", "deploy"]
+}

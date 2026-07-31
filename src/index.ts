@@ -12,8 +12,12 @@ export * from "./airports";
 export * from "./tags";
 export * from "./destinations-types";
 export * from "./destinations-overlay";
-export * from "./golf-courses";
-export * from "./golf-courses-hhq-merge";
+// Golf is exported ONLY through ./golf — the public surface that merges the
+// regenerated base with the sanctioned ingest destination. Star-exporting
+// ./golf-courses here is what made `SHARED_GOLF_COURSES` and `coursesForCity`
+// resolve to the base-only versions, hiding every researched course from every
+// consumer. Do not re-add it. See src/golf.ts.
+export * from "./golf";
 export * from "./residences";
 export * from "./residences-expansion";
 export * from "./tdf-destinations";
@@ -49,12 +53,7 @@ export const sharedDestinations: CanonicalDestination[] = [
 
 // Golf is the single golf-cite source (Task 3). The regenerated 994-row
 // `golf-courses.ts` (do-not-hand-edit) plus the `golf-courses-hhq-merge.ts`
-// overlay (HHQ-only courses tagged "handicap"; empty today) combine into the
-// canonical set every consumer — TDF, Offsite, Handicap HQ — reads.
-import { SHARED_GOLF_COURSES } from "./golf-courses";
-import { SHARED_GOLF_COURSES_HHQ_MERGE } from "./golf-courses-hhq-merge";
-import type { SharedGolfCourse } from "./golf-courses";
-export const ALL_GOLF_COURSES: SharedGolfCourse[] = [
-  ...SHARED_GOLF_COURSES,
-  ...SHARED_GOLF_COURSES_HHQ_MERGE,
-];
+// sanctioned-ingest overlay combine into the canonical set every consumer —
+// TDF, Offsite, Handicap HQ, Best Man HQ — reads. That merge, and BOTH reader
+// surfaces over it (`SHARED_GOLF_COURSES` and `coursesForCity`), now live in
+// `./golf` and are re-exported above.

@@ -13,11 +13,17 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { findStarved, findStarvedIn, type Starved, type StarvedUniverse } from "./starved-inputs";
+import {
+  findStarved,
+  findStarvedIn,
+  STARVED_CELL_COUNTERS,
+  type Starved,
+  type StarvedUniverse,
+} from "./starved-inputs";
 import { WIZARD_INPUT_SPACE } from "../../src/wizard-input-space";
 import type { BackfilledRow } from "../backfill-tags";
 import type { CanonicalDestination, CanonicalRegion, PartyVibe } from "../../src/destinations-types";
-import type { WizardTag, AudienceTag } from "../../src/tags";
+import { ALL_WIZARD_TAGS, type WizardTag, type AudienceTag } from "../../src/tags";
 
 function fakeDestination(o: { id: string; region: CanonicalRegion; vibes: PartyVibe[] }): CanonicalDestination {
   return {
@@ -105,10 +111,75 @@ test("SYNTHETIC: a moh cell's keys match its WIZARD_INPUT_SPACE axis names", () 
 });
 
 test("WIZARD_INPUT_SPACE is keyed by every WizardTag", () => {
-  const wizards = Object.keys(WIZARD_INPUT_SPACE).sort();
-  assert.deepEqual(wizards, ["bestman", "handicap", "moh", "offsite-outing", "offsite-retreat", "tdf"]);
-  for (const wizard of wizards as WizardTag[]) {
-    assert.equal(WIZARD_INPUT_SPACE[wizard].length, 2, `${wizard} should have exactly 2 axes`);
+  // Vocabulary-derived, not a hand-copied literal — see the matching note in
+  // orphaned.test.ts. Adding a wizard must fail this by way of a MISSING key,
+  // not by way of the name list having changed.
+  assert.deepEqual(Object.keys(WIZARD_INPUT_SPACE).sort(), [...ALL_WIZARD_TAGS].sort());
+  for (const wizard of ALL_WIZARD_TAGS) {
+    assert.equal(WIZARD_INPUT_SPACE[wizard]?.length, 2, `${wizard} should have exactly 2 axes`);
+  }
+});
+
+test("every WizardTag has its OWN cell counter — no wizard falls through to another's", () => {
+  // Regression guard. `findStarvedIn` used to be an if/else chain whose final
+  // `else` hardcoded "offsite-outing": any wizard not named in an earlier
+  // branch was silently counted against corporate party-venue rows while being
+  // REPORTED under its own name — a wrong number that looked like a real one.
+  assert.deepEqual(Object.keys(STARVED_CELL_COUNTERS).sort(), [...ALL_WIZARD_TAGS].sort());
+  for (const wizard of ALL_WIZARD_TAGS) {
+    assert.equal(typeof STARVED_CELL_COUNTERS[wizard], "function", `${wizard} needs a cell counter`);
+  }
+});
+
+test("an unregistered wizard THROWS rather than being silently miscounted", () => {
+  // The runtime twin of the compile-time exhaustiveness: `tsx` strips types, so
+  // scripts and tests run with no compiler in the loop. Simulate a seventh
+  // wizard reaching the enumerator with no counter registered and assert it is
+  // loud. (Mutating the frozen-by-convention maps in place, then restoring.)
+  const GHOST = "ghost-wizard" as WizardTag;
+  const space = WIZARD_INPUT_SPACE as Record<string, { name: string; values: readonly string[] }[]>;
+  const tags = ALL_WIZARD_TAGS as readonly string[] as string[];
+
+  space[GHOST] = [
+    { name: "region", values: ["south"] },
+    { name: "partyVibe", values: ["chill"] },
+  ];
+  tags.push(GHOST);
+  try {
+    assert.throws(
+      () => findStarvedIn(buildUniverse(), 3),
+      /no cell counter registered for wizard "ghost-wizard"/,
+      "an unregistered wizard must throw, not fall through to another wizard's counter",
+    );
+  } finally {
+    tags.pop();
+    delete space[GHOST];
+  }
+
+  // And the real universe is unaffected once the ghost is gone.
+  assert.ok(Array.isArray(findStarvedIn(buildUniverse(), 3)));
+});
+
+test("a wizard missing from WIZARD_INPUT_SPACE THROWS rather than being skipped", () => {
+  // The complementary hole: the enumerator used to iterate
+  // `Object.keys(WIZARD_INPUT_SPACE)`, so a wizard absent from that map was
+  // never audited at all — zero starved cells reported for it, indistinguishable
+  // from full coverage.
+  const GHOST = "ghost-wizard-2" as WizardTag;
+  const counters = STARVED_CELL_COUNTERS as Record<string, unknown>;
+  const tags = ALL_WIZARD_TAGS as readonly string[] as string[];
+
+  counters[GHOST] = STARVED_CELL_COUNTERS.bestman;
+  tags.push(GHOST);
+  try {
+    assert.throws(
+      () => findStarvedIn(buildUniverse(), 3),
+      /has no two-axis entry in WIZARD_INPUT_SPACE/,
+      "a wizard with no input space must throw, not be silently skipped",
+    );
+  } finally {
+    tags.pop();
+    delete counters[GHOST];
   }
 });
 

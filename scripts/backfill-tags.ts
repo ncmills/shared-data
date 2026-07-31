@@ -46,7 +46,6 @@ import { dirname, join } from "node:path";
 import {
   sharedDestinations,
   SHARED_GOLF_COURSES,
-  SHARED_GOLF_COURSES_HHQ_MERGE,
   residencesForSite,
   SHARED_TDF_DESTINATIONS,
   mohLocals,
@@ -63,7 +62,7 @@ import {
   ooPoolOutingsUrban,
 } from "../src/index";
 import { deriveRouting, type EntityKind } from "../src/tagging-rules";
-import type { WizardTag, AudienceTag, ProductTag } from "../src/tags";
+import { ALL_WIZARD_TAGS, type WizardTag, type AudienceTag, type ProductTag } from "../src/tags";
 
 const uniq = <T>(xs: T[]): T[] => Array.from(new Set(xs));
 const union = <T>(a: T[], b: T[]): T[] => uniq([...a, ...b]);
@@ -168,7 +167,9 @@ export function backfillUniverse(): BackfilledRow[] {
   }
 
   // ── golf courses ────────────────────────────────────────────────────────────
-  for (const c of [...SHARED_GOLF_COURSES, ...SHARED_GOLF_COURSES_HHQ_MERGE]) {
+  // Already the merged set (base + sanctioned ingest) — see src/golf.ts.
+  // Do NOT re-spread the merge overlay here; that double-counts it.
+  for (const c of SHARED_GOLF_COURSES) {
     const r = deriveRouting({ kind: "golf-course" });
     push(
       `${c.name}|${c.city},${c.state}`,
@@ -268,7 +269,9 @@ export function buildExpandSet(rows: BackfilledRow[]): ExpandEntry[] {
 
 // ─── coverage counts ──────────────────────────────────────────────────────────
 export type CountWizard = WizardTag;
-const ALL_WIZARDS: CountWizard[] = ["bestman", "moh", "tdf", "offsite-retreat", "offsite-outing", "handicap"];
+// Derived, never hand-copied — a wizard missing from this list silently
+// reports a coverage count of 0 for itself.
+const ALL_WIZARDS: readonly CountWizard[] = ALL_WIZARD_TAGS;
 
 /** Per-wizard row counts for a chosen phase ("pre" or "post"). */
 export function coverageCounts(rows: BackfilledRow[], which: "pre" | "post"): Record<CountWizard, number> {
