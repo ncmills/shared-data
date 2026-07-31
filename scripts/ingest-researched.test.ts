@@ -530,3 +530,69 @@ test("rollback mechanism: an injected gate failure restores an injected (temp) e
     rmSync(tmpDir, { recursive: true, force: true });
   }
 });
+
+// ---------------------------------------------------------------------------
+// PROVENANCE MUST SURVIVE INGEST.
+//
+// `validateResearchedRow` hard-requires a real `sourceUrl` and >=1 `citations`
+// on every researched row, and `verifyUrlLive` network-checks the sourceUrl on
+// the unattended path. All of that rigour was then THROWN AWAY for residences:
+// `toResidence` destructured `sourceUrl` and `citations` off and dropped them,
+// so provenance existed only as a gate artifact. That is why residences were
+// 0 of 341 with a url while golf — which persists it via
+// `url: row.url ?? row.sourceUrl` — was 877 of 999.
+//
+// It matters beyond bookkeeping: Offsite Outpost renders residences into live
+// copy, and a claim a reader cannot follow to a source is exactly the kind of
+// unverifiable specific this repo's honesty rules exist to prevent. Re-deriving
+// the citation later is impossible — the researching agent is long gone.
+test("residence ingest PERSISTS provenance (sourceUrl -> url, citations kept)", () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-provenance-residence-"));
+  const tmpResidencePath = join(tmpDir, "residence-fixture.ts");
+  writeFileSync(
+    tmpResidencePath,
+    `import type { SharedResidence } from "../src/residences";\n\n` +
+      `export const SHARED_RESIDENCES_EXPANSION: SharedResidence[] = [];\n`,
+  );
+  try {
+    const row: ResearchedRow = {
+      dataset: "residence",
+      id: `ingest-test-provenance-residence-${Date.now()}`,
+      name: "Ingest Test Provenance Residence",
+      setting: "vineyard",
+      region: "Test Region",
+      country: "USA",
+      capacity: { min: 10, max: 40, sleepsOnsite: 40 },
+      price: { perPersonPerNight: { low: 400, high: 800 } },
+      sourceUrl: "https://www.ingest-test-provenance-residence.example/",
+      citations: [
+        "https://www.ingest-test-provenance-residence.example/about",
+        "https://www.ingest-test-provenance-residence.example/rooms",
+      ],
+    } as unknown as ResearchedRow;
+
+    const result = ingestResearched([row], {
+      residenceFilePath: tmpResidencePath,
+      runGates: () => ({ ok: true, output: "" }),
+    });
+    assert.equal(result.accepted, 1);
+
+    const written = readWrittenArray(tmpResidencePath)[0];
+    assert.equal(
+      written.url,
+      "https://www.ingest-test-provenance-residence.example/",
+      "sourceUrl must land on the row as `url` — same contract golf already honours",
+    );
+    assert.deepEqual(
+      written.citations,
+      [
+        "https://www.ingest-test-provenance-residence.example/about",
+        "https://www.ingest-test-provenance-residence.example/rooms",
+      ],
+      "citations must be persisted, not discarded as a gate artifact",
+    );
+    assert.equal(written.dataset, undefined, "the dataset discriminator is still stripped");
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
+});

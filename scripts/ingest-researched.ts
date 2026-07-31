@@ -366,7 +366,16 @@ const RESIDENCE_UI_DEFAULTS: Record<string, unknown> = {
  * correct-by-construction, no hand-forced tag can ever reach the file.
  */
 function toResidence(row: ResearchedResidenceRow): ConvertResult<SharedResidence> {
-  const { dataset: _dataset, sourceUrl: _sourceUrl, citations: _citations, wizards: _wizards, sites: rowSites, products: rowProducts, ...rest } = row;
+  // PROVENANCE IS PERSISTED, NOT STRIPPED. `sourceUrl` and `citations` used to
+  // be destructured away here, so the schema gate and the live URL check both
+  // ran and then discarded their evidence — residences ended up 0 of 341 with a
+  // url while golf, which keeps it via `url: row.url ?? row.sourceUrl`, was 877
+  // of 999. Offsite Outpost renders residences into live copy, so a claim with
+  // no followable source is exactly the unverifiable specific the honesty rules
+  // exist to stop, and the citation cannot be re-derived later — the
+  // researching agent is long gone. Only `dataset` (the discriminator) and
+  // `wizards` (always re-derived from products, never hand-forced) are dropped.
+  const { dataset: _dataset, wizards: _wizards, sites: rowSites, products: rowProducts, ...rest } = row;
   const routing = deriveRouting({ kind: "residence" });
   const sites = Array.isArray(rowSites) && rowSites.length > 0 ? rowSites : ["offsite"];
   const products = Array.isArray(rowProducts) && rowProducts.length > 0 ? rowProducts : (routing.core.products as string[]);
@@ -382,6 +391,10 @@ function toResidence(row: ResearchedResidenceRow): ConvertResult<SharedResidence
     sites,
     products,
     wizards: routing.core.wizards,
+    // Same contract golf already honours (`url: row.url ?? row.sourceUrl`): the
+    // canonical row exposes the primary source as `url`, and `sourceUrl` +
+    // `citations` ride along via ...rest as the full audit trail.
+    url: (row as { url?: string }).url ?? row.sourceUrl,
   };
   return { ok: true, row: residence };
 }
