@@ -59,6 +59,7 @@ import { deriveRouting } from "../src/tagging-rules";
 import { SHARED_GOLF_COURSES } from "../src/golf-courses";
 import type { SharedGolfCourse } from "../src/golf-courses";
 import { SHARED_RESIDENCES } from "../src/residences";
+import { SHARED_TDF_DESTINATIONS } from "../src/tdf-destinations";
 import type { SharedResidence } from "../src/residences";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -272,6 +273,22 @@ function toGolfCourse(row: ResearchedGolfRow): ConvertResult<SharedGolfCourse> {
       ? (row.products as SharedGolfCourse["products"])
       : (routing.core.products as SharedGolfCourse["products"]);
 
+  // A researched course that names no destination reaches the flat catalog and
+  // NO PAGE — Handicap HQ renders courses from each destination's embedded
+  // `courses[]`. That is how the first batch of researched courses "closed" an
+  // audit gap while appearing nowhere. When the row names a destination, it is
+  // validated here so a typo'd anchor fails LOUDLY at ingest rather than
+  // silently attaching to nothing.
+  const destinationId = typeof row.destinationId === "string" ? row.destinationId.trim() : undefined;
+  if (destinationId && !SHARED_TDF_DESTINATIONS.some((d) => d.id === destinationId)) {
+    return {
+      ok: false,
+      reason:
+        `golf row "${row.name}" names destinationId "${destinationId}", which is not a real golf-trip destination. ` +
+        `Use an id from SHARED_TDF_DESTINATIONS, or omit it to keep the course catalog-only.`,
+    };
+  }
+
   const course: SharedGolfCourse = {
     name: row.name,
     city: row.city,
@@ -287,6 +304,7 @@ function toGolfCourse(row: ResearchedGolfRow): ConvertResult<SharedGolfCourse> {
     products,
     url: row.url ?? row.sourceUrl,
   };
+  if (destinationId) course.destinationId = destinationId;
   if (row.rating !== undefined) course.rating = row.rating;
   if (row.googleRating !== undefined) course.googleRating = row.googleRating;
   if (row.reviewCount !== undefined) course.reviewCount = row.reviewCount;
