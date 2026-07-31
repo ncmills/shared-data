@@ -170,3 +170,98 @@ test("validateResearchedRowLive: default verifier is verifyUrlLive itself when n
   const res = await validateResearchedRowLive({});
   assert.equal(res.ok, false);
 });
+
+// ─── blocked-vs-dead (2026-07-31) ───────────────────────────────────────────
+//
+// The first real backfill rejected two REAL hotels:
+//   403 https://www.larkbozeman.com/about-bozeman-hotel/
+//   429 https://www.hyatt.com/thompson-hotels/en-US/chith-thompson-chicago
+// Both sites are alive. 403 = the server refused US; 429 = try later. Treating
+// either as "dead" is a false negative, and because the queue re-derives from
+// the same rows every run, those venues would be re-rejected forever.
+//
+// Root cause: no User-Agent was sent at all. Node's fetch sends none, and
+// CDN-fronted sites reject that outright.
+//
+// A blocked URL is still NOT verified — we must never pretend it is. It is a
+// THIRD state: unverifiable. Rejected, but distinguishably and countably so.
+
+test("sends a User-Agent — a UA-less request is what most 403s actually are", async () => {
+  const seen: (Record<string, string> | undefined)[] = [];
+  await verifyUrlLive("https://ua.example.org/", {
+    fetchImpl: async (_u, init) => {
+      seen.push((init as { headers?: Record<string, string> } | undefined)?.headers);
+      return { ok: true, status: 200 };
+    },
+  });
+
+  assert.ok(seen[0], "no headers were sent at all");
+  const ua = Object.entries(seen[0]!).find(([k]) => k.toLowerCase() === "user-agent")?.[1];
+  assert.ok(ua && ua.length > 0, "must identify itself");
+});
+
+test("a persistent 403 is BLOCKED, not dead", async () => {
+  const res = await verifyUrlLive("https://blocked.example.org/", {
+    fetchImpl: async () => ({ ok: false, status: 403 }),
+  });
+
+  assert.equal(res.ok, false, "blocked is still not verified — never pretend otherwise");
+  assert.equal(res.blocked, true);
+  assert.match(res.reason ?? "", /block|refus|unverifiab/i);
+  assert.doesNotMatch(
+    res.reason ?? "",
+    /non-2xx\/3xx final status/,
+    "must not be filed under the same reason as a genuinely dead link",
+  );
+});
+
+test("a 429 is retried before being called anything", async () => {
+  let calls = 0;
+  const res = await verifyUrlLive("https://ratelimited.example.org/", {
+    retryDelayMs: 0,
+    fetchImpl: async () => {
+      calls++;
+      return calls <= 2 ? { ok: false, status: 429 } : { ok: true, status: 200 };
+    },
+  });
+
+  assert.equal(res.ok, true, "a rate limit that clears must resolve to live");
+});
+
+test("a persistent 429 is BLOCKED, not dead", async () => {
+  const res = await verifyUrlLive("https://ratelimited.example.org/", {
+    retryDelayMs: 0,
+    fetchImpl: async () => ({ ok: false, status: 429 }),
+  });
+
+  assert.equal(res.ok, false);
+  assert.equal(res.blocked, true);
+});
+
+test("a 404 is DEAD, not blocked — the distinction must not blur", async () => {
+  const res = await verifyUrlLive("https://gone.example.org/", {
+    fetchImpl: async () => ({ ok: false, status: 404 }),
+  });
+
+  assert.equal(res.ok, false);
+  assert.notEqual(res.blocked, true, "a 404 is real evidence the URL is wrong");
+});
+
+test("a 500 is DEAD, not blocked", async () => {
+  const res = await verifyUrlLive("https://broken.example.org/", {
+    fetchImpl: async () => ({ ok: false, status: 500 }),
+  });
+
+  assert.equal(res.ok, false);
+  assert.notEqual(res.blocked, true);
+});
+
+test("validateResearchedRowLive reports a blocked source distinguishably", async () => {
+  const res = await validateResearchedRowLive(GOOD_GOLF, {
+    verifyUrl: async () => ({ ok: false, status: 403, blocked: true, reason: "blocked by the server (403)" }),
+  });
+
+  assert.equal(res.ok, false);
+  const why = (res as { reasons: string[] }).reasons.join(" ");
+  assert.match(why, /block|unverifiab/i, "must not be filed under the same reason as a dead link");
+});
