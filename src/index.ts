@@ -38,18 +38,27 @@ import { expansionInternational } from "./destinations-expansion-international";
 import { expansionNortheast } from "./destinations-expansion-northeast";
 import { expansionMidwest } from "./destinations-expansion-midwest";
 import { expansionWest } from "./destinations-expansion-west";
+import { attachPartyVenues } from "./party-venues-attach";
 
 // Every canonical item is baked with universe tags (wizards/audiences/products/
 // priceTier) at module load, so the overlays are pure filters over the tags and
 // every consumer reads pre-tagged data. See destinations-bake.ts.
-export const sharedDestinations: CanonicalDestination[] = [
+//
+// `attachPartyVenues` runs FIRST and merges the machine-appended rows from the
+// flat `party-venues-expansion.ts` into the destination each one anchors — the
+// curated nested files are never machine-edited (see that file's header for
+// why, and for the golf precedent it follows). Attaching BEFORE the bake is the
+// whole point: an ingested row is then tagged by the identical code path as a
+// curated one, so no overlay, consumer or audit needs a special case. It throws
+// on an anchor that resolves to nothing rather than dropping the row.
+export const sharedDestinations: CanonicalDestination[] = attachPartyVenues([
   ...coreDestinations,
   ...expansionSouth,
   ...expansionInternational,
   ...expansionNortheast,
   ...expansionMidwest,
   ...expansionWest,
-].map(bakeDestination);
+]).map(bakeDestination);
 
 // Golf is the single golf-cite source (Task 3). The regenerated 994-row
 // `golf-courses.ts` (do-not-hand-edit) plus the `golf-courses-hhq-merge.ts`
