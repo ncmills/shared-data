@@ -35,7 +35,7 @@ export {
  * vibeTag scoring (party-planner-prompt.ts) explicitly checks for them. The
  * supersets below match everything the prompts reference. These are real
  * behavioural filters and are preserved verbatim through the tag migration. */
-const MOH_ACTIVITY_TYPES = new Set([
+export const MOH_ACTIVITY_TYPES = new Set([
   "spa","wine-tour","brewery-tour","distillery-tour","cooking-class","cocktail-class",
   "boat-cruise","karaoke","escape-room","axe-throwing","go-karts","paintball","casino",
   "pool-party","beach","hiking","brunch-crawl","food-tour","skiing","biking","kayaking",
@@ -50,7 +50,7 @@ const MOH_ACTIVITY_TYPES = new Set([
   "vortex-hike","mid-century-tour","art-class","spa-day","beach-hangout",
 ]);
 
-const BESTMAN_ACTIVITY_TYPES = new Set([
+export const BESTMAN_ACTIVITY_TYPES = new Set([
   "spa","wine-tour","brewery-tour","distillery-tour","cooking-class","cocktail-class",
   "boat-cruise","karaoke","escape-room","axe-throwing","go-karts","paintball","casino",
   "pool-party","beach","hiking","brunch-crawl","food-tour","golf","shooting-range","fishing",
