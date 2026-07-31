@@ -48,14 +48,22 @@ test("CROSS-TAG FIRES: ≥1 residence GAINS offsite-outing it lacked pre-backfil
   assert.ok(gained.length > 0, "no residence gained offsite-outing — cross-tag did not fire");
 });
 
-test("CROSS-TAG FIRES: ≥1 tdf-destination GAINS handicap", () => {
-  const gained = rows.filter(
-    (r) =>
-      r.dataset === "tdf-destination" &&
-      !r.preWizards.includes("handicap") &&
-      r.postWizards.includes("handicap"),
+test("REACH: EVERY golf-destination row routes to handicap", () => {
+  // This used to assert the backfill ADDED handicap to rows tagged `["tdf"]`.
+  // That was an artifact of the migration state: since the tdf wizard was
+  // retired (2026-07-31) the rows are natively `["handicap"]`, so nothing can
+  // "gain" it and the old test could only ever fail.
+  //
+  // The durable property is REACH, not the delta — every golf destination must
+  // end up routed to Handicap HQ, which is the only site that renders them.
+  const golfDests = rows.filter((r) => r.dataset === "tdf-destination");
+  assert.ok(golfDests.length > 0, "expected golf-destination rows in the backfilled universe");
+  const unreached = golfDests.filter((r) => !r.postWizards.includes("handicap"));
+  assert.deepEqual(
+    unreached.map((r) => r.id).slice(0, 5),
+    [],
+    `${unreached.length} golf-destination row(s) do not route to handicap`,
   );
-  assert.ok(gained.length > 0, "no tdf-destination gained handicap — cross-tag did not fire");
 });
 
 test("BRAND GUARD: no golf row ever routes to moh (post or expand)", () => {

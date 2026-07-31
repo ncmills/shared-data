@@ -44,7 +44,7 @@ import { findUnderTaggedIn, type UnderTagged } from "./under-tagged";
 import { findOrphanedIn, type Orphaned } from "./orphaned";
 import { findStarved, type Starved } from "./starved-inputs";
 import { backfillUniverse, type BackfilledRow, type Dataset } from "../backfill-tags";
-import type { WizardTag } from "../../src/tags";
+import { ALL_WIZARD_TAGS, type WizardTag } from "../../src/tags";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DOCS_DIR = join(HERE, "..", "..", "docs");
@@ -52,14 +52,9 @@ const DEFAULT_BASELINE_PATH = join(DOCS_DIR, "audit-baseline.json");
 const REPORT_PATH = join(DOCS_DIR, "audit-report.json");
 const MATRIX_PATH = join(DOCS_DIR, "coverage-matrix.md");
 
-const ALL_WIZARDS: WizardTag[] = [
-  "bestman",
-  "moh",
-  "tdf",
-  "offsite-retreat",
-  "offsite-outing",
-  "handicap",
-];
+// Derived, never hand-copied — this list going stale silently drops a wizard
+// from the coverage matrix (see src/tags.ts).
+const ALL_WIZARDS: readonly WizardTag[] = ALL_WIZARD_TAGS;
 
 const ALL_DATASETS: Dataset[] = [
   "party",

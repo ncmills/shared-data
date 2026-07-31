@@ -23,25 +23,35 @@ const GOLF_GAP: Starved = {
   count: 1,
 };
 
+/** deficit=2 as well — residence fan-out (offsite-retreat + offsite-outing = 2)
+ *  is the smallest stable contrast against party/golf's 4. */
+const RESIDENCE_GAP: Starved = {
+  wizard: "offsite-retreat",
+  cell: { setting: "palace", worldRegion: "Africa" },
+  count: 1,
+};
+
 test("TEETH: for equal deficit, the dataset serving MORE wizards outranks the one serving fewer", () => {
-  // party-venue (bestman, moh, offsite-retreat, offsite-outing = 4 wizards
-  // per ENGINE_READS) vs golf-course (bestman, offsite-retreat,
-  // offsite-outing, handicap, tdf = 5 wizards per ENGINE_READS, since Task
-  // 10b added bestman). Whichever wizard count is actually larger should
-  // win — assert against the live reverse-lookup result, not a hardcoded
-  // expectation, so this test can't silently drift from ENGINE_READS.
-  const queue = buildGapQueueFrom([PARTY_GAP, GOLF_GAP], 3);
+  // party-venue (bestman, moh, offsite-retreat, offsite-outing = 4 wizards per
+  // ENGINE_READS) vs residence (offsite-retreat, offsite-outing = 2).
+  //
+  // This compared party against GOLF until tdf was retired (2026-07-31), which
+  // took golf-course's fan-out from 5 to 4 and left the two datasets TIED — at
+  // which point the fixture could no longer discriminate. The test's own
+  // `notEqual` fixture-validity guard caught that rather than silently passing,
+  // which is why it's kept below. Residence is the durable contrast.
+  const queue = buildGapQueueFrom([PARTY_GAP, RESIDENCE_GAP], 3);
   assert.equal(queue.length, 2);
 
   const party = queue.find((t) => t.dataset === "party")!;
-  const golf = queue.find((t) => t.dataset === "golf")!;
+  const residence = queue.find((t) => t.dataset === "residence")!;
   assert.ok(party, "party task present");
-  assert.ok(golf, "golf task present");
-  assert.equal(party.deficit, golf.deficit, "fixture holds deficit equal");
-  assert.notEqual(party.wizardsServed.length, golf.wizardsServed.length, "fixture must differ in wizard fan-out to be a real test");
+  assert.ok(residence, "residence task present");
+  assert.equal(party.deficit, residence.deficit, "fixture holds deficit equal");
+  assert.notEqual(party.wizardsServed.length, residence.wizardsServed.length, "fixture must differ in wizard fan-out to be a real test");
 
-  const moreServed = party.wizardsServed.length > golf.wizardsServed.length ? party : golf;
-  const fewerServed = moreServed === party ? golf : party;
+  const moreServed = party.wizardsServed.length > residence.wizardsServed.length ? party : residence;
+  const fewerServed = moreServed === party ? residence : party;
   assert.ok(
     moreServed.leverageScore > fewerServed.leverageScore,
     `dataset serving more wizards (${moreServed.dataset}, ${moreServed.wizardsServed.length}) must outrank the one serving fewer (${fewerServed.dataset}, ${fewerServed.wizardsServed.length})`,
@@ -57,18 +67,13 @@ test("TEETH: a synthetic 3-wizard dataset outranks a synthetic 1-wizard dataset 
   // by using two cells against the SAME wizard/kind pairing is not enough —
   // instead directly assert the leverage formula's shape (monotonic in
   // wizardsServed.length) using the two real datasets whose fan-out is
-  // documented and stable: residence (2) vs golf (5).
-  const RESIDENCE_GAP: Starved = {
-    wizard: "offsite-retreat",
-    cell: { setting: "palace", worldRegion: "Africa" },
-    count: 1, // deficit 2, same as GOLF_GAP (threshold 3, count 1)
-  };
+  // documented and stable: residence (2) vs golf (4 since tdf's retirement).
   const queue = buildGapQueueFrom([RESIDENCE_GAP, GOLF_GAP], 3);
   const residence = queue.find((t) => t.dataset === "residence")!;
   const golf = queue.find((t) => t.dataset === "golf")!;
   assert.equal(residence.deficit, golf.deficit);
   assert.equal(residence.wizardsServed.length, 2);
-  assert.equal(golf.wizardsServed.length, 5);
+  assert.equal(golf.wizardsServed.length, 4); // bestman, offsite-retreat, offsite-outing, handicap
   assert.ok(golf.leverageScore > residence.leverageScore);
   assert.equal(queue[0].dataset, "golf");
 });
@@ -86,7 +91,7 @@ test("deficit and wizardsServed are computed correctly for a fixture cell", () =
 });
 
 test("deficit is computed correctly for a zero-count fixture cell", () => {
-  const zero: Starved = { wizard: "tdf", cell: { golfRegion: "Midwest", tier: "solid" }, count: 0 };
+  const zero: Starved = { wizard: "handicap", cell: { golfRegion: "Midwest", tier: "solid" }, count: 0 };
   const [task] = buildGapQueueFrom([zero], 3);
   assert.equal(task.deficit, 3);
 });
@@ -116,13 +121,15 @@ test("ties on leverageScore preserve original relative order (stable sort)", () 
 });
 
 test("TEETH: no two tasks in the output share the same (dataset, cell) — one physical gap, one score", () => {
-  // handicap and tdf share the identical golfRegion x tier input space over
-  // the same golf-course universe (WIZARD_INPUT_SPACE), so the SAME
-  // physical cell is enumerated once per wizard by findStarvedIn. Without
-  // dedup this would double-count leverage for one real gap.
-  const handicapGap: Starved = { wizard: "handicap", cell: { golfRegion: "International", tier: "budget" }, count: 0 };
-  const tdfGap: Starved = { wizard: "tdf", cell: { golfRegion: "International", tier: "budget" }, count: 1 };
-  const queue = buildGapQueueFrom([handicapGap, tdfGap], 3);
+  // bestman and moh share the identical region x partyVibe input space over
+  // the same party universe (WIZARD_INPUT_SPACE), so the SAME physical cell is
+  // enumerated once per wizard by findStarvedIn. Without dedup this would
+  // double-count leverage for one real gap.
+  // (This used handicap + tdf until tdf was retired 2026-07-31; handicap is now
+  // the only wizard enumerating golf cells, so bestman/moh is the real pair.)
+  const bestmanGap: Starved = { wizard: "bestman", cell: { region: "international", partyVibe: "chill" }, count: 0 };
+  const mohGap: Starved = { wizard: "moh", cell: { region: "international", partyVibe: "chill" }, count: 1 };
+  const queue = buildGapQueueFrom([bestmanGap, mohGap], 3);
 
   const seen = new Set<string>();
   for (const t of queue) {
@@ -133,24 +140,23 @@ test("TEETH: no two tasks in the output share the same (dataset, cell) — one p
 });
 
 test("TEETH: the same physical cell starved for two different wizards collapses into ONE task with the merged (max) deficit and full wizardsServed", () => {
-  const handicapGap: Starved = { wizard: "handicap", cell: { golfRegion: "International", tier: "budget" }, count: 0 }; // deficit 3
-  const tdfGap: Starved = { wizard: "tdf", cell: { golfRegion: "International", tier: "budget" }, count: 1 }; // deficit 2
-  const queue = buildGapQueueFrom([handicapGap, tdfGap], 3);
+  const bestmanGap: Starved = { wizard: "bestman", cell: { region: "international", partyVibe: "chill" }, count: 0 }; // deficit 3
+  const mohGap: Starved = { wizard: "moh", cell: { region: "international", partyVibe: "chill" }, count: 1 }; // deficit 2
+  const queue = buildGapQueueFrom([bestmanGap, mohGap], 3);
 
   assert.equal(queue.length, 1, "one physical gap must yield exactly one task");
   const [task] = queue;
-  assert.equal(task.dataset, "golf");
-  assert.deepEqual(task.cell, { golfRegion: "International", tier: "budget" });
+  assert.equal(task.dataset, "party");
+  assert.deepEqual(task.cell, { region: "international", partyVibe: "chill" });
   assert.equal(task.deficit, 3, "merged deficit must be the MAX across the duplicates (worst starvation)");
   // wizardsServed is the dataset's full reverse-lookup (unchanged, union already).
-  assert.ok(task.wizardsServed.includes("handicap"));
-  assert.ok(task.wizardsServed.includes("tdf"));
   assert.ok(task.wizardsServed.includes("bestman"));
+  assert.ok(task.wizardsServed.includes("moh"));
   // starvedForWizards: provenance of which wizards were actually starved on
   // this cell (union of the merged duplicates), distinct from wizardsServed.
   assert.equal(task.starvedForWizards.length, 2);
-  assert.ok(task.starvedForWizards.includes("handicap"));
-  assert.ok(task.starvedForWizards.includes("tdf"));
+  assert.ok(task.starvedForWizards.includes("bestman"));
+  assert.ok(task.starvedForWizards.includes("moh"));
   // leverageScore recomputed on the merged (max) deficit.
   assert.equal(task.leverageScore, 3 * task.wizardsServed.length * 1.0);
 });

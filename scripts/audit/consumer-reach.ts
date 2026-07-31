@@ -49,11 +49,12 @@ export const CONSUMER_REPOS: { repo: string; wizards: WizardTag[]; note?: string
   { repo: "maid-of-honor-hq", wizards: ["moh"] },
   { repo: "handicap-hq", wizards: ["handicap"] },
   { repo: "offsite-outpost", wizards: ["offsite-retreat", "offsite-outing"] },
-  {
-    repo: "tour-de-fore",
-    wizards: ["tdf"],
-    note: "PERSONAL site + pro shop since the 2026-07-02 split — the golf-trip wizard moved to Handicap HQ. It imports nothing from shared-data, so the `tdf` wizard tag has no live consumer.",
-  },
+  // tour-de-fore is deliberately ABSENT. It became a personal golf site + pro
+  // shop in the 2026-07-02 split and imports nothing from this package; the
+  // `tdf` wizard it hosted was retired 2026-07-31 and all golf routes to
+  // Handicap HQ. Re-adding it would re-create the phantom consumer this audit
+  // was written to expose. If TDF ever consumes shared-data again, add it with
+  // the wizard it actually hosts.
 ];
 
 /**

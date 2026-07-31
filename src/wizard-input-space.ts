@@ -216,10 +216,6 @@ export const WIZARD_INPUT_SPACE: Record<WizardTag, InputAxis[]> = {
     { name: "golfRegion", values: GOLF_REGIONS },
     { name: "tier", values: GOLF_TIERS },
   ],
-  tdf: [
-    { name: "golfRegion", values: GOLF_REGIONS },
-    { name: "tier", values: GOLF_TIERS },
-  ],
   "offsite-retreat": [
     { name: "setting", values: RESIDENCE_SETTINGS },
     { name: "worldRegion", values: RESIDENCE_WORLD_REGIONS },

@@ -122,8 +122,8 @@ test("SYNTHETIC: an existing starved cell that IMPROVES (still below threshold) 
 
 test("SYNTHETIC: buildBaseline round-trips into a baseline that reports zero regressions against itself", () => {
   const underTagged: UnderTagged[] = [{ itemId: "x", kind: "residence", missingWizards: ["moh"] }];
-  const orphaned: Orphaned[] = [{ itemId: "y", kind: "golf-course", wizard: "tdf" }];
-  const starved: Starved[] = [{ wizard: "tdf", cell: { golfRegion: "International", tier: "budget" }, count: 0 }];
+  const orphaned: Orphaned[] = [{ itemId: "y", kind: "golf-course", wizard: "handicap" }];
+  const starved: Starved[] = [{ wizard: "handicap", cell: { golfRegion: "International", tier: "budget" }, count: 0 }];
 
   const built = buildBaseline(underTagged, orphaned, starved);
   const regressions = computeRegressions({ underTagged, orphaned, starved }, built);
@@ -151,13 +151,12 @@ test("SYNTHETIC: buildCoverageMatrix counts rows per wizard x dataset cell", () 
   const rows: BackfilledRow[] = [
     fakeRow({ id: "r1", dataset: "residence", postWizards: ["offsite-retreat", "offsite-outing"] }),
     fakeRow({ id: "r2", dataset: "residence", postWizards: ["offsite-retreat"] }),
-    fakeRow({ id: "g1", dataset: "golf", postWizards: ["handicap", "tdf"] }),
+    fakeRow({ id: "g1", dataset: "golf", postWizards: ["handicap"] }),
   ];
   const matrix = buildCoverageMatrix(rows);
   assert.equal(matrix["offsite-retreat"].residence, 2);
   assert.equal(matrix["offsite-outing"].residence, 1);
   assert.equal(matrix.handicap.golf, 1);
-  assert.equal(matrix.tdf.golf, 1);
   assert.equal(matrix.bestman.residence, 0);
 });
 

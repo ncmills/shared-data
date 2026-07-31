@@ -30,8 +30,8 @@ const GOLF_TASK: GapTask = {
   dataset: "golf",
   cell: { golfRegion: "International", tier: "budget" },
   deficit: 3,
-  wizardsServed: ["bestman", "offsite-retreat", "offsite-outing", "handicap", "tdf"],
-  starvedForWizards: ["handicap", "tdf"],
+  wizardsServed: ["bestman", "offsite-retreat", "offsite-outing", "handicap"],
+  starvedForWizards: ["handicap"],
   leverageScore: 15,
 };
 

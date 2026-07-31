@@ -54,7 +54,7 @@ test("TEETH: a correctly-tagged row (engine reads the kind) reports nothing", ()
     id: "synthetic-golf-2",
     dataset: "golf",
     kind: "golf-course",
-    postWizards: ["handicap", "tdf"],
+    postWizards: ["handicap"],
   });
 
   assert.deepEqual(findOrphanedIn([goodRow]), []);

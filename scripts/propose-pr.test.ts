@@ -37,7 +37,7 @@ const SAMPLE_GAP_TASK: GapTask = {
   dataset: "golf",
   cell: { golfRegion: "International", tier: "budget" },
   deficit: 3,
-  wizardsServed: ["handicap", "tdf"],
+  wizardsServed: ["handicap"],
   starvedForWizards: ["handicap"],
   leverageScore: 6,
 };

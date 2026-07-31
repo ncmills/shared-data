@@ -69,7 +69,7 @@ test("leverage sort: a smaller-rows/more-wizards candidate outranks a larger-row
     // "small" kind: 3 rows, but targets FIVE distinct wizards -> leverage 15
     entry({ id: "small-1", kind: "residence", targetWizard: "bestman" }),
     entry({ id: "small-2", kind: "residence", targetWizard: "moh" }),
-    entry({ id: "small-3", kind: "residence", targetWizard: "tdf" }),
+    entry({ id: "small-3", kind: "residence", targetWizard: "handicap" }),
     entry({ id: "small-4", kind: "residence", targetWizard: "offsite-retreat" }),
     entry({ id: "small-5", kind: "residence", targetWizard: "offsite-outing" }),
   ];

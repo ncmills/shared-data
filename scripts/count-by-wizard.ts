@@ -36,7 +36,8 @@ for (const d of sharedDestinations) {
 // Golf courses - note: don't have wizards, have sites
 // Let's count based on sites: tdf + offsite map to tdf and offsite-retreat/offsite-outing
 for (const c of SHARED_GOLF_COURSES) {
-  if ((c.sites ?? []).includes('tdf')) counts['tdf']++;
+  // The tdf SITE tag is legacy; the tdf WIZARD is retired — golf routes to HHQ.
+  if ((c.sites ?? []).includes('tdf')) counts['handicap']++;
   if ((c.sites ?? []).includes('offsite')) {
     counts['offsite-retreat']++;
     counts['offsite-outing']++;
@@ -53,9 +54,9 @@ for (const r of SHARED_RESIDENCES) {
   }
 }
 
-// TDF destinations
+// Golf-trip destinations (historically 'TDF' — Handicap HQ's since the split)
 for (const t of SHARED_TDF_DESTINATIONS) {
-  counts['tdf']++;
+  counts['handicap']++;
 }
 
 // Locals

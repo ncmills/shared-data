@@ -4,18 +4,16 @@ Rows = wizard, columns = dataset. Cell = real reachable row count in the canonic
 
 | wizard | party | golf | residence | tdf-destination | moh-local | bestman-local | oo-experience | oo-outing |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bestman | 5137 | 999 | 0 | 0 | 0 | 91 | 0 | 0 |
+| bestman | 5137 | 1000 | 0 | 0 | 0 | 91 | 0 | 0 |
 | moh | 4854 | 0 | 0 | 0 | 50 | 0 | 0 | 0 |
-| tdf | 0 | 999 | 0 | 234 | 0 | 0 | 0 | 0 |
-| offsite-retreat | 1233 | 999 | 341 | 0 | 0 | 0 | 158 | 0 |
-| offsite-outing | 5705 | 999 | 341 | 0 | 0 | 0 | 158 | 107 |
-| handicap | 0 | 999 | 0 | 234 | 0 | 0 | 0 | 0 |
+| offsite-retreat | 1233 | 1000 | 341 | 0 | 0 | 0 | 158 | 0 |
+| offsite-outing | 5705 | 1000 | 341 | 0 | 0 | 0 | 158 | 107 |
+| handicap | 0 | 1000 | 0 | 234 | 0 | 0 | 0 | 0 |
 
 ## Starved-cell summary (input-space cells below threshold, per wizard)
 
 - **bestman**: 0 starved cell(s)
 - **moh**: 0 starved cell(s)
-- **tdf**: 0 starved cell(s)
 - **offsite-retreat**: 65 starved cell(s)
 - **offsite-outing**: 0 starved cell(s)
 - **handicap**: 0 starved cell(s)
