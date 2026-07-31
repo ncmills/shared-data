@@ -73,6 +73,49 @@ function observeInFreshProcess(): { lat: number | null; sourceUrl: string | null
   return JSON.parse(out.trim().split("\n").pop()!);
 }
 
+/**
+ * The END-TO-END proof: a patch driven through the REAL ingest gate (real
+ * verify + brand + audit) must reach the rendered object. The test above proves
+ * the mechanism given a patch already in the file; this proves the path a
+ * backfill agent will actually take.
+ *
+ * `docs/` is restored too — the audit gate regenerates the coverage matrix as a
+ * side effect, and restoring only the data file leaves committed numbers
+ * describing a universe that no longer exists.
+ */
+test("a patch INGESTED through the real gate renders", async () => {
+  const { ingestResearched } = await import("../scripts/ingest-researched");
+  const touched = [
+    PATCHES_PATH,
+    join(REPO_ROOT, "docs", "coverage-matrix.md"),
+    join(REPO_ROOT, "docs", "audit-report.json"),
+  ];
+  const before = touched.map((p) => [p, readFileSync(p, "utf-8")] as const);
+
+  try {
+    const res = ingestResearched([
+      {
+        dataset: "party-venue-patch",
+        destinationId: TARGET.dest.id,
+        category: "activity",
+        name: TARGET.activity.name,
+        lat: 44.9778,
+        lng: -93.265,
+        sourceUrl: "https://www.patch-ingest-e2e.test/",
+        citations: ["https://www.patch-ingest-e2e.test/location"],
+      } as never,
+    ]);
+    assert.equal(res.accepted, 1, `ingest rejected the patch: ${res.reasons.join("; ")}`);
+
+    const seen = observeInFreshProcess();
+    assert.equal(seen.rendered, true, "target row stopped rendering after the patch landed");
+    assert.equal(seen.lat, 44.9778, "ingested patch did not reach the rendered object");
+    assert.equal(seen.sourceUrl, "https://www.patch-ingest-e2e.test/", "provenance lost before render");
+  } finally {
+    for (const [p, content] of before) writeFileSync(p, content);
+  }
+});
+
 test("a patched coordinate RENDERS through the MOH overlay", () => {
   const before = readFileSync(PATCHES_PATH, "utf-8");
   try {

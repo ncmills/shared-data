@@ -23,6 +23,21 @@
  *   - party-venue → `src/party-venues-expansion.ts` (2026-07-31; attached onto
  *                   the anchored destination by `attachPartyVenues()` in
  *                   `index.ts`, BEFORE `bakeDestination`).
+ *   - party-venue-patch → `src/party-venue-patches.ts` (2026-07-31; merged onto
+ *                   an EXISTING row by `applyPartyVenuePatches()`, after the
+ *                   attach and before the bake).
+ *
+ * ── insert vs. enrich ──────────────────────────────────────────────────────
+ * `party-venue` INSERTS a venue; `party-venue-patch` ENRICHES one. They are
+ * separate datasets because they validate under opposite rules:
+ *   - an insert must carry a full row and LOSES to a curated row of the same
+ *     name (never overwrite reviewed copy);
+ *   - a patch may carry a single field, must name a row that ALREADY EXISTS,
+ *     and deliberately OVERWRITES the curated value (correcting an editorial
+ *     default like `groupMin: 4` is the entire point).
+ * Requiring a patch to carry `type` + `highlight` the way an insert does would
+ * make the coordinate backfill (0 of 4,251 rows) and the URL backfill (47 of
+ * ~4,200) structurally impossible — those patches carry neither.
  * `golf-courses.ts`, the `SHARED_RESIDENCES` array in `residences.ts`, and the
  * curated `destinations-data.ts` + `destinations-expansion-*.ts` files are all
  * regen-only or hand-authored ("DO NOT hand-edit") and are NEVER touched here.
@@ -69,6 +84,7 @@ import {
   type ResearchedGolfRow,
   type ResearchedResidenceRow,
   type ResearchedPartyVenueRow,
+  type ResearchedPartyVenuePatchRow,
 } from "../src/research-schema";
 import { deriveRouting } from "../src/tagging-rules";
 import { SHARED_GOLF_COURSES } from "../src/golf-courses";
@@ -80,6 +96,7 @@ import type { SharedResidence } from "../src/residences";
 // resolve against what consumers actually read, not a raw expansion file.
 import { sharedDestinations } from "../src/index";
 import type { PartyVenueExpansionRow } from "../src/party-venues-expansion";
+import type { PartyVenuePatch } from "../src/party-venue-patches";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(HERE, "..");
@@ -87,6 +104,7 @@ const REPO_ROOT = join(HERE, "..");
 export const DEFAULT_GOLF_EXPANSION_PATH = join(REPO_ROOT, "src", "golf-courses-hhq-merge.ts");
 export const DEFAULT_RESIDENCE_EXPANSION_PATH = join(REPO_ROOT, "src", "residences-expansion.ts");
 export const DEFAULT_PARTY_VENUE_EXPANSION_PATH = join(REPO_ROOT, "src", "party-venues-expansion.ts");
+export const DEFAULT_PARTY_PATCH_PATH = join(REPO_ROOT, "src", "party-venue-patches.ts");
 
 export interface GateResult {
   ok: boolean;
@@ -104,6 +122,9 @@ export interface IngestOptions {
   /** Override for testing — write to a temp fixture instead of the real
    *  sanctioned party-venue expansion file. Defaults to the real file. */
   partyVenueFilePath?: string;
+  /** Override for testing — write to a temp fixture instead of the real
+   *  sanctioned party-venue PATCH file. Defaults to the real file. */
+  partyPatchFilePath?: string;
   /** Inject a gate runner for testing the rollback MECHANISM in isolation,
    *  without spawning the real (multi-second) verify/audit gates. Defaults to
    *  the real `npx tsx scripts/verify-universe.ts && ... && ... audit/index.ts`
@@ -120,7 +141,7 @@ export interface IngestOptions {
  * PR-body builder can always see exactly why a row didn't land.
  */
 export interface SkippedDuplicate {
-  dataset: "golf" | "residence" | "party-venue";
+  dataset: "golf" | "residence" | "party-venue" | "party-venue-patch";
   /** Human-readable identity of the skipped candidate (name+city, or id). */
   identity: string;
   reason: string;
@@ -493,6 +514,44 @@ function collectCuratedPartyIdentities(): Set<string> {
   return keys;
 }
 
+/**
+ * ResearchedPartyVenuePatchRow → PartyVenuePatch. Drops only the discriminator;
+ * the key fields and every payload field ride through, as does provenance.
+ *
+ * No `url` mirror here, unlike the insert paths: a patch is a partial row, and
+ * silently writing `url` from `sourceUrl` would overwrite a venue's real
+ * homepage with whatever page happened to document the patched fact. If a patch
+ * means to set `url`, it says so.
+ */
+function toPartyPatch(row: ResearchedPartyVenuePatchRow): ConvertResult<PartyVenuePatch> {
+  const { dataset: _dataset, ...rest } = row;
+  return { ok: true, row: rest as PartyVenuePatch };
+}
+
+/**
+ * Every (destination, category, name) that EXISTS in the universe — the set a
+ * patch target must be found in. Memoised; built only when patches are present.
+ */
+let _curatedPartyIdentities: Set<string> | undefined;
+function existingPartyRowIdentities(): Set<string> {
+  if (!_curatedPartyIdentities) _curatedPartyIdentities = collectCuratedPartyIdentities();
+  return _curatedPartyIdentities;
+}
+
+/** Identity keys out of the raw JSON parsed from the party PATCH file. */
+function collectPatchIdentities(arr: unknown[]): Set<string> {
+  const keys = new Set<string>();
+  for (const r of arr) {
+    if (typeof r !== "object" || r === null) continue;
+    const row = r as { destinationId?: unknown; category?: unknown; name?: unknown };
+    if (typeof row.destinationId !== "string" || typeof row.category !== "string" || typeof row.name !== "string") {
+      continue;
+    }
+    keys.add(partyIdentityKey(row.destinationId, row.category, row.name));
+  }
+  return keys;
+}
+
 /** Identity keys out of the raw JSON parsed from the party expansion file. */
 function collectPartyFileIdentities(arr: unknown[]): Set<string> {
   const keys = new Set<string>();
@@ -535,6 +594,7 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
   const golfPath = opts.golfFilePath ?? DEFAULT_GOLF_EXPANSION_PATH;
   const residencePath = opts.residenceFilePath ?? DEFAULT_RESIDENCE_EXPANSION_PATH;
   const partyPath = opts.partyVenueFilePath ?? DEFAULT_PARTY_VENUE_EXPANSION_PATH;
+  const patchPath = opts.partyPatchFilePath ?? DEFAULT_PARTY_PATCH_PATH;
   const runGates = opts.runGates ?? defaultRunGates;
 
   const reasons: string[] = [];
@@ -547,6 +607,7 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
   const golfCandidates: { source: ResearchedRow; course: SharedGolfCourse }[] = [];
   const residenceCandidates: { source: ResearchedRow; residence: SharedResidence }[] = [];
   const partyCandidates: { source: ResearchedRow; venue: PartyVenueExpansionRow }[] = [];
+  const patchCandidates: { source: ResearchedRow; patch: PartyVenuePatch }[] = [];
 
   // ── Step 1: validate every row through the honesty firewall ─────────────
   for (const row of rows) {
@@ -596,6 +657,29 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
         continue;
       }
       partyCandidates.push({ source: v.row, venue: conv.row });
+    } else if (v.row.dataset === "party-venue-patch") {
+      // A patch must name a row that ALREADY EXISTS. Resolved here, before any
+      // write, against the assembled universe. `applyPartyVenuePatches` throws
+      // on the same condition at assembly time; this check is what stops a
+      // dead patch reaching the file, and it is the difference between a
+      // backfill that moves data and one that reports success and moves none.
+      const key = partyIdentityKey(v.row.destinationId, v.row.category, v.row.name);
+      if (!existingPartyRowIdentities().has(key)) {
+        rejected++;
+        reasons.push(
+          `rejected (patch target not found): no ${v.row.category} named "${v.row.name}" on ` +
+            `${JSON.stringify(v.row.destinationId)}. The target is matched on destination + category + ` +
+            `name and is never searched for elsewhere — fix the key or drop the patch.`,
+        );
+        continue;
+      }
+      const conv = toPartyPatch(v.row);
+      if (!conv.ok) {
+        rejected++;
+        reasons.push(`rejected (shape): ${conv.reason}`);
+        continue;
+      }
+      patchCandidates.push({ source: v.row, patch: conv.row });
     } else {
       // EXPLICIT dispatch, no trailing else that silently assumes a dataset —
       // the same shape that let a seventh wizard fall into offsite-outing's
@@ -712,13 +796,53 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
     }
   }
 
-  // acceptedRows: same object references as the corresponding `rows` entries
-  // (no cloning) — golf then residence then party-venue, not necessarily the
-  // original submit order (no caller relies on cross-dataset ordering; see
-  // IngestResult doc).
-  const acceptedRows: ResearchedRow[] = [...acceptedGolfRows, ...acceptedResidenceRows, ...acceptedPartyRows];
+  // Patch dedup is ONE patch per (destination, category, name). A second patch
+  // for a row already patched is skipped rather than appended: two patches
+  // against one row make the merged result depend on array order, and
+  // `applyPartyVenuePatches` throws on exactly that. Re-patching a row means
+  // editing the existing entry, not stacking a new one.
+  let patchParsed: ParsedArrayFile | undefined;
+  const validPatch: PartyVenuePatch[] = [];
+  const acceptedPatchRows: ResearchedRow[] = [];
+  if (patchCandidates.length > 0) {
+    patchParsed = readArrayFile(patchPath);
+    const existing = collectPatchIdentities(patchParsed.arr);
+    for (const { source, patch } of patchCandidates) {
+      const key = partyIdentityKey(patch.destinationId, patch.category, patch.name);
+      if (existing.has(key)) {
+        rejected++;
+        const identity = `${patch.name} (${patch.destinationId}/${patch.category})`;
+        skippedDuplicates.push({
+          dataset: "party-venue-patch",
+          identity,
+          reason: `a patch for this row already exists (matched destination+category+name, case-insensitive)`,
+        });
+        reasons.push(`skipped duplicate (party-venue-patch): "${identity}" is already patched`);
+        continue;
+      }
+      existing.add(key);
+      validPatch.push(patch);
+      acceptedPatchRows.push(source);
+    }
+  }
 
-  if (validGolf.length === 0 && validResidence.length === 0 && validParty.length === 0) {
+  // acceptedRows: same object references as the corresponding `rows` entries
+  // (no cloning) — golf, residence, party-venue, then patches; not necessarily
+  // the original submit order (no caller relies on cross-dataset ordering; see
+  // IngestResult doc).
+  const acceptedRows: ResearchedRow[] = [
+    ...acceptedGolfRows,
+    ...acceptedResidenceRows,
+    ...acceptedPartyRows,
+    ...acceptedPatchRows,
+  ];
+
+  if (
+    validGolf.length === 0 &&
+    validResidence.length === 0 &&
+    validParty.length === 0 &&
+    validPatch.length === 0
+  ) {
     return { accepted: 0, rejected, reasons, acceptedRows: [], skippedDuplicates };
   }
 
@@ -744,6 +868,12 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
       const merged = [...partyParsed.arr, ...validParty];
       writeArrayFile(partyPath, partyParsed, merged);
       expectedCounts.push({ path: partyPath, expectedLen: merged.length });
+    }
+    if (validPatch.length > 0 && patchParsed) {
+      backups.push({ path: patchPath, prevContent: patchParsed.raw });
+      const merged = [...patchParsed.arr, ...validPatch];
+      writeArrayFile(patchPath, patchParsed, merged);
+      expectedCounts.push({ path: patchPath, expectedLen: merged.length });
     }
 
     // ── Step 4a: structural proof the write landed + coverage strictly
@@ -771,7 +901,7 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
       throw new GateFailure(`gate "${gate.failedGate ?? "verify/audit"}" failed:\n${gate.output.slice(0, 4000)}`);
     }
 
-    return { accepted: validGolf.length + validResidence.length + validParty.length, rejected, reasons, acceptedRows, skippedDuplicates };
+    return { accepted: validGolf.length + validResidence.length + validParty.length + validPatch.length, rejected, reasons, acceptedRows, skippedDuplicates };
   } catch (e) {
     // ── Step 5: roll back EVERY touched file to its exact prior contents ──
     for (const b of backups) writeFileSync(b.path, b.prevContent);
@@ -779,7 +909,7 @@ export function ingestResearched(rows: ResearchedRow[], opts: IngestOptions = {}
     reasons.push(`batch rejected + rolled back: ${msg}`);
     return {
       accepted: 0,
-      rejected: rejected + validGolf.length + validResidence.length + validParty.length,
+      rejected: rejected + validGolf.length + validResidence.length + validParty.length + validPatch.length,
       reasons,
       acceptedRows: [],
       skippedDuplicates,

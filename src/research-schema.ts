@@ -79,11 +79,52 @@ export type ResearchedPartyVenueRow = {
 } & Record<string, unknown> &
   Provenance;
 
+/**
+ * A researched ENRICHMENT of an existing party venue — an UPDATE, not an insert.
+ *
+ * Added 2026-07-31 alongside the patch overlay. It validates differently from
+ * `ResearchedPartyVenueRow` in one decisive way: it does NOT have to carry a
+ * full row. `PARTY_VENUE_REQUIRED_BY_CATEGORY` demands `type` + `highlight` of
+ * a new activity, and requiring that of a patch would make the entire
+ * coordinate backfill (0 of 4,251 rows) and URL backfill (47 of ~4,200)
+ * impossible, since those patches carry neither.
+ *
+ * What it MUST have: the key that identifies an existing row, provenance, and
+ * at least one payload field. A patch that changes nothing is a backfill row
+ * that reports success and moves no data.
+ *
+ * The key fields are validated here for shape only. The ingest gate is what
+ * resolves them against the real universe and fails loudly when the target row
+ * does not exist — the same division of labour as the party-venue anchor.
+ */
+export type ResearchedPartyVenuePatchRow = {
+  dataset: "party-venue-patch";
+  destinationId: string;
+  category: PartyVenueCategory;
+  name: string;
+} & Record<string, unknown> &
+  Provenance;
+
 /** Discriminated union of every dataset a research agent can produce. */
 export type ResearchedRow =
   | ResearchedGolfRow
   | ResearchedResidenceRow
-  | ResearchedPartyVenueRow;
+  | ResearchedPartyVenueRow
+  | ResearchedPartyVenuePatchRow;
+
+/**
+ * Keys that identify the target of a patch rather than being payload, plus the
+ * discriminator and provenance. A patch whose fields are entirely drawn from
+ * this set would merge nothing.
+ */
+const PATCH_NON_PAYLOAD_FIELDS = new Set([
+  "dataset",
+  "destinationId",
+  "category",
+  "name",
+  "sourceUrl",
+  "citations",
+]);
 
 export type ValidationResult =
   | { ok: true; row: ResearchedRow }
@@ -104,6 +145,9 @@ const REQUIRED_FIELDS: Record<ResearchedRow["dataset"], string[]> = {
   // The anchor + identity. Per-category discriminating fields are checked
   // separately below, because they differ by which array the row lands in.
   "party-venue": ["destinationId", "category", "name"],
+  // The KEY of the row being enriched. Deliberately the same three fields and
+  // NOT the per-category set — see ResearchedPartyVenuePatchRow.
+  "party-venue-patch": ["destinationId", "category", "name"],
 };
 
 /**
@@ -174,7 +218,12 @@ export function validateResearchedRow(input: unknown): ValidationResult {
 
   // ── dataset discriminator ──────────────────────────────────────────────
   const dataset = row.dataset;
-  if (dataset !== "golf" && dataset !== "residence" && dataset !== "party-venue") {
+  if (
+    dataset !== "golf" &&
+    dataset !== "residence" &&
+    dataset !== "party-venue" &&
+    dataset !== "party-venue-patch"
+  ) {
     return { ok: false, reasons: [`unknown or missing dataset: ${JSON.stringify(dataset)}`] };
   }
 
@@ -260,6 +309,76 @@ export function validateResearchedRow(input: unknown): ValidationResult {
       if (!realGroup) {
         reasons.push("activity missing a real group range (groupMin > 0 and groupMax >= groupMin)");
       }
+    }
+  }
+
+  if (dataset === "party-venue-patch") {
+    const category = row.category;
+    if (!PARTY_VENUE_CATEGORIES.includes(category as PartyVenueCategory)) {
+      reasons.push(
+        `party-venue-patch category must be one of ${PARTY_VENUE_CATEGORIES.join("/")}, got ${JSON.stringify(category)}`,
+      );
+    }
+
+    // A patch must CHANGE something. Key + provenance only would merge no
+    // fields — a backfill row that reports success and moves no data, which is
+    // the failure this whole path exists to prevent.
+    const payloadFields = Object.keys(row).filter((k) => !PATCH_NON_PAYLOAD_FIELDS.has(k));
+    if (payloadFields.length === 0) {
+      reasons.push(
+        "patch carries no payload field — it would change nothing (key + provenance only)",
+      );
+    }
+
+    // Display-critical numbers are checked ONLY when the patch sets them. A
+    // patch is a partial row, so absence means "not changing this"; but a
+    // present zero still renders as a confident "$0" or "fits 0 people", which
+    // is worse than leaving the old value alone.
+    if ("pricePerPerson" in row) {
+      const band = row.pricePerPerson as unknown;
+      const realBand =
+        Array.isArray(band) &&
+        band.length === 2 &&
+        band.every((n) => typeof n === "number" && n > 0) &&
+        (band[0] as number) <= (band[1] as number);
+      if (!realBand) {
+        reasons.push(
+          "patch sets pricePerPerson but not to a real band ([low, high], both numbers > 0, low <= high)",
+        );
+      }
+    }
+    if ("groupMin" in row || "groupMax" in row) {
+      // Either bound may be patched alone, so only the supplied one is checked
+      // for realness; the pair relation is checked when both are present.
+      const gMin = row.groupMin;
+      const gMax = row.groupMax;
+      if ("groupMin" in row && !(typeof gMin === "number" && gMin > 0)) {
+        reasons.push("patch sets groupMin but not to a number > 0");
+      }
+      if ("groupMax" in row && !(typeof gMax === "number" && gMax > 0)) {
+        reasons.push("patch sets groupMax but not to a number > 0");
+      }
+      if (typeof gMin === "number" && typeof gMax === "number" && gMax < gMin) {
+        reasons.push("patch sets groupMax below groupMin");
+      }
+    }
+    // Coordinates are the headline use of this path, and a swapped or
+    // out-of-range pair silently places a venue in the ocean — which then
+    // yields a confidently wrong sunset time, the exact fabrication the
+    // coordinate backfill exists to prevent.
+    for (const [field, limit] of [
+      ["lat", 90],
+      ["lng", 180],
+    ] as const) {
+      if (field in row) {
+        const v = row[field];
+        if (typeof v !== "number" || !Number.isFinite(v) || Math.abs(v) > limit) {
+          reasons.push(`patch sets ${field} to ${JSON.stringify(v)} — must be a finite number within ±${limit}`);
+        }
+      }
+    }
+    if (("lat" in row) !== ("lng" in row)) {
+      reasons.push("patch sets only one of lat/lng — a half coordinate locates nothing");
     }
   }
 
