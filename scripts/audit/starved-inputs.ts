@@ -197,6 +197,11 @@ export const STARVED_CELL_COUNTERS: Record<WizardTag, CellCounterFactory> = {
   handicap: countGolfCourses,
   "offsite-retreat": countResidences,
   "offsite-outing": countCorporatePartyRows,
+  // Both read party destinations and are tagged on the same per-item bake as
+  // bestman/moh, so they share the party counter — which filters on the wizard
+  // it is handed, never on a hardcoded name.
+  friendsmoon: countPartyDestinations,
+  engagedmoon: countPartyDestinations,
 };
 
 /**

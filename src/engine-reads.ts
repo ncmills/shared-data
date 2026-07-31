@@ -61,4 +61,15 @@ export const ENGINE_READS: Record<WizardTag, EntityKind[]> = {
   "offsite-retreat": ["residence", "experience", "party-venue", "golf-course"],
   "offsite-outing": ["residence", "experience", "outing-template", "party-venue", "golf-course"],
   handicap: ["golf-course", "golf-destination"],
+  // friendsmoon (friendsmoon.com) / engagedmoon (engagedmoon.com) — party-venue
+  // ONLY, deliberately. Both engines are unbuilt as of 2026-07-31, and this map
+  // is ground truth for what an engine ACTUALLY reads, not what it might one
+  // day want. Declaring `residence` here before a single residence is tagged
+  // for either wizard would manufacture starved cells (consumed-but-not-tagged)
+  // and certify a gap the product does not yet have — the same failure mode as
+  // `offsite-retreat`'s `outing-template` entry removed above, and as the golf
+  // rows that closed an audit gap while reaching no page. Widen these arrays in
+  // the SAME commit that tags the rows and ships the engine read, never before.
+  friendsmoon: ["party-venue"],
+  engagedmoon: ["party-venue"],
 };

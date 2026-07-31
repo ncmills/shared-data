@@ -84,6 +84,8 @@ const WIZARD_TO_STARVED_KIND: Record<WizardTag, EntityKind> = {
   "offsite-outing": "party-venue",
   handicap: "golf-course",
   "offsite-retreat": "residence",
+  friendsmoon: "party-venue",
+  engagedmoon: "party-venue",
 };
 
 /** Human-readable dataset label per EntityKind (for the `dataset` field). */

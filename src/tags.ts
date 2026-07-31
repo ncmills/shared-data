@@ -16,7 +16,7 @@
  */
 
 /**
- * The five consumer wizards. Offsite is one domain, two wizards.
+ * The seven consumer wizards. Offsite is one domain, two wizards.
  *
  * THIS ARRAY IS THE SOURCE OF TRUTH — `WizardTag` is derived from it, not the
  * other way round. Every guard that needs to enumerate wizards at RUNTIME
@@ -33,6 +33,23 @@
  * 36-cell input space for a product nobody ships. ALL golf now routes to
  * `handicap`, and the `tdf` SITE label was migrated onto `handicap` in the data
  * too (see SiteTag below) — no trace of the retired brand remains in routing.
+ *
+ * WHY FRIENDSMOON IS ONE TAG, NOT TWO. Friendsmoon (friendsmoon.com) ships a
+ * SPLIT wizard — a "crew" path (a just-married couple + 4–16 friends) and a
+ * "couples" path (3–6 couples). Offsite is split into two TAGS because its two
+ * paths read different `EntityKind`s (retreat → residence, outing →
+ * party-venue). Friendsmoon's two paths read the SAME party-venue data and
+ * differ only by group size and room pairing — query-time filters, not
+ * routing. Splitting the tag would triple the starved-cell surface and
+ * manufacture ~30 cells that measure the same universe twice. The split lives
+ * in the site's wizard UI, not here.
+ *
+ * ⚠️ UNMERGED-BY-DESIGN. `friendsmoon` and `engagedmoon` are tags for consumers
+ * that DO NOT EXIST YET. That is precisely what the `tdf` retirement above was
+ * cleaning up, so this branch is deliberately held out of `main` until a real
+ * site consumes it (see the plan's Phase 3 gate). Tags are inert without a
+ * consumer, so holding costs nothing; merging early would re-create the exact
+ * accounting error `tdf` was retired for.
  */
 export const ALL_WIZARD_TAGS = [
   "bestman",
@@ -40,6 +57,8 @@ export const ALL_WIZARD_TAGS = [
   "offsite-retreat",
   "offsite-outing",
   "handicap",
+  "friendsmoon",
+  "engagedmoon",
 ] as const;
 
 export type WizardTag = (typeof ALL_WIZARD_TAGS)[number];
@@ -54,15 +73,32 @@ export type WizardTag = (typeof ALL_WIZARD_TAGS)[number];
  * `handicap` to compensate. The rows were migrated (`sites:["tdf","offsite"]`
  * -> `["handicap","offsite"]`, 994 golf + 5 ingest + 234 destinations) so the
  * label now names the site that actually renders them.
+ *
+ * `friendsmoon` / `engagedmoon` are listed because the wizards exist in the
+ * vocabulary, but NO ROW carries either as a `sites` value yet — the axis is
+ * only on golf + residence rows, and neither wizard reads those kinds (see
+ * ENGINE_READS). Add rows here only alongside a real reader, per the tdf lesson
+ * directly above.
  */
-export type SiteTag = "moh" | "bestman" | "offsite" | "handicap";
+export type SiteTag =
+  | "moh"
+  | "bestman"
+  | "offsite"
+  | "handicap"
+  | "friendsmoon"
+  | "engagedmoon";
 
 export type ProductTag =
   | "bach-party"
   | "bachelorette"
   | "golf-trip"
   | "retreat"
-  | "outing";
+  | "outing"
+  // Named for the TRIP, not the brand, matching every sibling above
+  // (`bach-party`, not `bestman`). `friends-trip` covers both Friendsmoon
+  // paths; `proposal-trip` is Engagedmoon's.
+  | "friends-trip"
+  | "proposal-trip";
 
 /** Source of truth for the audience vocabulary — same rule as
  *  `ALL_WIZARD_TAGS`: runtime guards derive their set from here. */
@@ -126,6 +162,34 @@ export const ACTIVITY_AUDIENCE_TAGS: Record<string, UniverseAudience[]> = {
 
 export function activityAudiences(type: string): UniverseAudience[] {
   return ACTIVITY_AUDIENCE_TAGS[type] ?? ALL_AUDIENCES;
+}
+
+/**
+ * GENERAL-AUDIENCE PREDICATE — "the per-type taxonomy did not restrict this to
+ * bachelor/bachelorette staples."
+ *
+ * `ACTIVITY_AUDIENCE_TAGS` above is a RESTRICT-list: an unlisted type defaults
+ * to every audience, and the ~11 listed types (poker-night, boudoir, casino,
+ * pole-class, drag-brunch, …) are the party-locked ones. So "carries corporate"
+ * is, mechanically, the same signal as "is not party-locked" — 1,958 of 2,161
+ * activity rows.
+ *
+ * Friendsmoon and Engagedmoon need exactly that signal, and reading
+ * `audiences.includes("corporate")` at their call sites would read as though a
+ * honeymoon were a corporate offsite. This names the predicate for what it
+ * actually tests so those call sites stay honest.
+ *
+ * It deliberately does NOT widen `UniverseAudience` with `friends`/`couple`
+ * audiences: that type is the narrower back-compat union Offsite Outpost
+ * imports, and widening it would change OO's types for no routing gain. These
+ * two wizards need no audience of their own — they need the absence of a
+ * party lock.
+ */
+export function isGeneralAudience(audiences: readonly AudienceTag[]): boolean {
+  // Typed on the WIDER union so both `activityAudiences()` output
+  // (UniverseAudience[], no `internal`) and baked `audiences` (AudienceTag[])
+  // pass without a cast. UniverseAudience is a strict subset of AudienceTag.
+  return audiences.includes("corporate");
 }
 
 /** Nightlife is audience-tagged by vibe: an "unhinged" room isn't corporate. */

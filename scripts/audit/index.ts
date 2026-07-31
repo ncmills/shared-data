@@ -53,7 +53,10 @@ const REPORT_PATH = join(DOCS_DIR, "audit-report.json");
 const MATRIX_PATH = join(DOCS_DIR, "coverage-matrix.md");
 
 // Derived, never hand-copied — this list going stale silently drops a wizard
-// from the coverage matrix (see src/tags.ts).
+// from the coverage matrix (see src/tags.ts). Typecheck cannot catch a stale
+// literal here, because a `WizardTag[]` missing members is just a shorter
+// array, not a type error — so the guard is the pair of runtime assertions in
+// index.test.ts ("coverage matrix is keyed by every WizardTag").
 const ALL_WIZARDS: readonly WizardTag[] = ALL_WIZARD_TAGS;
 
 const ALL_DATASETS: Dataset[] = [

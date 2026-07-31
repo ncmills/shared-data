@@ -224,4 +224,22 @@ export const WIZARD_INPUT_SPACE: Record<WizardTag, InputAxis[]> = {
     { name: "region", values: PARTY_REGIONS },
     { name: "audience", values: OUTING_AUDIENCES },
   ],
+  // friendsmoon / engagedmoon — same axes as bestman/moh because they query the
+  // same entity (party destinations) over the same two real enums. `partyVibe`
+  // is the DESTINATION-level vibe, so "unhinged" here measures whether a city
+  // has unhinged-vibe inventory, NOT whether either wizard would ever surface
+  // it — neither will. Excluding the value would understate coverage for cities
+  // whose only tagged rows are unhinged, which is a real thinness signal worth
+  // seeing. Group size (crew vs couples vs party-of-two) is deliberately NOT an
+  // axis: it is a query-time filter on `groupMin`/`groupMax`, not a routing
+  // dimension, and crossing it here would blow the cell count up while
+  // measuring the same universe repeatedly.
+  friendsmoon: [
+    { name: "region", values: PARTY_REGIONS },
+    { name: "partyVibe", values: PARTY_VIBES },
+  ],
+  engagedmoon: [
+    { name: "region", values: PARTY_REGIONS },
+    { name: "partyVibe", values: PARTY_VIBES },
+  ],
 };
