@@ -71,8 +71,54 @@ export function bumpConsumers(sha: string, repos: string[] = DEFAULT_CONSUMER_RE
     const after = rewriteDep(before, sha);
     writeFileSync(pkgPath, after, "utf8");
     console.log(`[bump-consumers] ${repo}: pinned ${DEP_NAME} -> #${sha.slice(0, 7)}`);
-    execSync("npm install --package-lock-only", { cwd: repo, stdio: "inherit" });
+    // MUST name the dep AND the exact ref. A bare `npm install
+    // --package-lock-only` reports "up to date" and leaves the lockfile
+    // resolving the PREVIOUS commit, because the existing lock entry still
+    // satisfies the range npm is checking.
+    //
+    // That is not cosmetic: Vercel installs from the LOCKFILE, so a bump whose
+    // package.json says the new SHA while the lock still says the old one
+    // deploys the OLD data while every file on disk claims otherwise. Observed
+    // 2026-08-01 bumping to 46fe9c7 — all three consumers kept 8a69187 in the
+    // lock. `verifyPin` below now fails loudly on exactly that mismatch.
+    execSync(`npm install "${DEP_NAME}@${REPO_SPEC}#${sha}" --package-lock-only --no-audit --no-fund`, {
+      cwd: repo,
+      stdio: "inherit",
+    });
+
+    verifyPin(repo, sha);
   }
+}
+
+/**
+ * Assert the LOCKFILE actually resolves the requested commit.
+ *
+ * The lockfile is what a deploy installs from. A bump that updates
+ * package.json but not the lock is not a partial success — it is a silent
+ * downgrade that ships stale data while every file on disk claims the new SHA.
+ * Fail the bump rather than let it reach a push.
+ */
+export function verifyPin(repo: string, sha: string): void {
+  const lockPath = path.join(repo, "package-lock.json");
+  let lock: { packages?: Record<string, { resolved?: string }> };
+  try {
+    lock = JSON.parse(readFileSync(lockPath, "utf8"));
+  } catch (e) {
+    throw new Error(`[bump-consumers] ${repo}: cannot read package-lock.json (${String(e)})`);
+  }
+
+  const entry = lock.packages?.[`node_modules/${DEP_NAME}`];
+  const resolved = entry?.resolved ?? "";
+  const lockedSha = resolved.includes("#") ? resolved.split("#")[1]! : "";
+
+  if (!lockedSha.startsWith(sha) && !sha.startsWith(lockedSha.slice(0, 7))) {
+    throw new Error(
+      `[bump-consumers] ${repo}: LOCKFILE MISMATCH — package.json pins #${sha.slice(0, 7)} but ` +
+        `package-lock.json resolves ${lockedSha.slice(0, 7) || "<none>"}. A deploy installs from the ` +
+        `lockfile, so pushing this would ship the OLD data. Re-run the install naming the exact ref.`,
+    );
+  }
+  console.log(`[bump-consumers] ${repo}: lockfile verified @ ${lockedSha.slice(0, 7)}`);
 }
 
 async function main() {
