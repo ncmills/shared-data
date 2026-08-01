@@ -50,18 +50,40 @@ const TASK: BackfillTask = {
 
 const FIXTURE_URL = "https://www.backfill-pipeline-proof.test/";
 
-test("the real backfill queue finds the unsourced universe", () => {
-  // Aggregate assertions only — a concurrent test may source any single venue,
-  // but it cannot meaningfully move these totals.
+test("the real backfill queue is internally consistent", () => {
+  // INVARIANTS, not a snapshot of progress.
+  //
+  // This test previously asserted `totalUnsourced > 6000` and then FAILED THE
+  // MOMENT THE BACKFILL WORKED — 31 batches sourced ~340 venues and the count
+  // dropped to 5,836. A test that breaks because the thing it guards succeeded
+  // is worse than no test: it trains you to edit the number and move on, and
+  // the next edit hides a real regression.
+  //
+  // So assert only what stays true at 0% sourced and at 100% sourced.
   const q = buildBackfillQueue();
 
+  // The catalog does not shrink — rows get sourced, never deleted.
   assert.ok(q.totalRows > 6000, `expected >6000 party rows, got ${q.totalRows}`);
-  assert.ok(q.totalUnsourced > 6000, `expected >6000 unsourced, got ${q.totalUnsourced}`);
-  assert.ok(q.tasks.length > 500, `expected >500 tasks, got ${q.tasks.length}`);
+  assert.ok(
+    q.totalUnsourced <= q.totalRows,
+    `unsourced (${q.totalUnsourced}) cannot exceed total (${q.totalRows})`,
+  );
+
+  // NO SILENT TRUNCATION: with no limit, the tasks must account for every
+  // unsourced row exactly. This is the assertion that would actually catch a
+  // queue bug, and it holds at any level of progress.
+  const venuesAcrossTasks = q.tasks.reduce((n, t) => n + t.venues.length, 0);
+  assert.equal(
+    venuesAcrossTasks,
+    q.totalUnsourced,
+    "every unsourced row must appear in exactly one task",
+  );
+
   assert.ok(
     q.tasks.every((t) => t.venues.length > 0),
-    "every task must name at least one venue to source",
+    "a task naming no venue is work that cannot be done",
   );
+  assert.equal(q.droppedTasks, 0, "no limit was set, so nothing may be withheld");
 });
 
 test("a researched URL survives research and is ingest-shaped", async () => {
