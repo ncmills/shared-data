@@ -23,6 +23,8 @@
  *   B. WIZARD REACH    — for each ENGINE_READS kind, does that wizard's repo
  *                        import an export that actually provides it?
  *   C. DEAD DROPS      — data exports no consumer imports at all
+ *   D. FIELD REACH     — a row the consumer DOES surface, but stripped of the
+ *                        data that made it worth researching
  *
  * LOCAL-ONLY by nature: it needs sibling checkouts, so it SKIPS (exit 0) any
  * repo it can't find rather than failing CI. Run it before bumping consumers.
@@ -245,6 +247,73 @@ function gitInfo(sha: string): { date: string; behind: string } | null {
 
 // ─── the run ────────────────────────────────────────────────────────────────
 
+/**
+ * CHECK D — SHADOWED PROVENANCE.
+ *
+ * Added 2026-08-01 after the third instance of the same failure. Checks A-C ask
+ * "does the row reach the site". This asks "does the row arrive INTACT".
+ *
+ * The URL backfill sourced 389 venues in shared-data and only ~102 reached the
+ * wizard. Both party consumers union-merge their own local destination files
+ * over shared-data, and for the ~90 cities they carry locally the LOCAL twin
+ * wins — carrying no url — while the shared twin holding the researched url is
+ * dropped as a duplicate. Every existing gate passed: the row was present, the
+ * count was right, the audit was green. A live plan on prod rendered a GUESSED
+ * url next to a catalog that held the real one.
+ *
+ * The check is exact rather than a threshold, because brand filtering
+ * legitimately removes venues: a venue the consumer does not surface AT ALL is
+ * fine (MOH should not show a bachelor-coded bar). A venue the consumer DOES
+ * surface, whose shared twin has provenance and whose merged copy does not, is
+ * always a bug.
+ *
+ * Runs inside the consumer against the shared-data IT ACTUALLY INSTALLS, not
+ * this working tree — that is the version its users get.
+ */
+const FIELD_REACH_PROBE = `
+import { allDestinations } from "./src/data/index";
+import { sharedDestinations } from "shared-data";
+const CATS = ["activities","dining","nightlife","lodging","transport"];
+const norm = (s) => String(s ?? "").toLowerCase().replace(/[^\\p{L}\\p{N}]+/gu, " ").trim();
+const merged = new Map();
+for (const d of allDestinations) {
+  for (const c of CATS) for (const v of d[c] ?? []) merged.set(d.id + "|" + c + "|" + norm(v.name), v);
+}
+let sourced = 0, surfaced = 0, shadowed = 0;
+const examples = [];
+for (const d of sharedDestinations) {
+  for (const c of CATS) for (const v of d[c] ?? []) {
+    if (!v.url) continue;
+    sourced++;
+    const m = merged.get(d.id + "|" + c + "|" + norm(v.name));
+    if (!m) continue;            // filtered out entirely — legitimate
+    surfaced++;
+    if (!m.url) { shadowed++; if (examples.length < 5) examples.push(d.id + "/" + c + ": " + v.name); }
+  }
+}
+console.log("__FIELD_REACH__" + JSON.stringify({ sourced, surfaced, shadowed, examples }));
+`;
+
+/** Run the probe inside a consumer checkout. Returns null when it can't run —
+ *  a probe that fails to execute must never be read as "no shadowing". */
+export function checkFieldReach(
+  repoRoot: string,
+): { sourced: number; surfaced: number; shadowed: number; examples: string[] } | null {
+  try {
+    const out = execFileSync("npx", ["tsx", "--eval", FIELD_REACH_PROBE], {
+      cwd: repoRoot,
+      encoding: "utf-8",
+      stdio: ["ignore", "pipe", "ignore"],
+      timeout: 180_000,
+    });
+    const line = out.split("\n").find((l) => l.includes("__FIELD_REACH__"));
+    if (!line) return null;
+    return JSON.parse(line.slice(line.indexOf("__FIELD_REACH__") + "__FIELD_REACH__".length));
+  } catch {
+    return null;
+  }
+}
+
 export interface ReachFinding {
   severity: "critical" | "warning" | "info";
   repo: string;
@@ -327,6 +396,36 @@ export function runConsumerReach(): { findings: ReachFinding[]; skipped: string[
           }
         }
       }
+    }
+
+    // D. field reach — surfaced but stripped of its provenance
+    const fr = checkFieldReach(root);
+    if (!fr) {
+      // A probe that could not run is NOT a pass. Say so rather than stay
+      // silent — absence of a measurement is not a passing measurement.
+      findings.push({
+        severity: "warning",
+        repo,
+        detail:
+          `field-reach probe did not run (tsx/import failure or timeout) — shadowed provenance is ` +
+          `UNMEASURED here, not clean.`,
+      });
+    } else if (fr.shadowed > 0) {
+      const pct = fr.surfaced > 0 ? Math.round((fr.shadowed / fr.surfaced) * 100) : 0;
+      findings.push({
+        severity: "critical",
+        repo,
+        detail:
+          `${fr.shadowed} of ${fr.surfaced} surfaced venues (${pct}%) carry a url in shared-data but ` +
+          `NOT in this repo's merged catalog — the local twin is shadowing researched provenance. ` +
+          `e.g. ${fr.examples.slice(0, 3).join("; ")}`,
+      });
+    } else if (fr.sourced > 0) {
+      findings.push({
+        severity: "info",
+        repo,
+        detail: `field reach OK — ${fr.surfaced} of ${fr.sourced} sourced venues surface, none stripped.`,
+      });
     }
 
     if (note) findings.push({ severity: "info", repo, detail: note });
