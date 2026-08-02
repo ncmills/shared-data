@@ -154,3 +154,80 @@ test("wrapPrompt: preserves the original prompt and appends the JSON-only contra
   assert.match(w, /ORIGINAL PROMPT BODY/);
   assert.match(w, /ONLY a JSON/);
 });
+
+// ─── the telemetry-scrape regression (2026-08-02) ───────────────────────────
+//
+// A scheduled dry run reported "1 candidate rejected — candidate has no name"
+// on every task. The researcher had in fact returned `"result": "[]"` — nothing
+// found, correctly. parseCandidates only accepted a NON-EMPTY payload under an
+// envelope key, so an empty one fell through to "first [...] anywhere in the
+// text" — which matched `usage.iterations`, the CLI's own telemetry.
+//
+// Two failure modes, both pinned: the signal was corrupted (found-nothing became
+// rejected-something), and arbitrary envelope objects were entering the
+// candidate pipeline at all.
+
+/** The real envelope shape, trimmed to the parts that matter. */
+const ENVELOPE_EMPTY_RESULT = JSON.stringify({
+  is_error: false,
+  usage: {
+    input_tokens: 2703,
+    iterations: [{ input_tokens: 1408, output_tokens: 631, type: "message" }],
+  },
+  permission_denials: [],
+  result: "[]",
+  type: "result",
+});
+
+test("parseCandidates: an empty `result` means EMPTY, not 'go scrape the telemetry'", () => {
+  const rows = parseCandidates(ENVELOPE_EMPTY_RESULT);
+  assert.deepEqual(rows, [], "an honest empty result must parse as empty");
+});
+
+test("parseCandidates: never returns an object from the envelope's own telemetry", () => {
+  const rows = parseCandidates(ENVELOPE_EMPTY_RESULT);
+  for (const r of rows) {
+    assert.ok(
+      !(r as Record<string, unknown>)?.input_tokens,
+      "a usage.iterations entry leaked into the candidate list",
+    );
+  }
+});
+
+test("parseCandidates: a NON-empty result inside the same envelope still parses", () => {
+  const envelope = JSON.stringify({
+    usage: { iterations: [{ input_tokens: 1408, type: "message" }] },
+    result: JSON.stringify([{ ...ROW }]),
+    type: "result",
+  });
+  const rows = parseCandidates(envelope);
+  assert.equal(rows.length, 1, "a real payload must survive the envelope");
+  assert.equal((rows[0] as Record<string, unknown>).name, ROW.name);
+});
+
+test("parseCandidates: a prose-wrapped result inside the envelope still parses", () => {
+  const envelope = JSON.stringify({
+    usage: { iterations: [{ input_tokens: 1408, type: "message" }] },
+    result: "Here are the venues I found:\n```json\n" + JSON.stringify([ROW]) + "\n```",
+    type: "result",
+  });
+  const rows = parseCandidates(envelope);
+  assert.equal(rows.length, 1);
+  assert.equal((rows[0] as Record<string, unknown>).name, ROW.name);
+});
+
+test("parseCandidates: an envelope with an UNPARSEABLE result yields [], not telemetry", () => {
+  const envelope = JSON.stringify({
+    usage: { iterations: [{ input_tokens: 1408, type: "message" }] },
+    result: "I could not find anything useful.",
+    type: "result",
+  });
+  assert.deepEqual(parseCandidates(envelope), []);
+});
+
+test("parseCandidates: a bare prose response (NOT an envelope) still scrapes its array", () => {
+  // The fallback is still valuable when the output genuinely is not an envelope.
+  const rows = parseCandidates("Sure! Here you go: " + JSON.stringify([ROW]));
+  assert.equal(rows.length, 1);
+  assert.equal((rows[0] as Record<string, unknown>).name, ROW.name);
+});

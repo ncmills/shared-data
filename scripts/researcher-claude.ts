@@ -87,6 +87,17 @@ function extractFirstArray(text: string): unknown[] | null {
  * json` returns `{ type:"result", result:"<text>", … }`): each known text
  * field is unwrapped and re-parsed for an embedded array.
  */
+/**
+ * Does this look like the `claude -p --output-format json` envelope? Used to
+ * stop the prose-scraping fallback from ever running against it — see the note
+ * in `parseCandidates`.
+ */
+function isCliEnvelope(v: unknown): boolean {
+  if (!v || typeof v !== "object" || Array.isArray(v)) return false;
+  const o = v as Record<string, unknown>;
+  return "result" in o || o.type === "result";
+}
+
 function coerceArray(v: unknown): unknown[] | null {
   if (Array.isArray(v)) return v;
   if (v && typeof v === "object") {
@@ -94,6 +105,19 @@ function coerceArray(v: unknown): unknown[] | null {
       const inner = (v as Record<string, unknown>)[key];
       if (Array.isArray(inner)) return inner;
       if (typeof inner === "string") {
+        // A WELL-FORMED payload under a known envelope key is AUTHORITATIVE —
+        // including when it is an empty array. The previous code only accepted
+        // a non-empty result and otherwise fell through, which turned the
+        // researcher's honest "I found nothing" (`"result": "[]"`) into a scrape
+        // of the envelope's own telemetry. Absence of a finding is a finding.
+        const direct = tryParse(inner.trim());
+        if (direct !== undefined) {
+          const arr = coerceArray(direct);
+          if (arr) return arr;
+        }
+        // Not clean JSON (prose, a ```json fence): fall back to the full parser,
+        // but only accept a non-empty result so an unparseable payload can still
+        // be retried by a later key.
         const got = parseCandidates(inner);
         if (got.length > 0) return got;
       }
@@ -121,6 +145,13 @@ export function parseCandidates(stdout: unknown): unknown[] {
   if (whole !== undefined) {
     const arr = coerceArray(whole);
     if (arr) return arr;
+    // The CLI envelope parsed but carried no usable payload. STOP HERE — never
+    // fall through to step 3. The envelope is full of arrays that are not
+    // candidates (`usage.iterations`, `permission_denials`, `modelUsage`), and
+    // scraping "the first [...] in the text" happily returns one of them. That
+    // is how a run reported "1 candidate rejected — candidate has no name" when
+    // the researcher had actually, correctly, returned nothing.
+    if (isCliEnvelope(whole)) return [];
   }
 
   // 2. A ```json … ``` fence (its body may itself be clean OR prose-wrapped).
@@ -193,9 +224,29 @@ export function wrapPrompt(prompt: string): string {
   ].join("\n");
 }
 
+/**
+ * Grace period between the child EXITING and us giving up on its stdio closing.
+ * See the process-group note in `defaultClaudeRunner`.
+ */
+const STDIO_FLUSH_GRACE_MS = 2_000;
+
 /** The real runner: spawn `claude -p`, feed the prompt on stdin, capture stdout,
- *  enforce a hard timeout. Never rejects — resolves a `ClaudeRunResult`. */
-function defaultClaudeRunner(opts: ClaudeResearcherOptions): ClaudeRunner {
+ *  enforce a hard timeout. Never rejects — resolves a `ClaudeRunResult`.
+ *
+ *  GROUP-SAFE ON PURPOSE. `claude` spawns helper processes that inherit its
+ *  stdout pipe. Killing only the direct child (plain `child.kill()`, no
+ *  `detached`) leaves those helpers holding the pipe open, so `'close'` — which
+ *  waits for stdio EOF — never fires and the promise never settles. That is not
+ *  hypothetical: the identical bug parked a second-nick daemon for ~2h45m with
+ *  its launchd LED stuck on "running" (fixed there 2026-07-28, commit a710ba6).
+ *  This runner is about to be scheduled unattended, so it gets the same two
+ *  defenses:
+ *    1. `detached: true` makes the child a process-group leader, so
+ *       `process.kill(-pid)` SIGKILLs the WHOLE group — helpers included.
+ *    2. Settle on `'exit'` after a short flush grace, so even a pipe holder we
+ *       failed to kill cannot block the run forever.
+ */
+export function defaultClaudeRunner(opts: ClaudeResearcherOptions): ClaudeRunner {
   const bin = opts.claudeBin ?? "claude";
   const timeoutMs = opts.timeoutMs ?? 180_000;
   const model = opts.model;
@@ -209,7 +260,7 @@ function defaultClaudeRunner(opts: ClaudeResearcherOptions): ClaudeRunner {
 
       let child;
       try {
-        child = spawn(bin, args, { stdio: ["pipe", "pipe", "pipe"] });
+        child = spawn(bin, args, { stdio: ["pipe", "pipe", "pipe"], detached: true });
       } catch (e) {
         resolve({ code: -1, stdout: "", stderr: String(e) });
         return;
@@ -219,23 +270,47 @@ function defaultClaudeRunner(opts: ClaudeResearcherOptions): ClaudeRunner {
       let stderr = "";
       let timedOut = false;
       let settled = false;
+      let graceTimer: NodeJS.Timeout | undefined;
+
+      /** SIGKILL the child's whole process group, falling back to the child. */
+      const killGroup = () => {
+        try {
+          if (child.pid !== undefined) process.kill(-child.pid, "SIGKILL");
+          else child.kill("SIGKILL");
+        } catch {
+          // ESRCH (already gone) or EPERM — fall back to the direct child.
+          try {
+            child.kill("SIGKILL");
+          } catch {
+            /* nothing left to kill */
+          }
+        }
+      };
 
       const timer = setTimeout(() => {
         timedOut = true;
-        child.kill("SIGKILL");
+        killGroup();
       }, timeoutMs);
 
       const done = (code: number) => {
         if (settled) return;
         settled = true;
         clearTimeout(timer);
+        if (graceTimer) clearTimeout(graceTimer);
         resolve({ code, stdout, stderr, timedOut });
       };
 
       child.stdout?.on("data", (d) => (stdout += d.toString()));
       child.stderr?.on("data", (d) => (stderr += d.toString()));
-      child.on("error", (e) => done(typeof (e as { code?: number }).code === "number" ? -1 : -1));
+      child.on("error", () => done(-1));
       child.on("close", (code) => done(code ?? -1));
+      // The process is gone but a helper may still hold the pipe. Give stdio a
+      // moment to flush, then settle regardless — 'close' may never arrive.
+      child.on("exit", (code) => {
+        if (settled || graceTimer) return;
+        graceTimer = setTimeout(() => done(code ?? -1), STDIO_FLUSH_GRACE_MS);
+        graceTimer.unref?.();
+      });
 
       // Feed the prompt on stdin (safe — no shell arg quoting/escaping).
       child.stdin?.on("error", () => {}); // swallow EPIPE if the CLI exits early
