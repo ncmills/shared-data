@@ -294,11 +294,31 @@ for (const d of sharedDestinations) {
 console.log("__FIELD_REACH__" + JSON.stringify({ sourced, surfaced, shadowed, examples }));
 `;
 
-/** Run the probe inside a consumer checkout. Returns null when it can't run —
- *  a probe that fails to execute must never be read as "no shadowing". */
-export function checkFieldReach(
-  repoRoot: string,
-): { sourced: number; surfaced: number; shadowed: number; examples: string[] } | null {
+export type FieldReach =
+  | { kind: "measured"; sourced: number; surfaced: number; shadowed: number; examples: string[] }
+  /** No local destination catalog, so there is no twin that could shadow —
+   *  structurally clean rather than merely unobserved. */
+  | { kind: "not-applicable"; reason: string }
+  /** Could not be observed. NOT a pass. */
+  | { kind: "unmeasured" };
+
+/**
+ * Run the probe inside a consumer checkout.
+ *
+ * Three outcomes, deliberately distinct. "could not measure" must never be
+ * reported as "clean" — that conflation is exactly how this class of bug
+ * survived. But neither should a repo be held permanently red for a check that
+ * cannot apply to it: Offsite Outpost has no local destination catalog at all
+ * (it reads `sharedDestinations` + `applyOutpostOverlay` directly), so there is
+ * no local twin to shadow anything. That is a real answer, not a missing one.
+ */
+export function checkFieldReach(repoRoot: string): FieldReach {
+  if (!existsSync(join(repoRoot, "src", "data", "index.ts"))) {
+    return {
+      kind: "not-applicable",
+      reason: "no local destination catalog (src/data/index.ts) — reads shared-data directly, so no local twin can shadow it",
+    };
+  }
   try {
     const out = execFileSync("npx", ["tsx", "--eval", FIELD_REACH_PROBE], {
       cwd: repoRoot,
@@ -307,10 +327,11 @@ export function checkFieldReach(
       timeout: 180_000,
     });
     const line = out.split("\n").find((l) => l.includes("__FIELD_REACH__"));
-    if (!line) return null;
-    return JSON.parse(line.slice(line.indexOf("__FIELD_REACH__") + "__FIELD_REACH__".length));
+    if (!line) return { kind: "unmeasured" };
+    const parsed = JSON.parse(line.slice(line.indexOf("__FIELD_REACH__") + "__FIELD_REACH__".length));
+    return { kind: "measured", ...parsed };
   } catch {
-    return null;
+    return { kind: "unmeasured" };
   }
 }
 
@@ -400,7 +421,9 @@ export function runConsumerReach(): { findings: ReachFinding[]; skipped: string[
 
     // D. field reach — surfaced but stripped of its provenance
     const fr = checkFieldReach(root);
-    if (!fr) {
+    if (fr.kind === "not-applicable") {
+      findings.push({ severity: "info", repo, detail: `field reach N/A — ${fr.reason}.` });
+    } else if (fr.kind === "unmeasured") {
       // A probe that could not run is NOT a pass. Say so rather than stay
       // silent — absence of a measurement is not a passing measurement.
       findings.push({
