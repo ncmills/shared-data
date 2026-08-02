@@ -9,8 +9,11 @@
 // Everything is injected here — no network, no writes, no real gates.
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
-import { runBackfill } from "./run-backfill";
+import { runBackfill, deriveBackfillCliConfig } from "./run-backfill";
 import type { BackfillTask } from "./backfill-queue";
 import type { IngestResult } from "./ingest-researched";
 
@@ -67,6 +70,9 @@ const okIngest = (rows: unknown[]): IngestResult => ({
 
 const baseOpts = {
   label: "backfill-test",
+  // Never touch the real record from a test — a fixture venue written here
+  // would be deprioritised in the next PRODUCTION run.
+  recordAttempts: false as const,
   topK: 10,
   rowCap: 100,
   tasks: TASKS,
@@ -191,4 +197,60 @@ test("surfaces WHY each candidate was rejected, not just how many", async () => 
     "each carries its task and at least one reason",
   );
   assert.match(res.rejections[0].reasons.join(" "), /drift/i);
+});
+
+// ─── --auto / pushPr wiring ─────────────────────────────────────────────────
+//
+// `pushPr` is the only flag in this lane that can open a real PR against the
+// repo, so its derivation is pinned rather than left to a comment. The case
+// that matters most is the THIRD one: `--auto --dry-run` is how the schedule is
+// smoke-tested, and it must never push.
+
+test("deriveBackfillCliConfig: default mode never pushes", () => {
+  const cfg = deriveBackfillCliConfig({});
+  assert.equal(cfg.pushPr, false);
+  assert.equal(cfg.liveUrlCheck, false);
+});
+
+test("deriveBackfillCliConfig: --auto turns on the live-URL gate AND push", () => {
+  const cfg = deriveBackfillCliConfig({ auto: true });
+  assert.equal(cfg.pushPr, true, "unattended mode opens a real PR");
+  assert.equal(cfg.liveUrlCheck, true, "--auto must not ingest dead sources");
+});
+
+test("deriveBackfillCliConfig: --auto --dry-run researches but NEVER pushes", () => {
+  const cfg = deriveBackfillCliConfig({ auto: true, dryRun: true });
+  assert.equal(cfg.pushPr, false, "a dry run must never open a PR");
+  assert.equal(cfg.liveUrlCheck, true, "the gate still reports honestly");
+});
+
+test("deriveBackfillCliConfig: --dry-run alone cannot push either", () => {
+  assert.equal(deriveBackfillCliConfig({ dryRun: true }).pushPr, false);
+});
+
+test("deriveBackfillCliConfig: --live-url-check without --auto still never pushes", () => {
+  const cfg = deriveBackfillCliConfig({ liveUrlCheck: true });
+  assert.equal(cfg.liveUrlCheck, true);
+  assert.equal(cfg.pushPr, false, "only --auto may push");
+});
+
+test("records a failed venue so the next run sinks it, and clears one that landed", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "attempts-"));
+  const path = join(dir, "backfill-attempts.json");
+  try {
+    // The researcher sources only the FIRST venue of the alpha task.
+    const partial = async (prompt: string) => {
+      const task = TASKS.find((t) => prompt.includes(t.destinationId))!;
+      return task.destinationId === "alpha-mn" ? [patchFor(task, task.venues[0])] : [];
+    };
+
+    await runBackfill({ ...baseOpts, recordAttempts: true, attemptsPath: path, researcher: partial });
+
+    const rec = JSON.parse(readFileSync(path, "utf-8")) as Record<string, number>;
+    assert.equal(rec["alpha-mn|activity|alpha one"], undefined, "a venue that landed carries no failure");
+    assert.equal(rec["alpha-mn|activity|alpha two"], 1, "the one that did not is counted");
+    assert.equal(rec["beta-mn|dining|beta one"], 1);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

@@ -21,8 +21,15 @@
  *   npx tsx scripts/run-backfill.ts --label=backfill-0731 --top-k=5 --row-cap=25 --dry-run
  * Run for real (local PR artifact, live-URL checked):
  *   npx tsx scripts/run-backfill.ts --label=backfill-0731 --top-k=5 --row-cap=25 --live-url-check
+ * Run UNATTENDED (live-URL gate ON, opens a REAL PR — never merges):
+ *   npx tsx scripts/run-backfill.ts --auto --top-k=5 --row-cap=25
+ *
+ * The `--auto` path is what `com.ncmills.url-backfill` (launchd) drives. Before
+ * it existed this lane could only ever produce a LOCAL branch, so every batch
+ * needed a human at a terminal — which is why the queue sat at 342 of 6,225
+ * rows sourced, two batches in, with no third batch coming.
  */
-import { buildBackfillQueue, type BackfillTask } from "./backfill-queue";
+import { buildBackfillQueue, loadAttempts, recordAttempts, type BackfillTask } from "./backfill-queue";
 import { researchBackfill } from "./research-backfill";
 import { runExpansion, type RunExpansionOptions, type RunResult } from "./run-expansion";
 
@@ -33,13 +40,26 @@ export interface RunBackfillOptions
   /** Venues per research call. See `BackfillQueueOptions.maxVenuesPerTask` —
    *  an unbounded task times the researcher out and the fail-safe hides it. */
   maxVenuesPerTask?: number;
+  /** Set false to leave the persisted attempt record alone. */
+  recordAttempts?: boolean;
+  /** Override the attempt-record path. Tests MUST set this — otherwise a test
+   *  run writes fixture venues into the real record and silently sinks them in
+   *  the next production run. (Happened once; hence this seam.) */
+  attemptsPath?: string;
 }
 
 export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<BackfillTask>> {
   const tasks =
-    opts.tasks ?? buildBackfillQueue(undefined, { maxVenuesPerTask: opts.maxVenuesPerTask ?? 8 }).tasks;
+    opts.tasks ??
+    buildBackfillQueue(undefined, {
+      maxVenuesPerTask: opts.maxVenuesPerTask ?? 8,
+      // Deprioritise venues previous runs already failed to source, so the
+      // queue head does not silt up with residue (yield fell 22 -> 3 per batch
+      // across the 31-batch run for exactly this reason).
+      attempts: opts.recordAttempts === false ? {} : loadAttempts(opts.attemptsPath),
+    }).tasks;
 
-  return runExpansion<BackfillTask>({
+  const result = await runExpansion<BackfillTask>({
     ...opts,
     tasks,
     taskNoun: "backfill",
@@ -52,6 +72,53 @@ export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<B
         verifyUrl: opts.verifyUrl,
       }),
   });
+
+  // Record which asked-about venues did NOT come back sourced, so the next run
+  // sinks them instead of re-asking forever. Venues that DID land have their
+  // record cleared.
+  if (opts.recordAttempts !== false) {
+    const asked = tasks.flatMap((t) =>
+      t.venues.map((name) => ({ destinationId: t.destinationId, category: t.category, name })),
+    );
+    const sourced = new Set(
+      result.ingestedRows.map((r) => {
+        const row = r as unknown as Record<string, unknown>;
+        return `${row.destinationId}|${row.category}|${String(row.name ?? "").trim().toLowerCase()}`;
+      }),
+    );
+    recordAttempts(asked, sourced, opts.attemptsPath);
+  }
+
+  return result;
+}
+
+/**
+ * The backfill CLI's two-mode contract, pure + exported so the wiring — above
+ * all `pushPr`, the one flag that can open a real PR — is unit-tested rather
+ * than asserted in a comment. Mirrors `deriveCliConfig` in run-expansion.ts.
+ *
+ *   DEFAULT — researches and proposes a LOCAL branch only. Never pushes.
+ *   `--auto` — unattended: live-URL gate ON + push ON (a real PR, never merged).
+ *   `--auto --dry-run` — researches and reports, ingests nothing, pushes
+ *      nothing. The safe way to smoke the real researcher on a schedule.
+ */
+export interface BackfillCliConfig {
+  liveUrlCheck: boolean;
+  /** Real PR push — true ONLY when `--auto` AND not a dry run. */
+  pushPr: boolean;
+}
+
+export function deriveBackfillCliConfig(args: {
+  auto?: boolean;
+  dryRun?: boolean;
+  liveUrlCheck?: boolean;
+}): BackfillCliConfig {
+  const auto = args.auto === true;
+  const dryRun = args.dryRun === true;
+  return {
+    liveUrlCheck: auto || args.liveUrlCheck === true,
+    pushPr: auto && !dryRun,
+  };
 }
 
 // ─── CLI ────────────────────────────────────────────────────────────────────
@@ -70,7 +137,22 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
   const label = args.get("label") ?? "url-backfill";
   const dryRun = args.get("dry-run") === "true";
-  const liveUrlCheck = args.get("live-url-check") === "true";
+
+  // `--auto` — the UNATTENDED mode the launchd job runs, same contract as
+  // run-expansion's: live-URL gate ON + push ON (a REAL PR via
+  // `proposePr({push:true})`). It never merges and never deploys; a human
+  // reviews the PR. `--auto --dry-run` still researches and reports but
+  // short-circuits before ingest, so it opens nothing — the safe smoke test.
+  //
+  // Without this flag the backfill lane could only ever produce a LOCAL branch,
+  // which is why it had no way to run unattended: every batch needed a human at
+  // a terminal to push it. That is the whole reason 5,836 of 6,225 rows were
+  // still unsourced two batches in.
+  const { liveUrlCheck, pushPr } = deriveBackfillCliConfig({
+    auto: args.get("auto") === "true",
+    dryRun,
+    liveUrlCheck: args.get("live-url-check") === "true",
+  });
 
   // A DRY RUN STILL RESEARCHES. That is the whole point of it: you want to see
   // what the researcher actually returns, and how much of it survives the
@@ -105,6 +187,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     rowCap: num("row-cap", 25),
     dryRun,
     liveUrlCheck,
+    pushPr,
     researcher,
     maxVenuesPerTask,
   });

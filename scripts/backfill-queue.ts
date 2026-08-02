@@ -19,6 +19,10 @@
  *
  * Run: npx tsx scripts/backfill-queue.ts
  */
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { sharedDestinations } from "../src/index";
 import type { CanonicalDestination } from "../src/destinations-types";
 import type { PartyVenueCategory } from "../src/research-schema";
@@ -57,6 +61,10 @@ export interface BackfillQueue {
    * this repo has been bitten by.
    */
   droppedTasks: number;
+  /** Venues past `maxAttempts` and no longer offered. Reported, never hidden. */
+  exhausted: number;
+  /** `<destinationId>/<category>: <name>` for each, so the residue is legible. */
+  exhaustedVenues: string[];
 }
 
 export interface BackfillQueueOptions {
@@ -75,6 +83,26 @@ export interface BackfillQueueOptions {
    * Unset means one task per category, the original behaviour.
    */
   maxVenuesPerTask?: number;
+  /**
+   * How many times each venue has already been researched without producing a
+   * url, keyed `<destinationId>|<category>|<normalised name>`.
+   *
+   * The queue re-derives purely from "still unsourced", so without this a venue
+   * that CANNOT be sourced — a generic activity name with no business behind it
+   * — is offered again every run and crowds out venues that can be. Measured
+   * across the 31-batch run: `atlantic-city-nj:dining#1` returned 0 valid twice
+   * running, and yield fell from 22/batch to 3/batch as the queue head filled
+   * with residue.
+   */
+  attempts?: Record<string, number>;
+  /**
+   * Attempts after which a venue stops being offered. Default 3.
+   *
+   * It stops being OFFERED, not counted: `totalUnsourced` still includes it and
+   * `exhausted` reports it. A venue that failed twice may be findable later, and
+   * quietly discarding work is how coverage numbers start lying.
+   */
+  maxAttempts?: number;
 }
 
 const CATEGORIES: readonly { category: PartyVenueCategory; field: keyof CanonicalDestination }[] = [
@@ -84,6 +112,10 @@ const CATEGORIES: readonly { category: PartyVenueCategory; field: keyof Canonica
   { category: "lodging", field: "lodging" },
   { category: "transport", field: "transport" },
 ];
+
+/** Venue-name normalisation — same shape the patch layer and the drift guard
+ *  use, so an attempt recorded by one is recognised by the other. */
+const norm = (s: string): string => s.trim().toLowerCase();
 
 /** A row is sourced iff it carries a non-blank `url`. */
 function isSourced(row: { url?: unknown }): boolean {
@@ -97,6 +129,8 @@ export function buildBackfillQueue(
   const tasks: BackfillTask[] = [];
   let totalRows = 0;
   let totalUnsourced = 0;
+  let exhausted = 0;
+  const exhaustedVenues: string[] = [];
 
   for (const dest of destinations) {
     for (const { category, field } of CATEGORIES) {
@@ -109,7 +143,26 @@ export function buildBackfillQueue(
       totalUnsourced += missing.length;
 
       const wizardsServed = [...new Set(missing.flatMap((r) => r.wizards ?? []))].sort();
-      const names = missing.map((r) => r.name);
+
+      // Least-attempted first, so fresh venues lead and residue sinks. Stable
+      // within an attempt count (catalog order preserved) so the queue does not
+      // reshuffle itself between runs.
+      const attemptOf = (name: string) =>
+        opts.attempts?.[`${dest.id}|${category}|${norm(name)}`] ?? 0;
+      const ceiling = opts.maxAttempts ?? 3;
+
+      const offerable = missing.filter((r) => {
+        if (attemptOf(r.name) < ceiling) return true;
+        exhausted++;
+        exhaustedVenues.push(`${dest.id}/${category}: ${r.name}`);
+        return false;
+      });
+      if (offerable.length === 0) continue;
+
+      const names = offerable
+        .map((r, i) => ({ name: r.name, a: attemptOf(r.name), i }))
+        .sort((x, y) => x.a - y.a || x.i - y.i)
+        .map((x) => x.name);
       const size = opts.maxVenuesPerTask && opts.maxVenuesPerTask > 0 ? opts.maxVenuesPerTask : names.length;
 
       // Chunked, never truncated — every venue lands in exactly one task.
@@ -145,12 +198,54 @@ export function buildBackfillQueue(
     totalRows,
     totalUnsourced,
     droppedTasks: tasks.length - kept.length,
+    exhausted,
+    exhaustedVenues,
   };
+}
+
+// ─── attempt record ────────────────────────────────────────────────────────
+//
+// Persisted so the deprioritisation actually survives between runs. Without
+// this the `attempts` option would be inert — a knob nothing turns, which is
+// the "built but unwired" shape this repo keeps finding.
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+export const DEFAULT_ATTEMPTS_PATH = join(HERE, "..", "docs", "backfill-attempts.json");
+
+export function loadAttempts(path: string = DEFAULT_ATTEMPTS_PATH): Record<string, number> {
+  if (!existsSync(path)) return {};
+  try {
+    const parsed = JSON.parse(readFileSync(path, "utf-8"));
+    return parsed && typeof parsed === "object" ? (parsed as Record<string, number>) : {};
+  } catch {
+    // A corrupt record must not silently reset every venue to zero attempts —
+    // that would quietly resurrect the exact residue this exists to sink.
+    throw new Error(`backfill-queue: ${path} is unreadable — fix or delete it deliberately`);
+  }
+}
+
+/** Increment the venues that were ASKED ABOUT but produced no url this run. */
+export function recordAttempts(
+  asked: { destinationId: string; category: string; name: string }[],
+  sourced: Set<string>,
+  path: string = DEFAULT_ATTEMPTS_PATH,
+): Record<string, number> {
+  const attempts = loadAttempts(path);
+  for (const v of asked) {
+    const key = `${v.destinationId}|${v.category}|${norm(v.name)}`;
+    if (sourced.has(key)) {
+      delete attempts[key]; // it landed — forget the failures
+      continue;
+    }
+    attempts[key] = (attempts[key] ?? 0) + 1;
+  }
+  writeFileSync(path, JSON.stringify(attempts, null, 2) + "\n");
+  return attempts;
 }
 
 // ─── CLI ────────────────────────────────────────────────────────────────────
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const q = buildBackfillQueue(undefined, { maxVenuesPerTask: 8 });
+  const q = buildBackfillQueue(undefined, { maxVenuesPerTask: 8, attempts: loadAttempts() });
   const pct = q.totalRows === 0 ? 0 : ((q.totalRows - q.totalUnsourced) / q.totalRows) * 100;
   console.log(`backfill-queue — party rows with no followable source\n`);
   console.log(

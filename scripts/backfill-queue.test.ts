@@ -208,3 +208,53 @@ test("no chunk size means one task per category, as before", () => {
   const q = buildBackfillQueue([dest("a-mn", { activities: many })]);
   assert.equal(q.tasks.length, 1);
 });
+
+// ─── attempt memory (2026-08-02) ────────────────────────────────────────────
+//
+// The queue re-derives purely from "still unsourced", so a venue that CANNOT be
+// sourced — a generic activity name with no business behind it — is offered
+// again every single run and crowds out venues that can be. Observed across the
+// 31-batch run: `atlantic-city-nj:dining#1` came back 0 valid twice in a row,
+// and yield fell from 22/batch to 3/batch as the top of the queue filled with
+// residue.
+//
+// Attempts are recorded per venue. A venue that has been asked about N times
+// without ever producing a url is DEPRIORITISED — not dropped, because a venue
+// that failed twice may still be findable later, and silently discarding work
+// is how coverage numbers start lying.
+test("deprioritises venues already attempted without success", () => {
+  const q = buildBackfillQueue(
+    [
+      dest("a-mn", { activities: [activity("Tried Twice"), activity("Never Tried")] }),
+    ],
+    { maxVenuesPerTask: 1, attempts: { "a-mn|activity|tried twice": 2 } },
+  );
+
+  assert.equal(q.tasks[0].venues[0], "Never Tried", "untried venues come first");
+});
+
+test("an exhausted venue is REPORTED, never silently dropped", () => {
+  const q = buildBackfillQueue(
+    [dest("a-mn", { activities: [activity("Hopeless")] })],
+    { attempts: { "a-mn|activity|hopeless": 5 }, maxAttempts: 3 },
+  );
+
+  assert.equal(q.tasks.length, 0, "past the attempt ceiling it stops being offered");
+  assert.equal(q.exhausted, 1, "but the count is surfaced");
+  assert.ok(q.exhaustedVenues[0].includes("Hopeless"));
+});
+
+test("totals still describe the whole universe, exhausted included", () => {
+  const q = buildBackfillQueue(
+    [dest("a-mn", { activities: [activity("Hopeless"), activity("Fresh")] })],
+    { attempts: { "a-mn|activity|hopeless": 5 }, maxAttempts: 3 },
+  );
+
+  assert.equal(q.totalUnsourced, 2, "an exhausted venue is still unsourced — do not hide it");
+});
+
+test("with no attempt record the queue behaves exactly as before", () => {
+  const q = buildBackfillQueue([dest("a-mn", { activities: [activity("A"), activity("B")] })]);
+  assert.equal(q.tasks[0].venues.length, 2);
+  assert.equal(q.exhausted, 0);
+});
