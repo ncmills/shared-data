@@ -312,7 +312,29 @@ export type FieldReach =
  * (it reads `sharedDestinations` + `applyOutpostOverlay` directly), so there is
  * no local twin to shadow anything. That is a real answer, not a missing one.
  */
-export function checkFieldReach(repoRoot: string): FieldReach {
+export function checkFieldReach(repoRoot: string, readsPartyVenue: boolean): FieldReach {
+  // Check D is about PARTY-VENUE provenance specifically. A consumer whose
+  // engine does not read party-venue builds its catalog from a different
+  // dataset, and comparing the two produces nonsense.
+  //
+  // It produced exactly that on its first run: Handicap HQ was reported
+  // "3 of 3 shadowed (100%)" for Birmingham/Mobile dining. HHQ reads
+  // `golfDestinations()`, a SEPARATE dataset that happens to share destination
+  // ids and venue names with the party catalog. The party row for Automatic
+  // Seafood carries automaticseafood.com; the golf row is a different object
+  // that never had one. Nothing was being shadowed.
+  //
+  // (There IS a real finding underneath: the same restaurant is sourced in the
+  // party dataset and unsourced in the golf one, so the backfill never benefits
+  // HHQ even for identical venues. That is cross-dataset DUPLICATION, not
+  // shadowing. It is deliberately NOT reported by this check — it needs its own
+  // check against the golf dataset, which does not exist yet.)
+  if (!readsPartyVenue) {
+    return {
+      kind: "not-applicable",
+      reason: "engine does not read party-venue — its catalog comes from another dataset entirely",
+    };
+  }
   if (!existsSync(join(repoRoot, "src", "data", "index.ts"))) {
     return {
       kind: "not-applicable",
@@ -420,7 +442,10 @@ export function runConsumerReach(): { findings: ReachFinding[]; skipped: string[
     }
 
     // D. field reach — surfaced but stripped of its provenance
-    const fr = checkFieldReach(root);
+    const readsPartyVenue = wizards.some((w) =>
+      ((ENGINE_READS as Record<string, readonly string[]>)[w] ?? []).includes("party-venue"),
+    );
+    const fr = checkFieldReach(root, readsPartyVenue);
     if (fr.kind === "not-applicable") {
       findings.push({ severity: "info", repo, detail: `field reach N/A — ${fr.reason}.` });
     } else if (fr.kind === "unmeasured") {
