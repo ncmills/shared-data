@@ -9,7 +9,7 @@
 // Everything is injected here — no network, no writes, no real gates.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -250,6 +250,73 @@ test("records a failed venue so the next run sinks it, and clears one that lande
     assert.equal(rec["alpha-mn|activity|alpha one"], undefined, "a venue that landed carries no failure");
     assert.equal(rec["alpha-mn|activity|alpha two"], 1, "the one that did not is counted");
     assert.equal(rec["beta-mn|dining|beta one"], 1);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+// ─── attempt-record blast radius (2026-08-02) ───────────────────────────────
+//
+// The attempt record is what retires a venue from the queue after maxAttempts.
+// Two ways it was over-recording, both measured, both silent:
+//   • it recorded against the WHOLE queue rather than the top-K actually asked
+//     about — one run retired every unsourced venue in the universe (a dry run
+//     against the real queue wrote 5,836 entries);
+//   • a DRY RUN recorded too, though it attempts nothing — so the documented
+//     safe smoke command was the most destructive one in the lane.
+// The failure mode is the dangerous kind: the queue reports nothing left to
+// offer, which reads exactly like "the backfill finished".
+
+/** Ten tasks, so a top-K of 2 leaves 8 that must NOT be recorded. */
+const TEN_TASKS: BackfillTask[] = Array.from({ length: 10 }, (_, i) => ({
+  ...TASKS[0],
+  id: `url-backfill:city-${i}:activity`,
+  destinationId: `city-${i}`,
+  venues: [`Venue ${i}`],
+}));
+
+test("attempts are recorded ONLY for the top-K tasks a run actually considered", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "attempts-topk-"));
+  const path = join(dir, "backfill-attempts.json");
+  try {
+    const res = await runBackfill({
+      ...baseOpts,
+      tasks: TEN_TASKS,
+      topK: 2,
+      recordAttempts: true,
+      attemptsPath: path,
+      researcher: async () => [],
+    });
+
+    assert.equal(res.tasksConsidered.length, 2, "only top-K is processed");
+    const rec = JSON.parse(readFileSync(path, "utf-8")) as Record<string, number>;
+    assert.equal(
+      Object.keys(rec).length,
+      2,
+      `a run considering 2 of 10 tasks must not retire all 10 — wrote ${Object.keys(rec).length}`,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("a DRY RUN records no attempts at all — it attempted nothing", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "attempts-dry-"));
+  const path = join(dir, "backfill-attempts.json");
+  try {
+    await runBackfill({
+      ...baseOpts,
+      tasks: TASKS,
+      dryRun: true,
+      recordAttempts: true,
+      attemptsPath: path,
+      researcher: async () => [],
+    });
+    assert.equal(
+      existsSync(path),
+      false,
+      "a dry run must not retire venues it never tried to ingest",
+    );
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

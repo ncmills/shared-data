@@ -76,8 +76,21 @@ export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<B
   // Record which asked-about venues did NOT come back sourced, so the next run
   // sinks them instead of re-asking forever. Venues that DID land have their
   // record cleared.
-  if (opts.recordAttempts !== false) {
-    const asked = tasks.flatMap((t) =>
+  //
+  // ONLY the venues this run actually ASKED ABOUT, and only on a real run.
+  // `tasks` is the WHOLE queue — 1,350 tasks / 5,836 venues — while a run only
+  // ever processes the top-K of it (`result.tasksConsidered`). Recording against
+  // `tasks` marked every unsourced venue in the universe as failed on every run:
+  // a run that sourced 20 rows retired the other ~5,816, and three runs took the
+  // entire queue past maxAttempts. The lane would then report nothing left to
+  // offer — indistinguishable from "the backfill is finished" — with 5,836 rows
+  // still unsourced. Measured, not theorised: one dry run wrote 5,836 entries.
+  //
+  // A dry run attempts NOTHING, so it has nothing to record. Without this guard
+  // the documented safe smoke path (`--auto --dry-run`) was the single most
+  // destructive command in the lane.
+  if (opts.recordAttempts !== false && !opts.dryRun) {
+    const asked = result.tasksConsidered.flatMap((t) =>
       t.venues.map((name) => ({ destinationId: t.destinationId, category: t.category, name })),
     );
     const sourced = new Set(
