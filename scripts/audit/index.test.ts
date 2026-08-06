@@ -228,7 +228,12 @@ test("FULL RUN: runAudit() writes docs/coverage-matrix.md and docs/audit-report.
   assert.match(matrixMd, /Regression gate/);
 
   const report = JSON.parse(readFileSync(reportPath, "utf-8"));
-  assert.ok("generatedAt" in report);
+  // Deliberately ABSENT (2026-08-06). This assertion used to require
+  // `generatedAt`, which changed on every run and left the committed artifact
+  // permanently dirty — read by loop_runner._repo_busy() as "a human is
+  // mid-work", which deadlocked the fleet's autonomous loop for two weeks.
+  // See scripts/audit-report-determinism.test.ts.
+  assert.ok(!("generatedAt" in report), "the report must carry no volatile timestamp");
   assert.ok(Array.isArray(report.underTagged));
   assert.ok(Array.isArray(report.orphaned));
   assert.ok(Array.isArray(report.starved));
