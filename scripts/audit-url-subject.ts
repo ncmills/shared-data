@@ -49,7 +49,7 @@ const STOPWORDS = new Set([
   "tour", "tours", "day", "night", "backup", "company", "co", "grill", "inn", "beach",
 ]);
 
-export type SubjectVerdict = "SUBJECT-OK" | "UNCONFIRMED" | "DEAD" | "BLOCKED";
+export type SubjectVerdict = "SUBJECT-OK" | "UNCONFIRMED" | "DEAD" | "BLOCKED" | "UNREACHABLE";
 
 export interface SubjectResult {
   name: string;
@@ -157,7 +157,16 @@ async function checkOne(row: ReturnType<typeof sourcedRows>[number]): Promise<Su
     });
     clearTimeout(timer);
   } catch (e: any) {
-    return { ...base, verdict: "DEAD", why: `fetch failed: ${String(e?.message ?? e).slice(0, 80)}` };
+    const msg = String(e?.message ?? e);
+    // OUR timeout is not THEIR outage. The first run of this audit reported 11
+    // dead links, three of which were borgata.mgmresorts.com hitting the 12s
+    // abort — a slow enterprise site, not a broken one. DEAD is the verdict that
+    // raises a RED alert, so anything we cannot distinguish from our own network
+    // must not land there. Same rule as BLOCKED, and the same rule the rest of
+    // this portfolio learned the hard way on 2026-08-05.
+    if (/abort|timeout|ETIMEDOUT/i.test(msg))
+      return { ...base, verdict: "UNREACHABLE", why: `no response in ${TIMEOUT_MS / 1000}s — our timeout, not proof of a dead link` };
+    return { ...base, verdict: "DEAD", why: `fetch failed: ${msg.slice(0, 80)}` };
   }
 
   // Mirrors verify-url.ts's doctrine: a refusal tells us about the server's bot
@@ -205,6 +214,7 @@ async function main() {
           unconfirmed: count("UNCONFIRMED"),
           dead: count("DEAD"),
           blocked: count("BLOCKED"),
+          unreachable: count("UNREACHABLE"),
           // Only the actionable ones travel — DEAD is a broken link a user can
           // hit today; UNCONFIRMED is a flag for human eyes, never an auto-action.
           deadRows: results.filter((r) => r.verdict === "DEAD"),
@@ -221,7 +231,8 @@ async function main() {
   console.log(`  SUBJECT-OK   ${count("SUBJECT-OK")}`);
   console.log(`  UNCONFIRMED  ${count("UNCONFIRMED")}  — needs human eyes, NOT auto-quarantine`);
   console.log(`  DEAD         ${count("DEAD")}  — a live broken link`);
-  console.log(`  BLOCKED      ${count("BLOCKED")}  — server refused us; says nothing about the url\n`);
+  console.log(`  BLOCKED      ${count("BLOCKED")}  — server refused us; says nothing about the url`);
+  console.log(`  UNREACHABLE  ${count("UNREACHABLE")}  — no response in time; OUR timeout, not their outage\n`);
 
   for (const r of results.filter((x) => x.verdict === "DEAD"))
     console.log(`  DEAD         ${r.name} (${r.city}) → ${r.url}  ${r.why}`);
