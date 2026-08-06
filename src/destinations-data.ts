@@ -3942,6 +3942,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Turtle Bay Resort", type: "resort", pricePerNight: [300, 900], perRoom: true, maxGuests: 100, highlight: "North Shore's only full-service resort — 1,300 acres, five miles of coastline, two pools, and zero resort-corridor noise." },
       { name: "Royal Hawaiian, a Luxury Collection Resort", type: "resort", pricePerNight: [350, 1000], perRoom: true, maxGuests: 120, highlight: "The Pink Palace of the Pacific — Moorish architecture, beachfront location, and a history that includes every Hawaiian royalty since 1927." },
       { name: "Surfjack Hotel & Swim Club", type: "boutique-hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 40, highlight: "Mid-century-modern boutique hotel in the Ala Moana neighborhood with a curated pool scene and strong creative culture." },
+      { name: "North Shore 6BR beach house", type: "house", pricePerNight: [900,2200], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Whole house near the surf breaks, lanai big enough for everyone" },
     ],
     transport: [
       { name: "TheBus (Honolulu Transit)", type: "shuttle", priceRange: "$3 per ride", highlight: "Oahu's excellent public bus system covers Waikiki, Chinatown, Kailua, and the North Shore — the $3 day pass is exceptional value." },

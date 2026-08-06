@@ -405,6 +405,7 @@ export const expansionInternational: CanonicalDestination[] = [
       { name: "Hamilton Princess & Beach Club", type: "hotel", pricePerNight: [350, 800], perRoom: true, maxGuests: 16, highlight: "Pink harborfront landmark with Marcus', a marina, and a beach-club shuttle" },
       { name: "The Loren at Pink Beach", type: "boutique-hotel", pricePerNight: [500, 1200], perRoom: true, maxGuests: 12, highlight: "Modern oceanfront boutique on the South Shore for a stylish small group" },
       { name: "South Shore Private Cottage (Airbnb)", type: "airbnb", pricePerNight: [300, 1000], perRoom: false, maxGuests: 10, highlight: "Pastel Bermuda cottage near a pink-sand cove with a scooter-friendly base" },
+      { name: "South Shore 6BR house", type: "house", pricePerNight: [520,1720], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Pink-sand beach below, scooters in the drive, one long table inside" },
     ],
     transport: [
       { name: "BDA Airport Transfer / Taxi", type: "shuttle", priceRange: "$30-60 per group each way", highlight: "Taxis or pre-booked vans from the airport; no rideshare and no rental cars" },
