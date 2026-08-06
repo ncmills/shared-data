@@ -186,6 +186,16 @@ export interface ClaudeRunResult {
   stderr?: string;
   /** True when the timeout fired and the CLI was killed ⇒ `[]`. */
   timedOut?: boolean;
+  /**
+   * True when the timeout fired only because the HOST SLEPT, not because the
+   * researcher was slow. `setTimeout` runs on libuv's uptime clock, which does
+   * not advance while the machine is suspended — so a 180s timer can take hours
+   * of wall clock to fire, and the child spends that time in ~45s DarkWake
+   * slices with its network torn down. A far larger wall delta than the timeout
+   * budget is the tell. Measured 2026-08-04: the lid closed 13 min into the run
+   * and the remaining 9 of 15 tasks all "timed out" across 24h25m.
+   */
+  suspended?: boolean;
 }
 
 /** The seam unit tests inject so NO real `claude` process is spawned. */
@@ -202,6 +212,14 @@ export interface ClaudeResearcherOptions {
   model?: string;
   /** Captured/diagnostic logger. Default no-op. */
   log?: (msg: string) => void;
+  /**
+   * Called when a timeout is attributable to the HOST SLEEPING rather than to a
+   * slow researcher. The caller needs this because the two are indistinguishable
+   * downstream — both yield `[]` — yet only one of them means the venue was
+   * actually asked about. Recording an attempt for the sleep case retires
+   * venues that were never researched.
+   */
+  onSuspended?: () => void;
 }
 
 /**
@@ -287,8 +305,19 @@ export function defaultClaudeRunner(opts: ClaudeResearcherOptions): ClaudeRunner
         }
       };
 
+      // Wall-clock start, compared against the timer's uptime-clock budget below
+      // to tell a slow researcher apart from a sleeping host.
+      const startedAt = Date.now();
+      let suspended = false;
+
       const timer = setTimeout(() => {
         timedOut = true;
+        // `setTimeout` counts RUNNABLE time; it does not advance while the host
+        // is asleep. So if far more wall clock elapsed than the budget, this
+        // call never really got its allotted time — the machine was suspended.
+        // 2× is deliberately loose: normal scheduling jitter is nowhere near
+        // it, while the observed sleep case overshot by ~54×.
+        suspended = Date.now() - startedAt > timeoutMs * 2;
         killGroup();
       }, timeoutMs);
 
@@ -297,7 +326,7 @@ export function defaultClaudeRunner(opts: ClaudeResearcherOptions): ClaudeRunner
         settled = true;
         clearTimeout(timer);
         if (graceTimer) clearTimeout(graceTimer);
-        resolve({ code, stdout, stderr, timedOut });
+        resolve({ code, stdout, stderr, timedOut, suspended });
       };
 
       child.stdout?.on("data", (d) => (stdout += d.toString()));
@@ -333,6 +362,14 @@ export function claudeResearcher(opts: ClaudeResearcherOptions = {}): Researcher
     try {
       const res = await runner(wrapPrompt(prompt));
       if (res.timedOut) {
+        if (res.suspended) {
+          // Say which failure this is. "timed out" and "the host slept" look
+          // identical from here — both return [] — and conflating them is what
+          // let 88 never-researched venues be recorded as failed attempts.
+          log("claudeResearcher: HOST SUSPENDED mid-call (not a real timeout) — returning []");
+          opts.onSuspended?.();
+          return [];
+        }
         log("claudeResearcher: timed out — returning []");
         return [];
       }

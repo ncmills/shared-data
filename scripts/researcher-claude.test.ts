@@ -231,3 +231,38 @@ test("parseCandidates: a bare prose response (NOT an envelope) still scrapes its
   assert.equal(rows.length, 1);
   assert.equal((rows[0] as Record<string, unknown>).name, ROW.name);
 });
+
+// ─── a sleeping host is not a slow researcher (2026-08-05) ─────────────────
+//
+// Both surface as `timedOut` and both return []. Only one of them means the
+// venue was actually asked about, and conflating them is what recorded 88
+// never-researched venues as failed attempts on 2026-08-04.
+
+test("claudeResearcher: a SUSPENDED timeout is logged distinctly and notifies the caller", async () => {
+  const logs: string[] = [];
+  let notified = 0;
+  const researcher = claudeResearcher({
+    runner: async () => ({ code: -1, stdout: "", stderr: "", timedOut: true, suspended: true }),
+    log: (m) => logs.push(m),
+    onSuspended: () => notified++,
+  });
+
+  assert.deepEqual(await researcher("anything"), [], "still fail-safe");
+  assert.equal(notified, 1, "the caller must learn the host slept");
+  assert.match(logs.join("\n"), /HOST SUSPENDED/, "must not be reported as a plain timeout");
+});
+
+test("claudeResearcher: an ORDINARY timeout does NOT notify the caller", async () => {
+  const logs: string[] = [];
+  let notified = 0;
+  const researcher = claudeResearcher({
+    runner: async () => ({ code: -1, stdout: "", stderr: "", timedOut: true }),
+    log: (m) => logs.push(m),
+    onSuspended: () => notified++,
+  });
+
+  assert.deepEqual(await researcher("anything"), []);
+  assert.equal(notified, 0, "a genuinely slow researcher IS evidence — do not suppress it");
+  assert.match(logs.join("\n"), /timed out/);
+  assert.doesNotMatch(logs.join("\n"), /HOST SUSPENDED/);
+});

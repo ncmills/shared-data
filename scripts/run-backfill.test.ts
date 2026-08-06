@@ -321,3 +321,52 @@ test("a DRY RUN records no attempts at all — it attempted nothing", async () =
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+// A run during which the host SLEPT looks exactly like a run of total research
+// failure — every call returns []. It is not one. The 2026-08-04 run recorded
+// 110 attempts of which ~88 were venues killed mid-DarkWake, never researched.
+test("a run where the HOST SLEPT records no attempts — those venues were never asked", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "attempts-suspended-"));
+  const path = join(dir, "backfill-attempts.json");
+  try {
+    await runBackfill({
+      ...baseOpts,
+      tasks: TASKS,
+      recordAttempts: true,
+      attemptsPath: path,
+      // Same observable behaviour as a genuine research failure...
+      researcher: async () => [],
+      // ...but the host went to sleep, so it is not evidence about any venue.
+      hostSuspended: () => true,
+    });
+    assert.equal(
+      existsSync(path),
+      false,
+      "a sleeping host must not retire venues it never actually researched",
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("without a sleeping host, the SAME empty run still records attempts", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "attempts-awake-"));
+  const path = join(dir, "backfill-attempts.json");
+  try {
+    await runBackfill({
+      ...baseOpts,
+      tasks: TASKS,
+      recordAttempts: true,
+      attemptsPath: path,
+      researcher: async () => [],
+      hostSuspended: () => false,
+    });
+    assert.equal(
+      existsSync(path),
+      true,
+      "a genuine failure while awake IS evidence and must still be recorded",
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

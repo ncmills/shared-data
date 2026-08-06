@@ -46,6 +46,13 @@ export interface RunBackfillOptions
    *  run writes fixture venues into the real record and silently sinks them in
    *  the next production run. (Happened once; hence this seam.) */
   attemptsPath?: string;
+  /**
+   * Reports whether the HOST SLEPT during this run. When it did, the run's
+   * failures are not evidence about any venue and no attempt is recorded — see
+   * the note at the recording site. A predicate rather than a boolean because
+   * it is latched during the run, after these options are constructed.
+   */
+  hostSuspended?: () => boolean;
 }
 
 export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<BackfillTask>> {
@@ -89,7 +96,18 @@ export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<B
   // A dry run attempts NOTHING, so it has nothing to record. Without this guard
   // the documented safe smoke path (`--auto --dry-run`) was the single most
   // destructive command in the lane.
-  if (opts.recordAttempts !== false && !opts.dryRun) {
+  // A run during which the host SLEPT proves nothing about any venue: the timer
+  // runs on the uptime clock, so the child was killed after ~45s DarkWake slices
+  // with its network down, never having been given its budget. Recording those
+  // as attempts retires venues that were never actually researched — measured
+  // 2026-08-04, where 88 of 110 recorded attempts were exactly that. Better to
+  // re-ask a venue than to silently drop it.
+  if (opts.hostSuspended?.()) {
+    console.log(
+      "run-backfill: host slept mid-run — NOT recording attempts " +
+        "(those venues were never really researched)",
+    );
+  } else if (opts.recordAttempts !== false && !opts.dryRun) {
     const asked = result.tasksConsidered.flatMap((t) =>
       t.venues.map((name) => ({ destinationId: t.destinationId, category: t.category, name })),
     );
@@ -175,9 +193,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   // `--no-research` is the separate, cheaper switch for exercising only the
   // plumbing (and it does not need the `claude` CLI present).
   const noResearch = args.get("no-research") === "true";
+  // Latched, never reset: once the host has slept mid-run, this run's "failures"
+  // are no longer evidence about any venue.
+  let hostSuspended = false;
   const researcher = noResearch
     ? async () => []
     : (await import("./researcher-claude")).claudeResearcher({
+        onSuspended: () => {
+          hostSuspended = true;
+        },
         // WIRE THE DIAGNOSTIC LOG. `claudeResearcher` is fail-safe by design —
         // it returns [] on a timeout, a non-zero exit, or a parse failure — so
         // without this a silent failure and a genuine "found nothing" are
@@ -203,6 +227,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     pushPr,
     researcher,
     maxVenuesPerTask,
+    hostSuspended: () => hostSuspended,
   });
 
   // Print what was actually sourced. On a dry run this IS the deliverable —
