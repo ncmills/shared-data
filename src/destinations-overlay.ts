@@ -64,6 +64,18 @@ export const BESTMAN_ACTIVITY_TYPES = new Set([
   // ["bestman"]. But the type was never added here, so applyBestmanOverlay
   // dropped it and it had NEVER rendered. Found by scripts/new-data-report.ts.
   "second-line-parade",
+  // Added 2026-08-06 — the same lag, caught by the adoption queue. Both rows are
+  // authored `brands: ["both"]` with BOTH "bachelor" and "bachelorette" in
+  // `audiences`, i.e. deliberately cross-brand, and both types were already in
+  // MOH_ACTIVITY_TYPES. Only this allowlist was missing them, so 3 correctly
+  // tagged rows (Goose Rocks Beach + Nantucket luxe picnics, Joshua Tree
+  // photoshoot) could never surface on Best Man HQ.
+  // NOTE the recurring shape: this allowlist is a SECOND gate behind the wizard
+  // tags, and it lags them. A row tagged "bestman" whose type is absent here is
+  // dropped SILENTLY — see the parity test below, added so the next lag fails
+  // loudly instead of quietly shipping a row that renders nowhere.
+  "luxe-picnic",
+  "photoshoot",
 ]);
 
 /** Strip the universe tag fields (+ brands) so output matches the pre-bake shape. */
