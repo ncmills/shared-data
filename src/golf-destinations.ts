@@ -20,6 +20,7 @@
 
 import { SHARED_GOLF_COURSES_HHQ_MERGE } from "./golf-courses-hhq-merge";
 import type { SharedGolfCourse } from "./golf-courses";
+import { stripUnpublishableImageUrls } from "./image-url-hygiene";
 
 export interface SharedGolfDestination {
   id: string;
@@ -105,9 +106,11 @@ export function golfDestinations(): SharedGolfDestination[] {
     if (list) list.push(c);
     else byDestination.set(c.destinationId, [c]);
   }
-  if (byDestination.size === 0) return SHARED_GOLF_DESTINATIONS;
+  if (byDestination.size === 0) {
+    return stripUnpublishableImageUrls(SHARED_GOLF_DESTINATIONS);
+  }
 
-  return SHARED_GOLF_DESTINATIONS.map((dest) => {
+  const merged = SHARED_GOLF_DESTINATIONS.map((dest) => {
     const extra = byDestination.get(dest.id);
     if (!extra) return dest;
     const existing = (dest.courses as EmbeddedCourse[] | undefined) ?? [];
@@ -118,4 +121,8 @@ export function golfDestinations(): SharedGolfDestination[] {
     if (additions.length === 0) return dest;
     return { ...dest, courses: [...existing, ...additions] };
   });
+
+  // Applied last so it covers the sanctioned-ingest courses attached above,
+  // not just the generated rows.
+  return stripUnpublishableImageUrls(merged);
 }
