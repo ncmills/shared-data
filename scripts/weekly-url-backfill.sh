@@ -39,17 +39,27 @@ say() { echo "$(date +%FT%T) $*" >> "$LOG"; }
 # missing binary and SKIP every single run — a job that looks scheduled and
 # silently never does anything. mkdir is atomic on POSIX and always present.
 if ! mkdir "$LOCK" 2>/dev/null; then
-  # Break a lock left behind by a crash/reboot rather than wedging forever.
-  if [ -n "$(find "$LOCK" -maxdepth 0 -mmin +180 2>/dev/null)" ]; then
-    say "breaking a stale lock (older than 180 min)"
-    rmdir "$LOCK" 2>/dev/null || true
-    mkdir "$LOCK" 2>/dev/null || { say "SKIP: could not take the lock"; exit 0; }
-  else
-    say "SKIP: a run is already in progress"
+  # AGE IS THE WRONG QUESTION. The old breaker declared any lock over 180 min
+  # stale — but the 2026-08-04 run legitimately held it for 24h25m (the host
+  # slept mid-run and the researcher's timer runs on the uptime clock). So the
+  # breaker would have called a LIVE run stale and let a second run
+  # `git reset --hard` + `clean -fd` the worktree underneath it. The 2026-08-02
+  # log already shows three overlapping "run start" lines against two "run OK".
+  #
+  # Ask whether the owner is still ALIVE instead. That is correct no matter how
+  # long a run legitimately takes.
+  owner="$(cat "$LOCK/pid" 2>/dev/null || true)"
+  if [ -n "$owner" ] && kill -0 "$owner" 2>/dev/null; then
+    say "SKIP: a run is already in progress (pid $owner)"
     exit 0
   fi
+  say "breaking a lock whose owner (pid ${owner:-unknown}) is gone"
+  rm -rf "$LOCK" 2>/dev/null || true
+  mkdir "$LOCK" 2>/dev/null || { say "SKIP: could not take the lock"; exit 0; }
 fi
-trap 'rmdir "$LOCK" 2>/dev/null || true' EXIT
+echo "$$" > "$LOCK/pid"
+# rm -rf, not rmdir: the lock directory now holds the pid file.
+trap 'rm -rf "$LOCK" 2>/dev/null || true' EXIT
 # `set -e` aborts on any failed git/npm step BEFORE the run block is reached, and
 # those steps are quiet — so without this the log would show "run start" and then
 # simply nothing, with no indication a failure had occurred. A scheduled job that
@@ -94,7 +104,12 @@ fi
 # as "${arr[@]}" under `set -u` is an "unbound variable" error. The dry path had
 # one element and worked; the real path died before printing a single line, exit
 # 1, with the run block never reached.
-if npx tsx scripts/run-backfill.ts \
+# caffeinate: hold off idle/system sleep for the run's duration. The 2026-08-04
+# run lost 9 of its 15 tasks to a mid-run sleep. This is the ops half only — it
+# does NOT make the job sleep-proof (a closed lid on battery sleeps regardless),
+# which is why run-backfill also detects suspension and declines to record
+# attempts for venues it never really researched.
+if /usr/bin/caffeinate -i -s -m npx tsx scripts/run-backfill.ts \
       --auto \
       ${DRY_FLAG[@]+"${DRY_FLAG[@]}"} \
       --label="$LABEL" \
