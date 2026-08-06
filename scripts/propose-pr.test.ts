@@ -137,11 +137,26 @@ test("deriveBranchName is deterministic and slugifies dataset + label", () => {
 
 // ─── proposePr: the go-live safety gate ────────────────────────────────────
 
+/**
+ * Models a run whose post-conditions actually HELD: `ls-remote` shows the ref
+ * and `gh` reports an open PR. This matters — a fake that returns exit 0 with
+ * EMPTY stdout is not the happy path, it is precisely the 2026-08-04 bug (a
+ * push that reported success and delivered nothing). Fakes have to model the
+ * outcome, not just the exit code, or the guard has nothing to prove.
+ */
+function deliveredStdout(cmd: string, args: string[]): string {
+  if (cmd === "git" && args[0] === "ls-remote") {
+    return `0000000000000000000000000000000000000000\trefs/heads/${args[args.length - 1]}\n`;
+  }
+  if (cmd === "gh" && args[0] === "pr" && args[1] === "list") return '[{"number":1}]';
+  return "";
+}
+
 function makeSpyRunner(): { run: CommandRunner; calls: { cmd: string; args: string[] }[] } {
   const calls: { cmd: string; args: string[] }[] = [];
   const run: CommandRunner = (cmd, args): CommandResult => {
     calls.push({ cmd, args });
-    return { status: 0, stdout: "", stderr: "" };
+    return { status: 0, stdout: deliveredStdout(cmd, args), stderr: "" };
   };
   return { run, calls };
 }
@@ -373,18 +388,62 @@ test("proposePr: a failing git push THROWS rather than reporting success", () =>
 
 test("proposePr: a failing `gh pr create` THROWS too", () => {
   withTempDocsDir((docsDir) => {
-    const run: CommandRunner = (cmd) =>
+    const run: CommandRunner = (cmd, args) =>
       cmd === "gh"
         ? { status: 1, stdout: "", stderr: "gh: could not create pull request" }
-        : { status: 0, stdout: "", stderr: "" };
+        : { status: 0, stdout: deliveredStdout(cmd, args), stderr: "" };
     assert.throws(() => proposePr(pushOpts(docsDir, run)), /gh pr create FAILED/);
   });
 });
 
 test("proposePr: the happy push path still returns the branch", () => {
   withTempDocsDir((docsDir) => {
-    const run: CommandRunner = () => ({ status: 0, stdout: "", stderr: "" });
+    const run: CommandRunner = (cmd, args) => ({
+      status: 0,
+      stdout: deliveredStdout(cmd, args),
+      stderr: "",
+    });
     const res = proposePr(pushOpts(docsDir, run));
     assert.equal(res.branch, "expand/golf-push-failure-test");
+  });
+});
+
+// ─── the post-condition, not the report (2026-08-05) ───────────────────────
+//
+// The exit-status guard above catches a push that FAILS loudly. It cannot
+// catch a push that exits 0 while origin ends up with no such ref — and the
+// whole failure history of this lane is "reported success, delivered nothing".
+// These two pin the outcome check itself.
+
+test("proposePr: push exits 0 but origin has no such ref → THROWS", () => {
+  withTempDocsDir((docsDir) => {
+    const seen: string[] = [];
+    const run: CommandRunner = (cmd, args) => {
+      seen.push(`${cmd} ${args[0]}`);
+      // Everything "succeeds"; ls-remote just reports an empty remote — which
+      // is exit 0 with no output, the one case a status check cannot see.
+      if (cmd === "git" && args[0] === "ls-remote") return { status: 0, stdout: "", stderr: "" };
+      return { status: 0, stdout: deliveredStdout(cmd, args), stderr: "" };
+    };
+
+    assert.throws(
+      () => proposePr(pushOpts(docsDir, run)),
+      /origin has no refs\/heads\//,
+      "a push that delivered nothing must not be reported as a PR",
+    );
+    assert.ok(
+      !seen.some((c) => c === "gh pr"),
+      "must not try to open a PR for a branch that never landed on origin",
+    );
+  });
+});
+
+test("proposePr: `gh pr create` exits 0 but no PR exists → THROWS", () => {
+  withTempDocsDir((docsDir) => {
+    const run: CommandRunner = (cmd, args) => {
+      if (cmd === "gh" && args[1] === "list") return { status: 0, stdout: "[]", stderr: "" };
+      return { status: 0, stdout: deliveredStdout(cmd, args), stderr: "" };
+    };
+    assert.throws(() => proposePr(pushOpts(docsDir, run)), /no open PR exists/);
   });
 });

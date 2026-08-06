@@ -78,10 +78,20 @@ export type CommandRunner = (cmd: string, args: string[], opts?: { cwd?: string 
 
 function defaultRunner(cmd: string, args: string[], opts?: { cwd?: string }): CommandResult {
   const res = spawnSync(cmd, args, { cwd: opts?.cwd, encoding: "utf-8" });
+  // A process killed by a SIGNAL exits with `status === null` and no `error`.
+  // The old `res.status ?? (res.error ? 1 : 0)` collapsed that to 0 — reporting
+  // SUCCESS for a push that was killed. Same defect class as the swallowed exit
+  // status below: never let an absent measurement read as a passing one.
+  const status =
+    res.status ?? (res.error ? 1 : res.signal ? 128 : 0);
   return {
-    status: res.status ?? (res.error ? 1 : 0),
+    status,
     stdout: res.stdout ?? "",
-    stderr: res.error ? String(res.error.message) : res.stderr ?? "",
+    stderr: res.error
+      ? String(res.error.message)
+      : res.signal
+        ? `killed by signal ${res.signal}`
+        : res.stderr ?? "",
   };
 }
 
@@ -422,12 +432,20 @@ export function proposePr(opts: ProposePrOptions): ProposePrResult {
     // venue rows sat in a local branch nobody knew about while the log reported
     // success. A run that cannot push must say so.
     mustSucceed(run("git", ["push", "-u", "origin", branch], { cwd: repoRoot }), "git push");
+    // ...and then CHECK THE OUTCOME, which is a different question. An exit
+    // code is the command's own account of itself; `ls-remote` asks the REMOTE
+    // what is actually there. Every failure in this lane has had the same
+    // shape — the pipeline reported success while the data never arrived — so
+    // the guard that matters is the one that verifies the post-condition
+    // rather than the report. If the branch is not on origin, say so.
+    assertOnRemote(run, repoRoot, branch);
     mustSucceed(
       run("gh", ["pr", "create", "--title", commitMessage, "--body-file", bodyPath], {
         cwd: repoRoot,
       }),
       "gh pr create",
     );
+    assertPrOpen(run, repoRoot, branch);
   }
 
   return { branch, body, bodyPath };
@@ -445,4 +463,40 @@ function mustSucceed(res: CommandResult, what: string): void {
     `propose-pr: ${what} FAILED (exit ${res.status}). The branch is committed locally and can be ` +
       `pushed by hand once the cause is fixed.\n${detail}`,
   );
+}
+
+/**
+ * Post-condition: the remote actually has the branch. Asks origin rather than
+ * trusting the push's exit code — a clean exit is a report, and this lane has
+ * already shipped a run whose report said "PUSHED" while origin had nothing.
+ */
+function assertOnRemote(run: CommandRunner, repoRoot: string, branch: string): void {
+  const res = run("git", ["ls-remote", "--heads", "origin", branch], { cwd: repoRoot });
+  mustSucceed(res, "git ls-remote (verifying push)");
+  // ls-remote exits 0 with EMPTY stdout when the ref does not exist, so the
+  // status alone proves nothing here — the output is the measurement.
+  if (!res.stdout.includes(`refs/heads/${branch}`)) {
+    throw new Error(
+      `propose-pr: git push reported success but origin has no refs/heads/${branch}. ` +
+        `The rows are committed locally and safe; nothing was delivered. Do NOT record ` +
+        `this run as a proposed PR.`,
+    );
+  }
+}
+
+/**
+ * Post-condition: a PR actually exists for the branch. Same reasoning — the
+ * `gh pr create` exit code is its own account of itself.
+ */
+function assertPrOpen(run: CommandRunner, repoRoot: string, branch: string): void {
+  const res = run("gh", ["pr", "list", "--head", branch, "--state", "open", "--json", "number"], {
+    cwd: repoRoot,
+  });
+  mustSucceed(res, "gh pr list (verifying PR)");
+  if (!/"number"\s*:\s*\d+/.test(res.stdout)) {
+    throw new Error(
+      `propose-pr: gh pr create reported success but no open PR exists for ${branch}. ` +
+        `The branch is on origin; open the PR by hand.`,
+    );
+  }
 }
