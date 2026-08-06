@@ -20,6 +20,7 @@
 
 import { SHARED_GOLF_COURSES_HHQ_MERGE } from "./golf-courses-hhq-merge";
 import type { SharedGolfCourse } from "./golf-courses";
+import { stripUnpublishableImageUrls } from "./image-url-hygiene";
 
 export interface SharedGolfDestination {
   id: string;
@@ -120,7 +121,16 @@ export function golfDestinations(): SharedGolfDestination[] {
           return { ...dest, courses: [...existing, ...additions] };
         });
 
-  return merged.map(stripUnprovenancedVenueUrls);
+  // TWO independent strips, on disjoint fields, both applied last so they cover
+  // the sanctioned-ingest courses attached above and not just the generated rows.
+  // They arrived as a merge conflict because each added the same `merged` hoist
+  // to hang itself off; they are not alternatives and dropping either restores a
+  // bug that reached users.
+  //   stripUnprovenancedVenueUrls — non-course venue `url`s with no provenance
+  //     (the 91 name-slugged domains: hash-kitchen.com is a construction company)
+  //   stripUnpublishableImageUrls — course `imageUrl`s that are tracking beacons
+  //     (xad.com and facebook.com/tr pixels firing on every render)
+  return stripUnpublishableImageUrls(merged.map(stripUnprovenancedVenueUrls));
 }
 
 /**
