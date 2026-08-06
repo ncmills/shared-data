@@ -235,7 +235,40 @@ export interface ClaudeResearcherOptions {
    * exit did not. A clean call returning `[]` does NOT fire this — that is a
    * real negative result and should count.
    */
-  onUnmeasured?: (reason: "timeout" | "exit") => void;
+  onUnmeasured?: (reason: "timeout" | "exit" | "usage-limit") => void;
+}
+
+/**
+ * Does this failed invocation look like a Claude USAGE LIMIT rather than a
+ * research failure?
+ *
+ * MEASURED 2026-08-06 13:16: at a session limit `claude -p` exits 1 and writes
+ * the `--output-format json` envelope with `is_error: true` and zero tokens —
+ * with EMPTY stderr, so there is nothing to diagnose from unless we look at
+ * stdout. Interactively it prints "You've hit your session limit · resets
+ * 1:40pm". Both shapes matter: the job may or may not be using --output-format.
+ *
+ * This is worth separating from a generic non-zero exit because the two demand
+ * opposite responses: a research failure is about the venues, a usage limit is
+ * about the account and every call in the run will fail the same way.
+ */
+export function looksLikeUsageLimit(stdout = "", stderr = ""): boolean {
+  const hay = `${stdout}\n${stderr}`;
+  if (/\b(session|usage|rate)\s+limit\b/i.test(hay)) return true;
+  // The JSON envelope: an error that consumed no tokens at all. A genuine
+  // research failure that reached the model would report non-zero usage.
+  try {
+    const env = JSON.parse(stdout.trim()) as Record<string, unknown>;
+    if (env && env.is_error === true) {
+      const u = (env.usage ?? {}) as Record<string, number>;
+      const spent =
+        (u.input_tokens ?? 0) + (u.output_tokens ?? 0) + (u.cache_read_input_tokens ?? 0);
+      if (spent === 0) return true;
+    }
+  } catch {
+    /* not the envelope — fall through */
+  }
+  return false;
 }
 
 /**
@@ -391,6 +424,17 @@ export function claudeResearcher(opts: ClaudeResearcherOptions = {}): Researcher
         return [];
       }
       if (res.code !== 0) {
+        if (looksLikeUsageLimit(res.stdout, res.stderr)) {
+          // Name it. This exact failure spent two minutes burning 40 drain
+          // iterations while reporting success, because "exited 1" with empty
+          // stderr reads as a research problem and it is not one.
+          log(
+            "claudeResearcher: USAGE LIMIT — claude -p refused the call and spent no tokens. " +
+              "Returning [] (NOT a measurement of these venues).",
+          );
+          opts.onUnmeasured?.("usage-limit");
+          return [];
+        }
         log(
           `claudeResearcher: claude exited ${res.code} — returning [] ` +
             `(stderr: ${(res.stderr ?? "").slice(0, 200).replace(/\s+/g, " ").trim()})`,
