@@ -31,8 +31,10 @@ import { sharedDestinations } from "../src/index";
 import {
   validateProposalSpot,
   PROPOSAL_TYPE_TO_CANONICAL,
+  downgradeIfUncorroborated,
   type ProposalSpot,
   type SourceTier,
+  type SourcedFact,
 } from "../src/proposal-spots";
 
 interface RawSpot extends Record<string, unknown> {
@@ -67,9 +69,83 @@ for (const d of sharedDestinations as unknown as { id: string; city: string; sta
 const slug = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
+/** Research batches arrive HTML-escaped from web scraping. */
+const unescapeHtml = (s: string) =>
+  s
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, " ");
+
+const deepUnescape = (v: unknown): unknown => {
+  if (typeof v === "string") return unescapeHtml(v);
+  if (Array.isArray(v)) return v.map(deepUnescape);
+  if (v && typeof v === "object") {
+    return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, deepUnescape(x)]));
+  }
+  return v;
+};
+
+/** A {verbatim:null,sourceUrl:null} stub is an absent fact, not a present one. */
+function fact(v: unknown): SourcedFact | null {
+  if (!v || typeof v !== "object") return null;
+  const f = v as { verbatim?: unknown; sourceUrl?: unknown };
+  if (typeof f.verbatim !== "string" || f.verbatim.trim() === "") return null;
+  if (typeof f.sourceUrl !== "string" || f.sourceUrl.trim() === "") return null;
+  return { verbatim: f.verbatim.trim(), sourceUrl: f.sourceUrl.trim() };
+}
+
+/**
+ * Reshape a research row into the dataset shape.
+ *
+ * The agents emit `permit: {verbatim, sourceUrl, ...}` flat and tier in caps.
+ * Normalising here rather than demanding a perfect contract keeps a batch that
+ * did real research from being thrown away over formatting — but note it only
+ * ever MOVES fields. It never fills one in.
+ */
+function normalise(raw: RawSpot, anchor: string): Record<string, unknown> {
+  const r = deepUnescape(raw) as Record<string, unknown>;
+  const p = (r.permit ?? {}) as Record<string, unknown>;
+  const tier = String(r.tier ?? "").toLowerCase();
+  const permitFact = fact(p.fact) ?? fact(p);
+
+  const out: Record<string, unknown> = {
+    ...r,
+    id: `${anchor}-${slug(String(r.name ?? ""))}`,
+    destinationId: anchor,
+    tier,
+    permit: {
+      required: p.required ?? "unknown",
+      appliesToProposal: p.appliesToProposal === true,
+      fact: permitFact,
+      authority: p.authority ?? "",
+      authorityContact: p.authorityContact ?? null,
+    },
+    crowdWindow: fact(r.crowdWindow),
+    privacy: fact(r.privacy),
+    backup: typeof r.backup === "string" && r.backup.trim() ? r.backup.trim() : null,
+  };
+
+  // A red row may not carry an authoritative-looking quote (the laundering
+  // rule). Where one exists it is preserved as a DISPUTED source instead of
+  // being deleted — Savannah's two contradictory city pages are real findings.
+  if (tier === "red" && permitFact) {
+    out.disputed = [permitFact, ...(Array.isArray(r.disputed) ? r.disputed : [])];
+    (out.permit as Record<string, unknown>).fact = null;
+  }
+  return out;
+}
+
 const accepted: ProposalSpot[] = [];
 const rejected: { where: string; reasons: string[] }[] = [];
 const emptyCities: string[] = [];
+// Greens the corroboration gate demoted to amber. Counted separately from
+// `rejected` because nothing was thrown away — the row still lands, at the tier
+// its own quote supports. Reported for the same reason rejections are: a silent
+// demotion would make a mislabelled batch look like a clean one.
+const downgrades: string[] = [];
 const seenIds = new Set<string>();
 
 for (const file of files) {
@@ -111,7 +187,30 @@ for (const file of files) {
       const id = `${anchor}-${slug(name)}`;
       const candidate = { ...raw, id, destinationId: anchor };
 
-      const result = validateProposalSpot(candidate);
+      // Demote an uncorroborated green BEFORE validating, so a mislabelled row
+      // is kept as the amber row it always was rather than thrown away.
+      const pre = validateProposalSpot(candidate);
+      const toCheck = pre.ok ? downgradeIfUncorroborated(pre.spot) : null;
+      if (toCheck?.downgraded) {
+        downgrades.push(`${anchor}/${name}`);
+      }
+      const result = toCheck
+        ? validateProposalSpot(toCheck.spot)
+        : (() => {
+            const c = candidate as Record<string, unknown>;
+            if (String(c.tier) === "green") {
+              const demoted = {
+                ...c,
+                tier: "amber",
+                permit: { ...(c.permit as object), appliesToProposal: false },
+              };
+              const r = validateProposalSpot(demoted);
+              if (r.ok) downgrades.push(`${anchor}/${name}`);
+              return r;
+            }
+            return pre;
+          })();
+
       if (!result.ok) {
         rejected.push({ where: `${anchor}/${name || "(unnamed)"}`, reasons: result.reasons });
         continue;
@@ -139,6 +238,13 @@ console.log(`  red            ${byTier("red")}  (unsourced — renders "confirm 
 console.log(`cities with data ${citiesCovered.size}`);
 console.log(`cities empty     ${emptyCities.length}${emptyCities.length ? ` (${emptyCities.join(", ")})` : ""}`);
 console.log(`rejected         ${rejected.length}`);
+console.log(`downgraded       ${downgrades.length}  (green -> amber: the quote never corroborated it)`);
+
+if (downgrades.length) {
+  console.log("\ndowngraded green -> amber (kept, at the tier the source supports):");
+  for (const d of downgrades.slice(0, 40)) console.log(`  ${d}`);
+  if (downgrades.length > 40) console.log(`  ... and ${downgrades.length - 40} more`);
+}
 
 if (rejected.length) {
   console.log("\nrejections (these are the honest gaps, not noise):");

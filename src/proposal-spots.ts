@@ -130,6 +130,20 @@ export interface ProposalSpot {
   privacy: SourcedFact | null;
   /** A named nearby fallback for when the spot is mobbed. null is honest. */
   backup: string | null;
+  /**
+   * Red-only. Sources that CONTRADICT each other, kept rather than discarded.
+   *
+   * Savannah is why this exists: savannahga.gov/3607/Weddings says a wedding
+   * with "fewer than fifty people" needs no permit, while the city's own
+   * Reserve City Parks & Squares page says fewer than twenty. Both are live,
+   * both are the City of Savannah. That disagreement is real information — it
+   * tells a couple the city's own guidance is unreliable and they must call —
+   * and throwing it away would leave the row looking merely unresearched.
+   *
+   * These never render as authority. `describePermit` only ever says that
+   * sources disagree, never which one is right.
+   */
+  disputed?: SourcedFact[];
   sourceUrl: string;
   citations: string[];
 }
@@ -145,6 +159,78 @@ const isNonBlank = (s: unknown): s is string =>
  * these; they read as data and are not.
  */
 const PLACEHOLDER = /^(n\/?a|tbd|todo|unknown|none|null|-|\?+|check locally|varies)$/i;
+
+/**
+ * The words that make a source proposal-relevant.
+ *
+ * ADDED 2026-08-06 after the first research batch came back with New Orleans
+ * City Park tiered green, `required: true`, and a summary claiming the permit
+ * form "explicitly lists engagement as a purpose of photos." The cited page
+ * says the opposite — "Personal-use film and photo shoots do not need a permit"
+ * — and contains neither "engagement" nor "proposal" anywhere. The quote was
+ * real; the CLAIM ABOUT THE QUOTE was not.
+ *
+ * That is the failure this whole file was built to stop, arriving through the
+ * one door left open: `appliesToProposal` was a self-reported boolean, so a
+ * researcher could simply assert it. Now the quote has to corroborate it. A
+ * green row whose own verbatim never mentions a proposal or an engagement is
+ * rejected, and `downgradeIfUncorroborated` turns it into the amber row it
+ * always was.
+ */
+export const PROPOSAL_WORDS = /propos|engagement|betroth|"pop the question"/i;
+
+/**
+ * The second corroboration path: a rule that covers proposals BY CONSTRUCTION.
+ *
+ * Found 2026-08-06 in batch 5. Post-EXPLORE-Act, the NPS and Forest Service
+ * both publish a rule that says still photography is "treated the same" and
+ * that "It does not matter whether it is commercial, non-commercial, for
+ * content creation, by a student, or conducted by media." A rule that applies
+ * to ALL photography regardless of purpose necessarily applies to a proposal —
+ * and it is arguably STRONGER evidence than a passing mention of the word,
+ * because it forecloses the question rather than answering one instance of it.
+ *
+ * This is still corroborated by the QUOTE, not by a researcher's say-so, which
+ * is the property that matters. It is deliberately narrow: it matches
+ * universal-applicability language only, not any generic permit sentence.
+ */
+export const UNIVERSAL_RULE_WORDS =
+  /treated the same|regardless of (whether|purpose|commercial|intent)|does not matter whether|whether .{0,40}commercial or non-?commercial|for any (photo|film) ?shoot, professional or otherwise/i;
+
+/**
+ * Does the quote itself support a proposal-specific reading?
+ *
+ * Either it names proposals/engagements, or it states a rule so broad that a
+ * proposal cannot fall outside it. Anything else is an inference and belongs
+ * in amber.
+ */
+export function factMentionsProposal(fact: SourcedFact | null): boolean {
+  if (!fact) return false;
+  return PROPOSAL_WORDS.test(fact.verbatim) || UNIVERSAL_RULE_WORDS.test(fact.verbatim);
+}
+
+/**
+ * Mechanically demote a green row whose quote does not corroborate it.
+ *
+ * Deliberately NOT a hand-edit of the offending row: the same mistake will
+ * recur across eight research batches and fifty cities, and a fix that only
+ * catches the instance I happened to spot-check is not a fix. Returns the row
+ * unchanged when it is already consistent.
+ */
+export function downgradeIfUncorroborated<T extends ProposalSpot>(
+  spot: T,
+): { spot: T; downgraded: boolean } {
+  if (spot.tier !== "green") return { spot, downgraded: false };
+  if (factMentionsProposal(spot.permit.fact)) return { spot, downgraded: false };
+  return {
+    spot: {
+      ...spot,
+      tier: "amber" as SourceTier,
+      permit: { ...spot.permit, appliesToProposal: false },
+    },
+    downgraded: true,
+  };
+}
 
 export type SpotValidation =
   | { ok: true; spot: ProposalSpot }
@@ -204,6 +290,15 @@ export function validateProposalSpot(input: unknown): SpotValidation {
     if (p.appliesToProposal !== true) {
       reasons.push("green: requires appliesToProposal=true (else it is amber, not green)");
     }
+    // The quote must corroborate the claim. See PROPOSAL_WORDS above: without
+    // this, appliesToProposal is just a researcher's assertion about a source
+    // rather than something the source actually says.
+    if (hasFact && !factMentionsProposal(p.fact!)) {
+      reasons.push(
+        "green: the verbatim quote never mentions a proposal or engagement — " +
+          "this is amber (real source, wedding-only), not green",
+      );
+    }
   }
   if (s.tier === "amber") {
     if (!hasFact) reasons.push("amber: requires permit.fact (a real source about the wrong subject)");
@@ -254,6 +349,14 @@ export function describePermit(spot: ProposalSpot): string {
       `mention proposals — so we can't tell you this applies to yours. They state: ` +
       `"${p.fact.verbatim}" Confirm with ${p.authority}` +
       (p.authorityContact ? ` (${p.authorityContact}).` : ".")
+    );
+  }
+  const disputed = spot.disputed ?? [];
+  if (disputed.length >= 2) {
+    return (
+      `Official sources disagree about the rules here, so we won't guess. ` +
+      `${p.authority} publishes conflicting guidance` +
+      (p.authorityContact ? ` — confirm directly (${p.authorityContact}).` : ".")
     );
   }
   return (
