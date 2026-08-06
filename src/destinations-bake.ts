@@ -33,6 +33,7 @@ import {
   activityAudiences,
   nightlifeAudiences,
   isGeneralAudience,
+  isFriendsmoonType,
   wizardsFromBrands,
   wizardsForActivity,
   audiencesFromBrands,
@@ -80,10 +81,27 @@ const outingProducts = (audiences: AudienceTag[]): ProductTag[] =>
  * `groupMin`/`groupMax`, not a routing decision — encoding it here would bake a
  * query into the cache and make the row invisible to any future two-person use.
  */
-const moonWizards = (audiences: AudienceTag[]): WizardTag[] =>
-  isGeneralAudience(audiences) ? ["friendsmoon", "engagedmoon"] : [];
-const moonProducts = (audiences: AudienceTag[]): ProductTag[] =>
-  isGeneralAudience(audiences) ? ["friends-trip", "proposal-trip"] : [];
+/**
+ * SUPERSEDED 2026-08-06 — the block above describes the INTENT; it was not what
+ * the code did. Routing Friendsmoon off `isGeneralAudience` (= corporate) made
+ * it a byte-identical clone of offsite-outing: 4472 rows each, 0 either way.
+ * The "no denylist to maintain" property was real, but it bought that
+ * simplicity by answering the wrong question — the honky-tonk crawl the comment
+ * promises Friendsmoon could reach was in fact excluded, because a honky-tonk
+ * is `unhinged` and `unhinged` is not corporate.
+ *
+ * Friendsmoon now gates per surface on what a friends long weekend would
+ * actually book; Engagedmoon keeps the old conservative signal until Phase 4.
+ * See PARTY_LOCKED_ACTIVITY_TYPES in tags.ts for the full rationale.
+ */
+const moonWizards = (audiences: AudienceTag[], friendsmoon: boolean): WizardTag[] => [
+  ...(friendsmoon ? (["friendsmoon"] as WizardTag[]) : []),
+  ...(isGeneralAudience(audiences) ? (["engagedmoon"] as WizardTag[]) : []),
+];
+const moonProducts = (audiences: AudienceTag[], friendsmoon: boolean): ProductTag[] => [
+  ...(friendsmoon ? (["friends-trip"] as ProductTag[]) : []),
+  ...(isGeneralAudience(audiences) ? (["proposal-trip"] as ProductTag[]) : []),
+];
 
 function applyOverride<T extends object>(key: string, base: T): T {
   const o = TAG_OVERRIDES[key];
@@ -99,7 +117,7 @@ function bakeActivity(destId: string, a: CanonicalActivity): CanonicalActivity {
   const products = uniq([
     ...productsFromBrands(a.brands as Brand[]),
     ...outingProducts(audiences),
-    ...moonProducts(audiences),
+    ...moonProducts(audiences, isFriendsmoonType(a.type)),
   ]);
   return applyOverride(`${destId}|activity|${a.name}`, {
     ...a,
@@ -115,12 +133,14 @@ function bakeNightlife(destId: string, n: CanonicalNightlife): CanonicalNightlif
   const wizards = uniq([
     ...wizardsFromBrands(n.brands as Brand[]),
     ...outingWizards(audiences),
-    ...moonWizards(audiences),
+    // Every nightlife vibe reaches Friendsmoon, `unhinged` included — 317 rows
+    // that a corporate-gated Friendsmoon could never surface.
+    ...moonWizards(audiences, true),
   ]);
   const products = uniq([
     ...productsFromBrands(n.brands as Brand[]),
     ...outingProducts(audiences),
-    ...moonProducts(audiences),
+    ...moonProducts(audiences, true),
   ]);
   return applyOverride(`${destId}|nightlife|${n.name}`, {
     ...n,
@@ -137,12 +157,12 @@ function bakeDining(destId: string, d: CanonicalDining): CanonicalDining {
   const wizards = uniq([
     ...wizardsFromBrands(d.brands as Brand[]),
     "offsite-outing" as WizardTag,
-    ...moonWizards(audiences),
+    ...moonWizards(audiences, true),
   ]);
   const products = uniq([
     ...productsFromBrands(d.brands as Brand[]),
     "outing" as ProductTag,
-    ...moonProducts(audiences),
+    ...moonProducts(audiences, true),
   ]);
   return applyOverride(`${destId}|dining|${d.name}`, {
     ...d,

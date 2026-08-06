@@ -19,6 +19,10 @@ import type {
   CanonicalDining,
 } from "./destinations-types";
 
+// The Friendsmoon activity allowlist is derived from the routing gate rather
+// than restated here — see FRIENDSMOON_ACTIVITY_TYPES below.
+import { isFriendsmoonType } from "./tags";
+
 // Audience vocabulary now lives in tags.ts; re-export for back-compat with
 // consumers that import these from the package root (e.g. Offsite Outpost).
 export {
@@ -65,6 +69,65 @@ export const BESTMAN_ACTIVITY_TYPES = new Set([
   // dropped it and it had NEVER rendered. Found by scripts/new-data-report.ts.
   "second-line-parade",
 ]);
+
+/**
+ * Friendsmoon's activity allowlist is DERIVED, not hand-written.
+ *
+ * MOH_ACTIVITY_TYPES and BESTMAN_ACTIVITY_TYPES are hand-maintained sets, and
+ * both have now shipped the same bug: a row correctly tagged for the wizard,
+ * whose type nobody remembered to add here, is dropped SILENTLY and renders
+ * nowhere. It cost the NOLA second line (authored 2026-07-22, never rendered
+ * until 2026-07-31) and then `luxe-picnic` + `photoshoot` on top of it.
+ *
+ * The routing gate in tags.ts already answers "may Friendsmoon show this type?"
+ * — PARTY_LOCKED_ACTIVITY_TYPES is the single source of truth. Restating that
+ * answer as a second hand-kept list would just re-arm the same trap. So this
+ * set is computed from the taxonomy: every known activity type that is not
+ * party-locked. A new type added to the universe joins Friendsmoon the moment
+ * it is tagged, with no second edit to forget.
+ */
+export const FRIENDSMOON_ACTIVITY_TYPES: ReadonlySet<string> = new Set(
+  [...MOH_ACTIVITY_TYPES, ...BESTMAN_ACTIVITY_TYPES].filter(isFriendsmoonType),
+);
+
+/**
+ * The Friendsmoon lens: a couples-and-friends long weekend.
+ *
+ * Filters on the wizard tag alone for nightlife and dining — the tag is already
+ * the decision — and on the tag plus the derived type set for activities, which
+ * keeps it structurally parallel to the MOH/BESTMAN overlays without inheriting
+ * their maintenance hazard.
+ *
+ * No `tagline`/`description`: `presentation` is typed as a closed
+ * `{ moh, bestman }` record, so no Friendsmoon copy can be authored yet.
+ * applyOutpostOverlay has shipped without one since OO launched, so this is a
+ * copy gap to fill when the site gets its own city prose, not a blocker.
+ */
+export function applyFriendsmoonOverlay(c: CanonicalDestination): unknown {
+  const nightlife = c.nightlife
+    .filter((n) => forWizard(n, "friendsmoon"))
+    .map((n: CanonicalNightlife) => omitTags(n));
+  const dining = c.dining.filter((d) => forWizard(d, "friendsmoon")).map((d) => omitTags(d));
+  const activities = c.activities
+    .filter((a) => forWizard(a, "friendsmoon"))
+    .filter((a) => FRIENDSMOON_ACTIVITY_TYPES.has(a.type))
+    .map((a: CanonicalActivity) => omitTags(a));
+  return {
+    id: c.id,
+    city: c.city,
+    state: c.state,
+    region: c.region,
+    nearestAirport: c.nearestAirport,
+    bestMonths: c.bestMonths,
+    vibes: c.vibes,
+    nightlife,
+    dining,
+    activities,
+    lodging: c.lodging.map((l) => omitTags(l)),
+    transport: c.transport.map((t) => omitTags(t)),
+    score: c.score,
+  };
+}
 
 /** Strip the universe tag fields (+ brands) so output matches the pre-bake shape. */
 const TAG_FIELDS = ["brands", "wizards", "audiences", "products", "priceTier"];

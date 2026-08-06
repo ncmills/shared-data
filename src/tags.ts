@@ -209,6 +209,52 @@ export function isGeneralAudience(audiences: readonly AudienceTag[]): boolean {
   return audiences.includes("corporate");
 }
 
+/**
+ * Activity types locked to ONE party brand, and the only ones Friendsmoon may
+ * not surface.
+ *
+ * WHY THIS EXISTS AT ALL. Friendsmoon used to route off `isGeneralAudience`,
+ * i.e. off `audiences.includes("corporate")`. The comment on `moonWizards`
+ * described the intent as "every row the taxonomy did NOT lock to a
+ * bachelor/bachelorette staple" — but corporate-eligibility is a different
+ * question, and the outcome was measured 2026-08-06:
+ *
+ *   friendsmoon rows 4472 · offsite-outing rows 4472 · in both 4472 · in one 0
+ *
+ * Friendsmoon was a byte-identical clone of the corporate wizard. What a
+ * company offsite will not book is not the same as what a friends long weekend
+ * will not book, so seven perfectly good leisure types were invisible —
+ * pool-party, casino, cigar-bar, poker-night, brunch-crawl, drag-brunch,
+ * silent-disco — along with all 317 `unhinged` nightlife rows, which are
+ * exactly the bars the trip is for.
+ *
+ * So the gate is now an explicit denylist of BRAND-CODED types rather than a
+ * borrowed corporate signal. A denylist has a maintenance cost the audience
+ * signal did not — `party-locked-types.test.ts` pins the full type taxonomy so
+ * a NEW activity type fails loudly here instead of silently inheriting a
+ * default, which is the same "silent drop" shape BESTMAN_ACTIVITY_TYPES hit.
+ *
+ * `second-line-parade` is here because tags.ts already records that the EVENT
+ * stays Best Man HQ, not because it reads bachelorette.
+ *
+ * ENGAGEDMOON IS DELIBERATELY NOT ROUTED OFF THIS. A proposal trip is not a
+ * friends trip: pool parties and unhinged bars are wrong for it. It keeps the
+ * conservative corporate-eligible signal until Phase 4 gives it a real model —
+ * and Phase 4 is behind a kill gate, so inventing one now would be building for
+ * a site that may never exist.
+ */
+export const PARTY_LOCKED_ACTIVITY_TYPES: ReadonlySet<string> = new Set([
+  "boudoir",
+  "burlesque-class",
+  "pole-class",
+  "second-line-parade",
+]);
+
+/** Does this activity type reach Friendsmoon? Everything not brand-locked. */
+export function isFriendsmoonType(type: string): boolean {
+  return !PARTY_LOCKED_ACTIVITY_TYPES.has(type);
+}
+
 /** Nightlife is audience-tagged by vibe: an "unhinged" room isn't corporate. */
 export function nightlifeAudiences(vibe: string): UniverseAudience[] {
   return vibe === "unhinged" ? ["bachelor", "bachelorette"] : ALL_AUDIENCES;
@@ -260,8 +306,13 @@ export function wizardsForActivity(type: string, brands: Brand[]): WizardTag[] {
   // Golf is a bachelor + corporate thing and NEVER a bachelorette one.
   const party = wizardsFromBrands(brands).filter((w) => !(w === "moh" && isGolfType(type)));
   const outing: WizardTag[] = audiences.includes("corporate") ? ["offsite-outing"] : [];
-  const moon: WizardTag[] = isGeneralAudience(audiences) ? ["friendsmoon", "engagedmoon"] : [];
-  return Array.from(new Set([...party, ...outing, ...moon]));
+  // Friendsmoon gates on the TYPE (see PARTY_LOCKED_ACTIVITY_TYPES); engagedmoon
+  // still gates on corporate-eligibility until Phase 4 gives it its own model.
+  // Golf reaches Friendsmoon deliberately (Nick, 2026-08-06): a friends long
+  // weekend can include a round. The `moh` golf block above is untouched.
+  const fm: WizardTag[] = isFriendsmoonType(type) ? ["friendsmoon"] : [];
+  const em: WizardTag[] = isGeneralAudience(audiences) ? ["engagedmoon"] : [];
+  return Array.from(new Set([...party, ...outing, ...fm, ...em]));
 }
 
 export function productsFromBrands(brands: Brand[]): ProductTag[] {
