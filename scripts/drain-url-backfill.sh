@@ -129,6 +129,7 @@ START_ROWS="$(queue_rows)"
 say "=== drain start: $START_ROWS row(s) unsourced, up to $ITERATIONS iteration(s) ==="
 say "    top-k=$TOP_K row-cap=$ROW_CAP concurrency=$RESEARCH_CONCURRENCY"
 
+RUN_ID="$(date +%Y%m%d-%H%M%S)"
 PREV_ROWS=""
 ZERO_YIELD=0
 
@@ -143,7 +144,12 @@ for i in $(seq 1 "$ITERATIONS"); do
   # Unique label per iteration: propose-pr does `git checkout -b
   # expand/<dataset>-<label>` and a repeated label would collide with the
   # branch the previous iteration created.
-  LABEL="drain-$(date +%Y%m%d)-i$i"
+  # RUN_ID, not just the date. propose-pr does `git checkout -b
+  # expand/<dataset>-<label>`, which FAILS on an existing branch — so a second
+  # drain on the same day (a smoke test, then the real run) would collide on
+  # iteration 1 and die ~20 minutes in. The run's start time makes the branch
+  # namespace unique per invocation.
+  LABEL="drain-$RUN_ID-i$i"
 
   # caffeinate -i -s: hold off idle/system sleep. This does NOT make the run
   # sleep-proof — a closed lid on battery sleeps regardless, and the 2026-08-04
