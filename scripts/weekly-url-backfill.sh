@@ -66,7 +66,13 @@ if [ ! -d "$TREE/.git" ] && [ ! -f "$TREE/.git" ]; then
 fi
 git -C "$TREE" fetch --quiet origin
 git -C "$TREE" reset --hard --quiet origin/main
-git -C "$TREE" clean -fdq -e node_modules
+# PRESERVE the attempt record. `docs/backfill-attempts.json` is untracked, so a
+# bare `clean -fd` deletes it — and that file IS the queue's memory of which
+# venues have already failed to source. Wiping it every run restores the exact
+# silting the memory was added to prevent (yield fell 22 -> 3 per batch), while
+# looking like it was working. Verified: `clean -nd docs/` reported "Would
+# remove docs/backfill-attempts.json".
+git -C "$TREE" clean -fdq -e node_modules -e docs/backfill-attempts.json
 
 cd "$TREE"
 npm install --silent >> "$LOG" 2>&1

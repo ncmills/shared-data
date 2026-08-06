@@ -414,9 +414,35 @@ export function proposePr(opts: ProposePrOptions): ProposePrResult {
   // go-live constraint for this task keeps everything local. NOT exercised
   // by Task 16 (no test sets push:true against a real repo/gh). ────────────
   if (opts.push === true) {
-    run("git", ["push", "-u", "origin", branch], { cwd: repoRoot });
-    run("gh", ["pr", "create", "--title", commitMessage, "--body-file", bodyPath], { cwd: repoRoot });
+    // CHECK THE STATUS. `run` returns a CommandResult and, until 2026-08-05,
+    // nothing here looked at it — so a failed push or a failed `gh pr create`
+    // was swallowed whole and the caller still logged "proposed PUSHED PR
+    // ... (push:true)". That is exactly what happened on the 2026-08-04 run:
+    // the machine's DNS was flapping, the push failed, and 10 genuinely-sourced
+    // venue rows sat in a local branch nobody knew about while the log reported
+    // success. A run that cannot push must say so.
+    mustSucceed(run("git", ["push", "-u", "origin", branch], { cwd: repoRoot }), "git push");
+    mustSucceed(
+      run("gh", ["pr", "create", "--title", commitMessage, "--body-file", bodyPath], {
+        cwd: repoRoot,
+      }),
+      "gh pr create",
+    );
   }
 
   return { branch, body, bodyPath };
+}
+
+/**
+ * Throw with the command's own stderr when it failed. The commit is already on
+ * a local branch at this point, so the rows are never lost — but the caller
+ * must not be allowed to report a PR that does not exist.
+ */
+function mustSucceed(res: CommandResult, what: string): void {
+  if (res.status === 0) return;
+  const detail = (res.stderr || res.stdout || "").trim().split("\n").slice(-4).join("\n");
+  throw new Error(
+    `propose-pr: ${what} FAILED (exit ${res.status}). The branch is committed locally and can be ` +
+      `pushed by hand once the cause is fixed.\n${detail}`,
+  );
 }

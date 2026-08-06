@@ -319,3 +319,72 @@ test("DEFAULT_FILES_TO_COMMIT covers every sanctioned ingest target", () => {
     );
   }
 });
+
+// ─── push/PR failures must not be silent (2026-08-05) ───────────────────────
+//
+// The 2026-08-04 scheduled run logged "proposed PUSHED PR ... (push:true)" and
+// opened nothing: the machine's DNS was flapping, `git push` failed, and nobody
+// checked its exit status. Ten genuinely-sourced venue rows sat in a local
+// branch for a day while the log reported success. A lane that cannot tell a
+// pushed PR from a failed one must not run unattended.
+
+function pushOpts(docsDir: string, run: CommandRunner) {
+  return {
+    label: "push-failure-test",
+    dataset: "golf",
+    gapTasks: [SAMPLE_GAP_TASK],
+    rowCountsByDataset: { golf: 3 },
+    citations: ["https://www.realcourse.example/about"],
+    beforeMatrixMd: BEFORE_MATRIX_MD,
+    afterMatrixMd: AFTER_MATRIX_MD,
+    docsDir,
+    repoRoot: docsDir,
+    run,
+    push: true as const,
+  };
+}
+
+test("proposePr: a failing git push THROWS rather than reporting success", () => {
+  withTempDocsDir((docsDir) => {
+    const seen: string[] = [];
+    const run: CommandRunner = (cmd, args) => {
+      seen.push(`${cmd} ${args[0]}`);
+      if (cmd === "git" && args[0] === "push") {
+        return {
+          status: 128,
+          stdout: "",
+          stderr: "fatal: unable to access ...: Could not resolve host: github.com",
+        };
+      }
+      return { status: 0, stdout: "", stderr: "" };
+    };
+
+    assert.throws(
+      () => proposePr(pushOpts(docsDir, run)),
+      /git push FAILED/,
+      "a failed push must surface, not be swallowed",
+    );
+    assert.ok(
+      !seen.some((c) => c.startsWith("gh ")),
+      "must not open a PR for a branch that failed to push",
+    );
+  });
+});
+
+test("proposePr: a failing `gh pr create` THROWS too", () => {
+  withTempDocsDir((docsDir) => {
+    const run: CommandRunner = (cmd) =>
+      cmd === "gh"
+        ? { status: 1, stdout: "", stderr: "gh: could not create pull request" }
+        : { status: 0, stdout: "", stderr: "" };
+    assert.throws(() => proposePr(pushOpts(docsDir, run)), /gh pr create FAILED/);
+  });
+});
+
+test("proposePr: the happy push path still returns the branch", () => {
+  withTempDocsDir((docsDir) => {
+    const run: CommandRunner = () => ({ status: 0, stdout: "", stderr: "" });
+    const res = proposePr(pushOpts(docsDir, run));
+    assert.equal(res.branch, "expand/golf-push-failure-test");
+  });
+});
