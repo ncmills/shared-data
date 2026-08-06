@@ -105,17 +105,105 @@ export function golfDestinations(): SharedGolfDestination[] {
     if (list) list.push(c);
     else byDestination.set(c.destinationId, [c]);
   }
-  if (byDestination.size === 0) return SHARED_GOLF_DESTINATIONS;
+  const merged =
+    byDestination.size === 0
+      ? SHARED_GOLF_DESTINATIONS
+      : SHARED_GOLF_DESTINATIONS.map((dest) => {
+          const extra = byDestination.get(dest.id);
+          if (!extra) return dest;
+          const existing = (dest.courses as EmbeddedCourse[] | undefined) ?? [];
+          const seen = new Set(existing.map((c) => c.name.trim().toLowerCase()));
+          const additions = extra
+            .filter((c) => !seen.has(c.name.trim().toLowerCase()))
+            .map(toEmbeddedCourse);
+          if (additions.length === 0) return dest;
+          return { ...dest, courses: [...existing, ...additions] };
+        });
 
-  return SHARED_GOLF_DESTINATIONS.map((dest) => {
-    const extra = byDestination.get(dest.id);
-    if (!extra) return dest;
-    const existing = (dest.courses as EmbeddedCourse[] | undefined) ?? [];
-    const seen = new Set(existing.map((c) => c.name.trim().toLowerCase()));
-    const additions = extra
-      .filter((c) => !seen.has(c.name.trim().toLowerCase()))
-      .map(toEmbeddedCourse);
-    if (additions.length === 0) return dest;
-    return { ...dest, courses: [...existing, ...additions] };
-  });
+  return merged.map(stripUnprovenancedVenueUrls);
+}
+
+/**
+ * Venue arrays whose `url` is not trustworthy on its own. `courses` is
+ * deliberately NOT in this list — see the note on the strip below.
+ */
+const UNVERIFIED_URL_ARRAYS = [
+  "dining",
+  "bars",
+  "activities",
+  "lodging",
+  "partyBuses",
+  "privateChefs",
+] as const;
+
+/** The provenance the backfill actually writes (`research-schema.ts`): a source
+ *  URL the value was read FROM, plus at least one citation. */
+function hasRealProvenance(row: Record<string, unknown>): boolean {
+  const cites = row.citations;
+  return (
+    typeof row.sourceUrl === "string" &&
+    row.sourceUrl.trim() !== "" &&
+    Array.isArray(cites) &&
+    cites.length > 0
+  );
+}
+
+/**
+ * Drop `url` from non-course golf venues that carry no provenance.
+ *
+ * These 91 URLs were not researched — they are the venue's own name slugged
+ * into a domain, and they are WRONG. Measured 2026-08-05: 90 of 91 are a bare
+ * host with no path and 89 of 91 are a mechanical slug of the name. Resolving
+ * them shows what they actually are: `hash-kitchen.com` is a construction
+ * company, `the-shed.com` is an artist's blog, `geronimo.com` is a nonprofit
+ * consultancy. Where a venue appears in BOTH the party and golf datasets, the
+ * two disagree every time and the party value is the correct one.
+ *
+ * They survived every gate because they all return HTTP 200, and `verify-url`
+ * asks whether a URL is alive, not whether it is the right place. A 200 is not
+ * proof of subject. Until a check exists that can tell those apart, presence in
+ * this dataset cannot confer trust.
+ *
+ * Stripping rather than blanking: downstream treats a non-blank `url` as
+ * provenance (`backfill-queue.ts` counts a row as sourced iff `url` is
+ * non-blank), so leaving the key behind would keep these scored as sourced and
+ * keep them out of the backfill queue that should now pick them up.
+ *
+ * Forward-compatible by construction: a row that DOES carry `sourceUrl` +
+ * `citations` keeps its URL, so when the golf backfill lands real provenance
+ * these rows go clickable again with no further change here. Today zero golf
+ * rows qualify — those fields do not yet exist in this dataset at all.
+ *
+ * Courses are left alone on purpose. They are 88% covered with mostly real
+ * hosts and deep paths (`tpc.com/scottsdale`), only ~11% match the fabrication
+ * fingerprint, and HHQ gates the remainder on render (handicap-hq#24). Note
+ * that 88% is COVERAGE, not verification — nothing here attests a course URL
+ * was ever checked.
+ */
+function stripUnprovenancedVenueUrls(dest: SharedGolfDestination): SharedGolfDestination {
+  let changed = false;
+  const out: Record<string, unknown> = { ...dest };
+
+  for (const key of UNVERIFIED_URL_ARRAYS) {
+    const arr = dest[key];
+    if (!Array.isArray(arr)) continue;
+
+    let arrChanged = false;
+    const next = arr.map((v) => {
+      if (!v || typeof v !== "object" || Array.isArray(v)) return v;
+      const row = v as Record<string, unknown>;
+      if (typeof row.url !== "string" || row.url.trim() === "") return v;
+      if (hasRealProvenance(row)) return v;
+      arrChanged = true;
+      const { url: _unverified, ...rest } = row;
+      return rest;
+    });
+
+    if (arrChanged) {
+      out[key] = next;
+      changed = true;
+    }
+  }
+
+  return changed ? (out as SharedGolfDestination) : dest;
 }
