@@ -172,6 +172,29 @@ export function deriveBackfillCliConfig(args: {
   };
 }
 
+/**
+ * Did this run MEASURE anything at all?
+ *
+ * WHY (2026-08-06): `claudeResearcher` is fail-safe — a timeout, a non-zero
+ * exit, or a usage limit all resolve to `[]`. So a run in which every single
+ * call failed printed "0 researched, 0 ingested" and exited 0, which
+ * `weekly-url-backfill.sh` logged as `=== run OK ===`. That is byte-identical
+ * to a run that researched everything and genuinely found nothing, and the
+ * backfill watchdog reads run status — so a usage-limited Tue-03:00 job could
+ * report health every week while sourcing nothing.
+ *
+ * A run that measured NOTHING is not a successful run. Absence of a
+ * measurement is not a passing measurement (feedback_fleet_signal_integrity).
+ *
+ * Deliberately narrow: it fires only when there was at least one call AND
+ * every one of them was unmeasured. A partial failure (the normal case — ~42%
+ * of calls time out) is still a real run, and an EMPTY QUEUE makes zero calls
+ * and must stay a success, not a false alarm.
+ */
+export function runMeasuredNothing(totalCalls: number, unmeasuredCalls: number): boolean {
+  return totalCalls > 0 && unmeasuredCalls >= totalCalls;
+}
+
 // ─── CLI ────────────────────────────────────────────────────────────────────
 if (import.meta.url === `file://${process.argv[1]}`) {
   const args = new Map(
@@ -221,6 +244,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   // never really researched, so this run must not strike them. Same doctrine as
   // hostSuspended directly below; that case had a seam and these did not.
   let unmeasuredCalls = 0;
+  // The DENOMINATOR. `unmeasuredCalls` alone cannot distinguish "3 of 40 calls
+  // failed" from "3 of 3 calls failed" — and only the second means the run
+  // learned nothing. Every number carries its denominator.
+  let totalCalls = 0;
   const researcher = noResearch
     ? async () => []
     : (await import("./researcher-claude")).claudeResearcher({
@@ -256,6 +283,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       `across ${q.tasks.length} task(s)\n`,
   );
 
+  const countingResearcher = async (prompt: string) => {
+    totalCalls++;
+    return researcher(prompt);
+  };
+
   const res = await runBackfill({
     label,
     topK: num("top-k", 5),
@@ -263,7 +295,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     dryRun,
     liveUrlCheck,
     pushPr,
-    researcher,
+    researcher: countingResearcher,
     maxVenuesPerTask,
     researchConcurrency,
     hostSuspended: () => hostSuspended,
@@ -289,6 +321,18 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       console.log(`  ${r.taskId} [#${r.index}]`);
       for (const reason of r.reasons) console.log(`      ${reason}`);
     }
+  }
+
+  if (runMeasuredNothing(totalCalls, unmeasuredCalls)) {
+    // EXIT NON-ZERO. weekly-url-backfill.sh propagates a failed run's status, so
+    // this is what turns a silently-starved job into a visible one.
+    console.error(
+      `\nrun-backfill[${label}]: MEASURED NOTHING — all ${totalCalls} research ` +
+        `call(s) failed (timeout / non-zero exit / usage limit). This is NOT ` +
+        `"found nothing": the venues were never researched, and no attempt was ` +
+        `recorded against them. Check the log above for "USAGE LIMIT".`,
+    );
+    process.exitCode = 1;
   }
 
   console.log(
