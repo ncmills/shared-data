@@ -32,6 +32,7 @@ export * from "./tagging-rules";
 // (BESTMAN HQ, MOH) picks them up via the same `sharedDestinations` export.
 import type { CanonicalDestination } from "./destinations-types";
 import { bakeDestination } from "./destinations-bake";
+import { stripDeadVenueUrls } from "./dead-url-quarantine";
 import { sharedDestinations as coreDestinations } from "./destinations-data";
 import { expansionSouth } from "./destinations-expansion-south";
 import { expansionInternational } from "./destinations-expansion-international";
@@ -61,6 +62,11 @@ import { applyPartyVenuePatches } from "./party-venue-patch-apply";
 // after attach lets a venue added this month be enriched next month. Patching
 // before the bake feeds derived tags: a repriced row must not keep a
 // `priceTier` computed from its stale price.
+// `stripDeadVenueUrls` runs LAST, after the patch pass, because a patch is
+// exactly how one of these urls would come back: the quarantine has to see the
+// final value a consumer will render, not the one the source file happens to
+// carry. It only ever removes a `url` key, so it cannot affect tags or pricing
+// derived by the bake above.
 export const sharedDestinations: CanonicalDestination[] = applyPartyVenuePatches(
   attachPartyVenues([
     ...coreDestinations,
@@ -70,7 +76,9 @@ export const sharedDestinations: CanonicalDestination[] = applyPartyVenuePatches
     ...expansionMidwest,
     ...expansionWest,
   ]),
-).map(bakeDestination);
+)
+  .map(bakeDestination)
+  .map(stripDeadVenueUrls);
 
 // Golf is the single golf-cite source (Task 3). The regenerated 994-row
 // `golf-courses.ts` (do-not-hand-edit) plus the `golf-courses-hhq-merge.ts`

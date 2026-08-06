@@ -38,7 +38,28 @@ import { sharedDestinations } from "../src/index";
 
 const CATEGORIES = ["activities", "dining", "nightlife", "lodging", "transport"] as const;
 
-const UA = "Mozilla/5.0 (SharedData UrlSubjectAudit; +https://github.com/ncmills/shared-data)";
+/**
+ * A real browser UA, not an honest bot string.
+ *
+ * Measured: with the bot UA, cityexperiences.com's Boston page failed outright
+ * and was reported DEAD; with this one it returns 200. We are checking whether a
+ * link works FOR A USER, so we have to ask the way a user's browser asks. The
+ * Accept headers matter for the same reason — some CDNs refuse on their absence.
+ */
+const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
+           "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
+const ACCEPT = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+
+/**
+ * Node's fetch is STRICTER than every browser about certificate chains. Sites
+ * that serve an incomplete chain load fine for users and throw here. Reporting
+ * those as dead links is a false alarm that costs a working link.
+ */
+const TLS_ERRORS = /UNABLE_TO_GET_ISSUER|UNABLE_TO_VERIFY_LEAF|CERT_|DEPTH_ZERO|SELF_SIGNED/i;
+/** Nothing answered. Could be them, could be us — never definitive on one try. */
+const CONNECT_ERRORS = /ECONNREFUSED|ECONNRESET|ETIMEDOUT|EHOSTUNREACH|ENETUNREACH|CONNECT_TIMEOUT|abort|timeout/i;
+/** DNS does not resolve. That IS definitive: the domain is gone. */
+const NO_DNS = /ENOTFOUND|EAI_AGAIN/i;
 const TIMEOUT_MS = 12_000;
 const CONCURRENCY = 10;
 
@@ -49,7 +70,24 @@ const STOPWORDS = new Set([
   "tour", "tours", "day", "night", "backup", "company", "co", "grill", "inn", "beach",
 ]);
 
-export type SubjectVerdict = "SUBJECT-OK" | "UNCONFIRMED" | "DEAD" | "BLOCKED" | "UNREACHABLE";
+/**
+ * DEAD is reserved for the definitive cases — a domain that no longer resolves,
+ * or a server that answered with an error. Everything we cannot distinguish from
+ * our own stack lands in UNREACHABLE or TLS-UNVERIFIED instead.
+ *
+ * That split is not pedantry. The first version of this audit called 11 links
+ * dead. Re-checking each one by hand: 3 were its own 12s timeout, 2 were TLS
+ * chains Node rejects and browsers accept, 1 was bot-blocking that a real UA
+ * fixes. Four were genuinely broken. Acting on the original number would have
+ * stripped seven working links.
+ */
+export type SubjectVerdict =
+  | "SUBJECT-OK"
+  | "UNCONFIRMED"
+  | "DEAD"            // no DNS, or the server returned 4xx/5xx — actionable
+  | "BLOCKED"         // 401/403/429 — the server refused US
+  | "UNREACHABLE"     // nothing answered; may be them, may be our network
+  | "TLS-UNVERIFIED"; // loads in a browser, fails Node's stricter chain check
 
 export interface SubjectResult {
   name: string;
@@ -153,20 +191,22 @@ async function checkOne(row: ReturnType<typeof sourcedRows>[number]): Promise<Su
     res = await fetch(row.url, {
       redirect: "follow",
       signal: ctl.signal,
-      headers: { "User-Agent": UA },
+      headers: { "User-Agent": UA, "Accept": ACCEPT, "Accept-Language": "en-US,en;q=0.9" },
     });
     clearTimeout(timer);
   } catch (e: any) {
-    const msg = String(e?.message ?? e);
-    // OUR timeout is not THEIR outage. The first run of this audit reported 11
-    // dead links, three of which were borgata.mgmresorts.com hitting the 12s
-    // abort — a slow enterprise site, not a broken one. DEAD is the verdict that
-    // raises a RED alert, so anything we cannot distinguish from our own network
-    // must not land there. Same rule as BLOCKED, and the same rule the rest of
-    // this portfolio learned the hard way on 2026-08-05.
-    if (/abort|timeout|ETIMEDOUT/i.test(msg))
-      return { ...base, verdict: "UNREACHABLE", why: `no response in ${TIMEOUT_MS / 1000}s — our timeout, not proof of a dead link` };
-    return { ...base, verdict: "DEAD", why: `fetch failed: ${msg.slice(0, 80)}` };
+    // Classify by CAUSE. A thrown fetch has several very different meanings and
+    // collapsing them into "dead" is what produced seven false alarms.
+    const msg = `${e?.cause?.code ?? ""} ${e?.message ?? e}`;
+    if (NO_DNS.test(msg))
+      return { ...base, verdict: "DEAD", why: "domain does not resolve — the site is gone" };
+    if (TLS_ERRORS.test(msg))
+      return { ...base, verdict: "TLS-UNVERIFIED",
+               why: "incomplete certificate chain — loads in a browser, rejected by Node; NOT a dead link" };
+    if (CONNECT_ERRORS.test(msg))
+      return { ...base, verdict: "UNREACHABLE",
+               why: `nothing answered (${String(e?.cause?.code ?? "timeout").slice(0, 24)}) — verify by hand before acting` };
+    return { ...base, verdict: "UNREACHABLE", why: `fetch failed: ${String(e?.message ?? e).slice(0, 60)}` };
   }
 
   // Mirrors verify-url.ts's doctrine: a refusal tells us about the server's bot
@@ -215,6 +255,8 @@ async function main() {
           dead: count("DEAD"),
           blocked: count("BLOCKED"),
           unreachable: count("UNREACHABLE"),
+          tlsUnverified: count("TLS-UNVERIFIED"),
+          unreachableRows: results.filter((r) => r.verdict === "UNREACHABLE"),
           // Only the actionable ones travel — DEAD is a broken link a user can
           // hit today; UNCONFIRMED is a flag for human eyes, never an auto-action.
           deadRows: results.filter((r) => r.verdict === "DEAD"),
@@ -232,8 +274,11 @@ async function main() {
   console.log(`  UNCONFIRMED  ${count("UNCONFIRMED")}  — needs human eyes, NOT auto-quarantine`);
   console.log(`  DEAD         ${count("DEAD")}  — a live broken link`);
   console.log(`  BLOCKED      ${count("BLOCKED")}  — server refused us; says nothing about the url`);
-  console.log(`  UNREACHABLE  ${count("UNREACHABLE")}  — no response in time; OUR timeout, not their outage\n`);
+  console.log(`  UNREACHABLE  ${count("UNREACHABLE")}  — nothing answered; verify by hand before acting`);
+  console.log(`  TLS-UNVERIFIED ${count("TLS-UNVERIFIED")}  — loads in a browser, Node rejects the chain\n`);
 
+  for (const r of results.filter((x) => x.verdict === "UNREACHABLE"))
+    console.log(`  UNREACHABLE  ${r.name} (${r.city}) → ${r.url}  ${r.why}`);
   for (const r of results.filter((x) => x.verdict === "DEAD"))
     console.log(`  DEAD         ${r.name} (${r.city}) → ${r.url}  ${r.why}`);
   for (const r of results.filter((x) => x.verdict === "UNCONFIRMED"))
