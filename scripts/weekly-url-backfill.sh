@@ -25,7 +25,21 @@ LOCK="$HOME/work/logs/.url-backfill.lock"
 # Overridable so the job itself can be smoke-tested exactly as launchd runs it:
 #   DRY_RUN=1 TOP_K=1 ROW_CAP=3 bash scripts/weekly-url-backfill.sh
 # DRY_RUN still performs real research — it just never ingests or opens a PR.
-TOP_K="${TOP_K:-15}"
+#
+# TOP_K 15 -> 40 (2026-08-06). ROW_CAP was never the binding constraint: every
+# real run logged "0 task(s) trimmed by the cap" and ingested 10-29 rows against
+# a cap of 120. TOP_K was the throttle — 15 tasks is only ~69 candidate rows, so
+# the job ran at roughly a sixth of the drain rate its own comment describes. At
+# 40 tasks a run approaches the 120 the cap already allows, WITHOUT raising the
+# cap, so PR size (the thing the note above protects) is unchanged.
+#
+# Cadence stays WEEKLY on purpose. Measured 2026-08-06: 358 of 399 sourced rows
+# verify as the right venue, so the data is good — but the payoff per row is
+# modest (a direct venue link replacing a working Resy/Maps fallback), and the
+# tail gets harder as backfill-attempts.json accumulates failures that are never
+# retried. Weekly at the design rate lands ~1 year; revisit cadence when a launch
+# actually depends on it, not before.
+TOP_K="${TOP_K:-40}"
 ROW_CAP="${ROW_CAP:-120}"
 DRY_RUN="${DRY_RUN:-}"
 
@@ -117,5 +131,13 @@ if /usr/bin/caffeinate -i -s -m npx tsx scripts/run-backfill.ts \
       --row-cap="$ROW_CAP" >> "$LOG" 2>&1; then
   say "=== run OK ($LABEL) ==="
 else
-  say "=== run FAILED exit=$? ($LABEL) — see the run output above ==="
+  # PROPAGATE. This `if/else` used to swallow the status and let the script fall
+  # off the end at exit 0, so launchd recorded a failed backfill as a success and
+  # the fleet health monitor had nothing to report. Verified by reproduction:
+  # a setup failure (ERR trap + set -e) correctly exits 1, but a failed RUN
+  # exited 0 — the one path that actually does the work was the one that lied.
+  # Capture before `say`, which resets $?.
+  rc=$?
+  say "=== run FAILED exit=$rc ($LABEL) — see the run output above ==="
+  exit "$rc"
 fi
