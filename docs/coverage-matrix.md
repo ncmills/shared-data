@@ -4,11 +4,11 @@ Rows = wizard, columns = dataset. Cell = real reachable row count in the canonic
 
 | wizard | party | golf | residence | golf-destination | moh-local | bestman-local | oo-experience | oo-outing |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bestman | 5137 | 1000 | 0 | 0 | 0 | 91 | 0 | 0 |
+| bestman | 5137 | 999 | 0 | 0 | 0 | 91 | 0 | 0 |
 | moh | 4854 | 0 | 0 | 0 | 50 | 0 | 0 | 0 |
-| offsite-retreat | 1233 | 1000 | 341 | 0 | 0 | 0 | 158 | 0 |
-| offsite-outing | 5705 | 1000 | 341 | 0 | 0 | 0 | 158 | 107 |
-| handicap | 0 | 1000 | 0 | 234 | 0 | 0 | 0 | 0 |
+| offsite-retreat | 1233 | 999 | 341 | 0 | 0 | 0 | 158 | 0 |
+| offsite-outing | 5705 | 999 | 341 | 0 | 0 | 0 | 158 | 107 |
+| handicap | 0 | 999 | 0 | 234 | 0 | 0 | 0 | 0 |
 | friendsmoon | 5705 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | engagedmoon | 5705 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
