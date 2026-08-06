@@ -46,6 +46,7 @@ export const expansionMidwest: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Fort Des Moines (Curio Collection)", type: "boutique-hotel", pricePerNight: [180,320], perRoom: true, maxGuests: 2, highlight: "1919 landmark hotel with the In Confidence speakeasy downstairs" },
       { name: "East Village loft", type: "airbnb", pricePerNight: [350,650], perRoom: false, maxGuests: 10, highlight: "Walkable to the cocktail bars + sculpture park" },
+      { name: "East Village 6BR house", type: "house", pricePerNight: [510,960], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Walkable to the bars with the capitol dome up the hill" },
     ],
     transport: [{ name: "Des Moines party shuttle", type: "shuttle", priceRange: "$100-$220/group", highlight: "East Village to downtown loop with late pickup" }],
     presentation: {
@@ -79,6 +80,7 @@ export const expansionMidwest: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Vetro", type: "boutique-hotel", pricePerNight: [160,280], perRoom: true, maxGuests: 2, highlight: "Glass-tower hotel steps from the Ped Mall" },
       { name: "Downtown 4BR rental", type: "airbnb", pricePerNight: [320,600], perRoom: false, maxGuests: 10, highlight: "Walk to every bar on the Ped Mall" },
+      { name: "Northside 6BR house", type: "house", pricePerNight: [470,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Porch near the Ped Mall and the old brick taverns" },
     ],
     transport: [{ name: "Iowa City group shuttle", type: "shuttle", priceRange: "$90-$200/group", highlight: "Orchard + brewery loop with downtown drop" }],
     presentation: {
@@ -145,6 +147,7 @@ export const expansionMidwest: CanonicalDestination[] = [
     lodging: [
       { name: "The Graduate Lincoln", type: "boutique-hotel", pricePerNight: [160,290], perRoom: true, maxGuests: 2, highlight: "Husker-themed boutique hotel on the edge of the Haymarket" },
       { name: "Haymarket loft", type: "airbnb", pricePerNight: [300,580], perRoom: false, maxGuests: 10, highlight: "Brick-warehouse loft walkable to every bar" },
+      { name: "Haymarket 6BR loft house", type: "house", pricePerNight: [440,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Warehouse block, walk to the ballpark and the bars" },
     ],
     transport: [{ name: "Lincoln group shuttle", type: "shuttle", priceRange: "$90-$200/group", highlight: "Haymarket + brewery loop with late pickup" }],
     presentation: {
@@ -178,6 +181,7 @@ export const expansionMidwest: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel at Old Town", type: "boutique-hotel", pricePerNight: [160,280], perRoom: true, maxGuests: 2, highlight: "All-suite historic hotel in the middle of the nightlife district" },
       { name: "Old Town warehouse loft", type: "airbnb", pricePerNight: [280,520], perRoom: false, maxGuests: 10, highlight: "Brick loft steps from the bars" },
+      { name: "Old Town 6BR loft", type: "house", pricePerNight: [410,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Brick warehouse conversion in the middle of the bar district" },
     ],
     transport: [{ name: "Wichita party shuttle", type: "shuttle", priceRange: "$100-$220/group", highlight: "Old Town loop + brewery runs" }],
     presentation: {
@@ -244,6 +248,7 @@ export const expansionMidwest: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Donaldson (The HoDo)", type: "boutique-hotel", pricePerNight: [180,320], perRoom: true, maxGuests: 2, highlight: "Artist-themed boutique rooms over the Blarney Stone on Broadway" },
       { name: "Downtown Broadway loft", type: "airbnb", pricePerNight: [250,500], perRoom: false, maxGuests: 10, highlight: "Walk to every Broadway bar" },
+      { name: "Downtown Broadway 6BR loft", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Above the restaurants, everything on foot" },
     ],
     transport: [{ name: "Fargo party shuttle", type: "shuttle", priceRange: "$100-$220/group", highlight: "Broadway loop + brewery runs with late pickup" }],
     presentation: {
@@ -510,6 +515,7 @@ export const expansionMidwest: CanonicalDestination[] = [
     lodging: [
       { name: "Pier B Resort", type: "resort", pricePerNight: [220,440], perRoom: true, maxGuests: 2, highlight: "Harborfront resort with a dock and rooftop deck" },
       { name: "Canal Park rental loft", type: "airbnb", pricePerNight: [350,700], perRoom: false, maxGuests: 10, highlight: "Lake-view loft walkable to the brewery district" },
+      { name: "Canal Park 6BR house", type: "house", pricePerNight: [510,1030], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Lake Superior out the window, lift bridge down the street" },
     ],
     transport: [{ name: "Duluth North Shore charter van", type: "charter", priceRange: "$140-$320/group", highlight: "Brewery loop + scenic North Shore day trips" }],
     presentation: {
@@ -543,6 +549,7 @@ export const expansionMidwest: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel on Phillips", type: "boutique-hotel", pricePerNight: [160,300], perRoom: true, maxGuests: 2, highlight: "Restored 1918 bank building in the center of the bar district" },
       { name: "Downtown group rental", type: "airbnb", pricePerNight: [280,560], perRoom: false, maxGuests: 10, highlight: "Walk to Phillips Avenue + Falls Park" },
+      { name: "Downtown 6BR house", type: "house", pricePerNight: [410,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Walk to the falls and the Phillips Avenue restaurants" },
     ],
     transport: [{ name: "Sioux Falls group shuttle", type: "shuttle", priceRange: "$90-$200/group", highlight: "Phillips Ave + brewery loop with late pickup" }],
     presentation: {
