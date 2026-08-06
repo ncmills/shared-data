@@ -220,6 +220,22 @@ export interface ClaudeResearcherOptions {
    * venues that were never researched.
    */
   onSuspended?: () => void;
+  /**
+   * Called when a call produced NO MEASUREMENT of its venues — a timeout, or a
+   * non-zero exit (which is what an upstream rate-limit looks like). Distinct
+   * from `onSuspended`, which is the narrower host-slept case.
+   *
+   * Why this exists (2026-08-06): every one of these resolves to `[]`, exactly
+   * like a clean call that genuinely found nothing. `run-backfill` then strikes
+   * every asked venue that isn't in `ingestedRows` — so a 180s timeout retired 8
+   * venues that were never actually researched. At the measured ~50% timeout
+   * rate and TOP_K=40 that is ~160 false strikes per run, against an attempts
+   * file already holding 62 venues one strike from permanent retirement.
+   * `onSuspended` had a seam for precisely this reason; timeout and non-zero
+   * exit did not. A clean call returning `[]` does NOT fire this — that is a
+   * real negative result and should count.
+   */
+  onUnmeasured?: (reason: "timeout" | "exit") => void;
 }
 
 /**
@@ -370,7 +386,8 @@ export function claudeResearcher(opts: ClaudeResearcherOptions = {}): Researcher
           opts.onSuspended?.();
           return [];
         }
-        log("claudeResearcher: timed out — returning []");
+        log("claudeResearcher: timed out — returning [] (NOT a measurement of these venues)");
+        opts.onUnmeasured?.("timeout");
         return [];
       }
       if (res.code !== 0) {
@@ -378,6 +395,7 @@ export function claudeResearcher(opts: ClaudeResearcherOptions = {}): Researcher
           `claudeResearcher: claude exited ${res.code} — returning [] ` +
             `(stderr: ${(res.stderr ?? "").slice(0, 200).replace(/\s+/g, " ").trim()})`,
         );
+        opts.onUnmeasured?.("exit");
         return [];
       }
       const rows = parseCandidates(res.stdout);
@@ -385,6 +403,7 @@ export function claudeResearcher(opts: ClaudeResearcherOptions = {}): Researcher
       return rows;
     } catch (e) {
       log(`claudeResearcher: threw (${String(e)}) — returning [] (fail-safe)`);
+      opts.onUnmeasured?.("exit");
       return [];
     }
   };
