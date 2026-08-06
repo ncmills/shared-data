@@ -44,6 +44,7 @@ export const expansionNortheast: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Portsmouth", type: "boutique-hotel", pricePerNight: [260,460], perRoom: true, maxGuests: 2, highlight: "Victorian B&B-style boutique steps from the bars" },
       { name: "South End harbor townhouse", type: "airbnb", pricePerNight: [500,1100], perRoom: false, maxGuests: 10, highlight: "Walkable 4BR near Strawbery Banke + the waterfront" },
+      { name: "South End 6BR harbor townhouse", type: "house", pricePerNight: [740,1620], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Brick and clapboard, walk to the working waterfront" },
     ],
     transport: [{ name: "Seacoast party shuttle", type: "shuttle", priceRange: "$120-$260/group", highlight: "Brewery + beach runs to Hampton and Kittery" }],
     presentation: {
@@ -110,6 +111,7 @@ export const expansionNortheast: CanonicalDestination[] = [
     lodging: [
       { name: "Whaler's Inn", type: "boutique-hotel", pricePerNight: [240,440], perRoom: true, maxGuests: 2, highlight: "Downtown, walk to the bridge and the bars" },
       { name: "Mystic River 4BR", type: "airbnb", pricePerNight: [450,1000], perRoom: false, maxGuests: 10, highlight: "Riverside rental within strolling distance of the seaport" },
+      { name: "Mystic River 6BR house", type: "house", pricePerNight: [660,1470], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Dock out back, drawbridge and oyster bars within walking distance" },
     ],
     transport: [{ name: "Mystic Country shuttle", type: "shuttle", priceRange: "$120-$260/group", highlight: "Winery loops + casino runs to Foxwoods and Mohegan Sun" }],
     presentation: {
@@ -143,6 +145,7 @@ export const expansionNortheast: CanonicalDestination[] = [
     lodging: [
       { name: "The Study at Yale", type: "boutique-hotel", pricePerNight: [220,400], perRoom: true, maxGuests: 2, highlight: "Smart boutique on Chapel Street by the galleries" },
       { name: "Wooster Square loft", type: "airbnb", pricePerNight: [350,800], perRoom: false, maxGuests: 8, highlight: "Walk to the apizza row + downtown bars" },
+      { name: "Wooster Square 6BR house", type: "house", pricePerNight: [640,1470], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Cherry-tree block, apizza on the corner" },
     ],
     transport: [{ name: "Elm City group van", type: "shuttle", priceRange: "$110-$240/group", highlight: "Pizza-tour + casino transfers" }],
     presentation: {
@@ -341,6 +344,7 @@ export const expansionNortheast: CanonicalDestination[] = [
     lodging: [
       { name: "Annapolis Waterfront Hotel", type: "hotel", pricePerNight: [280,520], perRoom: true, maxGuests: 2, highlight: "Only hotel directly on the harbor at City Dock" },
       { name: "Eastport waterfront townhouse", type: "airbnb", pricePerNight: [450,1100], perRoom: false, maxGuests: 10, highlight: "Walk-to-the-dock 4BR with a creek view" },
+      { name: "Eastport 6BR waterfront house", type: "house", pricePerNight: [660,1620], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Dock and a bridge walk to the historic district" },
     ],
     transport: [{ name: "Annapolis harbor shuttle", type: "shuttle", priceRange: "$120-$260/group", highlight: "Crab-house + winery + downtown transfers" }],
     presentation: {
@@ -407,6 +411,7 @@ export const expansionNortheast: CanonicalDestination[] = [
     lodging: [
       { name: "The Merchant", type: "boutique-hotel", pricePerNight: [240,480], perRoom: true, maxGuests: 2, highlight: "1784 mansion boutique steps from the action" },
       { name: "McIntire District Federal house", type: "airbnb", pricePerNight: [400,950], perRoom: false, maxGuests: 10, highlight: "Historic 4BR within walking distance of downtown" },
+      { name: "McIntire District 6BR Federal", type: "house", pricePerNight: [590,1400], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Clapboard house on a historic block, walk to the wharf" },
     ],
     transport: [{ name: "MBTA Newburyport/Rockport line + local rideshare", type: "shuttle", priceRange: "$8 train + rideshare", highlight: "30-min train from Boston North Station; walkable once there" }],
     presentation: {

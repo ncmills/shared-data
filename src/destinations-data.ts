@@ -140,6 +140,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "1661 Inn", type: "boutique-hotel", pricePerNight: [380,720], perRoom: true, maxGuests: 2, highlight: "Ocean-view rooms + breakfast on the deck" },
       { name: "Crescent Beach 4BR", type: "house", pricePerNight: [900,1800], perRoom: false, maxGuests: 10, highlight: "Walk to the beach + outdoor shower" },
+      { name: "Crescent Beach 6BR", type: "house", pricePerNight: [1320,2650], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Walk to the beach, outdoor shower, and room for the whole crew" },
     ],
     transport: [{ name: "Block Island Ferry", type: "shuttle", priceRange: "$30/person RT", highlight: "From Point Judith — book ahead summer" }],
     presentation: {
@@ -207,6 +208,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Little America Hotel", type: "hotel", pricePerNight: [220,420], perRoom: true, maxGuests: 2, highlight: "Pine forest grounds + walking trails" },
       { name: "Downtown 4BR cabin", type: "house", pricePerNight: [500,1100], perRoom: false, maxGuests: 10, highlight: "Walk to Heritage Square + fire pit" },
+      { name: "Downtown 6BR cabin", type: "house", pricePerNight: [740,1620], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Ponderosa pines, big deck, and a 20-minute drive to the canyon rim" },
     ],
     transport: [{ name: "Flagstaff Shuttle Service", type: "shuttle", priceRange: "$140-$280", highlight: "Grand Canyon + Sedona day trips" }],
     presentation: {
@@ -239,6 +241,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Eagle Ridge Resort", type: "resort", pricePerNight: [320,560], perRoom: true, maxGuests: 4, highlight: "Lake views + golf + spa onsite" },
       { name: "Riverview cabin 4BR", type: "house", pricePerNight: [450,880], perRoom: false, maxGuests: 10, highlight: "Hot tub + downtown walk" },
+      { name: "Riverview 6BR cabin", type: "house", pricePerNight: [660,1290], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Bluff-top porch over the river, walkable to Main Street" },
     ],
     transport: [{ name: "Galena Trolley", type: "shuttle", priceRange: "$40-$120", highlight: "Historic-tour loops + private charter" }],
     presentation: {
@@ -464,6 +467,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "1886 Crescent Hotel", type: "boutique-hotel", pricePerNight: [220,420], perRoom: true, maxGuests: 2, highlight: "Hilltop Victorian + spa" },
       { name: "Victorian 4BR", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 10, highlight: "Walk to bars + wraparound porch" },
+      { name: "Victorian 6BR", type: "house", pricePerNight: [590,1320], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Wraparound porch in the historic district, hot tub under the trees" },
     ],
     transport: [{ name: "Eureka Trolley", type: "shuttle", priceRange: "Free + $80 charters", highlight: "Historic district loops" }],
     presentation: {
@@ -854,6 +858,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "White Elephant", type: "resort", pricePerNight: [680,1400], perRoom: true, maxGuests: 2, highlight: "Harbor-front grande dame — rose garden, Brant Point walk, breakfast on the porch" },
       { name: "'Sconset 5BR shingled cottage", type: "house", pricePerNight: [1400,3200], perRoom: false, maxGuests: 10, highlight: "Rose-trellised east-bluff rental — private yard + outdoor shower" },
+      { name: "'Sconset 6BR shingled house", type: "house", pricePerNight: [2060,4700], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Weathered shingles, hydrangea hedge, and bikes to the beach" },
     ],
     transport: [{ name: "Hy-Line ferry from Hyannis", type: "shuttle", priceRange: "$80/person RT (fast ferry)", highlight: "1 hr from Cape — book ahead in summer" }],
     presentation: {
@@ -1295,6 +1300,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Faena Hotel Miami Beach", type: "boutique-hotel", pricePerNight: [800,2000], perRoom: true, maxGuests: 4, highlight: "Mid-Beach Faena with red-velvet lobby, beachfront pool, iconic gilded mammoth" },
       { name: "Freehand Miami", type: "boutique-hotel", pricePerNight: [100,450], perRoom: true, maxGuests: 4, highlight: "Boutique with Broken Shaker in the courtyard — affordable, fun, very photogenic" },
       { name: "Wynwood Loft (Airbnb)", type: "airbnb", pricePerNight: [400,900], perRoom: false, maxGuests: 10, highlight: "Industrial loft in the arts district — central to murals and Wynwood nightlife" },
+      { name: "Wynwood 6BR house", type: "house", pricePerNight: [590,1320], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Private pool and a walkable art-district block" },
     ],
     transport: [
       { name: "Miami Party Bus", type: "party-bus", priceRange: "$600-$1,500 for 4 hr", highlight: "Necessary for groups doing both Wynwood and South Beach in one night" },
@@ -3266,6 +3272,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Fishtown Airbnb Row Homes", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 10, highlight: "Full row homes in Philly's hottest neighborhood for nightlife" },
       { name: "The Study at University City", type: "boutique-hotel", pricePerNight: [150, 280], perRoom: true, maxGuests: 2, highlight: "Modern hotel near Penn campus with affordable group rates" },
       { name: "Center City Luxury Condo Rentals", type: "airbnb", pricePerNight: [400, 1000], perRoom: false, maxGuests: 10, highlight: "High-rise condos walking distance to Rittenhouse and nightlife" },
+      { name: "Fishtown 6BR rowhouse", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Roof deck over the skyline, bars and BYOBs on the block" },
     ],
     transport: [
       { name: "Philly Party Bus", type: "party-bus", priceRange: "$300–$600/night", highlight: "Keeps the group together between Fishtown, Rittenhouse, and East Passyunk without waiting for rides." },
@@ -3519,6 +3526,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "L'Auberge Carmel", type: "boutique-hotel", pricePerNight: [450, 900], perRoom: true, maxGuests: 2, highlight: "Carmel's most celebrated boutique inn with 20 European-style rooms, Aubergine restaurant below, and an atmosphere of unhurried elegance." },
       { name: "Mission Ranch (Carmel)", type: "resort", pricePerNight: [200, 450], perRoom: true, maxGuests: 2, highlight: "Clint Eastwood's restored 1850s working ranch with meadow and bay views, a restaurant, tennis courts, and a genuinely Californian sense of place." },
       { name: "Carmel Cottage Rental", type: "airbnb", pricePerNight: [400, 1100], perRoom: false, maxGuests: 10, highlight: "Storybook Carmel cottages — the village was built to look like a fairy tale, and the best Airbnbs deliver exactly that atmosphere for a private group." },
+      { name: "Carmel Point 6BR house", type: "house", pricePerNight: [590,1620], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Cypress-lined lane, fireplace, and a short walk to the sand" },
     ],
     transport: [
       { name: "Carmel Valley Wine & Scenic Tour", type: "charter", priceRange: "$600–$1,200/day", highlight: "Private vehicle and guide for Carmel Valley and Santa Lucia Highlands winery touring — the essential upgrade for tasting-room days." },
@@ -4082,6 +4090,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Tributary Hotel", type: "boutique-hotel", pricePerNight: [200, 380], perRoom: true, maxGuests: 2, highlight: "McMinnville's intimate boutique hotel steps from Third Street's restaurants and wine bars — beautifully designed and thoughtfully curated." },
       { name: "The McMenamins Hotel Oregon", type: "hotel", pricePerNight: [120, 220], perRoom: true, maxGuests: 2, highlight: "Restored 1905 downtown McMinnville hotel with a rooftop bar, pub, and the laid-back McMenamins atmosphere beloved across Oregon." },
       { name: "Dundee Hills Vineyard Rental", type: "airbnb", pricePerNight: [450, 1100], perRoom: false, maxGuests: 10, highlight: "Private vineyard property rentals in the Dundee Hills — waking up in the vines with no neighbors in sight." },
+      { name: "Dundee Hills 6BR farmhouse", type: "house", pricePerNight: [660,1620], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Vineyard rows to the ridgeline, long table for a group dinner" },
     ],
     transport: [
       { name: "Willamette Valley Wine Tours Van", type: "charter", priceRange: "$700–$1,400/day", highlight: "Private van-and-guide service for full-day winery touring across multiple AVAs — the non-negotiable logistical move." },
@@ -4260,6 +4269,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Sagamore Pendry Baltimore", type: "boutique-hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 2, highlight: "Stunning waterfront hotel in a restored Fells Point pier building" },
       { name: "Fells Point Airbnb Row Houses", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 10, highlight: "Historic row houses steps from bars and waterfront" },
       { name: "Four Seasons Baltimore", type: "hotel", pricePerNight: [350, 700], perRoom: true, maxGuests: 2, highlight: "Luxury Harbor East hotel with waterfront pool and spa" },
+      { name: "Fells Point 6BR rowhouse", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Cobblestone block, roof deck, and the harbor two streets over" },
     ],
     transport: [
       { name: "Baltimore Party Bus", type: "party-bus", priceRange: "$125-$250/hr", highlight: "Party buses for Fells Point and Federal Hill crawls" },
@@ -4486,6 +4496,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "South Boston Airbnb Houses", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 10, highlight: "Full houses in Southie near waterfront bars and restaurants" },
       { name: "The Verb Hotel", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Rock-and-roll themed hotel steps from Fenway Park" },
       { name: "Back Bay Luxury Condo Rentals", type: "airbnb", pricePerNight: [500, 1200], perRoom: false, maxGuests: 10, highlight: "Brownstone condos in Boston's most walkable neighborhood" },
+      { name: "South Boston 6BR townhouse", type: "house", pricePerNight: [510,1320], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Three floors, big kitchen, and a short ride to the Seaport" },
     ],
     transport: [
       { name: "Boston Party Bus Co.", type: "party-bus", priceRange: "$150-$300/hr", highlight: "Party buses for bar crawls through the Seaport and Fenway" },
@@ -4832,6 +4843,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Dunhill Hotel", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 2, highlight: "Historic boutique hotel in the heart of uptown" },
       { name: "South End Airbnb Houses", type: "airbnb", pricePerNight: [300, 700], perRoom: false, maxGuests: 10, highlight: "Walking distance to bars, breweries, and rail trail" },
       { name: "Kimpton Tryon Park Hotel", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Stylish hotel with Nuvole rooftop bar" },
+      { name: "South End 6BR house", type: "house", pricePerNight: [440,1030], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Backyard and a walk to the rail-trail breweries" },
     ],
     transport: [
       { name: "Charlotte Party Bus Rentals", type: "party-bus", priceRange: "$130-$250/hr", highlight: "Party buses for South End and NoDa bar crawls" },
@@ -4890,6 +4902,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Hotel Covington", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 2, highlight: "Trendy boutique hotel across the river in Covington with skyline views" },
       { name: "OTR Airbnb Apartments", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 10, highlight: "Historic renovated apartments in the heart of Over-the-Rhine" },
       { name: "The Lytle Park Hotel", type: "hotel", pricePerNight: [220, 450], perRoom: true, maxGuests: 2, highlight: "Luxury Marriott property overlooking Lytle Park downtown" },
+      { name: "Over-the-Rhine 6BR townhouse", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Restored 19th-century brick, walkable to Findlay Market" },
     ],
     transport: [
       { name: "Queen City Party Bus", type: "party-bus", priceRange: "$125-$250/hr", highlight: "Party buses for OTR crawls and brewery tours" },
@@ -4947,6 +4960,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Metropolitan at The 9", type: "hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Luxury hotel with rooftop bar and bowling alley in the building" },
       { name: "Ohio City Airbnb Houses", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 10, highlight: "Full houses walking distance to breweries and West Side Market" },
       { name: "Drury Plaza Hotel Cleveland", type: "hotel", pricePerNight: [140, 260], perRoom: true, maxGuests: 2, highlight: "Great value downtown hotel with free evening drinks and snacks" },
+      { name: "Ohio City 6BR house", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Porch, big kitchen, and the West Side Market around the corner" },
     ],
     transport: [
       { name: "Cleveland Party Bus", type: "party-bus", priceRange: "$125-$250/hr", highlight: "Party buses for brewery tours and Flats bar crawls" },
@@ -5001,6 +5015,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Hotel LeVeque", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Art Deco luxury in the iconic LeVeque Tower downtown" },
       { name: "German Village Airbnb Houses", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 10, highlight: "Historic brick homes in one of Columbus's most charming neighborhoods" },
       { name: "The Hilton Columbus Downtown", type: "hotel", pricePerNight: [170, 340], perRoom: true, maxGuests: 2, highlight: "Connected to convention center, walking distance to Arena District nightlife" },
+      { name: "German Village 6BR house", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Brick streets and a courtyard built for a long dinner" },
     ],
     transport: [
       { name: "Columbus Party Bus", type: "party-bus", priceRange: "$125-$250/hr", highlight: "Party buses for Short North and Brewery District crawls" },
@@ -5063,6 +5078,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Corktown Airbnb Houses", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 10, highlight: "Full houses in Detroit's hottest neighborhood near bars and restaurants" },
       { name: "MGM Grand Detroit", type: "hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 2, highlight: "Casino hotel with nightlife, spa, and entertainment built in" },
       { name: "Midtown Detroit Loft Rentals", type: "airbnb", pricePerNight: [250, 700], perRoom: false, maxGuests: 8, highlight: "Lofts near the DIA and Midtown restaurants and bars" },
+      { name: "Corktown 6BR house", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Restored Victorian with a porch, walk to Michigan Avenue" },
     ],
     transport: [
       { name: "Detroit Party Bus Rentals", type: "party-bus", priceRange: "$100-$225/hr", highlight: "Party buses for Corktown and Midtown bar crawls" },
@@ -5631,6 +5647,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Bottleworks Hotel", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Stunning Art Deco restoration in the Mass Ave district" },
       { name: "Broad Ripple Airbnb Houses", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 10, highlight: "Full houses near Broad Ripple's bar scene" },
       { name: "JW Marriott Indianapolis", type: "hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Largest JW Marriott in the world, connected to convention center" },
+      { name: "Broad Ripple 6BR house", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Canal-side, deep backyard, and bars within walking distance" },
     ],
     transport: [
       { name: "Indy Party Bus", type: "party-bus", priceRange: "$125-$250/hr", highlight: "Party buses for bar crawls and brewery tours" },
@@ -5745,6 +5762,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "21c Museum Hotel Kansas City", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Contemporary art museum meets boutique hotel in Crossroads" },
       { name: "Power & Light District Airbnbs", type: "airbnb", pricePerNight: [300, 700], perRoom: false, maxGuests: 10, highlight: "Loft apartments steps from nightlife and restaurants" },
       { name: "The Fontaine", type: "hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Country Club Plaza hotel with rooftop pool and skyline views" },
+      { name: "Crossroads 6BR loft house", type: "house", pricePerNight: [440,1030], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Warehouse conversion, walkable to barbecue and the jazz district" },
     ],
     transport: [
       { name: "KC Party Bus", type: "party-bus", priceRange: "$125-$250/hr", highlight: "Party buses with sound systems for BBQ and bar crawls" },
@@ -6033,6 +6051,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Brady Street Airbnb Apartments", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 8, highlight: "Apartments near Brady Street bars and restaurants" },
       { name: "Third Ward Loft Rentals", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 10, highlight: "Warehouse lofts in the heart of the Third Ward" },
       { name: "Drury Plaza Hotel Milwaukee Downtown", type: "hotel", pricePerNight: [130, 250], perRoom: true, maxGuests: 2, highlight: "Solid value downtown hotel with free evening drinks and snacks" },
+      { name: "Third Ward 6BR loft", type: "house", pricePerNight: [440,1180], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Timber beams and a river walk to the bars" },
     ],
     transport: [
       { name: "Milwaukee Party Bus", type: "party-bus", priceRange: "$100-$225/hr", highlight: "Party buses for Water Street and Third Ward bar crawls" },
@@ -6431,6 +6450,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Ace Hotel Pittsburgh", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 2, highlight: "Trendy East Liberty hotel in a converted YMCA" },
       { name: "South Side Airbnb Houses", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 10, highlight: "Full houses walking distance to South Side bar strip" },
       { name: "Fairmont Pittsburgh", type: "hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 2, highlight: "Luxury hotel at Point State Park with river views" },
+      { name: "South Side 6BR house", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Three floors on a slope, city view from the top deck" },
     ],
     transport: [
       { name: "Pittsburgh Party Bus", type: "party-bus", priceRange: "$125-$250/hr", highlight: "Party buses for South Side and Strip District bar crawls" },
@@ -6484,6 +6504,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Graduate Providence", type: "boutique-hotel", pricePerNight: [170, 340], perRoom: true, maxGuests: 2, highlight: "Design-forward hotel in the historic Biltmore building" },
       { name: "Federal Hill Airbnb Apartments", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 8, highlight: "Walk to Federal Hill restaurants and downtown bars" },
       { name: "Hotel Providence", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Elegant Mathewson Street boutique with Art Deco details" },
+      { name: "Federal Hill 6BR house", type: "house", pricePerNight: [400,920], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Above the restaurant row, big table, short walk to everything" },
     ],
     transport: [
       { name: "Providence Party Trolley", type: "party-bus", priceRange: "$100-$200/hr", highlight: "Vintage trolley-style party bus for bar crawls" },
@@ -6657,6 +6678,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The St. Anthony", type: "hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 4, highlight: "Historic downtown hotel with a rooftop pool and easy River Walk access." },
       { name: "River Walk Condo (Airbnb)", type: "airbnb", pricePerNight: [250, 700], perRoom: false, maxGuests: 10, highlight: "Full condo with River Walk access and balcony views of the water." },
       { name: "Drury Inn & Suites San Antonio Riverwalk", type: "hotel", pricePerNight: [130, 250], perRoom: true, maxGuests: 4, highlight: "Budget-friendly River Walk hotel with free evening drinks and snacks." },
+      { name: "King William 6BR house", type: "house", pricePerNight: [400,1030], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Historic district porch, ten minutes from the River Walk" },
     ],
     transport: [
       { name: "Uber / Lyft", type: "rideshare", priceRange: "$6-$18 per ride", highlight: "Cheap and abundant rideshare — most rides within city are under $15." },
