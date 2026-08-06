@@ -41,6 +41,15 @@ LOCK="$HOME/work/logs/.url-backfill.lock"
 # actually depends on it, not before.
 TOP_K="${TOP_K:-40}"
 ROW_CAP="${ROW_CAP:-120}"
+# PINNED TO 1 ON PURPOSE (2026-08-06). run-backfill's own default is now 6, and
+# leaving this unset would silently jump the UNATTENDED Tue-03:00 run from
+# sequential to 6 concurrent `claude -p` processes with nobody watching — at
+# TOP_K=40, on a box that also runs the rest of the fleet. Concurrency is the
+# right fix for the 112-minute wall (measured: 14 of 28 calls burning the full
+# 180s timeout), but it earns its way into the scheduled job after a supervised
+# run, not before. Raise deliberately:
+#   RESEARCH_CONCURRENCY=6 bash scripts/weekly-url-backfill.sh
+RESEARCH_CONCURRENCY="${RESEARCH_CONCURRENCY:-1}"
 DRY_RUN="${DRY_RUN:-}"
 
 mkdir -p "$(dirname "$LOG")" "$HOME/work"
@@ -128,7 +137,8 @@ if /usr/bin/caffeinate -i -s -m npx tsx scripts/run-backfill.ts \
       ${DRY_FLAG[@]+"${DRY_FLAG[@]}"} \
       --label="$LABEL" \
       --top-k="$TOP_K" \
-      --row-cap="$ROW_CAP" >> "$LOG" 2>&1; then
+      --row-cap="$ROW_CAP" \
+      --research-concurrency="$RESEARCH_CONCURRENCY" >> "$LOG" 2>&1; then
   say "=== run OK ($LABEL) ==="
 else
   # PROPAGATE. This `if/else` used to swallow the status and let the script fall
