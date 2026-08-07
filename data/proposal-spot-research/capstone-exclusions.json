@@ -1,0 +1,51 @@
+{
+  "$comment": [
+    "Spots that may NOT carry the proposal itself, and why. Read by",
+    "scripts/ingest-proposal-spots.ts, which sets capstoneEligible=false on",
+    "these ids and leaves every other row eligible.",
+    "",
+    "WHY THIS FILE IS HAND-WRITTEN AND NOT A PATTERN.",
+    "",
+    "The 2026-08-06 plan said: exclude any spot whose `blocker` field is",
+    "non-null. That rule was inferred from one row — McWay Falls, where the",
+    "park states elopements and filming 'will not be permitted'. Applied to",
+    "the 124-spot research batch on 2026-08-07 it excluded 80 of them,",
+    "because the same field had collected 'Selfie sticks, tripods, flags, or",
+    "banners are not allowed', 'Do not bring in any tables, tents, arches,",
+    "trellises, etc.' and 'No overnight parking is allowed at Ecola State",
+    "Park'. Those are things a couple packs around, not reasons they cannot",
+    "propose somewhere.",
+    "",
+    "A regex was tried and rejected. 'prohibited' / 'not permitted' matches",
+    "15 rows, of which most are about drones, tripods and roadside parking —",
+    "and it still misses Breakneck Ridge, which is shut for two years and",
+    "whose blocker says 'CLOSED'. The distinction is semantic, so it is made",
+    "by reading, once, and written down where a reviewer can check it.",
+    "",
+    "Bar for inclusion here: the authority forbids the moment itself, or the",
+    "place is not open. Fee, insurance, lead time, group caps, gear rules,",
+    "parking, weather and seasonal windows are NOT exclusions — they are",
+    "constraints the product exists to surface, and they stay in `blocker`",
+    "and `seasonalClosure` as prose.",
+    "",
+    "An excluded spot is not deleted. It keeps its SEO page and can still be",
+    "another spot's `backup`; it just cannot be where the question gets asked."
+  ],
+  "exclusions": [
+    {
+      "id": "carmel-ca-mcway-falls-overlook",
+      "reason": "California State Parks: \"Events, elopements, and filming will not be permitted/allowed at the Waterfall Overlook, the Waterfall Overlook Trail, McWay Falls, or Canyon Trail until further notice.\" (Updated December 15, 2024)",
+      "recheck": "Says 'until further notice' — re-read the Big Sur park page before restoring."
+    },
+    {
+      "id": "portland-me-portland-head-light",
+      "reason": "Town of Cape Elizabeth, Fort Williams Park Ceremony Regulations (as of Dec. 2024): \"Ceremonies and photographs are not permitted on the Portland Head Light Parcel inside the park.\"",
+      "recheck": "Scoped to the lighthouse parcel. The rest of Fort Williams Park is not covered by this rule and could be researched as a separate spot."
+    },
+    {
+      "id": "hudson-valley-ny-breakneck-ridge",
+      "reason": "NY State Parks: \"Beginning April 21, 2025, Breakneck Ridge, other area trails, and the adjacent Breakneck Ridge Metro-North Station will close for a two-year period\" for the Breakneck Connector and Bridge project.",
+      "recheck": "Two-year closure from 2025-04-21, so the earliest plausible reopening is 2027-04. Verify with the park before restoring."
+    }
+  ]
+}

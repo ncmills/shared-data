@@ -1,0 +1,401 @@
+[
+  {
+    "id": "seattle-wa-deception-pass-bridge",
+    "destinationId": "seattle-wa",
+    "name": "Deception Pass Bridge Overlook",
+    "type": "scenic-overlook",
+    "highlight": "Two green steel spans stitch Whidbey to Fidalgo about 180 feet above a tidal channel that runs like a river. Walk the bluff on the north side and you get madronas leaning over the rock, the current pulling standing waves through the gap, and the San Juans stacked up behind it.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Professional and commercial filming and/or photography is defined as when an individual or organization films and/or takes still photographs in a state park to sell or otherwise use the imagery for economic gain. This includes, but is not limited to, online marketing, print materials (such as postcards and calendars) and promotional materials. These activities require a permit.",
+        "sourceUrl": "https://parks.wa.gov/passes-permits/permits/commercial-filming-and-photography-permits"
+      },
+      "authority": "Washington State Parks and Recreation Commission",
+      "authorityContact": "(360) 675-3767"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Public parks are—well, public. So, depending on the popularity of the park and the time of year, there might be people picnicking or kids playing not-so-far from your happy day.",
+      "sourceUrl": "https://parks.wa.gov/about/news-center/field-guide-blog/park-weddings-six-things-consider"
+    },
+    "backup": "seattle-wa-kerry-park",
+    "sourceUrl": "https://parks.wa.gov/find-park/state-parks/deception-pass-state-park",
+    "citations": [
+      "https://parks.wa.gov/find-park/state-parks/deception-pass-state-park",
+      "https://parks.wa.gov/passes-permits/permits/commercial-filming-and-photography-permits",
+      "https://parks.wa.gov/about/news-center/field-guide-blog/park-weddings-six-things-consider"
+    ],
+    "leadTimeDays": 60,
+    "fee": "$100",
+    "blocker": null
+  },
+  {
+    "id": "seattle-wa-kerry-park",
+    "destinationId": "seattle-wa",
+    "name": "Kerry Park",
+    "type": "viewpoint",
+    "highlight": "A single stone terrace on the south slope of Queen Anne, with the Space Needle at roughly eye level and the downtown towers stacked behind it. On a clear evening Mount Rainier sits above the skyline; it is one small wall, so you will be sharing it.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Photography Permit is required from the Event Scheduling Office if you are a hired photographer, plan to hire a photographer, and/or plan to sell or profit from any photos/videos taken on Parks property.",
+        "sourceUrl": "https://www.seattle.gov/parks/reserve/photography-permits"
+      },
+      "authority": "Seattle Parks and Recreation",
+      "authorityContact": "(206) 684-4080, x 4"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "seattle-wa-deception-pass-bridge",
+    "sourceUrl": "https://www.seattle.gov/parks/parks/kerry-park",
+    "citations": [
+      "https://www.seattle.gov/parks/parks/kerry-park",
+      "https://www.seattle.gov/parks/reserve/photography-permits",
+      "https://www.seattle.gov/documents/Departments/ParksAndRecreation/Reserve/Permits/2026%20Photo%20Film%20Application%20_ADA.pdf"
+    ],
+    "leadTimeDays": 3,
+    "fee": "$32",
+    "blocker": "Photography applications must be submitted between 3 to 14 days in advance."
+  },
+  {
+    "id": "leavenworth-wa-peshastin-pinnacles",
+    "destinationId": "leavenworth-wa",
+    "name": "Peshastin Pinnacles",
+    "type": "trail",
+    "highlight": "Sandstone fins tilt out of the orchard floor like the plates of something buried. Short, steep paths put you on a bench of bare rock with pear and apple rows below and the Wenatchee River valley opening east.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Professional and commercial filming and/or photography is defined as when an individual or organization films and/or takes still photographs in a state park to sell or otherwise use the imagery for economic gain. This includes, but is not limited to, online marketing, print materials (such as postcards and calendars) and promotional materials. These activities require a permit.",
+        "sourceUrl": "https://parks.wa.gov/passes-permits/permits/commercial-filming-and-photography-permits"
+      },
+      "authority": "Washington State Parks and Recreation Commission",
+      "authorityContact": "(509) 664-6373"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Public parks are—well, public. So, depending on the popularity of the park and the time of year, there might be people picnicking or kids playing not-so-far from your happy day.",
+      "sourceUrl": "https://parks.wa.gov/about/news-center/field-guide-blog/park-weddings-six-things-consider"
+    },
+    "backup": null,
+    "sourceUrl": "https://parks.wa.gov/find-park/state-parks/peshastin-pinnacles-state-park",
+    "citations": [
+      "https://parks.wa.gov/find-park/state-parks/peshastin-pinnacles-state-park",
+      "https://parks.wa.gov/passes-permits/permits/commercial-filming-and-photography-permits",
+      "https://parks.wa.gov/about/news-center/field-guide-blog/park-proposals-and-marriages"
+    ],
+    "leadTimeDays": 60,
+    "fee": "$100",
+    "blocker": "Park closed Nov. 1 - March 15"
+  },
+  {
+    "id": "walla-walla-wa-palouse-falls",
+    "destinationId": "walla-walla-wa",
+    "name": "Palouse Falls Overlook",
+    "type": "overlook",
+    "highlight": "The Palouse River drops about 200 feet into a round basalt bowl, then knifes off through a columnar gorge. Three fenced viewpoints look straight across at it; the upper Fryxell Overlook gives you the falls and the whole scoured canyon in one frame.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Professional and commercial filming and/or photography is defined as when an individual or organization films and/or takes still photographs in a state park to sell or otherwise use the imagery for economic gain. This includes, but is not limited to, online marketing, print materials (such as postcards and calendars) and promotional materials. These activities require a permit.",
+        "sourceUrl": "https://parks.wa.gov/passes-permits/permits/commercial-filming-and-photography-permits"
+      },
+      "authority": "Washington State Parks and Recreation Commission",
+      "authorityContact": "(509) 646-3229"
+    },
+    "crowdWindow": {
+      "verbatim": "But if you don't want to battle a potential crowd, try visiting mid-week, early morning or after 5 p.m. Parking and viewing space is limited.",
+      "sourceUrl": "https://parks.wa.gov/about/news-center/field-guide-blog/make-your-trip-palouse-falls-unforgettable"
+    },
+    "privacy": null,
+    "backup": "spokane-wa-steptoe-butte",
+    "sourceUrl": "https://parks.wa.gov/find-parks/state-parks/palouse-falls-state-park-heritage-site",
+    "citations": [
+      "https://parks.wa.gov/find-parks/state-parks/palouse-falls-state-park-heritage-site",
+      "https://parks.wa.gov/about/news-center/field-guide-blog/make-your-trip-palouse-falls-unforgettable",
+      "https://parks.wa.gov/passes-permits/permits/commercial-filming-and-photography-permits"
+    ],
+    "leadTimeDays": 60,
+    "fee": "$100",
+    "blocker": "All trails into the canyon and base of Palouse Falls are permanently closed. Venturing beyond designated viewing area and trails at the park is prohibited."
+  },
+  {
+    "id": "spokane-wa-steptoe-butte",
+    "destinationId": "spokane-wa",
+    "name": "Steptoe Butte Summit",
+    "type": "scenic-overlook",
+    "highlight": "A quartzite knob that stands a couple of thousand feet above the wheat country, with a spiral road to the top. From the summit the Palouse hills read as long green and gold swells running to the horizon in every direction.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Professional and commercial filming and/or photography is defined as when an individual or organization films and/or takes still photographs in a state park to sell or otherwise use the imagery for economic gain. This includes, but is not limited to, online marketing, print materials (such as postcards and calendars) and promotional materials. These activities require a permit.",
+        "sourceUrl": "https://parks.wa.gov/passes-permits/permits/commercial-filming-and-photography-permits"
+      },
+      "authority": "Washington State Parks and Recreation Commission",
+      "authorityContact": "(509) 337-6457"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Public parks are—well, public. So, depending on the popularity of the park and the time of year, there might be people picnicking or kids playing not-so-far from your happy day.",
+      "sourceUrl": "https://parks.wa.gov/about/news-center/field-guide-blog/park-weddings-six-things-consider"
+    },
+    "backup": "walla-walla-wa-palouse-falls",
+    "sourceUrl": "https://parks.wa.gov/find-park/state-parks/steptoe-butte-state-park",
+    "citations": [
+      "https://parks.wa.gov/find-park/state-parks/steptoe-butte-state-park",
+      "https://parks.wa.gov/passes-permits/permits/commercial-filming-and-photography-permits"
+    ],
+    "leadTimeDays": 60,
+    "fee": "$100",
+    "blocker": "During winter, the road is not maintained. Call the park for conditions."
+  },
+  {
+    "id": "cannon-beach-or-ecola-point",
+    "destinationId": "cannon-beach-or",
+    "name": "Ecola Point",
+    "type": "scenic-overlook",
+    "highlight": "The entrance road climbs through Sitka spruce and then opens onto a grass bluff over the Pacific. Look south and you get the whole run of shoreline with sea stacks punctuating it, Cannon Beach at the far end and the coast range behind.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Different parks may have unique rules, require special use permits, or guidelines—particularly for commercial photography. Please check the information provided by individual parks before you arrive.",
+        "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+      },
+      "authority": "Oregon Parks and Recreation Department",
+      "authorityContact": "503-812-0650"
+    },
+    "crowdWindow": {
+      "verbatim": "Schedule wisely: Consider visiting during non-peak times to reduce crowding and give your clients a more relaxed session. Early mornings or weekdays may also give you better light and quieter surroundings.",
+      "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+    },
+    "privacy": {
+      "verbatim": "Leave room for other visitors: Avoid monopolizing a scenic overlook or popular photo spot for extended periods.",
+      "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+    },
+    "backup": "cannon-beach-or-north-head-lighthouse",
+    "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=136",
+    "citations": [
+      "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=136",
+      "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132",
+      "https://stateparks.oregon.gov/index.cfm?do=main.loadFile&load=_siteFiles%2Fpublications%2F%2Fscsp-special-use-permit-application-and-instructions-fill-in-form-rev-2024.083106.pdf"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "No overnight parking is allowed at Ecola State Park."
+  },
+  {
+    "id": "cannon-beach-or-north-head-lighthouse",
+    "destinationId": "cannon-beach-or",
+    "name": "North Head Lighthouse Overlook, Cape Disappointment",
+    "type": "historic-site",
+    "highlight": "A white 1898 tower on a cliff at the mouth of the Columbia, with the Pacific on three sides and the Long Beach Peninsula running north. The overlook is a small railed shelf — wind is the whole character of the place.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "The lighthouse overlook is available at a rate of $1,000 per ceremony plus tax, with a one hour limit.",
+        "sourceUrl": "https://parks.wa.gov/find-park/state-parks/cape-disappointment-state-park/north-head-lighthouse-wedding-day-use-site"
+      },
+      "authority": "Washington State Parks and Recreation Commission",
+      "authorityContact": "(360) 642-3078"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Public parks are—well, public. So, depending on the popularity of the park and the time of year, there might be people picnicking or kids playing not-so-far from your happy day.",
+      "sourceUrl": "https://parks.wa.gov/about/news-center/field-guide-blog/park-weddings-six-things-consider"
+    },
+    "backup": "cannon-beach-or-ecola-point",
+    "sourceUrl": "https://parks.wa.gov/find-park/state-parks/cape-disappointment-state-park/north-head-lighthouse-wedding-day-use-site",
+    "citations": [
+      "https://parks.wa.gov/find-park/state-parks/cape-disappointment-state-park/north-head-lighthouse-wedding-day-use-site",
+      "https://parks.wa.gov/find-park/state-parks/cape-disappointment-state-park",
+      "https://parks.wa.gov/passes-permits/permits/special-activities-permit"
+    ],
+    "leadTimeDays": null,
+    "fee": "$1,000 per ceremony plus tax",
+    "blocker": "The overlook is not available for private events from June 15 to Sept. 15 annually."
+  },
+  {
+    "id": "bend-or-smith-rock",
+    "destinationId": "bend-or",
+    "name": "Smith Rock State Park",
+    "type": "hike",
+    "highlight": "Welded tuff walls the color of apricot stand several hundred feet over a bend in the Crooked River. The Misery Ridge trail tops out with Monkey Face on one side and the Cascade volcanoes lined up white on the horizon.",
+    "tier": "green",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Smith Rock State Park is a popular location for wedding, engagement, senior and family photoshoots. Please call the park office before conducting a photoshoot so we can help you better plan for your shoot. You may need a permit, and certain areas are off limits due to endangered sensitive plant and animal species.",
+        "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=36"
+      },
+      "authority": "Oregon Parks and Recreation Department",
+      "authorityContact": "541-548-7501"
+    },
+    "crowdWindow": {
+      "verbatim": "Schedule wisely: Consider visiting during non-peak times to reduce crowding and give your clients a more relaxed session. Early mornings or weekdays may also give you better light and quieter surroundings.",
+      "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+    },
+    "privacy": {
+      "verbatim": "Leave room for other visitors: Avoid monopolizing a scenic overlook or popular photo spot for extended periods.",
+      "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+    },
+    "backup": null,
+    "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=36",
+    "citations": [
+      "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=36",
+      "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+    ],
+    "leadTimeDays": 1,
+    "fee": null,
+    "blocker": "Some climbing areas are closed or have limited access from about Jan. 15 to Aug. 1 to protect golden eagle and falcon nesting areas."
+  },
+  {
+    "id": "willamette-valley-or-silver-falls-south-falls",
+    "destinationId": "willamette-valley-or",
+    "name": "South Falls, Silver Falls State Park",
+    "type": "trail",
+    "highlight": "A 177-foot curtain of water off a basalt lip, with a trail that carries you into the mossy alcove behind it. You stand in the cut looking out through the falling water at the canyon floor.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Different parks may have unique rules, require special use permits, or guidelines—particularly for commercial photography. Please check the information provided by individual parks before you arrive.",
+        "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+      },
+      "authority": "Oregon Parks and Recreation Department",
+      "authorityContact": "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=151"
+    },
+    "crowdWindow": {
+      "verbatim": "Schedule wisely: Consider visiting during non-peak times to reduce crowding and give your clients a more relaxed session. Early mornings or weekdays may also give you better light and quieter surroundings.",
+      "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+    },
+    "privacy": {
+      "verbatim": "Leave room for other visitors: Avoid monopolizing a scenic overlook or popular photo spot for extended periods.",
+      "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+    },
+    "backup": "portland-or-international-rose-test-garden",
+    "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=151",
+    "citations": [
+      "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=151",
+      "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132",
+      "https://stateparks.oregon.gov/index.cfm?do=main.loadFile&load=_siteFiles%2Fpublications%2F%2Fscsp-special-use-permit-application-and-instructions-fill-in-form-rev-2024.083106.pdf"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "For everyone’s safety— absolutely no pets allowed on the Canyon Trail."
+  },
+  {
+    "id": "portland-or-international-rose-test-garden",
+    "destinationId": "portland-or",
+    "name": "International Rose Test Garden, Washington Park",
+    "type": "garden",
+    "highlight": "Terraced beds of test roses step down the west hills in tight rows, with a gazebo on the lower tier and the city below the tree line. Peak bloom turns the whole slope into blocks of color.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "You will conduct any commercial activity - a service/product for which customers pay, including photography, film/video, classes (including personal training), approved concession of food products and sundries, docking, pedicabs, etc.",
+        "sourceUrl": "https://www.portland.gov/parks/customer-service-center"
+      },
+      "authority": "Portland Parks & Recreation",
+      "authorityContact": "503-823-2525"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "willamette-valley-or-silver-falls-south-falls",
+    "sourceUrl": "https://www.portland.gov/parks/washington-park-international-rose-test-garden",
+    "citations": [
+      "https://www.portland.gov/parks/washington-park-international-rose-test-garden",
+      "https://www.portland.gov/parks/customer-service-center",
+      "https://www.portland.gov/parks/film-video-and-photography-permit",
+      "https://www.portland.gov/parks/rules"
+    ],
+    "leadTimeDays": 5,
+    "fee": "$85.50",
+    "blocker": null
+  },
+  {
+    "id": "hood-river-or-crown-point-vista-house",
+    "destinationId": "hood-river-or",
+    "name": "Vista House at Crown Point",
+    "type": "historic-site",
+    "highlight": "An octagonal stone rotunda from 1918 set on a promontory 693 feet above the Columbia, with marble floors and stained glass inside. From the parapet the river bends away east between the Gorge walls.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Different parks may have unique rules, require special use permits, or guidelines—particularly for commercial photography. Please check the information provided by individual parks before you arrive.",
+        "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+      },
+      "authority": "Oregon Parks and Recreation Department",
+      "authorityContact": "503-695-2261"
+    },
+    "crowdWindow": {
+      "verbatim": "Schedule wisely: Consider visiting during non-peak times to reduce crowding and give your clients a more relaxed session. Early mornings or weekdays may also give you better light and quieter surroundings.",
+      "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+    },
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=108",
+    "citations": [
+      "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=108",
+      "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "The landmark will close when winds reach 50mph or more."
+  },
+  {
+    "id": "eugene-or-heceta-head-lighthouse",
+    "destinationId": "eugene-or",
+    "name": "Heceta Head Lighthouse Viewpoint",
+    "type": "scenic-overlook",
+    "highlight": "A 56-foot white tower on a headland 206 feet above the Pacific, reached by a half-mile trail past the old keeper's house. The viewpoint just below it looks straight down on murre colonies and the surf line.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "No, but you can get married outside of the lighthouse. Please contact the park for further information.",
+        "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=86"
+      },
+      "authority": "Oregon Parks and Recreation Department",
+      "authorityContact": "541-547-3416"
+    },
+    "crowdWindow": {
+      "verbatim": "Schedule wisely: Consider visiting during non-peak times to reduce crowding and give your clients a more relaxed session. Early mornings or weekdays may also give you better light and quieter surroundings.",
+      "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+    },
+    "privacy": {
+      "verbatim": "Leave room for other visitors: Avoid monopolizing a scenic overlook or popular photo spot for extended periods.",
+      "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+    },
+    "backup": null,
+    "sourceUrl": "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=86",
+    "citations": [
+      "https://stateparks.oregon.gov/index.cfm?do=park.profile&parkId=86",
+      "https://stateparks.oregon.gov/index.cfm?do=v.page&id=132"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "Drone use is not permitted at Heceta Head Lighthouse State Scenic Viewpoint due to the historical nature of the building as well as the presence of wildlife in the area."
+  }
+]

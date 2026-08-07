@@ -46,21 +46,29 @@
  *
  * ⚠️ TAGGED AHEAD OF THEIR CONSUMERS — ON PURPOSE. Nick's call, 2026-07-31.
  *
- * `friendsmoon` and `engagedmoon` are tags for sites that DO NOT EXIST YET.
+ * `friendsmoon` and `engagedmoon` were tags for sites that did not exist yet.
  * This was deliberately held out of `main` for exactly that reason — it is the
  * shape of the `tdf` mistake the retirement above cleaned up — and was then
  * merged as a considered decision, not an oversight. The intent: tag the data
  * NOW so that when either wizard is built it reads a universe that is already
  * routed, instead of needing a tagging pass at build time.
  *
- * WHAT THIS COSTS, so nobody rediscovers it as a bug:
- *   - the coverage matrix counts ~5,705 party rows per wizard against
- *     consumers that render nothing;
- *   - the starved-input audit enumerates ~30 cells for products nobody ships.
- * Those numbers are REAL but currently MEANINGLESS. Do not tune data to close
- * them, and do not read a "starved" friendsmoon/engagedmoon cell as work to do
- * until the site exists. Tags are inert without a consumer — nothing renders
- * from these, and no runtime behaviour depends on them.
+ * ✅ `engagedmoon` REACHED ITS CONSUMER 2026-08-06 — engagedmoon.com is live and
+ * now reads this package. Its cells are therefore NO LONGER exempt: a starved
+ * engagedmoon input is real work, and its ~5,705 party rows now have a reader
+ * (the proposal trip layer picks dinner/backup venues from them). The exemption
+ * below is what suppressed that signal, so it is scoped to `friendsmoon` alone
+ * from here. Leaving it blanket would have gone on telling every audit to
+ * ignore gaps in a shipped product — the inverse of the tdf mistake, and the
+ * same failure class as an audit rule anchored to nothing.
+ *
+ * WHAT THIS STILL COSTS for `friendsmoon`, so nobody rediscovers it as a bug:
+ *   - the coverage matrix counts ~5,705 party rows against a consumer that
+ *     renders nothing;
+ *   - the starved-input audit enumerates ~30 cells for a product nobody ships.
+ * Those numbers are REAL but currently MEANINGLESS *for friendsmoon*. Do not
+ * tune data to close them, and do not read a "starved" friendsmoon cell as work
+ * to do until that site exists. Tags are inert without a consumer.
  *
  * DO NOT "clean these up" on the grounds that they have no reader. That is the
  * tdf argument, and it was heard and overruled here. If either site is KILLED

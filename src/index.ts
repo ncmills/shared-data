@@ -25,6 +25,13 @@ export * from "./moh-locals";
 export * from "./bestman-locals";
 export * from "./oo-atlas";
 export * from "./tagging-rules";
+// Proposal spots (engagedmoon). Exported here because a module nothing can
+// import is a module nothing can be checked against: `proposal-spots.ts` landed
+// in #25 with its whole three-tier firewall and then sat unreachable from the
+// package root, so engagedmoon grew a SECOND, weaker copy of the dataset in its
+// own repo and drifted for a week. The schema is only load-bearing if the
+// consumer actually reads it.
+export * from "./proposal-spots";
 
 // 2026-06-24 expansion: the canonical catalog is now the core set plus the
 // region/international expansion files. New cities land in a

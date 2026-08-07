@@ -1,0 +1,432 @@
+[
+  {
+    "id": "chicago-il-promontory-point",
+    "destinationId": "chicago-il",
+    "name": "Promontory Point",
+    "type": "scenic-overlook",
+    "highlight": "A stone-rimmed peninsula that pushes out into Lake Michigan at 55th Street, so the downtown skyline sits across open water to the north rather than looming overhead. Alfred Caldwell's limestone council rings and meadow are behind you; the water is at your feet.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "A permit is required for the following types of filming and photography: Non-commercial use, such as engagement, wedding, and other special occasions",
+        "sourceUrl": "https://www.chicagoparkdistrict.com/filming-photography-permits"
+      },
+      "authority": "Chicago Park District",
+      "authorityContact": "(312) 763-6710"
+    },
+    "crowdWindow": {
+      "verbatim": "Note: Media Permit availability may be limited during peak periods. Additional fees may apply for indoor locations which vary by site.",
+      "sourceUrl": "https://www.chicagoparkdistrict.com/filming-photography-permits"
+    },
+    "privacy": null,
+    "backup": "chicago-il-museum-campus-skyline-view",
+    "sourceUrl": "https://www.chicagoparkdistrict.com/parks-facilities/promontory-point",
+    "citations": [
+      "https://www.chicagoparkdistrict.com/filming-photography-permits",
+      "https://www.chicagoparkdistrict.com/parks-facilities/promontory-point"
+    ],
+    "leadTimeDays": null,
+    "fee": "Non-Commercial Filming/Photography: $45 (per location, per hour), No Fee security deposit, insurance not required. The same page states \"Filming & Photography Permit Pricing includes a $35 Application Fee + Permit Fees\" but the application-payment step on that page is labeled \"a non-refundable $45 Permit Application Fee\" — confirm the current application fee with the Park District before budgeting.",
+    "blocker": null,
+    "accessNote": "Promontory Point is NOT one of the twelve locations the Park District lets you self-reserve online for a non-commercial photography permit, so it goes through the general queue: \"For All Other Filming & Photography Complete Step 1 & Step 2: Click on the following button to pay a non-refundable $45 Permit Application Fee now, and secure your spot in the queue.\" (https://www.chicagoparkdistrict.com/filming-photography-permits). Park hours are posted on the park page as 6:00 am-11:00 pm daily.",
+    "seasonalClosure": null
+  },
+  {
+    "id": "chicago-il-lincoln-park-conservatory",
+    "destinationId": "chicago-il",
+    "name": "Lincoln Park Conservatory",
+    "type": "garden",
+    "highlight": "An 1890s glass house with four rooms — Palm House, Fern Room, Orchid House, Show House — where the air is warm and wet and the light comes down green through forty-foot palms. It reads the same in February as in June, which is the point.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "A permit is required for the following types of filming and photography: Non-commercial use, such as engagement, wedding, and other special occasions",
+        "sourceUrl": "https://www.chicagoparkdistrict.com/filming-photography-permits"
+      },
+      "authority": "Chicago Park District",
+      "authorityContact": "(312) 763-6710"
+    },
+    "crowdWindow": {
+      "verbatim": "Note: Media Permit availability may be limited during peak periods. Additional fees may apply for indoor locations which vary by site.",
+      "sourceUrl": "https://www.chicagoparkdistrict.com/filming-photography-permits"
+    },
+    "privacy": null,
+    "backup": "chicago-il-promontory-point",
+    "sourceUrl": "https://www.chicagoparkdistrict.com/parks-facilities/lincoln-park-conservatory",
+    "citations": [
+      "https://www.chicagoparkdistrict.com/filming-photography-permits",
+      "https://www.chicagoparkdistrict.com/parks-facilities/lincoln-park-conservatory"
+    ],
+    "leadTimeDays": null,
+    "fee": "Non-Commercial Filming/Photography: $45 (per location, per hour). Conservatory admission itself is free (\"Admission is free.\" — https://www.chicagoparkdistrict.com/parks-facilities/lincoln-park-conservatory), but see accessNote — entry is timed and must be reserved separately.",
+    "blocker": null,
+    "accessNote": "TWO separate bookings are required and a full house can turn you away at the door: \"Reservations are required to enter the conservatories. Prior to booking a non-commercial media permit, make a reservation online for entry for all participants to ensure there is space available on the day and time of your permit. Failure to include the entire party may result in you being turned away due to lack of space. Reservations are available 30 days out. Both the proof of reservation and permit will be required to show when arriving at a conservatory for photography.\" (https://www.chicagoparkdistrict.com/filming-photography-permits). The park page also currently notes: \"The Conservatory is open with timed entry and adjusted hours.\"",
+    "seasonalClosure": null
+  },
+  {
+    "id": "chicago-il-museum-campus-skyline-view",
+    "destinationId": "chicago-il",
+    "name": "Museum Campus Skyline View (Solidarity Drive, by the Adler Planetarium)",
+    "type": "viewpoint",
+    "highlight": "The causeway out to the Adler puts the entire Loop in one frame across the harbor — Willis, the Aon, the Blue Cross tower — with sailboats in the foreground and nothing built behind you. It is the postcard angle, and it is a public sidewalk.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "A permit is required for the following types of filming and photography: Non-commercial use, such as engagement, wedding, and other special occasions",
+        "sourceUrl": "https://www.chicagoparkdistrict.com/filming-photography-permits"
+      },
+      "authority": "Chicago Park District",
+      "authorityContact": "(312) 763-6710"
+    },
+    "crowdWindow": {
+      "verbatim": "Note: Media Permit availability may be limited during peak periods. Additional fees may apply for indoor locations which vary by site.",
+      "sourceUrl": "https://www.chicagoparkdistrict.com/filming-photography-permits"
+    },
+    "privacy": null,
+    "backup": "chicago-il-chicago-riverwalk",
+    "sourceUrl": "https://www.chicagoparkdistrict.com/filming-photography-permits",
+    "citations": [
+      "https://www.chicagoparkdistrict.com/filming-photography-permits"
+    ],
+    "leadTimeDays": null,
+    "fee": "Non-Commercial Filming/Photography: $45 (per location, per hour)",
+    "blocker": null,
+    "accessNote": "This is one of the twelve locations the Park District lets you self-reserve online: \"Reserve a permit for non-commercial photography (such as engagement, wedding, and other special occasions) at the following locations by clicking on the Reserve button below. ... Museum Campus Skyline View (Solidarity Dr.)\" (https://www.chicagoparkdistrict.com/filming-photography-permits). Note the Adler Planetarium building and grounds are a private institution, not Park District land — the permit covers the Solidarity Drive skyline-view location.",
+    "seasonalClosure": null
+  },
+  {
+    "id": "chicago-il-chicago-riverwalk",
+    "destinationId": "chicago-il",
+    "name": "Chicago Riverwalk",
+    "type": "waterfront",
+    "highlight": "A continuous promenade a full story below street level, running from Lake Shore Drive to Lake Street with the bridgehouses and the river-facing walls of the Loop rising straight up on both sides. The city noise is above you; the water is beside you.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Can I take photos for a special event on the Riverwalk? The Riverwalk is free and open to the public. Please be respectful, courteous and mindful of everyone who is also enjoying the Riverwalk. Vendor areas may have a separate policy please inquire with a vendor or contact us.",
+        "sourceUrl": "https://www.chicago.gov/city/en/sites/chicagoriverwalk/home/faq.html"
+      },
+      "authority": "City of Chicago — Chicago Riverwalk (Department of Cultural Affairs and Special Events / Chicago Film Office)",
+      "authorityContact": "https://www.chicago.gov/city/en/depts/dca/supp_info/permits.html"
+    },
+    "crowdWindow": {
+      "verbatim": "What are the Riverwalk hours? The Riverwalk is open from 6 am to 11 pm.",
+      "sourceUrl": "https://www.chicago.gov/city/en/sites/chicagoriverwalk/home/faq.html"
+    },
+    "privacy": null,
+    "backup": "chicago-il-museum-campus-skyline-view",
+    "sourceUrl": "https://www.chicago.gov/city/en/sites/chicagoriverwalk/home/faq.html",
+    "citations": [
+      "https://www.chicago.gov/city/en/sites/chicagoriverwalk/home/faq.html",
+      "https://www.chicago.gov/city/en/depts/dca/supp_info/permits.html"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "DIFFERENT AUTHORITY from the three Chicago Park District rows above — the Riverwalk is City of Chicago, not Park District, and its rules do not carry over in either direction. A personal proposal needs no permit per the FAQ; a crewed shoot goes through the Chicago Film Office (https://www.chicago.gov/city/en/depts/dca/supp_info/permits.html). Riverwalk vendor patios are separately controlled: \"Vendor areas may have a separate policy please inquire with a vendor or contact us.\"",
+    "seasonalClosure": null
+  },
+  {
+    "id": "mackinac-island-mi-arch-rock",
+    "destinationId": "mackinac-island-mi",
+    "name": "Arch Rock",
+    "type": "scenic-overlook",
+    "highlight": "A limestone arch standing about 150 feet above the east shore, with Lake Huron showing turquoise through the opening. The overlook platform is reached on foot, by bike, or by horse — there is no other way to arrive.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Arrangements for filming, taping, recording, interviewing or photographing at MSHP must be made several days in advance through the Chief of Marketing.",
+        "sourceUrl": "https://www.mackinacparks.com/about/media/film-and-photography-guidelines-2/"
+      },
+      "authority": "Mackinac State Historic Parks (Mackinac Island State Park Commission)",
+      "authorityContact": "https://www.mackinacparks.com/contact-mshp/"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.mackinacparks.com/about/media/film-and-photography-guidelines-2/",
+    "citations": [
+      "https://www.mackinacparks.com/about/media/film-and-photography-guidelines-2/",
+      "https://www.mackinacparks.com/host-an-event/weddings/",
+      "https://www.mackinacparks.com/contact-mshp/"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "Arch Rock is explicitly named as Mackinac Island State Park Commission land in the film-and-photography guidelines: \"These guidelines are designed for those requesting to film on MSHP sites as well as all land and buildings owned by the Mackinac Island State Park Commission including but not limited to: ... Mackinac Island State Park (including, but not limited to) – Arch Rock\". YOUR DATE MAY BE HARDER THAN IT LOOKS: the island has no car access — \"Motor vehicles were banned on Mackinac Island in 1898.\" — so everything hinges on the ferry schedule, and MSHP's staffed season is limited: \"MSHP's sites are open from early-May through mid-October. Scouting and/or filming on site before or after this time is discouraged due to limited staff and non-winterized buildings. Off-season requests will be reviewed individually and must be made at least a week in advance.\" (all https://www.mackinacparks.com/about/media/film-and-photography-guidelines-2/)",
+    "seasonalClosure": null
+  },
+  {
+    "id": "traverse-city-mi-sleeping-bear-lake-michigan-overlook",
+    "destinationId": "traverse-city-mi",
+    "name": "Lake Michigan Overlook, Sleeping Bear Dunes National Lakeshore (FEDERAL LAND)",
+    "type": "scenic-overlook",
+    "highlight": "A sand bluff 450 feet straight above the water, with the lake filling the whole western horizon and no shoreline development in sight. On a clear day the bluffs at Empire and the sweep of Platte Bay are visible to the south.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service — Sleeping Bear Dunes National Lakeshore (FEDERAL)",
+      "authorityContact": "https://www.nps.gov/slbe/planyourvisit/permitsandreservations.htm"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/places/000/lake-michigan-overlook-pssd9.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/places/000/lake-michigan-overlook-pssd9.htm",
+      "https://www.nps.gov/places/000/pierce-stocking-scenic-drive.htm",
+      "https://www.nps.gov/slbe/planyourvisit/permitsandreservations.htm"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "FEDERAL LAND — this is National Park Service jurisdiction, not Michigan DNR and not a county park. Note the park's own Special Use Permits page still reads \"The National Park Service (NPS) requires a permit for activities not normally associated with a visit to Sleeping Bear Dunes National Lakeshore. This includes activities such as, commercial photography, memorials, first amendment activities, and powerless flight.\" (https://www.nps.gov/slbe/planyourvisit/permitsandreservations.htm) — that park page has not caught up with the NPS-wide rule quoted above. Call the park if a hired photographer is involved.",
+    "accessNote": "The overlook is reached from Stop #9 on the one-way Pierce Stocking Scenic Drive: \"A paved path through a section of maple-beech forest leads to the approach to Lake Michigan Overlook. This paved trail becomes loose sand before reaching the top of the dune.\" (https://www.nps.gov/places/000/lake-michigan-overlook-pssd9.htm). A park entrance pass is required for the Lakeshore.",
+    "seasonalClosure": "The driving approach closes for roughly half the year: \"The Pierce Stocking Scenic Drive is open to vehicles seasonally. Generally: late May until late October. During the winter and spring, the drive is open for hiking and walk-in recreation during the vehicle closure.\" (https://www.nps.gov/places/000/pierce-stocking-scenic-drive.htm) — off-season you can still reach the overlook, but on foot over a 7.4-mile loop road."
+  },
+  {
+    "id": "door-county-wi-cave-point-county-park",
+    "destinationId": "door-county-wi",
+    "name": "Cave Point County Park",
+    "type": "scenic-overlook",
+    "highlight": "Wave-cut dolomite ledges dropping straight into Lake Michigan, with sea caves undercut below the rim you are standing on. It faces east, so it is a sunrise spot, and in winter the spray freezes onto the rock in sheets.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Various parks may be reserved, (but not closed to the public), for weddings, reunions, birthdays, private and company picnics and other events.",
+        "sourceUrl": "https://www.co.door.wi.gov/766/Door-County-Park-Rentals"
+      },
+      "authority": "Door County Facilities and Parks Department",
+      "authorityContact": "920-743-5511"
+    },
+    "crowdWindow": {
+      "verbatim": "Well-known for its wave-worn Dolomite/limestone ledges, underwater caves and stirring view of Lake Michigan, the park is a popular attraction for residents and visitors alike. The site is a popular location for weddings as well. Fishermen, skilled scuba divers, photography buffs, and nature observers find the park a great delight.",
+      "sourceUrl": "https://www.co.door.wi.gov/554/Cave-Point-County-Park"
+    },
+    "privacy": {
+      "verbatim": "Various parks may be reserved, (but not closed to the public), for weddings, reunions, birthdays, private and company picnics and other events.",
+      "sourceUrl": "https://www.co.door.wi.gov/766/Door-County-Park-Rentals"
+    },
+    "backup": null,
+    "sourceUrl": "https://www.co.door.wi.gov/554/Cave-Point-County-Park",
+    "citations": [
+      "https://www.co.door.wi.gov/554/Cave-Point-County-Park",
+      "https://www.co.door.wi.gov/766/Door-County-Park-Rentals"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "Reserving space here never buys you privacy — the county states plainly that reserved parks are \"not closed to the public.\" Reservations are also unforgiving: \"All reservations are taken on a first-come, first served basis and are Nonrefundable.\" (https://www.co.door.wi.gov/766/Door-County-Park-Rentals). Cave Point is a small park — \"Cave Point County Park consists of 18.6 acres, including 900 feet of shoreline\" — and the ledges are genuinely dangerous: \"Use caution, as rocks are slippery when wet or covered with ice.\" Door County's parks ordinance (Chapter 12) contains no photography-permit provision at all, which is why this row is amber rather than green — call Facilities and Parks before assuming a hired photographer is fine.",
+    "seasonalClosure": null
+  },
+  {
+    "id": "duluth-mn-split-rock-lighthouse-overlook",
+    "destinationId": "duluth-mn",
+    "name": "Split Rock Lighthouse State Park — Lake Superior shoreline overlooks",
+    "type": "scenic-overlook",
+    "highlight": "The 1910 lighthouse sits on a 130-foot cliff above Lake Superior, and the park's shoreline lookouts frame it from below and to the side. Pebble Beach at the base is a cove of flat, water-smoothed stones.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Film and photography permits ARE NOT required for the following activities, unless the filming/photography meets any criteria on the list above: Coverage of news, by news media. Visitors taking photos or videos for their own personal use.",
+        "sourceUrl": "https://www.dnr.state.mn.us/state_parks/rules.html"
+      },
+      "authority": "Minnesota Department of Natural Resources, Division of Parks and Trails",
+      "authorityContact": "https://www.dnr.state.mn.us/state_parks/park.html?id=spk00266"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.dnr.state.mn.us/state_parks/park.html?id=spk00266",
+    "citations": [
+      "https://www.dnr.state.mn.us/state_parks/rules.html",
+      "https://www.dnr.state.mn.us/state_parks/park.html?id=spk00266",
+      "https://www.dnr.state.mn.us/state_parks/split_rock_lighthouse/things_to_do.html"
+    ],
+    "leadTimeDays": null,
+    "fee": "A Minnesota state park vehicle permit is required: \"All vehicles entering a state park must display a valid year-round or one-day Minnesota state park vehicle permit affixed to the lower right hand corner of the windshield.\" (https://www.dnr.state.mn.us/state_parks/rules.html)",
+    "blocker": "The permit exemption above is conditional. The DNR's list of activities that DO require a permit includes filming or photography that \"Involves the use of a prop, compensated model(s) or actor(s), or any set\" and that \"Potentially disrupts normal visitor activities or inconveniences other visitors\" (https://www.dnr.state.mn.us/state_parks/rules.html) — a staged setup with props may cross that line even though a personal proposal does not. \"The application review process may take up to 30 days.\"",
+    "accessNote": "TWO AUTHORITIES ON ONE SITE — the state park is Minnesota DNR, but the lighthouse compound itself is not: \"The lighthouse site is maintained by the Minnesota Historical Society (MNHS) and includes the Fog Signal Building, three keeper's houses and the Visitor Center. Tours of the sites are available daily through the summer season for a fee.\" (https://www.dnr.state.mn.us/state_parks/split_rock_lighthouse/things_to_do.html). The DNR photography rule above governs the park's shoreline and trails; anything inside the MNHS-run lighthouse site needs to be cleared with MNHS separately. Park hours: \"Park hours 8 a.m. to 10 p.m., 365 days a year.\"",
+    "seasonalClosure": null
+  },
+  {
+    "id": "minneapolis-mn-minnehaha-falls",
+    "destinationId": "minneapolis-mn",
+    "name": "Minnehaha Falls",
+    "type": "park",
+    "highlight": "A single fifty-odd-foot drop into a limestone gorge inside the city, with a stone-and-iron overlook at the lip and a stair down to the streambed below. The pergola garden above it is the formal counterpoint.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Still Photography: It applies to low impact (minimal props and equipment) photo session for personal use by a private individual, these are typically to document a time in your life – not for high-traffic viewing or advertising.",
+        "sourceUrl": "https://www.minneapolisparks.org/permits/photography__filming_permits/"
+      },
+      "authority": "Minneapolis Park and Recreation Board",
+      "authorityContact": "https://www.minneapolisparks.org/permits/photography__filming_permits/"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.minneapolisparks.org/parks-destinations/parks-lakes/minnehaha_regional_park/",
+    "citations": [
+      "https://www.minneapolisparks.org/permits/photography__filming_permits/",
+      "https://www.minneapolisparks.org/parks-destinations/parks-lakes/minnehaha_regional_park/"
+    ],
+    "leadTimeDays": 10,
+    "fee": "Individual/Group Portrait Fees: $47 per 1.5 hours; $315 annual. Commercial Fees: $315 per day and location. Change Order Fee: \"You will need a new permit. $35 per change order\" (https://www.minneapolisparks.org/permits/photography__filming_permits/)",
+    "blocker": null,
+    "accessNote": "MPRB nowhere mentions proposals or engagements — the closest category is the \"Individual/Group Portrait\" still-photo permit, which is why this row is amber. Lead time: \"Step 3: Your application will be reviewed by MPRB staff in the order in which it was received. Please plan on submitting your application at least 10 days prior to your requested date(s).\" And the permit is location-locked: \"You are limited to the physical park location your permit lists, unless otherwise stated in the notes a permit. For example, you may not take photos at Lake Nokomis if your permit lists only Minnehaha Park as your permitted location.\" No insurance for personal work: \"Still Photography: No, for personal use photography we do not require insurance\" (all https://www.minneapolisparks.org/permits/photography__filming_permits/)",
+    "seasonalClosure": null
+  },
+  {
+    "id": "fredericksburg-tx-enchanted-rock-summit",
+    "destinationId": "fredericksburg-tx",
+    "name": "Enchanted Rock Summit",
+    "type": "hike",
+    "highlight": "A bare pink granite dome 425 feet above the Hill Country floor, climbed on open rock with no trees and no railing. From the top the horizon is unbroken in every direction, and at dusk the granite holds its heat and its color.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Media production is any audio, video, photo­graphic or digital recording including still photography, digital imaging, filming or video recording. Examples include docu­men­taries, independent or student films, scenic photography, motion picture pro­duc­tions, commercials, marketing videos or photos, drone video or photos, or any other commercial filming activity.",
+        "sourceUrl": "https://tpwd.texas.gov/state-parks/park-information/park-requests-application"
+      },
+      "authority": "Texas Parks and Wildlife Department — Enchanted Rock State Natural Area",
+      "authorityContact": "1-512-389-8900"
+    },
+    "crowdWindow": {
+      "verbatim": "Parks are most likely to fill on weekends and school holidays. Capacity limits are in place to protect you, the park's natural and cultural resources, and its infrastructure.",
+      "sourceUrl": "https://tpwd.texas.gov/state-parks/park-reservation-information/day-pass-faqs"
+    },
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://tpwd.texas.gov/state-parks/enchanted-rock",
+    "citations": [
+      "https://tpwd.texas.gov/state-parks/enchanted-rock",
+      "https://tpwd.texas.gov/state-parks/park-reservation-information/day-pass-faqs",
+      "https://tpwd.texas.gov/state-parks/park-information/park-requests-application"
+    ],
+    "leadTimeDays": 30,
+    "fee": null,
+    "blocker": "The route to the top is weather-dependent: \"The Summit Trail may close in wet weather.\" (https://tpwd.texas.gov/state-parks/enchanted-rock)",
+    "accessNote": "YOUR DATE CAN BE IMPOSSIBLE. TPWD names this park specifically: \"No. You can purchase a daily entrance pass at the park if any are available. However, many parks have capacity limits and will close to drop-in day-use visitors once they reach that limit. Very popular parks such as Enchanted Rock may sell out days in advance.\" The fix is to buy ahead: \"Guarantee entry to a state park with a day pass. We highly recommend buying a day pass in advance for popular parks. Day passes are available up to 30 days before your visit.\" But note the limit of that guarantee: \"No. Your day pass only guarantees entrance into the park. It does not guarantee access to specific day-use areas or parking lots.\" (all https://tpwd.texas.gov/state-parks/park-reservation-information/day-pass-faqs). Separately, TPWD's media-production application window is long: \"Submit completed applications up to one year and not less than 90 days before your event.\" (https://tpwd.texas.gov/state-parks/park-information/park-requests-application) — TPWD publishes no personal-proposal exemption, so if a paid photographer is coming, call before you count on it.",
+    "seasonalClosure": null
+  },
+  {
+    "id": "austin-tx-hamilton-pool-preserve",
+    "destinationId": "austin-tx",
+    "name": "Hamilton Pool Preserve",
+    "type": "park",
+    "highlight": "A collapsed grotto where Hamilton Creek drops fifty feet off an overhanging limestone dome into a jade-green pool. Ferns and travertine hang from the underside of the arch; the whole thing is invisible until you are almost in it.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Reservations are not valid for commercial use or for shuttle.",
+        "sourceUrl": "https://parks.traviscountytx.gov/parks/hamilton-pool-preserve"
+      },
+      "authority": "Travis County Parks (Travis County Transportation and Natural Resources)",
+      "authorityContact": "512-854-2581"
+    },
+    "crowdWindow": {
+      "verbatim": "Reservations Required to Enter Preserve Every Day March - October Every day November - February Weekends and Travis County Holidays Morning Reservation Period 9:00 am - 12:30 pm Afternoon Reservation Period 2:00 pm - 5:30 pm",
+      "sourceUrl": "https://parks.traviscountytx.gov/parks/hamilton-pool-preserve"
+    },
+    "privacy": null,
+    "backup": "austin-tx-mount-bonnell",
+    "sourceUrl": "https://parks.traviscountytx.gov/parks/hamilton-pool-preserve",
+    "citations": [
+      "https://parks.traviscountytx.gov/parks/hamilton-pool-preserve",
+      "https://parks.traviscountytx.gov/about/permits"
+    ],
+    "leadTimeDays": null,
+    "fee": "Reservation Fee per Vehicle: $12 (1 vehicle max, 8 people max). Per Person Entrance Fees: $8 per adult (13 to 61 years of age), $3 per senior (62 years of age and older), $0 per child (12 years of age and younger). \"Cash only at the preserve. Credit and debit cards are not accepted. All fees are non-refundable.\" (https://parks.traviscountytx.gov/parks/hamilton-pool-preserve)",
+    "blocker": "Part of the site is currently closed outright: \"The section of trail that goes underneath the overhanging cliff at the pool is closed for safety concerns. Visitors can access the beach, but cannot walk all the way around the pool to below the waterfall. Rocks have been falling from the cliffs above the trail. We continue to consult with geologists about this hazard.\" (https://parks.traviscountytx.gov/parks/hamilton-pool-preserve)",
+    "accessNote": "THE HARDEST DATE IN THIS SET. You cannot walk up: \"Reservations are required every day of the week to visit Hamilton Pool Preserve. Please make your reservation online before arriving at the preserve.\" The booking window is finite: \"You can now make Hamilton Pool Preserve reservations online for dates through September 2026. Reservations for dates in October 2026 and beyond are not available yet.\" And the water itself is never promised: \"As always, whether swimming at the pool will be allowed depends on factors beyond our control, such as bacteria levels and recent rain. Water access is never guaranteed with a reservation. Even when swimming is not allowed, the preserve is open for hiking and reservations are still required.\" Timing is rigid: \"Visitors cannot remain in the preserve after their reservation period ends. Please arrive at least an hour before your reservation period ends to give yourself time to enjoy the preserve. No entry allowed after the reservation time period is past.\" And a hired photographer is a real question mark: \"Reservations are not valid for commercial use or for shuttle.\" (all https://parks.traviscountytx.gov/parks/hamilton-pool-preserve)",
+    "seasonalClosure": null
+  },
+  {
+    "id": "austin-tx-mount-bonnell",
+    "destinationId": "austin-tx",
+    "name": "Mount Bonnell at Covert Park",
+    "type": "scenic-overlook",
+    "highlight": "About a hundred stone steps up to a limestone bluff 780-odd feet over Lake Austin, with the river bending below and the hills folding away west. It faces the sunset squarely, which is why everyone else is also there at 7pm.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Photo session permits are required for ANY posed/portrait or similar photo shoots at the following parks which experience high volumes of public use: Auditorium Shores Mayfield Park Mt. Bonnell at Cover Park Zilker Metropolitan Park Zilker Botanical Garden",
+        "sourceUrl": "https://www.austintexas.gov/parks/special-events-policies-and-procedures"
+      },
+      "authority": "City of Austin Parks and Recreation Department",
+      "authorityContact": "https://www.austintexas.gov/parks/special-events-policies-and-procedures"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "austin-tx-hamilton-pool-preserve",
+    "sourceUrl": "https://www.austintexas.gov/parks/special-events-policies-and-procedures",
+    "citations": [
+      "https://www.austintexas.gov/parks/special-events-policies-and-procedures"
+    ],
+    "leadTimeDays": 4,
+    "fee": "$50 per 2 hour session",
+    "blocker": "\"Sessions NOT permitted during special events or holidays.\" (https://www.austintexas.gov/parks/special-events-policies-and-procedures)",
+    "accessNote": "Booking window is narrow at both ends: \"$50 per 2 hour session - book online 4 days or up to 30 days prior. Sessions NOT permitted during special events or holidays.\" Austin also lists Mt. Bonnell among the parks \"which experience high volumes of public use\" — the permit is a queue for a busy overlook, not a private booking. If a paid photographer is involved, note Austin's separate commercial-activity rule and its teeth: \"COMMERCIAL ACTIVITY means to advertise or provide a good, service, class, or instructional activity for compensation. ... Fines: $100-$500 fine, $250 minimum fine during a special event, Class C Misdemeanor.\" (all https://www.austintexas.gov/parks/special-events-policies-and-procedures). Note the city's own page spells the park \"Cover Park\" — the site is Covert Park.",
+    "seasonalClosure": null
+  },
+  {
+    "id": "st-louis-mo-garden-of-the-gods-observation-trail",
+    "destinationId": "st-louis-mo",
+    "name": "Garden of the Gods Observation Trail, Shawnee National Forest (FEDERAL LAND)",
+    "type": "trail",
+    "highlight": "A quarter-mile of flagstone across the top of a sandstone bluff, past Camel Rock and Devil's Smokestack, with the Shawnee Hills running to the horizon. The rock is banded and wind-cut, and the drop-offs are unfenced.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "A De Minimis Use authorization may be issued for filming activities involving six to eight individuals, provided all conditions in Section 1(a)(5)(A)-(H) are met. No fee or cost recovery applies in these cases.",
+        "sourceUrl": "https://www.fs.usda.gov/working-with-us/contracts-commercial-permits/filming"
+      },
+      "authority": "USDA Forest Service — Shawnee National Forest, Hidden Springs Ranger District",
+      "authorityContact": "618-253-7114"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.fs.usda.gov/r09/shawnee/recreation/garden-gods-recreation-area",
+    "citations": [
+      "https://www.fs.usda.gov/r09/shawnee/recreation/garden-gods-recreation-area",
+      "https://www.fs.usda.gov/working-with-us/contracts-commercial-permits/filming"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "FEDERAL LAND, AND NOT THE SAME RULE AS A NATIONAL PARK. This is US Forest Service, not National Park Service. The Forest Service does not publish the NPS \"eight or fewer individuals / permits and fees are not required\" language, and its own guidance is a discretionary authorization — \"may be issued\" — so a proposal shoot here is genuinely unresolved on paper. The agency's instruction is to ask: \"Contact your local Forest Service office for information on how to apply for a De Minimis Use Authorization or a Special Use Permit.\" (https://www.fs.usda.gov/working-with-us/contracts-commercial-permits/filming)",
+    "accessNote": "Roughly a 2h15m drive southeast of St. Louis — the nearest catalog anchor, but it is a day trip, not a city outing. Hours: \"Picnic area and Observation Trail hours of operation - 6 a.m. to 10 p.m.\" and \"No overnight parking is allowed in picnic area or Observation Trail parking lots.\" No entry permit is needed for the adjacent wilderness — \"No permit required for entering or camping in Garden of the Gods Wilderness.\" — but that is an access rule, not a photography rule. Also note: \"Disposable food and beverage containers are not permitted on the Observation Trail.\" (so no champagne bottle on the rocks) and \"Caution should be used due to the high cliffs in the area.\" (all https://www.fs.usda.gov/r09/shawnee/recreation/garden-gods-recreation-area)",
+    "seasonalClosure": null
+  }
+]

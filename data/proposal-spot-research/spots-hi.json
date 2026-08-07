@@ -1,0 +1,336 @@
+[
+  {
+    "id": "honolulu-hi-diamond-head-summit",
+    "destinationId": "honolulu-hi",
+    "name": "Diamond Head (Lēʻahi) Summit, Diamond Head State Monument",
+    "type": "scenic-overlook",
+    "highlight": "The trail ends inside a 1911 fire control station on the crater rim, 560 feet above the crater floor. From the bunker the shoreline runs unbroken from Koko Head to Waiʻanae, with Waikīkī's towers small and pale below.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Film permits and insurance are required for all filming activity, commercial, educational or non-profit projects which take place within the State’s jurisdiction.  Film permits are not required for photography or video that is only for personal use or which takes place on private property.",
+        "sourceUrl": "https://filmoffice.hawaii.gov/permit-procedures/"
+      },
+      "authority": "Hawaii Film Office (Department of Business, Economic Development & Tourism), permitting on behalf of Hawaii DLNR Division of State Parks",
+      "authorityContact": "(808) 586-2570 — https://filmoffice.hawaii.gov/permit-procedures/"
+    },
+    "crowdWindow": {
+      "verbatim": "With visitors to the park exceeding 3,000 people per day, Diamond Head is one of the most popular and heavily visited destinations in the state.",
+      "sourceUrl": "https://dlnr.hawaii.gov/dsp/parks/oahu/diamond-head-state-monument/"
+    },
+    "privacy": null,
+    "backup": "oahu-hi-makapuu-point-lighthouse-trail",
+    "sourceUrl": "https://dlnr.hawaii.gov/dsp/parks/oahu/diamond-head-state-monument/",
+    "citations": [
+      "https://dlnr.hawaii.gov/dsp/parks/oahu/diamond-head-state-monument/",
+      "https://filmoffice.hawaii.gov/permit-procedures/",
+      "https://filmoffice.hawaii.gov/elopementwedding-photography/",
+      "https://filmoffice.hawaii.gov/locations/openaccessible-sites/"
+    ],
+    "leadTimeDays": 5,
+    "fee": "$5 per person entry for non-Hawaii residents; $10 per vehicle non-resident parking (Hawaii residents free with ID). State film permit location fee: \"parks and beaches under the Department of Land and Natural Resources / Division of State Parks have a $100/day nonrefundable fee\" (filmoffice.hawaii.gov/permit-procedures/).",
+    "blocker": "Liability insurance required with the film permit. Standard Film Permit applies here because the Film Office states \"ALL STATE PARK LOCATIONS HAVE BEEN REMOVED FROM THE OAHU, MAUI AND KAUAI O&A SITE LIST\" (filmoffice.hawaii.gov/locations/openaccessible-sites/) — the faster Open & Accessible ePermit is not available at Diamond Head. Standard permits must be submitted at least five (5) business days ahead. If the proposal is staged as a ceremony/elopement rather than photography only, State Parks additionally requires a Special Use Permit submitted 45 days in advance.",
+    "accessNote": "Entry and parking reservations are required for non-residents and sell out — a date can be impossible without one. Hawaii DLNR: \"Entry and parking reservations required for non-residents (as of May 12th, 2022), plan accordingly.\" (https://dlnr.hawaii.gov/dsp/parks/oahu/diamond-head-state-monument/). Park hours 6:00 am to 6:00 pm daily; last entry 4:30 pm for the 4:00 pm reservation."
+  },
+  {
+    "id": "oahu-hi-makapuu-point-lighthouse-trail",
+    "destinationId": "oahu-hi",
+    "name": "Makapuʻu Point Lighthouse Lookout, Kaiwi State Scenic Shoreline",
+    "type": "scenic-overlook",
+    "highlight": "A paved mile of old lighthouse access road climbs to a headland 500 feet above the red-roofed Makapuʻu light. The lookout holds the whole southeastern coastline, and from November through May humpbacks work the channel below.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Film permits and insurance are required for all filming activity, commercial, educational or non-profit projects which take place within the State’s jurisdiction.  Film permits are not required for photography or video that is only for personal use or which takes place on private property.",
+        "sourceUrl": "https://filmoffice.hawaii.gov/permit-procedures/"
+      },
+      "authority": "Hawaii Film Office (Department of Business, Economic Development & Tourism), permitting on behalf of Hawaii DLNR Division of State Parks",
+      "authorityContact": "(808) 586-2570 — https://filmoffice.hawaii.gov/permit-procedures/"
+    },
+    "crowdWindow": {
+      "verbatim": "Hawaii’s humpback whale season runs from November through May, with January through March being the peak whale-watching months.",
+      "sourceUrl": "https://dlnr.hawaii.gov/dsp/parks/oahu/kaiwi-state-scenic-shoreline/"
+    },
+    "privacy": null,
+    "backup": "honolulu-hi-nuuanu-pali-lookout",
+    "sourceUrl": "https://dlnr.hawaii.gov/dsp/parks/oahu/kaiwi-state-scenic-shoreline/",
+    "citations": [
+      "https://dlnr.hawaii.gov/dsp/parks/oahu/kaiwi-state-scenic-shoreline/",
+      "https://filmoffice.hawaii.gov/permit-procedures/",
+      "https://filmoffice.hawaii.gov/locations/openaccessible-sites/",
+      "https://dlnr.hawaii.gov/dofaw/oahu/faq/"
+    ],
+    "leadTimeDays": 5,
+    "fee": "No entrance fee. State film permit location fee: \"parks and beaches under the Department of Land and Natural Resources / Division of State Parks have a $100/day nonrefundable fee\" (filmoffice.hawaii.gov/permit-procedures/).",
+    "blocker": "Liability insurance required with the film permit. All Oʻahu state park locations were removed from the Open & Accessible list, so a Standard Film Permit (five business days minimum) is required rather than the fast O+A ePermit. The Makapuʻu tide pools below the trail are a closed area — DLNR: \"The tide pools located at Kaiwi State Scenic Shoreline commonly referred to as the Makapu’u tide pools are in a CLOSED AREA and considered very dangerous.\"",
+    "accessNote": "Gate hours limit the window: summer 7:00am to 7:45pm, winter 7:00am to 6:45pm; summer hours begin April 1, winter hours the day after Labor Day (https://dlnr.hawaii.gov/dsp/parks/oahu/kaiwi-state-scenic-shoreline/). No reservation system."
+  },
+  {
+    "id": "oahu-hi-lanikai-pillbox-kaiwa-ridge",
+    "destinationId": "oahu-hi",
+    "name": "Lanikai Pillboxes, Kaʻiwa Ridge",
+    "type": "overlook",
+    "highlight": "Two WWII observation stations sit on a bare ridge above Kailua. From the upper roof the Mokulua islets sit offshore in shallow water and the windward coast runs from Waimānalo to Mokoliʻi.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Film permits and insurance are required for all filming activity, commercial, educational or non-profit projects which take place within the State’s jurisdiction.  Film permits are not required for photography or video that is only for personal use or which takes place on private property.",
+        "sourceUrl": "https://filmoffice.hawaii.gov/permit-procedures/"
+      },
+      "authority": "Hawaii Film Office (Department of Business, Economic Development & Tourism), permitting on behalf of Hawaii DLNR",
+      "authorityContact": "(808) 586-2570 — https://filmoffice.hawaii.gov/permit-procedures/"
+    },
+    "crowdWindow": {
+      "verbatim": "But now with widespread advertising on travel websites and social media the trail is experiencing the same problems as many other O‘ahu hiking trails; it is being loved to death.",
+      "sourceUrl": "https://dlnr.hawaii.gov/blog/2018/03/16/nr18-036/"
+    },
+    "privacy": null,
+    "backup": "oahu-hi-kualoa-regional-park",
+    "sourceUrl": "https://dlnr.hawaii.gov/blog/2018/03/16/nr18-036/",
+    "citations": [
+      "https://dlnr.hawaii.gov/blog/2018/03/16/nr18-036/",
+      "https://dlnr.hawaii.gov/recreation/home/ka%CA%BBiwa-ridge-trail-management-plan/",
+      "https://filmoffice.hawaii.gov/permit-procedures/"
+    ],
+    "leadTimeDays": 5,
+    "fee": null,
+    "blocker": "Jurisdiction is state but unusual, so confirm with the Film Office before booking a photographer. DLNR: \"Though located on state land, this trail is not on the managed inventory of DLNR’s Na Ala Hele and Access Program\" and \"Today, the two pillboxes sit on DLNR land\" (https://dlnr.hawaii.gov/blog/2018/03/16/nr18-036/). Because it is not a Division of State Parks unit, the published $100/day State Parks location fee may not be the applicable one. Liability insurance is required with any state film permit.",
+    "accessNote": "No reservation or entry fee, but the trail has been closed outright for structural repairs to the pillboxes before — DLNR closed it for at least 60 calendar days in 2018 (https://dlnr.hawaii.gov/blog/2018/03/16/nr18-036/). Check DLNR trail notices before committing to a date."
+  },
+  {
+    "id": "oahu-hi-kualoa-regional-park",
+    "destinationId": "oahu-hi",
+    "name": "Kualoa Regional Park",
+    "type": "park",
+    "highlight": "A flat run of lawn meets the water with the Koʻolau wall rising directly behind it. Mokoliʻi — the cone islet off the point — sits a few hundred yards offshore and takes the early light first.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Section 34. Permits. (a) Applicants desiring to use City parks properties for commercial filming purposes shall first secure a permit from the Department. (b) Permits shall be issued in the name of the commercial film company designated on the Certificate of Insurance. (c) Permits shall be non-transferable. (d) Daily, monthly, annual permits may be issued to still photographers shooting wedding ceremonies, portraits, scenics, etc., or if shooting does not involve any commercial product or the use of props such as birds, animals, etc.",
+        "sourceUrl": "https://www.honolulu.gov/dpr/wp-content/uploads/sites/34/2024/04/COMMERCIAL-FILMING-PART-VI.pdf"
+      },
+      "authority": "City and County of Honolulu Department of Parks and Recreation",
+      "authorityContact": "Parks Permit Office, (808) 768-3440 — https://www.honolulu.gov/parks/default/park-locations/182-site-dpr-cat/1758-park-use-permits.html"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "oahu-hi-byodo-in-temple",
+    "sourceUrl": "https://www.honolulu.gov/dpr/wp-content/uploads/sites/34/2024/04/COMMERCIAL-FILMING-PART-VI.pdf",
+    "citations": [
+      "https://www.honolulu.gov/dpr/wp-content/uploads/sites/34/2024/04/COMMERCIAL-FILMING-PART-VI.pdf",
+      "https://www.honolulu.gov/parks/default/park-locations/182-site-dpr-cat/1758-park-use-permits.html",
+      "https://www.honolulu.gov/film-office/wp-content/uploads/sites/46/2024/05/DPR_Pre-app-conditions_2024-1.pdf",
+      "https://filmoffice.hawaii.gov/elopementwedding-photography/"
+    ],
+    "leadTimeDays": 21,
+    "fee": null,
+    "blocker": "Liability insurance. Honolulu DPR rule Section 37(a): \"Each permit applicant must have in current force and effect an insurance policy, in which a combined limit of liability for bodily injury and property damage is $1 million per occurrence. The insurance certificate shall name the City and County of Honolulu and its officers and employees, and the State of Hawaii and its officers and employees as additional insured.\" A second permit may also be needed below the high-water mark — Section 37(c): \"For beach parks owned or controlled by the City, the high-water mark shall be considered the makai boundary. Applicants shall be responsible to secure applicable commercial filming permits from the State Department of Land and Natural Resources and the State Department of Transportation for filming activities occurring makai of the high-water mark.\"",
+    "accessNote": "No entry reservation, but the city application deadline is hard: \"Application must be filed 3 weeks in advance to the DPR Permits Office\" (https://www.honolulu.gov/parks/default/park-locations/182-site-dpr-cat/1758-park-use-permits.html). A proposal booked inside three weeks cannot be permitted on the city side."
+  },
+  {
+    "id": "honolulu-hi-nuuanu-pali-lookout",
+    "destinationId": "honolulu-hi",
+    "name": "Nuʻuanu Pali Lookout, Nuʻuanu Pali State Wayside",
+    "type": "scenic-overlook",
+    "highlight": "The Koʻolau cliffs fall away 1,200 feet to the windward plain, with Kāneʻohe Bay laid out below. The trades funnel through the gap hard enough to lean against.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Film permits and insurance are required for all filming activity, commercial, educational or non-profit projects which take place within the State’s jurisdiction.  Film permits are not required for photography or video that is only for personal use or which takes place on private property.",
+        "sourceUrl": "https://filmoffice.hawaii.gov/permit-procedures/"
+      },
+      "authority": "Hawaii Film Office (Department of Business, Economic Development & Tourism), permitting on behalf of Hawaii DLNR Division of State Parks",
+      "authorityContact": "(808) 586-2570 — https://filmoffice.hawaii.gov/permit-procedures/"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Impressive view of windward Oʻahu from brink of pali (cliffs) at 1200 feet elevation in the Ko’olau Range. Winds are usually so strong that one can lean against the wall of wind.",
+      "sourceUrl": "https://dlnr.hawaii.gov/dsp/parks/oahu/nuuanu-pali-state-wayside/"
+    },
+    "backup": "oahu-hi-byodo-in-temple",
+    "sourceUrl": "https://dlnr.hawaii.gov/dsp/parks/oahu/nuuanu-pali-state-wayside/",
+    "citations": [
+      "https://dlnr.hawaii.gov/dsp/parks/oahu/nuuanu-pali-state-wayside/",
+      "https://filmoffice.hawaii.gov/permit-procedures/",
+      "https://filmoffice.hawaii.gov/locations/openaccessible-sites/"
+    ],
+    "leadTimeDays": 5,
+    "fee": "Non-resident parking $7.00 per vehicle; Hawaii residents no charge. State film permit location fee: \"parks and beaches under the Department of Land and Natural Resources / Division of State Parks have a $100/day nonrefundable fee\" (filmoffice.hawaii.gov/permit-procedures/).",
+    "blocker": "Liability insurance required with the film permit. The Film Office removed \"Nuuanu Pali State Wayside (Oahu)\" from the DLNR Open and Accessible list (https://filmoffice.hawaii.gov/locations/openaccessible-sites/), so the fast O+A ePermit is not available here — a Standard Film Permit at five business days minimum is required.",
+    "accessNote": "No reservation required. Gate hours are the constraint: \"Daily 6:00am to 6:00pm\" (https://dlnr.hawaii.gov/dsp/parks/oahu/nuuanu-pali-state-wayside/)."
+  },
+  {
+    "id": "honolulu-hi-manoa-falls-trail",
+    "destinationId": "honolulu-hi",
+    "name": "Mānoa Falls, Honolulu Watershed Forest Reserve",
+    "type": "trail",
+    "highlight": "A short, consistently wet walk through bamboo and hau ends at a thin fall dropping into a shallow rock basin. The light arrives filtered green and the valley walls close in on both sides.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Film permits and insurance are required for all filming activity, commercial, educational or non-profit projects which take place within the State’s jurisdiction.  Film permits are not required for photography or video that is only for personal use or which takes place on private property.",
+        "sourceUrl": "https://filmoffice.hawaii.gov/permit-procedures/"
+      },
+      "authority": "Hawaii Film Office (Department of Business, Economic Development & Tourism), permitting on behalf of Hawaii DLNR Division of Forestry and Wildlife",
+      "authorityContact": "(808) 586-2570 — https://filmoffice.hawaii.gov/permit-procedures/ ; DOFAW Oʻahu Branch (808) 973-9778"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "honolulu-hi-nuuanu-pali-lookout",
+    "sourceUrl": "https://dlnr.hawaii.gov/dofaw/oahu/faq/",
+    "citations": [
+      "https://dlnr.hawaii.gov/dofaw/oahu/faq/",
+      "https://dlnr.hawaii.gov/dofaw/permits/",
+      "https://filmoffice.hawaii.gov/permit-procedures/"
+    ],
+    "leadTimeDays": 5,
+    "fee": null,
+    "blocker": "A second, slower permit may stack on top of the state film permit. DLNR Division of Forestry and Wildlife: \"Commercial activities ranging from guided hikes and tours to photography may require additional permits. It is the individual’s sole responsibility to ensure that all applicable permits are held prior to commencement of regulated activities.\" DOFAW's general guideline is that \"requests for permits should be submitted, at minimum, 90 days prior to the expected start of field work\" (https://dlnr.hawaii.gov/dofaw/permits/). Confirm with the Oʻahu Branch whether a DOFAW permit is needed for your shoot.",
+    "accessNote": "Jurisdiction note for planning: Mānoa Falls is a DOFAW trail, not a State Parks unit — DLNR lists it under the Honolulu Watershed Forest Reserve and states that \"Diamond Head, ʻAiea Loop, Makapuʻu Lighthouse and Kaʻena Point Trails are all managed by DLNR Division of State Parks\" while the Honolulu Watershed trails are DOFAW (https://dlnr.hawaii.gov/dofaw/oahu/faq/). No entry reservation is required for the trail itself."
+  },
+  {
+    "id": "oahu-hi-byodo-in-temple",
+    "destinationId": "oahu-hi",
+    "name": "Byodo-In Temple, Valley of the Temples",
+    "type": "historic-site",
+    "highlight": "A full-scale replica of Japan's Byodo-In, its Phoenix Hall standing at the edge of a koi pond with the Koʻolau ridge rising almost vertically behind it. A three-ton brass bell hangs in its own house near the entrance and visitors ring it before going in.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Permits are required for all planned individual or group photo shoots, whether personal or professional, such as graduation, family portraits, special events, etc.",
+        "sourceUrl": "https://byodo-in.com/visit/"
+      },
+      "authority": "Byodo-In Temple Hawaii / Valley of the Temples Memorial Park (private property)",
+      "authorityContact": "Gift Shop / permits: (808) 239-9844 — https://byodo-in.com/visit/"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Because the Byodo-In Temple is a place of prayer and meditation, as well as where memorial services are often conducted, we do request that visitors dress appropriately (no beach attire) and behave as you would in a place of worship (no running, yelling, throwing rocks, climbing trees, bothering wildlife, etc.).",
+      "sourceUrl": "https://byodo-in.com/visit/"
+    },
+    "backup": "oahu-hi-kualoa-regional-park",
+    "sourceUrl": "https://byodo-in.com/visit/",
+    "citations": [
+      "https://byodo-in.com/visit/",
+      "https://byodo-in.com/explore/",
+      "https://filmoffice.hawaii.gov/permit-procedures/"
+    ],
+    "leadTimeDays": null,
+    "fee": "General Admission $10.00 (age 13-64); Seniors $8.00 (age 65 & up); Children $6.00 (age 2-12); parking $6 per hour. Kamaʻāina rates with valid Hawaii ID. Photo-shoot permit fee is not published — obtain the permit reservation form from the gift shop.",
+    "blocker": "A permit is required even for a personal, unpaid photo shoot here — the rule covers \"whether personal or professional.\" Note this is private land, so no state film permit applies: \"Film permits are not required for photography or video that is only for personal use or which takes place on private property\" (https://filmoffice.hawaii.gov/permit-procedures/). The temple's own permit governs instead.",
+    "accessNote": "Admission is ticketed and hours are short: \"The Byodo-In Temple is open daily from 8:30am – 4:30pm with the last entrance at 4:15pm\" (https://byodo-in.com/visit/). Sunset proposals are not possible here."
+  },
+  {
+    "id": "maui-hi-waianapanapa-black-sand-beach",
+    "destinationId": "maui-hi",
+    "name": "Paʻiloa Black Sand Beach, Waiʻānapanapa State Park",
+    "type": "beach",
+    "highlight": "Black sand set between low lava headlands, with a natural stone arch, blowholes and a hala forest along the coastal trail behind it. The water reads very bright against the rock.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Film permits and insurance are required for all filming activity, commercial, educational or non-profit projects which take place within the State’s jurisdiction.  Film permits are not required for photography or video that is only for personal use or which takes place on private property.",
+        "sourceUrl": "https://filmoffice.hawaii.gov/permit-procedures/"
+      },
+      "authority": "Hawaii Film Office (Department of Business, Economic Development & Tourism), permitting on behalf of Hawaii DLNR Division of State Parks",
+      "authorityContact": "(808) 586-2570 — https://filmoffice.hawaii.gov/permit-procedures/ ; park info (808) 984-8109"
+    },
+    "crowdWindow": {
+      "verbatim": "Visitors making parking reservations will be required to select a time slot, to spread out visitation across the day.",
+      "sourceUrl": "https://dlnr.hawaii.gov/dsp/parks/maui/waianapanapa-state-park/"
+    },
+    "privacy": null,
+    "backup": "maui-hi-hookipa-lookout",
+    "sourceUrl": "https://dlnr.hawaii.gov/dsp/parks/maui/waianapanapa-state-park/",
+    "citations": [
+      "https://dlnr.hawaii.gov/dsp/parks/maui/waianapanapa-state-park/",
+      "https://filmoffice.hawaii.gov/permit-procedures/",
+      "https://filmoffice.hawaii.gov/locations/openaccessible-sites/"
+    ],
+    "leadTimeDays": 5,
+    "fee": "Non-residents $5.00 per person entry plus $10 per vehicle parking; Hawaii residents free with driver's licence or ID. State film permit location fee: \"parks and beaches under the Department of Land and Natural Resources / Division of State Parks have a $100/day nonrefundable fee\" (filmoffice.hawaii.gov/permit-procedures/).",
+    "blocker": "Liability insurance required with the film permit. \"Waianapanapa State Park (Maui)\" was removed from the DLNR Open and Accessible list (https://filmoffice.hawaii.gov/locations/openaccessible-sites/), so a Standard Film Permit — five business days minimum — is required rather than the fast O+A ePermit.",
+    "accessNote": "This is the hardest availability constraint in the set. DLNR: \"All visitors and commercial operators will need to make reservations to enter the popular Waiʻānapana State Park on Maui, beginning on March 1.\" The park page is headed \"RESERVATIONS REQUIRED\" and reservations are time-slotted (https://dlnr.hawaii.gov/dsp/parks/maui/waianapanapa-state-park/). Reserve at https://gostateparks.hawaii.gov/waianapanapa before fixing a date. Hours 7:00am–6:00pm daily."
+  },
+  {
+    "id": "maui-hi-iao-valley-needle-lookout",
+    "destinationId": "maui-hi",
+    "name": "ʻĪao Needle Lookout, ʻĪao Valley State Monument",
+    "type": "viewpoint",
+    "highlight": "A paved 0.6-mile walk ends at a rail facing Kukaʻemoku, the green spire that rises 1,200 feet straight off the valley floor. Cloud moves through the gap above it most afternoons.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Film permits and insurance are required for all filming activity, commercial, educational or non-profit projects which take place within the State’s jurisdiction.  Film permits are not required for photography or video that is only for personal use or which takes place on private property.",
+        "sourceUrl": "https://filmoffice.hawaii.gov/permit-procedures/"
+      },
+      "authority": "Hawaii Film Office (Department of Business, Economic Development & Tourism), permitting on behalf of Hawaii DLNR Division of State Parks",
+      "authorityContact": "(808) 586-2570 — https://filmoffice.hawaii.gov/permit-procedures/"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "This valley is rich in cultural and spiritual values and is the site of the battle of Kepaniwai where the forces of Kamehameha I conquered the Maui army in 1790.",
+      "sourceUrl": "https://dlnr.hawaii.gov/dsp/parks/maui/iao-valley-state-monument/"
+    },
+    "backup": "maui-hi-hookipa-lookout",
+    "sourceUrl": "https://dlnr.hawaii.gov/dsp/parks/maui/iao-valley-state-monument/",
+    "citations": [
+      "https://dlnr.hawaii.gov/dsp/parks/maui/iao-valley-state-monument/",
+      "https://filmoffice.hawaii.gov/permit-procedures/",
+      "https://www.mauicounty.gov/DocumentCenter/View/12482/Maui-County-Film-Permit-Application-Handbook"
+    ],
+    "leadTimeDays": 5,
+    "fee": "Non-residents $5 per person entry plus $10 per vehicle parking; Hawaii residents free with Hawaii DL or ID. State film permit location fee: \"parks and beaches under the Department of Land and Natural Resources / Division of State Parks have a $100/day nonrefundable fee\" (filmoffice.hawaii.gov/permit-procedures/).",
+    "blocker": "Liability insurance required with the film permit. ʻĪao also sits inside a designated historic district, and the Maui Film Office states: \"Historic Districts: Any filming activity in certain parts of Lahaina, Iao Valley, Wailuku or any other designated historic district must be cleared through the Maui Film Office\" (https://www.mauicounty.gov/DocumentCenter/View/12482/Maui-County-Film-Permit-Application-Handbook). Expect a second clearance on top of the state permit.",
+    "accessNote": "Reservations gate the date for visitors from out of state. DLNR: \"*Advance reservations are required for out-of-State residents. Reservations can be made at https://gostateparks.hawaii.gov.\" (https://dlnr.hawaii.gov/dsp/parks/maui/iao-valley-state-monument/). Hours 7:00 am to 6:00 pm daily."
+  },
+  {
+    "id": "maui-hi-hookipa-lookout",
+    "destinationId": "maui-hi",
+    "name": "Hoʻokipa Lookout, Hoʻokipa Beach Park",
+    "type": "overlook",
+    "highlight": "A low bluff above Hoʻokipa's reef break on Maui's north shore, with sailors working the outside break and the coast running west toward Pāʻia. Late afternoon puts the sun straight down the length of the shoreline.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "County Parks Permits: Cover any production activities taking place in a county park or recreation area. A fee of $100 to $300 per day applies, depending on the activity taking place.",
+        "sourceUrl": "https://www.mauicounty.gov/DocumentCenter/View/12482/Maui-County-Film-Permit-Application-Handbook"
+      },
+      "authority": "County of Maui, Office of Economic Development — Maui Film Office (county park); Hawaii DLNR / Hawaii Film Office for the sandy beach below",
+      "authorityContact": "Maui Film Office, (808) 270-8237, filmmaui@mauicounty.gov — https://www.mauicounty.gov/DocumentCenter/View/12482/Maui-County-Film-Permit-Application-Handbook ; Maui County DPR Permits Main Office (808) 270-7389"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "maui-hi-iao-valley-needle-lookout",
+    "sourceUrl": "https://www.mauicounty.gov/DocumentCenter/View/12482/Maui-County-Film-Permit-Application-Handbook",
+    "citations": [
+      "https://www.mauicounty.gov/DocumentCenter/View/12482/Maui-County-Film-Permit-Application-Handbook",
+      "https://www.mauicounty.gov/410/Park-Permits",
+      "https://dlnr.hawaii.gov/ld/commercial-activities/"
+    ],
+    "leadTimeDays": null,
+    "fee": "$100 to $300 per day for a county parks permit, depending on the activity (Maui Film Office handbook). No entry or parking fee is published for the park itself.",
+    "blocker": "Split jurisdiction — the grassy bluff and the sand are governed by different agencies, and the Maui handbook is written for film production, not proposals, so it does not say whether a two-person engagement shoot needs a permit at all. Maui Film Office: \"Although there are exceptions, most beach parks (the grassy areas fronting sandy beaches) are on county property\" and \"State Permits: Cover all sandy beaches, airports, harbors and certain beach parks and any filming of marine activities.\" Hawaii DLNR Land Division adds the general rule for the sand: \"The general rule (with very few exceptions) is that where you have a county park, the shoreline is still under the jurisdiction of the State. Therefore, if you want your event on the sandy beach, you will need a permit from Wiki Permits. The county cannot issue you a permit for the sandy beach because that land is not under their jurisdiction.\" (https://dlnr.hawaii.gov/ld/commercial-activities/). Call the Maui Film Office to confirm before hiring a photographer.",
+    "accessNote": null
+  }
+]

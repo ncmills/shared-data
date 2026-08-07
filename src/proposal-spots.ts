@@ -146,6 +146,69 @@ export interface ProposalSpot {
   disputed?: SourcedFact[];
   sourceUrl: string;
   citations: string[];
+
+  // ───────────────────── practical fields (2026-08-07) ─────────────────────
+  // Everything above answers "can we say this?". Everything below answers
+  // "can they actually do it?" — the questions a couple hits after they have
+  // believed us.
+
+  /**
+   * Approximate centroid of the named viewpoint. BOTH OR NEITHER.
+   *
+   * These exist for one reason: golden hour is computed from them, and a
+   * proposal timed to the wrong twenty minutes is the product failing at the
+   * only thing it promises. Solar math is insensitive at this precision (0.1°
+   * of longitude moves sunset by about 24 seconds), so a centroid is honest for
+   * a sunset window and is NOT precise enough to navigate by.
+   *
+   * NEVER GUESS THESE, and never derive them from a city name. A spot without
+   * coordinates is not broken — it renders "late afternoon" instead of a clock
+   * time, and it can still be a backup and carry its own page. A spot with
+   * WRONG coordinates states a time, confidently, and is unfalsifiable to a
+   * reader. Absent is the safe value; approximate-but-real is the good one;
+   * invented is the one that does harm.
+   */
+  lat?: number;
+  lng?: number;
+  /** Minimum advance notice in days, only where the authority publishes one. */
+  leadTimeDays?: number;
+  /** Published fee, verbatim from the authority. Never estimated. */
+  fee?: string;
+  /**
+   * Practical constraints a couple must satisfy — insurance, group caps, no
+   * tripods, "bring your own car". PROSE, shown to the user.
+   *
+   * READ `capstoneEligible` BEFORE FILTERING ON THIS. The 2026-08-06 plan said
+   * to exclude any spot with a non-null `blocker` from capstone selection. That
+   * rule was written from McWay Falls, where the park says elopements and
+   * filming "will not be permitted" — and applied literally it removed 80 of
+   * 124 researched spots, because the field had also collected "no selfie
+   * sticks", "do not bring arches or trellises" and "no overnight parking".
+   * Hand-read on 2026-08-07: 3 of the 80 actually disqualify a spot. A field
+   * that mixes "you may not propose here" with "leave the tripod at home"
+   * cannot be filtered on, so the disqualification is now its own explicit,
+   * reviewable boolean and this one is prose again.
+   */
+  blocker?: string;
+  /** How to reach the spot, where that is not obvious. */
+  accessNote?: string;
+  /** A spot that does not exist for part of the year. */
+  seasonalClosure?: string;
+
+  /**
+   * May this spot carry the proposal itself?
+   *
+   * `false` ONLY when the authority forbids the moment or the place is shut:
+   * McWay Falls (elopements and filming not permitted), Portland Head Light
+   * (ceremonies and photographs not permitted on the parcel), Breakneck Ridge
+   * (closed for a two-year project). Absent means eligible — the common case.
+   *
+   * An ineligible spot is not deleted. It still appears in SEO pages and can
+   * still be someone's `backup`; it just cannot be the capstone.
+   */
+  capstoneEligible?: boolean;
+  /** Required whenever `capstoneEligible` is false. Quotes the authority. */
+  ineligibleReason?: string;
 }
 
 const isHttpUrl = (s: unknown): s is string =>
@@ -311,6 +374,25 @@ export function validateProposalSpot(input: unknown): SpotValidation {
     if (!isNonBlank(p.authorityContact)) {
       reasons.push("red: requires permit.authorityContact so 'check locally' is actionable");
     }
+  }
+
+  // Half a coordinate pair is worse than none: `lat` alone reads as "we know
+  // where this is" to anything checking truthiness, and then the solar call
+  // gets NaN for the other half.
+  const hasLat = typeof s.lat === "number" && Number.isFinite(s.lat);
+  const hasLng = typeof s.lng === "number" && Number.isFinite(s.lng);
+  if (hasLat !== hasLng) {
+    reasons.push("lat/lng: provide both or neither — half a pair computes a wrong sunset");
+  }
+  if (hasLat && (s.lat! < -90 || s.lat! > 90)) reasons.push("lat: out of range");
+  if (hasLng && (s.lng! < -180 || s.lng! > 180)) reasons.push("lng: out of range");
+
+  // An exclusion without a stated reason is indistinguishable from a typo, and
+  // this flag removes a spot from the only thing the product exists to do.
+  if (s.capstoneEligible === false && !isNonBlank(s.ineligibleReason)) {
+    reasons.push(
+      "capstoneEligible=false requires ineligibleReason quoting the authority",
+    );
   }
 
   for (const [k, v] of [
