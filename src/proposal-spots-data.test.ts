@@ -248,17 +248,23 @@ const STATE_BOUNDS: Record<string, [number, number, number, number]> = {
   FL: [23.8, 32.0, -88.5, -79.0],
   GA: [29.5, 36.0, -86.5, -80.0],
   HI: [17.8, 23.5, -161.5, -153.5],
+  // ID/NH/TN/TX/VT added 2026-08-07 (Batch 2 Group B).
+  ID: [40.9, 50.0, -118.2, -110.0],
   IL: [36.0, 43.5, -92.5, -86.5],
   MA: [40.7, 43.9, -74.5, -69.0],
   ME: [42.0, 48.5, -72.0, -66.0],
   MT: [43.5, 49.9, -117.0, -103.0],
   NC: [32.5, 37.4, -85.5, -74.5],
+  NH: [41.7, 46.3, -73.6, -69.6],
   NV: [34.0, 42.9, -121.0, -113.0],
   NY: [39.5, 46.0, -80.8, -71.0],
   OR: [41.0, 47.3, -125.5, -115.5],
   SC: [31.0, 36.2, -84.5, -77.5],
+  TN: [34.0, 37.7, -91.3, -80.6],
+  TX: [24.8, 37.5, -107.7, -92.5],
   UT: [36.0, 42.9, -115.0, -108.0],
   VA: [36.4, 39.6, -83.8, -75.1],
+  VT: [41.7, 46.0, -74.4, -70.5],
   WA: [44.5, 49.9, -125.5, -116.0],
   WY: [40.0, 45.9, -112.0, -103.0],
 };
@@ -288,6 +294,32 @@ const STATE_BOUNDS: Record<string, [number, number, number, number]> = {
 const STATE_OVERRIDE: Record<string, string> = {
   "washington-dc-hawksbill-summit": "VA",
   "bozeman-mt-artist-point": "WY",
+  // Cape Disappointment / North Head Lighthouse is in Pacific County,
+  // WASHINGTON, even though this spot files under cannon-beach-or. Added
+  // 2026-08-07 (Batch 2 Group A). Note: on today's OR/WA boxes this is
+  // provably inert the same way Artist Point is — OR's box is generous
+  // enough to reach WA's latitude band — but it states a true fact the id
+  // contradicts, which is worth keeping for the same reason Artist Point
+  // was kept (see the comment above).
+  "cannon-beach-or-north-head-lighthouse": "WA",
+  // Batch 2 Group B (2026-08-07):
+  // GNIS assigns Kuwohi (formerly Clingmans Dome) to Swain County, NORTH
+  // CAROLINA — its own Board-Decision record (09/18/2024) — even though this
+  // spot files under gatlinburg-tn; the summit itself straddles the TN-NC
+  // line and is simultaneously Tennessee's highest point. The observation
+  // tower sits on the summit itself, so this is not the feature-vs-overlook
+  // trap; it is the same shape as Artist Point above: a state fact the id
+  // contradicts. PROVABLY INERT on today's boxes, same as Artist Point and
+  // North Head above — 35.5628,-83.4985 already falls inside TN's own box.
+  "gatlinburg-tn-kuwohi-observation-tower": "NC",
+  // Las Vegas is a hub for parks in three states. Zabriskie Point is in
+  // Death Valley National Park, Inyo County, CALIFORNIA. PROVABLY INERT on
+  // today's boxes — 36.4202,-116.8122 already falls inside NV's own box.
+  "las-vegas-nv-zabriskie-point": "CA",
+  // Sunset Point is in Bryce Canyon National Park, Garfield County, UTAH.
+  // LOAD-BEARING, not decorative: -112.1660 sits outside NV's box (which
+  // stops at -113.0), so without this override the state test below fails.
+  "las-vegas-nv-bryce-sunset-point": "UT",
 };
 
 /**
