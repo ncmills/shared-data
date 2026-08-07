@@ -303,16 +303,22 @@ const STATE_OVERRIDE: Record<string, string> = {
   // was kept (see the comment above).
   "cannon-beach-or-north-head-lighthouse": "WA",
   // Batch 2 Group B (2026-08-07):
-  // Kuwohi (formerly Clingmans Dome) is in Swain County, NORTH CAROLINA —
-  // GNIS's own Board-Decision record (09/18/2024) — even though this spot
-  // files under gatlinburg-tn. The observation tower sits on the summit
-  // itself, so this is not the feature-vs-overlook trap; it is the same
-  // shape as Artist Point above: a state fact the id contradicts.
+  // GNIS assigns Kuwohi (formerly Clingmans Dome) to Swain County, NORTH
+  // CAROLINA — its own Board-Decision record (09/18/2024) — even though this
+  // spot files under gatlinburg-tn; the summit itself straddles the TN-NC
+  // line and is simultaneously Tennessee's highest point. The observation
+  // tower sits on the summit itself, so this is not the feature-vs-overlook
+  // trap; it is the same shape as Artist Point above: a state fact the id
+  // contradicts. PROVABLY INERT on today's boxes, same as Artist Point and
+  // North Head above — 35.5628,-83.4985 already falls inside TN's own box.
   "gatlinburg-tn-kuwohi-observation-tower": "NC",
   // Las Vegas is a hub for parks in three states. Zabriskie Point is in
-  // Death Valley National Park, Inyo County, CALIFORNIA.
+  // Death Valley National Park, Inyo County, CALIFORNIA. PROVABLY INERT on
+  // today's boxes — 36.4202,-116.8122 already falls inside NV's own box.
   "las-vegas-nv-zabriskie-point": "CA",
   // Sunset Point is in Bryce Canyon National Park, Garfield County, UTAH.
+  // LOAD-BEARING, not decorative: -112.1660 sits outside NV's box (which
+  // stops at -113.0), so without this override the state test below fails.
   "las-vegas-nv-bryce-sunset-point": "UT",
 };
 
