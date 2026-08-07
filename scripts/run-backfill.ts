@@ -31,7 +31,12 @@
  */
 import { buildBackfillQueue, loadAttempts, recordAttempts, type BackfillTask } from "./backfill-queue";
 import { researchBackfill } from "./research-backfill";
-import { runExpansion, type RunExpansionOptions, type RunResult } from "./run-expansion";
+import {
+  DEFAULT_RESEARCH_CONCURRENCY,
+  runExpansion,
+  type RunExpansionOptions,
+  type RunResult,
+} from "./run-expansion";
 
 export interface RunBackfillOptions
   extends Omit<RunExpansionOptions<BackfillTask>, "research" | "gapQueue" | "gapQueuePath"> {
@@ -53,6 +58,8 @@ export interface RunBackfillOptions
    * it is latched during the run, after these options are constructed.
    */
   hostSuspended?: () => boolean;
+  /** How many research calls produced NO measurement (timeout / non-zero exit). */
+  unmeasuredCalls?: () => number;
 }
 
 export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<BackfillTask>> {
@@ -105,6 +112,19 @@ export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<B
   if (opts.hostSuspended?.()) {
     console.log(
       "run-backfill: host slept mid-run — NOT recording attempts " +
+        "(those venues were never really researched)",
+    );
+  } else if (opts.unmeasuredCalls?.()) {
+    // A timeout or non-zero exit is not a verdict on a venue — the researcher
+    // never got to look. Measured 2026-08-06: 14 of 28 calls timed out, which
+    // would have struck ~112 venues that were never asked about, against an
+    // attempts file already holding 62 venues one strike from retirement at
+    // maxAttempts=3. Skipping the WHOLE run's attempts is deliberately
+    // conservative — per-venue attribution isn't available here, and this file's
+    // own doctrine is that re-asking a venue beats silently dropping it.
+    console.log(
+      `run-backfill: ${opts.unmeasuredCalls()} research call(s) produced no measurement ` +
+        "(timeout / non-zero exit) — NOT recording attempts for this run " +
         "(those venues were never really researched)",
     );
   } else if (opts.recordAttempts !== false && !opts.dryRun) {
@@ -196,11 +216,19 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   // Latched, never reset: once the host has slept mid-run, this run's "failures"
   // are no longer evidence about any venue.
   let hostSuspended = false;
+  // Latched, never reset: any call that produced no measurement (timeout, or a
+  // non-zero exit — what an upstream rate-limit looks like). Its venues were
+  // never really researched, so this run must not strike them. Same doctrine as
+  // hostSuspended directly below; that case had a seam and these did not.
+  let unmeasuredCalls = 0;
   const researcher = noResearch
     ? async () => []
     : (await import("./researcher-claude")).claudeResearcher({
         onSuspended: () => {
           hostSuspended = true;
+        },
+        onUnmeasured: () => {
+          unmeasuredCalls++;
         },
         // WIRE THE DIAGNOSTIC LOG. `claudeResearcher` is fail-safe by design —
         // it returns [] on a timeout, a non-zero exit, or a parse failure — so
@@ -210,6 +238,16 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         log: (m: string) => console.log(`  ${m}`),
         timeoutMs: num("researcher-timeout-ms", 180_000),
       });
+
+  // How many research calls run at once. The loop used to be strictly
+  // sequential, so a top-K=40 run was 40 × up-to-180s of wall clock (~1h52m),
+  // and ~59% of that was spent inside calls that timed out and returned
+  // nothing. Bounded on purpose — `--research-concurrency=40` would put 40
+  // `claude -p` processes on the machine at once.
+  const researchConcurrency = Math.max(
+    1,
+    Math.floor(num("research-concurrency", DEFAULT_RESEARCH_CONCURRENCY)),
+  );
 
   const maxVenuesPerTask = num("max-venues-per-task", 8);
   const q = buildBackfillQueue(undefined, { maxVenuesPerTask });
@@ -227,7 +265,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     pushPr,
     researcher,
     maxVenuesPerTask,
+    researchConcurrency,
     hostSuspended: () => hostSuspended,
+    unmeasuredCalls: () => unmeasuredCalls,
   });
 
   // Print what was actually sourced. On a dry run this IS the deliverable —

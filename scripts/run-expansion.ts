@@ -23,6 +23,26 @@
  * with an explicit reason (and `log()`'d). The caller can always see exactly
  * what was left on the table and why.
  *
+ * ── CONCURRENT RESEARCH (2026-08-06) ───────────────────────────────────────
+ * Step 1 used to be a strictly sequential `for…of await`, so a top-K=40 run
+ * cost 40 × up-to-180s of wall clock — ~1h52m, of which ~59% was spent inside
+ * research calls that timed out and returned nothing. The task loop is now a
+ * BOUNDED WORKER POOL (`researchConcurrency`, default 6). Bounded, never
+ * `Promise.all` over the whole batch: 40 simultaneous `claude -p` processes
+ * would thrash the machine and starve each other.
+ *
+ * THE CORRECTNESS PROPERTY THIS MUST NOT BREAK: `perTask` is consumed in
+ * gap-priority order by the rowCap step below, so which rows survive the cap
+ * depends on task ORDER. Results are therefore written into a PRE-SIZED array
+ * by index and read back in `tasksConsidered` order — completion order never
+ * leaks into the output. `rejections` is flattened in the same task order for
+ * the same reason. Only the LOG lines interleave (each carries its task id and
+ * `[i/N]` position), because they are emitted as calls finish.
+ *
+ * A research call that THROWS is contained to its own task: it contributes 0
+ * rows, is recorded in `rejections` with `index: -1`, and the run continues.
+ * One unlucky task must never abort a 40-task batch.
+ *
  * ── dryRun ──────────────────────────────────────────────────────────────────
  * `dryRun:true` runs research + validation + reporting ONLY. It never calls
  * `ingest` and never calls `propose` — no file is written, no branch created.
@@ -206,9 +226,58 @@ export interface RunExpansionOptions<T extends ExpansionTask = GapTask> {
   propose?: (opts: ProposePrOptions) => ProposePrResult;
   /** Injected logger (tests capture). Defaults to `console.log`. */
   log?: (msg: string) => void;
+  /**
+   * How many research calls may be in flight at once. Default
+   * `DEFAULT_RESEARCH_CONCURRENCY` (6). Clamped to >= 1 and to the number of
+   * tasks. This is a POOL WIDTH, not a batch size — results are still
+   * assembled in `tasksConsidered` order (see the header note).
+   */
+  researchConcurrency?: number;
 }
 
 // ─── helpers ────────────────────────────────────────────────────────────────
+
+/**
+ * Default research pool width. 6 is deliberately modest: each slot is a whole
+ * `claude -p` process doing sequential WebSearch/WebFetch round-trips, and the
+ * machine also has to stay usable while an unattended run is in flight.
+ */
+export const DEFAULT_RESEARCH_CONCURRENCY = 6;
+
+/**
+ * Run `worker` over `items` with at most `limit` invocations in flight, and
+ * return the results in INPUT ORDER regardless of completion order.
+ *
+ * Order is preserved structurally, not by sorting afterwards: the output array
+ * is pre-sized and each worker writes to its own index. There is no path by
+ * which a fast task can displace a slow one.
+ *
+ * Exactly `width` runners are started and each awaits ONE worker at a time, so
+ * in-flight count is bounded by construction (not by a counter that could
+ * drift). `worker` must not reject — callers wrap their own try/catch — but a
+ * rejection here would still propagate rather than be swallowed.
+ */
+export async function mapWithConcurrency<A, B>(
+  items: readonly A[],
+  limit: number,
+  worker: (item: A, index: number) => Promise<B>,
+): Promise<B[]> {
+  const out = new Array<B>(items.length);
+  if (items.length === 0) return out;
+  const requested = Math.floor(limit);
+  const width = Math.max(1, Math.min(Number.isFinite(requested) ? requested : 1, items.length));
+
+  let next = 0;
+  const runners = Array.from({ length: width }, async () => {
+    for (;;) {
+      const i = next++;
+      if (i >= items.length) return;
+      out[i] = await worker(items[i], i);
+    }
+  });
+  await Promise.all(runners);
+  return out;
+}
 
 function loadGapQueue<T extends ExpansionTask>(opts: RunExpansionOptions<T>): T[] {
   if (opts.tasks) return opts.tasks;
@@ -260,25 +329,69 @@ export async function runExpansion<T extends ExpansionTask = GapTask>(
   );
 
   // ── Step 1: research each considered task (validated survivors only) ──────
+  //
+  // Concurrent, bounded, ORDER-PRESERVING — see the header note. Completion
+  // order affects only when a log line is printed, never what the run ingests.
+  const noun = opts.taskNoun ?? "gap";
+  const concurrency = opts.researchConcurrency ?? DEFAULT_RESEARCH_CONCURRENCY;
+  const total = tasksConsidered.length;
+  if (total > 1) {
+    say(
+      `  researching ${total} task(s) with up to ${Math.min(Math.max(1, Math.floor(concurrency) || 1), total)} ` +
+        `concurrent research call(s); results are assembled in queue order`,
+    );
+  }
+
+  const outcomes = await mapWithConcurrency(tasksConsidered, concurrency, async (task, i) => {
+    const at = `[${i + 1}/${total}]`;
+    const meta = `${task.deficit === undefined ? "" : `deficit=${task.deficit}, `}leverage=${task.leverageScore}`;
+    try {
+      const res = opts.research
+        ? await opts.research(task)
+        : await researchGap(task as unknown as GapTask, opts.researcher, {
+            liveUrlCheck: opts.liveUrlCheck,
+            verifyUrl: opts.verifyUrl,
+          });
+      say(
+        `  ${at} ${noun} ${task.id}: ${res.rows.length} valid row(s), ${res.rejected} rejected (${meta})`,
+      );
+      return {
+        task,
+        rows: res.rows,
+        rejected: res.rejected,
+        rejections: (res.rejections ?? []).map((r) => ({
+          taskId: task.id,
+          index: r.index,
+          reasons: r.reasons,
+        })),
+      };
+    } catch (e) {
+      // CONTAINED, NOT FATAL. `claudeResearcher` is already fail-safe, but
+      // `research` is an injection seam and anything upstream of the researcher
+      // (prompt building, a live-URL verifier, an injected mock) can still
+      // throw. One task must not take a 40-task run down — and the failure must
+      // be VISIBLE, not swallowed into a silent zero. `index: -1` marks it as a
+      // task-level failure rather than a rejected candidate; `rejectedCandidates`
+      // deliberately does NOT move, because no candidate was ever produced.
+      const reason = `research threw for task ${task.id}: ${e instanceof Error ? e.message : String(e)}`;
+      say(`  ${at} ${noun} ${task.id}: RESEARCH FAILED — ${reason} (${meta}); run continues`);
+      return {
+        task,
+        rows: [] as ResearchedRow[],
+        rejected: 0,
+        rejections: [{ taskId: task.id, index: -1, reasons: [reason] }],
+      };
+    }
+  });
+
+  // Assemble in QUEUE ORDER — `outcomes` is index-aligned to `tasksConsidered`.
   const perTask: { task: T; rows: ResearchedRow[] }[] = [];
   let rejectedCandidates = 0;
   const rejections: { taskId: string; index: number; reasons: string[] }[] = [];
-  for (const task of tasksConsidered) {
-    const res = opts.research
-      ? await opts.research(task)
-      : await researchGap(task as unknown as GapTask, opts.researcher, {
-          liveUrlCheck: opts.liveUrlCheck,
-          verifyUrl: opts.verifyUrl,
-        });
-    rejectedCandidates += res.rejected;
-    for (const r of res.rejections ?? []) {
-      rejections.push({ taskId: task.id, index: r.index, reasons: r.reasons });
-    }
-    say(
-      `  ${opts.taskNoun ?? "gap"} ${task.id}: ${res.rows.length} valid row(s), ${res.rejected} rejected ` +
-        `(${task.deficit === undefined ? "" : `deficit=${task.deficit}, `}leverage=${task.leverageScore})`,
-    );
-    perTask.push({ task, rows: res.rows });
+  for (const o of outcomes) {
+    rejectedCandidates += o.rejected;
+    rejections.push(...o.rejections);
+    perTask.push({ task: o.task, rows: o.rows });
   }
   const researchedRows = perTask.flatMap((p) => p.rows);
 
@@ -517,6 +630,8 @@ export interface CliConfig {
   liveUrlCheck: boolean;
   /** Use the real headless-claude researcher (true in `--auto`). */
   useClaudeResearcher: boolean;
+  /** Research pool width (`--research-concurrency`). */
+  researchConcurrency: number;
   /** Supervised path: JSON file of pre-verified candidate rows (non-auto). */
   candidatesPath?: string;
 }
@@ -528,6 +643,10 @@ export function deriveCliConfig(args: Record<string, string | boolean>): CliConf
   const auto = args["auto"] === true;
   const label = String(args["label"] ?? `expansion-${new Date().toISOString().slice(0, 10)}`);
   const candidatesPath = typeof args["candidates"] === "string" ? args["candidates"] : undefined;
+  const rawConcurrency = Number(args["research-concurrency"]);
+  const researchConcurrency = Number.isFinite(rawConcurrency)
+    ? Math.max(1, Math.floor(rawConcurrency))
+    : DEFAULT_RESEARCH_CONCURRENCY;
 
   if (auto) {
     // --auto implies: real researcher + live-URL gate ON + push ON.
@@ -541,6 +660,7 @@ export function deriveCliConfig(args: Record<string, string | boolean>): CliConf
       pushPr: !dryRun,
       liveUrlCheck: true,
       useClaudeResearcher: true,
+      researchConcurrency,
       candidatesPath,
     };
   }
@@ -556,6 +676,7 @@ export function deriveCliConfig(args: Record<string, string | boolean>): CliConf
     pushPr: false,
     liveUrlCheck: args["skip-live-check"] !== true,
     useClaudeResearcher: false,
+    researchConcurrency,
     candidatesPath,
   };
 }
@@ -593,6 +714,7 @@ if (isMain) {
     label: cfg.label,
     liveUrlCheck: cfg.liveUrlCheck,
     pushPr: cfg.pushPr,
+    researchConcurrency: cfg.researchConcurrency,
     researcher,
   })
     .then((res) => {
