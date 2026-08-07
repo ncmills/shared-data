@@ -288,6 +288,14 @@ const STATE_BOUNDS: Record<string, [number, number, number, number]> = {
 const STATE_OVERRIDE: Record<string, string> = {
   "washington-dc-hawksbill-summit": "VA",
   "bozeman-mt-artist-point": "WY",
+  // Cape Disappointment / North Head Lighthouse is in Pacific County,
+  // WASHINGTON, even though this spot files under cannon-beach-or. Added
+  // 2026-08-07 (Batch 2 Group A). Note: on today's OR/WA boxes this is
+  // provably inert the same way Artist Point is — OR's box is generous
+  // enough to reach WA's latitude band — but it states a true fact the id
+  // contradicts, which is worth keeping for the same reason Artist Point
+  // was kept (see the comment above).
+  "cannon-beach-or-north-head-lighthouse": "WA",
 };
 
 /**
