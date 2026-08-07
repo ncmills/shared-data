@@ -193,3 +193,20 @@ test("validateProposalSpot rejects half a coordinate pair", () => {
   assert.equal(validateProposalSpot({ ...base, lat: 40.7, lng: -73.9 }).ok, true);
   assert.equal(validateProposalSpot({ ...base, lat: undefined, lng: undefined }).ok, true);
 });
+
+test("the rows are reachable from the package root", async () => {
+  // #25 exported nothing and engagedmoon forked the dataset. #27 exported the
+  // schema and left the rows unreachable, so the fork could not be undone. The
+  // rule both times: a module nothing can import is a module nothing can be
+  // checked against. This asserts the package ROOT, not the file.
+  const root = await import("./index");
+  const data = (root as Record<string, unknown>).PROPOSAL_SPOTS_DATA;
+  assert.ok(Array.isArray(data), "PROPOSAL_SPOTS_DATA must resolve from the package root");
+  assert.equal((data as unknown[]).length, PROPOSAL_SPOTS_DATA.length);
+  for (const name of ["CAPSTONE_ELIGIBLE_SPOTS", "SPOTS_WITH_COORDINATES"]) {
+    assert.ok(
+      Array.isArray((root as Record<string, unknown>)[name]),
+      `${name} must resolve from the package root — consumers gate on it`,
+    );
+  }
+});

@@ -32,6 +32,13 @@ export * from "./tagging-rules";
 // own repo and drifted for a week. The schema is only load-bearing if the
 // consumer actually reads it.
 export * from "./proposal-spots";
+// ...and the ROWS, for the same reason, which #27 missed while fixing exactly
+// this bug one file over: it exported the schema and left the 144 rows
+// unreachable, so `PROPOSAL_SPOTS_DATA` did not resolve from the package root
+// and engagedmoon's first attempt to stop forking the dataset failed to
+// compile. A schema without its rows is the same unreachable module in a
+// smaller costume.
+export * from "./proposal-spots-data";
 
 // 2026-06-24 expansion: the canonical catalog is now the core set plus the
 // region/international expansion files. New cities land in a
