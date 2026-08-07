@@ -1,0 +1,348 @@
+[
+  {
+    "id": "stateline-nv-sand-harbor-boulders",
+    "destinationId": "stateline-nv",
+    "name": "Sand Harbor Boulders, Lake Tahoe Nevada State Park",
+    "type": "beach",
+    "highlight": "Rounded granite boulders sit right in the shallows, and the water over the white sand reads turquoise before it drops to cobalt a few yards out. Early morning the lake is glass and the Sierra rim across the water catches first light.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Photographers/videographers utilizing the park for commercial use (including but not limited to: social media influencing or promotion, print ads, movies, wedding, engagement, family, or senior photos, or any service that would normally be expected to be paid for under regular client/vendor circumstances) are required to get a photography permit.",
+        "sourceUrl": "https://parks.nv.gov/parks/lake-tahoe-nevada-state-park"
+      },
+      "authority": "Nevada Division of State Parks",
+      "authorityContact": "775-831-0494 / shsp@parks.nv.gov"
+    },
+    "crowdWindow": {
+      "verbatim": "From Memorial to Labor Day Sand Harbor is very popular and experiences high visitation. Those planning to visit Sand Harbor should be prepared for park closures and have an alternate destination in mind.",
+      "sourceUrl": "https://parks.nv.gov/parks/lake-tahoe-nevada-state-park"
+    },
+    "privacy": {
+      "verbatim": "Asking users to move from an area on the beach is strickly prohibited and will result in immediate revocation of the group area.",
+      "sourceUrl": "https://parks.nv.gov/parks/lake-tahoe-nevada-state-park"
+    },
+    "backup": "stateline-nv-spooner-lake",
+    "sourceUrl": "https://parks.nv.gov/parks/lake-tahoe-nevada-state-park",
+    "citations": [
+      "https://parks.nv.gov/parks/lake-tahoe-nevada-state-park",
+      "https://parks.nv.gov/fees/photography-permits"
+    ],
+    "leadTimeDays": 14,
+    "fee": "Class A photography permit $50 per day (1-3 vehicles or 2-15 people); $500/year annual. Plus a $25 non-refundable application fee. Park entry $10.00 ($15.00 for Non-NV Vehicles) is charged separately.",
+    "blocker": "Certificate of liability insurance required with a $2 million general aggregate / $1 million per occurrence minimum, plus a separate additional insured endorsement naming \"The State of Nevada, Division of State Parks, Department of Conservation and Natural Resources, its officers, employees, and agents as additional insured under the terms of this policy.\" Applications filed later than two weeks out are automatically denied; the statewide page separately instructs applying at least 30 days ahead."
+  },
+  {
+    "id": "stateline-nv-spooner-lake",
+    "destinationId": "stateline-nv",
+    "name": "Spooner Lake, Lake Tahoe Nevada State Park",
+    "type": "trail",
+    "highlight": "A small lake ringed by aspens at the top of the Spooner grade, with a flat two-mile loop trail and benches on the water. In late September the aspen stands go gold and the crowd thins to hikers heading for the Flume Trail.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Commercial Photography: Photography engaged in for financial gain, including, without limitation, the sale of a photographic image as a product or for use in advertising, motion pictures, portraits, television productions, portfolios, or the archiving of an image by a person who uses photographic skills, equipment, or resources to provide a photographic product for sale.",
+        "sourceUrl": "https://parks.nv.gov/fees/photography-permits"
+      },
+      "authority": "Nevada Division of State Parks",
+      "authorityContact": "775-749-5980 / slsp@parks.nv.gov"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "stateline-nv-sand-harbor-boulders",
+    "sourceUrl": "https://parks.nv.gov/parks/spooner-lake",
+    "citations": [
+      "https://parks.nv.gov/parks/spooner-lake",
+      "https://parks.nv.gov/fees/photography-permits"
+    ],
+    "leadTimeDays": 30,
+    "fee": "Class A photography permit $50 per day (1-3 vehicles or 2-15 people), plus a $25 non-refundable application fee. Park entry $10.00 ($15.00 for Non-NV Vehicles).",
+    "blocker": "Certificate of liability insurance required: $2 million general aggregate, $1 million per occurrence, plus a separate additional insured endorsement naming the State of Nevada."
+  },
+  {
+    "id": "las-vegas-nv-valley-of-fire-white-domes",
+    "destinationId": "las-vegas-nv",
+    "name": "White Domes, Valley of Fire State Park",
+    "type": "trail",
+    "highlight": "A mile-long loop through a slot canyon that opens onto banded sandstone the color of raw salmon, streaked white and lavender. The last hour of light turns the rock the same red as the name suggests.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Commercial Photography: Photography engaged in for financial gain, including, without limitation, the sale of a photographic image as a product or for use in advertising, motion pictures, portraits, television productions, portfolios, or the archiving of an image by a person who uses photographic skills, equipment, or resources to provide a photographic product for sale.",
+        "sourceUrl": "https://parks.nv.gov/fees/photography-permits"
+      },
+      "authority": "Nevada Division of State Parks",
+      "authorityContact": "702-397-2088 / vofsp@parks.nv.gov"
+    },
+    "crowdWindow": {
+      "verbatim": "During the closure, the park is closed to all visitors, including those entering on foot. Camping reservations are not available, and all commercial activities such as weddings, photo shoots, and guided tours, are prohibited.",
+      "sourceUrl": "https://parks.nv.gov/parks/valley-of-fire"
+    },
+    "privacy": null,
+    "backup": "las-vegas-nv-spring-mountain-ranch",
+    "sourceUrl": "https://parks.nv.gov/parks/valley-of-fire",
+    "citations": [
+      "https://parks.nv.gov/parks/valley-of-fire",
+      "https://parks.nv.gov/fees/photography-permits",
+      "https://parks.nv.gov/uploads/documents/2021_VOF_Photo__Filming_Application.pdf"
+    ],
+    "leadTimeDays": 30,
+    "fee": "Class A photography permit $50 per day, plus a $25 non-refundable application fee, plus a $100/day non-refundable date-reservation fee at Valley of Fire. Park entry $10.00 ($15.00 for Non-NV Vehicles) charged separately.",
+    "blocker": "Valley of Fire's own photography rules state \"Filming/photography prohibited on weekends and holidays (Class A photography is the exception).\" and \"There is a $100/day non-refundable fee to reserve dates. This fee is in addition to permit fees.\" Certificate of liability insurance and an additional insured endorsement naming the State of Nevada are required. The park also closes entirely December 1 through December 14 each year."
+  },
+  {
+    "id": "las-vegas-nv-spring-mountain-ranch",
+    "destinationId": "las-vegas-nv",
+    "name": "Spring Mountain Ranch State Park",
+    "type": "historic-site",
+    "highlight": "A green lawn and a spring-fed creek at the foot of the Wilson Cliffs, half an hour from the Strip. The old ranch house and cottonwoods give you shade and a foreground; the sandstone escarpment does the rest at sunset.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "A photo application is required for all staged photos at Spring Mountain Ranch State Park.",
+        "sourceUrl": "https://parks.nv.gov/uploads/documents/2025_SMRSP_photo_application.pdf"
+      },
+      "authority": "Nevada Division of State Parks",
+      "authorityContact": "smrsp@parks.nv.gov / Nevada State Parks 775-684-2770"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Due to the sensitive nature of the park's significant resources, photography and filming is limited to pre-approved areas only.",
+      "sourceUrl": "https://parks.nv.gov/uploads/documents/2025_SMRSP_photo_application.pdf"
+    },
+    "backup": "las-vegas-nv-valley-of-fire-white-domes",
+    "sourceUrl": "https://parks.nv.gov/uploads/documents/2025_SMRSP_photo_application.pdf",
+    "citations": [
+      "https://parks.nv.gov/uploads/documents/2025_SMRSP_photo_application.pdf",
+      "https://parks.nv.gov/fees/photography-permits"
+    ],
+    "leadTimeDays": 30,
+    "fee": "Class A photography permit $50 per day, plus a $25 non-refundable application fee. Entry fees apply to all visitors in addition to photography fees.",
+    "blocker": "Certificate of liability insurance plus a separate additional insured endorsement naming the State of Nevada. The application states \"Fully completed application and insurance requirements must be submitted to: crichardson@parks.nv.gov and smrsp@parks.nv.gov no less than 30 days prior to date requested\" and that \"Submission of application does not guarantee a permit.\""
+  },
+  {
+    "id": "las-vegas-nv-cathedral-gorge-moon-caves",
+    "destinationId": "las-vegas-nv",
+    "name": "Moon Caves, Cathedral Gorge State Park",
+    "type": "park",
+    "highlight": "Narrow bentonite clay slots you can walk into shoulder-width, opening to buff-colored spires that look poured rather than eroded. The canyon holds shade most of the day, so the light inside stays soft when everything above it is blown out.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Commercial Photography: Photography engaged in for financial gain, including, without limitation, the sale of a photographic image as a product or for use in advertising, motion pictures, portraits, television productions, portfolios, or the archiving of an image by a person who uses photographic skills, equipment, or resources to provide a photographic product for sale.",
+        "sourceUrl": "https://parks.nv.gov/fees/photography-permits"
+      },
+      "authority": "Nevada Division of State Parks",
+      "authorityContact": "775-728-8101 / cgsp@parks.nv.gov"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "las-vegas-nv-valley-of-fire-white-domes",
+    "sourceUrl": "https://parks.nv.gov/parks/cathedral-gorge",
+    "citations": [
+      "https://parks.nv.gov/parks/cathedral-gorge",
+      "https://parks.nv.gov/fees/photography-permits"
+    ],
+    "leadTimeDays": 30,
+    "fee": "Class A photography permit $50 per day, plus a $25 non-refundable application fee. Day use entrance fee: $5.00 per vehicle (Non-NV Vehicles $10.00 per vehicle).",
+    "blocker": "Certificate of liability insurance required: $2 million general aggregate, $1 million per occurrence, plus a separate additional insured endorsement naming the State of Nevada."
+  },
+  {
+    "id": "las-vegas-nv-snow-canyon-overlook",
+    "destinationId": "las-vegas-nv",
+    "name": "Snow Canyon Scenic Overlook, Snow Canyon State Park",
+    "type": "scenic-overlook",
+    "highlight": "White Navajo sandstone lying in cross-bedded waves against black lava flow, with the canyon floor a couple hundred feet below. It was named an International Dark Sky Destination in 2025, so the same spot works after the sun is gone.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "This includes professional photographers/videographers and their clients using the canyon for shoots that include weddings, engagements, bridals, family group photos, prom, senior photos or other posed portraiture for commercial gain.",
+        "sourceUrl": "https://stateparks.utah.gov/wp-content/uploads/sites/13/2026/02/Professional-Photography-in-Snow-Canyon-2026.pdf"
+      },
+      "authority": "Utah Division of State Parks - Snow Canyon State Park",
+      "authorityContact": "435-628-2255 / snowcanyon@utah.gov"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Shoots are only permitted in areas open to the public, i.e. no special access privileges are granted with your pass.",
+      "sourceUrl": "https://stateparks.utah.gov/wp-content/uploads/sites/13/2026/02/Professional-Photography-in-Snow-Canyon-2026.pdf"
+    },
+    "backup": "salt-lake-city-ut-antelope-island-buffalo-point",
+    "sourceUrl": "https://stateparks.utah.gov/wp-content/uploads/sites/13/2026/02/Professional-Photography-in-Snow-Canyon-2026.pdf",
+    "citations": [
+      "https://stateparks.utah.gov/wp-content/uploads/sites/13/2026/02/Professional-Photography-in-Snow-Canyon-2026.pdf",
+      "https://stateparks.utah.gov/parks/snow-canyon/permits/"
+    ],
+    "leadTimeDays": 5,
+    "fee": "Annual Professional Photography pass, purchased by the photographer: \"Tier 1: $225. Allows up to 5 professional shoots per year.\" / \"Tier 2: $400. Allows up to 10 professional shoots per year.\"",
+    "blocker": "There is no one-off option. The park states \"Note: One-time Special Use Permits are not issued for professional photography portrait sessions.\" and \"Passes must be purchased by the photographer (not client) at least five days in advance of shoot.\" If your photographer does not already hold a current Snow Canyon annual pass, they must buy one before your shoot, and every individual shoot must also be pre-scheduled by email at least five days out."
+  },
+  {
+    "id": "moab-ut-dead-horse-point",
+    "destinationId": "moab-ut",
+    "name": "Dead Horse Point Overlook",
+    "type": "scenic-overlook",
+    "highlight": "A narrow neck of rock 2,000 feet above a gooseneck bend in the Colorado River, with the Canyonlands benches stepping away in red and white. The railed overlook is a short flat walk from the parking area, which matters if one of you is not expecting to be walking anywhere in particular.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "SPECIAL USE PERMITS are required for any event or activity beyond the activities of normal park use. Commercial activities such as filming, photography, hiking tours, biking tours, workshops, and weddings all require a SUPs.",
+        "sourceUrl": "https://stateparks.utah.gov/parks/dead-horse/special-use-permits/"
+      },
+      "authority": "Utah Division of State Parks - Dead Horse Point State Park",
+      "authorityContact": "435-259-2614 / ecappa@utah.gov"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "moab-ut-goblin-valley",
+    "sourceUrl": "https://stateparks.utah.gov/parks/dead-horse/special-use-permits/",
+    "citations": [
+      "https://stateparks.utah.gov/parks/dead-horse/special-use-permits/",
+      "https://stateparks.utah.gov/resources/special-event-policy-and-process/"
+    ],
+    "leadTimeDays": 30,
+    "fee": "\"There is a $10 application fee and a Special Use Permit fee that starts at $50.\"",
+    "blocker": "The park states \"Some commercial activities will need to supply a current commercial general liability COI (listing Utah State Parks, 1594 W. North Temple #116, Salt Lake City, UT 84116 as additionally insured). Required limits vary depending on the activity/event.\" The park also warns \"This page applies only to Dead Horse Point State Park. We cannot process, approve, or advise on any permit for any other park or jurisdiction.\""
+  },
+  {
+    "id": "moab-ut-goblin-valley",
+    "destinationId": "moab-ut",
+    "name": "Valley of Goblins, Goblin Valley State Park",
+    "type": "park",
+    "highlight": "A basin floor of thousands of mushroom-shaped hoodoos in Entrada sandstone, all roughly person-height, that you are allowed to walk freely among. It is a certified dark-sky park, so the same basin under the Milky Way is a second, different spot.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Special Use Permits are required for these types of events and activities so that State Parks personnel can best serve your needs while balancing the needs of other park visitors and the capacity of each park and facility. Visit our individual park pages to find staff contact for the park where you plan to host your event. Staff will work with you to determine IF a Special Use Permit will be required and IF your event or activity can be approved.",
+        "sourceUrl": "https://stateparks.utah.gov/resources/special-event-policy-and-process/"
+      },
+      "authority": "Utah Division of State Parks - Goblin Valley State Park",
+      "authorityContact": "435-259-3710 or 435-275-4584"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "moab-ut-dead-horse-point",
+    "sourceUrl": "https://stateparks.utah.gov/parks/goblin-valley/",
+    "citations": [
+      "https://stateparks.utah.gov/parks/goblin-valley/",
+      "https://stateparks.utah.gov/resources/special-event-policy-and-process/",
+      "https://stateparks.utah.gov/wp-content/uploads/sites/13/2023/08/Utah-State-Parks-Administrative-Rules-for-Commercial-Activities-Aug-2023.pdf"
+    ],
+    "leadTimeDays": 30,
+    "fee": "\"There is a $10 application fee and a Special Use Permit fee that starts at $50.\"",
+    "blocker": "Goblin Valley publishes no park-specific photography policy, so the statewide Special Use Permit route applies and park staff decide case by case. Utah's administrative rule requires the request \"at least 30 business days before the proposed Commercial Activity, privileged, or Special Use\" and notes \"Liability insurance may be required.\""
+  },
+  {
+    "id": "salt-lake-city-ut-antelope-island-buffalo-point",
+    "destinationId": "salt-lake-city-ut",
+    "name": "Buffalo Point, Antelope Island State Park",
+    "type": "scenic-overlook",
+    "highlight": "A short climb to a rock shoulder over the north end of the Great Salt Lake, with the Wasatch across the water and bison usually somewhere below you. At sunset the lake goes flat pink and the island's shadow runs out across it.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Portrait Photography Passes* are required for any hired photographer and/or videographer conducting sessions at Antelope Island State Park. This includes photographers utilizing the park for weddings, bridals, engagements, family groups, graduation or other posed portraiture for commercial gain.",
+        "sourceUrl": "https://stateparks.utah.gov/wp-content/uploads/sites/13/2023/03/Photography-Pass-Terms-and-Conditions.pdf"
+      },
+      "authority": "Utah Division of State Parks - Antelope Island State Park",
+      "authorityContact": "801-725-9263 / wendywilson@utah.gov"
+    },
+    "crowdWindow": {
+      "verbatim": "There are many days each year where visitation is very high and wait times to enter the park may be great than 30 minutes. Your pass does not guarantee access, parking or special entry into the park.",
+      "sourceUrl": "https://stateparks.utah.gov/wp-content/uploads/sites/13/2023/03/Photography-Pass-Terms-and-Conditions.pdf"
+    },
+    "privacy": {
+      "verbatim": "Shoots are only permitted in areas open to the general public.",
+      "sourceUrl": "https://stateparks.utah.gov/wp-content/uploads/sites/13/2023/03/Photography-Pass-Terms-and-Conditions.pdf"
+    },
+    "backup": "salt-lake-city-ut-bonneville-salt-flats",
+    "sourceUrl": "https://stateparks.utah.gov/wp-content/uploads/sites/13/2023/03/Photography-Pass-Terms-and-Conditions.pdf",
+    "citations": [
+      "https://stateparks.utah.gov/wp-content/uploads/sites/13/2023/03/Photography-Pass-Terms-and-Conditions.pdf",
+      "https://stateparks.utah.gov/parks/antelope-island/frequently-asked-questions/"
+    ],
+    "leadTimeDays": 0,
+    "fee": "Day Portrait Photography Pass: \"$40.00 per day\". Annual Portrait Photography Pass: \"$115.00 if purchased January - June\" / \"$85.00 if purchased July - December\".",
+    "blocker": null
+  },
+  {
+    "id": "salt-lake-city-ut-bonneville-salt-flats",
+    "destinationId": "salt-lake-city-ut",
+    "name": "Bonneville Salt Flats",
+    "type": "viewpoint",
+    "highlight": "Thirty thousand acres of hard white salt crust with the Silver Island range on the horizon and no other reference point at all. After a shallow rain the surface mirrors the sky and the two of you are the only vertical thing in the frame.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "The salt flats are used for land speed racing, archery competitions, running races, photography, videography, and scientific research projects. Public wishing to utilize the salt flats for these purposes need a special recreation or film permit from the BLM Salt Lake Field Office.",
+        "sourceUrl": "https://www.blm.gov/visit/bonneville-salt-flats"
+      },
+      "authority": "Bureau of Land Management, Salt Lake Field Office",
+      "authorityContact": "801-320-8300 / https://www.blm.gov/office/salt-lake-field-office"
+    },
+    "crowdWindow": {
+      "verbatim": "During permitted racing and private events in 2026, the salt flats will be temporarily closed to general access to support event safety and resource protection.",
+      "sourceUrl": "https://www.blm.gov/visit/bonneville-salt-flats"
+    },
+    "privacy": null,
+    "backup": "salt-lake-city-ut-antelope-island-buffalo-point",
+    "sourceUrl": "https://www.blm.gov/visit/bonneville-salt-flats",
+    "citations": [
+      "https://www.blm.gov/visit/bonneville-salt-flats",
+      "https://www.blm.gov/office/salt-lake-field-office"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "Different authority from the Utah state parks on this list: this is federal BLM land, not a state park, so the state park permit and pass rules do not apply here. BLM's page does not say whether a small hired-photographer portrait session counts as commercial use needing a Special Recreation Permit, and it does not publish a permit fee or lead time for one. The page also notes \"Motor vehicle use is limited by seasonal closure during the spring when the salt is moist or has standing water on the surface. Closure dates may vary and will be posted by sign.\" Call the Salt Lake Field Office before booking a photographer."
+  },
+  {
+    "id": "park-city-ut-jordanelle-hailstone",
+    "destinationId": "park-city-ut",
+    "name": "Hailstone Overlook, Jordanelle State Park",
+    "type": "overlook",
+    "highlight": "A bench of sagebrush above Jordanelle Reservoir with the Deer Valley ridgelines on one side and Mount Timpanogos closing the far end. Fifteen minutes from Park City's Main Street, and quiet on a weekday evening.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Special Use Permits are required for these types of events and activities so that State Parks personnel can best serve your needs while balancing the needs of other park visitors and the capacity of each park and facility. Visit our individual park pages to find staff contact for the park where you plan to host your event. Staff will work with you to determine IF a Special Use Permit will be required and IF your event or activity can be approved.",
+        "sourceUrl": "https://stateparks.utah.gov/resources/special-event-policy-and-process/"
+      },
+      "authority": "Utah Division of State Parks - Jordanelle State Park",
+      "authorityContact": "435-649-9540 / jordanelle@utah.gov"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "salt-lake-city-ut-antelope-island-buffalo-point",
+    "sourceUrl": "https://stateparks.utah.gov/parks/jordanelle/",
+    "citations": [
+      "https://stateparks.utah.gov/parks/jordanelle/",
+      "https://stateparks.utah.gov/resources/special-event-policy-and-process/",
+      "https://stateparks.utah.gov/wp-content/uploads/sites/13/2023/08/Utah-State-Parks-Administrative-Rules-for-Commercial-Activities-Aug-2023.pdf"
+    ],
+    "leadTimeDays": 30,
+    "fee": "\"There is a $10 application fee and a Special Use Permit fee that starts at $50.\"",
+    "blocker": "Jordanelle publishes no park-specific photography pass, unlike Antelope Island and Snow Canyon, so the statewide Special Use Permit route applies and park staff decide case by case. Utah's administrative rule requires the request \"at least 30 business days before the proposed Commercial Activity, privileged, or Special Use\" and notes \"Liability insurance may be required.\""
+  }
+]

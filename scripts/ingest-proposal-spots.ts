@@ -61,6 +61,42 @@ if (files.length === 0) {
   process.exit(2);
 }
 
+/**
+ * Spots that may not carry the proposal, hand-read rather than pattern-matched.
+ * See the `$comment` block in the file itself for why it is not a regex.
+ */
+interface Exclusion { id: string; reason: string; recheck?: string }
+const EXCLUSIONS = new Map<string, Exclusion>();
+{
+  const path = "data/proposal-spot-research/capstone-exclusions.json";
+  const parsed = JSON.parse(readFileSync(path, "utf8")) as { exclusions: Exclusion[] };
+  for (const e of parsed.exclusions) EXCLUSIONS.set(e.id, e);
+}
+
+/**
+ * Research batches arrive as either a flat array of spots or an array of
+ * cities each holding `spots`. Both are accepted because the shape is an
+ * artifact of which agent wrote the file, not a statement about the data — and
+ * rewriting 124 researched rows into a second shape, by hand, to satisfy a
+ * parser is exactly how a transcription error gets introduced into a dataset
+ * whose entire value is that nothing in it was retyped.
+ */
+function asCities(parsed: unknown): RawCity[] | null {
+  if (!Array.isArray(parsed)) return null;
+  if (parsed.length === 0) return [];
+  const looksLikeSpot = (v: unknown) =>
+    !!v && typeof v === "object" && "name" in (v as object) && !("spots" in (v as object));
+  if (!parsed.every(looksLikeSpot)) return parsed as RawCity[];
+
+  const byAnchor = new Map<string, RawSpot[]>();
+  for (const spot of parsed as RawSpot[]) {
+    const anchor = String((spot as Record<string, unknown>).destinationId ?? "").trim();
+    if (!byAnchor.has(anchor)) byAnchor.set(anchor, []);
+    byAnchor.get(anchor)!.push(spot);
+  }
+  return [...byAnchor].map(([destinationId, spots]) => ({ destinationId, spots }));
+}
+
 const KNOWN = new Map<string, { city: string; state: string }>();
 for (const d of sharedDestinations as unknown as { id: string; city: string; state: string }[]) {
   KNOWN.set(d.id, { city: d.city, state: d.state });
@@ -104,6 +140,19 @@ function fact(v: unknown): SourcedFact | null {
  * Normalising here rather than demanding a perfect contract keeps a batch that
  * did real research from being thrown away over formatting — but note it only
  * ever MOVES fields. It never fills one in.
+ *
+ * WIRED IN 2026-08-07. This function shipped in #25 and was never called: the
+ * loop below built its candidate inline instead. Three things it promises were
+ * therefore not happening. The HTML unescape never ran. The red-row rescue
+ * never ran, so a red row carrying a quote was REJECTED by the laundering rule
+ * instead of having that quote preserved as `disputed` — which is what cost
+ * Yellowstone's Artist Point and Dry Tortugas' Fort Jefferson on the 124-row
+ * batch, the second of which is one of the batch's better findings (the
+ * monument's own page contradicts the NPS servicewide exemption). And the id
+ * was recomputed in two places that happened to agree.
+ *
+ * The lesson is the one this repo keeps paying for: a docblock is not a test.
+ * `ingest.test.ts` now drives a red-row-with-quote through the real entry point.
  */
 function normalise(raw: RawSpot, anchor: string): Record<string, unknown> {
   const r = deepUnescape(raw) as Record<string, unknown>;
@@ -146,22 +195,36 @@ const emptyCities: string[] = [];
 // its own quote supports. Reported for the same reason rejections are: a silent
 // demotion would make a mislabelled batch look like a clean one.
 const downgrades: string[] = [];
-const seenIds = new Set<string>();
+const excludedIds: string[] = [];
+const seenIds = new Map<string, { spot: ProposalSpot; where: string }>();
+
+/** How much of this row is backed by a quote — the tiebreak between duplicates. */
+function sourcedFactCount(s: ProposalSpot): number {
+  return (
+    (s.permit.fact ? 1 : 0) +
+    (s.crowdWindow ? 1 : 0) +
+    (s.privacy ? 1 : 0) +
+    (s.disputed?.length ?? 0) +
+    (s.backup ? 1 : 0) +
+    (s.permit.authorityContact ? 1 : 0)
+  );
+}
 
 for (const file of files) {
-  let parsed: RawCity[];
+  let parsed: unknown;
   try {
     parsed = JSON.parse(readFileSync(file, "utf8"));
   } catch (e) {
     rejected.push({ where: file, reasons: [`unparseable JSON: ${(e as Error).message}`] });
     continue;
   }
-  if (!Array.isArray(parsed)) {
+  const cities = asCities(parsed);
+  if (!cities) {
     rejected.push({ where: file, reasons: ["top level is not an array"] });
     continue;
   }
 
-  for (const city of parsed) {
+  for (const city of cities) {
     const anchor = String(city.destinationId ?? "").trim();
 
     // Hard anchor resolution. No fuzzy fallback, on purpose.
@@ -184,8 +247,26 @@ for (const file of files) {
 
     for (const raw of spots) {
       const name = String(raw.name ?? "").trim();
-      const id = `${anchor}-${slug(name)}`;
-      const candidate = { ...raw, id, destinationId: anchor };
+
+      // IDENTITY vs NAME. A batch that set its own `id` keeps it; only a batch
+      // that did not gets one derived from the name.
+      //
+      // Recomputing unconditionally (the behaviour until 2026-08-07) broke two
+      // things at once. `backup` fields point at the ids the batch itself
+      // wrote, so rewriting every id left all 40-odd backup references
+      // dangling — caught by `proposal-spots-data.test.ts`, which is why that
+      // test exists. And the derived slug mangles the names that most need it:
+      // "Diamond Head (Lēʻahi) Summit" became `diamond-head-l-ahi-summit`,
+      // where the batch had written `honolulu-hi-diamond-head-summit`.
+      //
+      // Deduping still uses the DERIVED key, because two agents finding the
+      // same place is a collision of places, not of strings — Dream Lake came
+      // back as `denver-co-dream-lake-rmnp` and `denver-co-dream-lake`, and
+      // matching on the stored id would have let both through.
+      const presetId = String((raw as Record<string, unknown>).id ?? "").trim();
+      const dedupeKey = `${anchor}-${slug(name)}`;
+      const id = presetId || dedupeKey;
+      const candidate = { ...normalise(raw, anchor), id };
 
       // Demote an uncorroborated green BEFORE validating, so a mislabelled row
       // is kept as the amber row it always was rather than thrown away.
@@ -215,11 +296,43 @@ for (const file of files) {
         rejected.push({ where: `${anchor}/${name || "(unnamed)"}`, reasons: result.reasons });
         continue;
       }
-      if (seenIds.has(id)) {
-        rejected.push({ where: `${anchor}/${name}`, reasons: ["duplicate spot id"] });
+      // Two research agents can independently find the same place — Dream Lake
+      // came back in both the mountain-west and the NPS batch. Keep the better
+      // row, not whichever file the glob reached first: one of those two had a
+      // sourced crowd window and a park-specific authority contact and the
+      // other had neither, and alphabetical order deciding that is luck, not a
+      // rule. Ties still fall to first-seen, which is fine once "richer wins"
+      // has already run.
+      const prior = seenIds.get(dedupeKey);
+      if (prior) {
+        const better = sourcedFactCount(result.spot) > sourcedFactCount(prior.spot);
+        rejected.push({
+          where: `${anchor}/${name}`,
+          reasons: [
+            `duplicate of ${prior.where} — kept the row with more sourced facts ` +
+              `(${better ? "this one" : "the earlier one"}: ` +
+              `${Math.max(sourcedFactCount(result.spot), sourcedFactCount(prior.spot))} vs ` +
+              `${Math.min(sourcedFactCount(result.spot), sourcedFactCount(prior.spot))})`,
+          ],
+        });
+        if (better) {
+          accepted[accepted.indexOf(prior.spot)] = result.spot;
+          seenIds.set(dedupeKey, { spot: result.spot, where: `${anchor}/${name}` });
+        }
         continue;
       }
-      seenIds.add(id);
+      seenIds.set(dedupeKey, { spot: result.spot, where: `${anchor}/${name}` });
+
+      // Hand-read exclusions. Applied here rather than trusted from the batch
+      // because a research agent has no way to know the product rule, and
+      // `blocker` prose cannot be filtered on — see capstone-exclusions.json.
+      const excluded = EXCLUSIONS.get(id);
+      if (excluded) {
+        result.spot.capstoneEligible = false;
+        result.spot.ineligibleReason = excluded.reason;
+        excludedIds.push(id);
+      }
+
       accepted.push(result.spot);
     }
   }
@@ -239,6 +352,28 @@ console.log(`cities with data ${citiesCovered.size}`);
 console.log(`cities empty     ${emptyCities.length}${emptyCities.length ? ` (${emptyCities.join(", ")})` : ""}`);
 console.log(`rejected         ${rejected.length}`);
 console.log(`downgraded       ${downgrades.length}  (green -> amber: the quote never corroborated it)`);
+console.log(`capstone-blocked ${excludedIds.length}  (hand-read: the authority forbids the moment, or it is shut)`);
+
+// A blocker is NOT an exclusion, and reporting the two counts side by side is
+// the whole point: the 2026-08-06 plan conflated them and would have thrown
+// away every row in the first number.
+const withBlocker = accepted.filter((s) => s.blocker).length;
+console.log(`  of which        ${withBlocker} rows carry blocker prose (constraints, not exclusions)`);
+
+if (excludedIds.length) {
+  console.log("\nnot eligible to carry the proposal:");
+  for (const id of excludedIds) console.log(`  ${id}`);
+}
+
+// An id in the exclusions file that matched nothing is a silent no-op, and a
+// stale exclusion reads as an enforced one. Fail loudly instead.
+const unmatched = [...EXCLUSIONS.keys()].filter((id) => !excludedIds.includes(id));
+if (unmatched.length) {
+  console.error(`\nERROR: ${unmatched.length} exclusion id(s) matched no ingested spot:`);
+  for (const id of unmatched) console.error(`  ${id}`);
+  console.error("Fix the id or drop the entry — an exclusion that matches nothing enforces nothing.");
+  process.exitCode = 1;
+}
 
 if (downgrades.length) {
   console.log("\ndowngraded green -> amber (kept, at the tier the source supports):");

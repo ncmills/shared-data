@@ -1,0 +1,391 @@
+[
+  {
+    "id": "carmel-ca-mcway-falls-overlook",
+    "destinationId": "carmel-ca",
+    "name": "McWay Falls Overlook, Julia Pfeiffer Burns State Park",
+    "type": "scenic-overlook",
+    "highlight": "An eighty-foot waterfall drops straight onto a crescent of sand in a cove the color of green glass. The overlook path runs a few hundred feet out from Highway 1 through a tunnel under the road, and there is no way down to the beach, so the view is the entire visit.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "All film shoots at Julia Pfeiffer Burns State Park and all other California State Parks are required to have a valid film permit issued by the California Film Commission (CFC). The term “film shoot” refers to both motion picture and still photography shoots.",
+        "sourceUrl": "https://www.parks.ca.gov/?page_id=29887"
+      },
+      "authority": "California State Parks",
+      "authorityContact": "BigSurEvents@parks.ca.gov or 831-667-0507"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "carmel-ca-garrapata-soberanes-point",
+    "sourceUrl": "https://www.parks.ca.gov/?page_id=29887",
+    "citations": [
+      "https://www.parks.ca.gov/?page_id=29887",
+      "https://www.parks.ca.gov/?page_id=25997"
+    ],
+    "leadTimeDays": 14,
+    "fee": null,
+    "blocker": "Events, elopements, and filming will not be permitted/allowed at the Waterfall Overlook, the Waterfall Overlook Trail, McWay Falls, or Canyon Trail until further notice. (Updated December 15, 2024)"
+  },
+  {
+    "id": "carmel-ca-garrapata-soberanes-point",
+    "destinationId": "carmel-ca",
+    "name": "Soberanes Point, Garrapata State Park",
+    "type": "scenic-overlook",
+    "highlight": "Headland loops run out over black rock and open ocean about ten miles south of Carmel, with a short climb to a bench above the Monterey Bay National Marine Sanctuary. Sea lions and otters work the water below and gray whales pass close in winter.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Everything beyond what is listed above requires a permit from the California Film Commission and anyone engaged in commercial (profit and sale) photography on state property.",
+        "sourceUrl": "https://www.parks.ca.gov/?page_id=25997"
+      },
+      "authority": "California State Parks",
+      "authorityContact": "831-624-3407 (Monterey District Special Events Coordinator)"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.parks.ca.gov/?page_id=579",
+    "citations": [
+      "https://www.parks.ca.gov/?page_id=579",
+      "https://www.parks.ca.gov/?page_id=25997",
+      "https://www.parks.ca.gov/?page_id=29856"
+    ],
+    "leadTimeDays": 10,
+    "fee": null,
+    "blocker": "The Soberanes Trail is open exclusively from the main, gated trailhead on the east side of Highway 1, across from Gate 8 of the Garrapata Coastal Trail."
+  },
+  {
+    "id": "san-diego-ca-torrey-pines-razor-point",
+    "destinationId": "san-diego-ca",
+    "name": "Razor Point Overlook, Torrey Pines State Natural Reserve",
+    "type": "overlook",
+    "highlight": "Eroded sandstone fins and ravines drop away to the surf at the end of a half-mile trail through Torrey pines, the rarest pine in the country. The railed point sits directly above the beach with the lagoon behind you.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Everything beyond what is listed above requires a permit from the California Film Commission and anyone engaged in commercial (profit and sale) photography on state property.",
+        "sourceUrl": "https://www.parks.ca.gov/?page_id=25997"
+      },
+      "authority": "California State Parks",
+      "authorityContact": "sd.specialevents@parks.ca.gov"
+    },
+    "crowdWindow": {
+      "verbatim": "Gates open at 07:15 a.m. and close at Sunset.",
+      "sourceUrl": "https://www.parks.ca.gov/torreypines"
+    },
+    "privacy": null,
+    "backup": "san-diego-ca-sunset-cliffs-luscomb-point",
+    "sourceUrl": "https://www.parks.ca.gov/?page_id=31730",
+    "citations": [
+      "https://www.parks.ca.gov/?page_id=31730",
+      "https://www.parks.ca.gov/torreypines",
+      "https://www.parks.ca.gov/?page_id=25997"
+    ],
+    "leadTimeDays": 45,
+    "fee": null,
+    "blocker": "Torrey Pines SNR is currently unavailable as a Special Event location due the recent construction project."
+  },
+  {
+    "id": "san-diego-ca-sunset-cliffs-luscomb-point",
+    "destinationId": "san-diego-ca",
+    "name": "Luscomb Point, Sunset Cliffs Natural Park",
+    "type": "scenic-overlook",
+    "highlight": "Sandstone cliffs run a mile and a half along the west edge of Point Loma, facing straight into the sunset with no land between you and the horizon. Dirt paths follow the rim past sea caves and blowholes; there are no restrooms and no railings.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Casual, amateur photographers, tourists, credentialed members of the media, or other members of the public who do not use vehicles or equipment or assert exclusive use of City property are not required to submit a Filming Registration Form.",
+        "sourceUrl": "https://www.sandiego.gov/sites/default/files/filming_production_guide.pdf"
+      },
+      "authority": "City of San Diego Special Events and Filming Department",
+      "authorityContact": "Film@SanDiego.gov or 619-685-1340"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "The Luscomb Point area is named for Happy Luscomb, a local surfing personality. It is a favorite spot for sunset viewing and weddings, which can be permitted for up to 50 people. Parking is available on the street or at a number of small lots at the park site. There are no restrooms available.",
+      "sourceUrl": "https://www.sandiego.gov/park-and-recreation/parks/regional/shoreline/sunset"
+    },
+    "backup": null,
+    "sourceUrl": "https://www.sandiego.gov/park-and-recreation/parks/regional/shoreline/sunset",
+    "citations": [
+      "https://www.sandiego.gov/park-and-recreation/parks/regional/shoreline/sunset",
+      "https://www.sandiego.gov/sites/default/files/filming_production_guide.pdf",
+      "https://www.sandiego.gov/specialevents-filming/filming"
+    ],
+    "leadTimeDays": 3,
+    "fee": null,
+    "blocker": null
+  },
+  {
+    "id": "san-francisco-ca-palace-of-fine-arts",
+    "destinationId": "san-francisco-ca",
+    "name": "Palace of Fine Arts Rotunda and Lagoon",
+    "type": "historic-site",
+    "highlight": "A Beaux-Arts rotunda and colonnade stand in a curve around a lagoon in the Marina, with weeping figures turned inward on the tops of the columns. Swans and herons use the water and the reflection doubles the whole structure at first light.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All commercial film, video or photography (Film) production on Recreation and Park Department property requires a Film Permit. Commercial film production is defined as any activity that results in a film, video or photograph being sold or used for commercial purposes, or any activity involving filming or photography for which crew and/or talent is paid. This includes not-for-profit productions. This also includes wedding pictures if the wedding is not taking place on SFRPD property and the photographer is being paid. It does not include photography or video for personal use, however tripods, even for personal use, are restricted in certain areas.",
+        "sourceUrl": "https://sfrecpark.org/428/Film-Video-and-Photo"
+      },
+      "authority": "San Francisco Recreation and Parks",
+      "authorityContact": "RPDReservations@sfgov.org or (415) 831-5500"
+    },
+    "crowdWindow": {
+      "verbatim": "Park Hours: 5 a.m. to 11:45 p.m.",
+      "sourceUrl": "https://sfrecpark.org/facilities/facility/details/Palace-of-Fine-Arts-256"
+    },
+    "privacy": null,
+    "backup": "san-francisco-ca-shakespeare-garden",
+    "sourceUrl": "https://sfrecpark.org/428/Film-Video-and-Photo",
+    "citations": [
+      "https://sfrecpark.org/428/Film-Video-and-Photo",
+      "https://sfrecpark.org/facilities/facility/details/Palace-of-Fine-Arts-256"
+    ],
+    "leadTimeDays": 5,
+    "fee": "$369 - Simple non-intrusive exterior still photography (per day, per site).",
+    "blocker": null
+  },
+  {
+    "id": "san-francisco-ca-shakespeare-garden",
+    "destinationId": "san-francisco-ca",
+    "name": "Shakespeare Garden, Golden Gate Park",
+    "type": "garden",
+    "highlight": "A hedged garden off the Music Concourse, entered through an iron gate, with a brick path running to a sundial and benches set back under the foliage. The fencing and planting screen it from the rest of the park without closing it in.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All commercial film, video or photography (Film) production on Recreation and Park Department property requires a Film Permit. Commercial film production is defined as any activity that results in a film, video or photograph being sold or used for commercial purposes, or any activity involving filming or photography for which crew and/or talent is paid. This includes not-for-profit productions. This also includes wedding pictures if the wedding is not taking place on SFRPD property and the photographer is being paid. It does not include photography or video for personal use, however tripods, even for personal use, are restricted in certain areas.",
+        "sourceUrl": "https://sfrecpark.org/428/Film-Video-and-Photo"
+      },
+      "authority": "San Francisco Recreation and Parks",
+      "authorityContact": "RPDReservations@sfgov.org or (415) 831-5500"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "PUBLIC PARK: Wedding sites cannot be “closed to the public” due to each site being located in a public park.",
+      "sourceUrl": "https://sfrecpark.org/DocumentCenter/View/3966/Rules-and-Regulations-PDF"
+    },
+    "backup": "san-francisco-ca-palace-of-fine-arts",
+    "sourceUrl": "https://sfrecpark.org/913/Golden-Gate-Park---Shakespeare-Garden",
+    "citations": [
+      "https://sfrecpark.org/913/Golden-Gate-Park---Shakespeare-Garden",
+      "https://sfrecpark.org/428/Film-Video-and-Photo",
+      "https://sfrecpark.org/DocumentCenter/View/3966/Rules-and-Regulations-PDF"
+    ],
+    "leadTimeDays": 5,
+    "fee": "$369 - Simple non-intrusive exterior still photography (per day, per site).",
+    "blocker": "Shakespeare Garden has a gate but must still remain unlocked at all times."
+  },
+  {
+    "id": "los-angeles-ca-griffith-observatory",
+    "destinationId": "los-angeles-ca",
+    "name": "Griffith Observatory West Lawn and Terrace",
+    "type": "overlook",
+    "highlight": "Three copper domes sit on a terrace above the whole Los Angeles basin, with the Hollywood sign on the ridge to the west and the downtown towers straight ahead. The lawn below the building empties out well before the parking lot does.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Major commercial film and photography shoots can only take place on days the Observatory building is closed to the public (though the grounds are open). The Observatory has virtually no “back of house” areas where filming or photography can occur away from the public. Filming and photography in non-public areas of the building is prohibited.",
+        "sourceUrl": "https://griffithobservatory.lacity.gov/about/filming/"
+      },
+      "authority": "City of Los Angeles Department of Recreation and Parks",
+      "authorityContact": "Park Film Office, (323) 644-6220"
+    },
+    "crowdWindow": {
+      "verbatim": "The Observatory’s main purpose is to serve the public, and we are open to the public 10-12 hours a day on all weekend days and most weekdays in pursuit of this mission.",
+      "sourceUrl": "https://griffithobservatory.lacity.gov/about/filming/"
+    },
+    "privacy": {
+      "verbatim": "The tunnel and adjacent trails are NOT part of the Observatory grounds; they are under the jurisdiction of Griffith Park and the Park Film Office.",
+      "sourceUrl": "https://griffithobservatory.lacity.gov/about/filming/"
+    },
+    "backup": null,
+    "sourceUrl": "https://griffithobservatory.lacity.gov/about/filming/",
+    "citations": [
+      "https://griffithobservatory.lacity.gov/about/filming/",
+      "https://griffithobservatory.lacity.gov/visit/hours-admission/",
+      "https://www.laparks.org/park-film-procedure"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null
+  },
+  {
+    "id": "santa-barbara-ca-shoreline-park-bluff",
+    "destinationId": "santa-barbara-ca",
+    "name": "Shoreline Park Bluff, Santa Barbara",
+    "type": "park",
+    "highlight": "A long grass bluff above the harbor with a walking path along the edge, the Channel Islands stacked on the horizon and a stairway cut down to the sand. Gray whales pass close enough to watch from the lawn in winter and spring.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "The City of Santa Barbara offers a one-stop permitting process with the Parks and Recreation Department acting as the lead in issuing photo and film permits for any location on City property.",
+        "sourceUrl": "https://sbparksandrec.santabarbaraca.gov/photo-and-film-permits"
+      },
+      "authority": "City of Santa Barbara Parks and Recreation",
+      "authorityContact": "FilmPermits@SantaBarbaraCA.gov or (805) 564-5418"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "One of our most popular parks overlooking the beach and harbor, Shoreline Park features a playground for two- to five-year-olds, large grassy areas, walking paths, views of the Channel Islands, whale watching area, a stairway to the beach, and reservable picnic areas.",
+      "sourceUrl": "https://sbparksandrec.santabarbaraca.gov/parks/shoreline-park"
+    },
+    "backup": null,
+    "sourceUrl": "https://sbparksandrec.santabarbaraca.gov/parks/shoreline-park",
+    "citations": [
+      "https://sbparksandrec.santabarbaraca.gov/parks/shoreline-park",
+      "https://sbparksandrec.santabarbaraca.gov/photo-and-film-permits"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null
+  },
+  {
+    "id": "mendocino-ca-mendocino-headlands",
+    "destinationId": "mendocino-ca",
+    "name": "Mendocino Headlands State Park Bluff Trail",
+    "type": "trail",
+    "highlight": "A bluff trail wraps the town of Mendocino on three sides, past sea arches, tunnels and grass that runs right to the drop. The village water towers sit behind you and there is nothing but ocean in front.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Everything beyond what is listed above requires a permit from the California Film Commission and anyone engaged in commercial (profit and sale) photography on state property.",
+        "sourceUrl": "https://www.parks.ca.gov/?page_id=25997"
+      },
+      "authority": "California State Parks",
+      "authorityContact": "Special Event Coordinator Heidi Heldstab, 707-937-5721"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "For these reasons State Park units in the Sonoma-Mendocino Coast District do not allow launching, landing or the operation of drones on State Park property.",
+      "sourceUrl": "https://www.parks.ca.gov/?page_id=442"
+    },
+    "backup": "mendocino-ca-point-cabrillo-light",
+    "sourceUrl": "https://www.parks.ca.gov/?page_id=442",
+    "citations": [
+      "https://www.parks.ca.gov/?page_id=442",
+      "https://www.parks.ca.gov/?page_id=25997"
+    ],
+    "leadTimeDays": 10,
+    "fee": null,
+    "blocker": null
+  },
+  {
+    "id": "mendocino-ca-point-cabrillo-light",
+    "destinationId": "mendocino-ca",
+    "name": "Point Cabrillo Light Station State Historic Park",
+    "type": "historic-site",
+    "highlight": "A half-mile walk down a gravel road across open headland ends at a restored lighthouse and three original keepers' houses. The land runs out into the Pacific on three sides of the building.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Everything beyond what is listed above requires a permit from the California Film Commission and anyone engaged in commercial (profit and sale) photography on state property.",
+        "sourceUrl": "https://www.parks.ca.gov/?page_id=25997"
+      },
+      "authority": "California State Parks",
+      "authorityContact": "(707) 937-6122"
+    },
+    "crowdWindow": {
+      "verbatim": "The preserve grounds are open for pedestrian use from sunrise to sunset daily.",
+      "sourceUrl": "https://www.parks.ca.gov/?page_id=22276"
+    },
+    "privacy": {
+      "verbatim": "For these reasons State Park units in the Sonoma-Mendocino Coast District do not allow launching, landing or the operation of drones on State Park property.",
+      "sourceUrl": "https://www.parks.ca.gov/?page_id=22276"
+    },
+    "backup": "mendocino-ca-mendocino-headlands",
+    "sourceUrl": "https://www.parks.ca.gov/?page_id=22276",
+    "citations": [
+      "https://www.parks.ca.gov/?page_id=22276",
+      "https://www.parks.ca.gov/?page_id=25997"
+    ],
+    "leadTimeDays": 10,
+    "fee": null,
+    "blocker": null
+  },
+  {
+    "id": "sonoma-ca-sonoma-overlook-trail",
+    "destinationId": "sonoma-ca",
+    "name": "Sonoma Overlook Trail, Montini Open Space Preserve",
+    "type": "trail",
+    "highlight": "The trail climbs out of Mountain Cemetery a few blocks north of the Plaza through oak savanna to a bench on the hillside, with the vineyard floor of Sonoma Valley below and the Bay visible on a clear day. Benches sit at several points along the way.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "A film permit is required for filming activity (the filming, video taping, photographing, or other similar process conducted for the making of motion pictures, television programs, commercial and nontheatrical productions) on location within the City. Certain exemptions apply.",
+        "sourceUrl": "https://www.sonomacity.org/park-rules/"
+      },
+      "authority": "City of Sonoma",
+      "authorityContact": "https://www.sonomacity.org/park-rules/"
+    },
+    "crowdWindow": {
+      "verbatim": "The trail is open to the public for walking during daylight hours.",
+      "sourceUrl": "https://www.sonomacity.org/contacts/sonoma-overlook-trail/"
+    },
+    "privacy": {
+      "verbatim": "Dogs, bikes, horses and smoking prohibited.",
+      "sourceUrl": "https://www.sonomacity.org/contacts/sonoma-overlook-trail/"
+    },
+    "backup": null,
+    "sourceUrl": "https://www.sonomacity.org/contacts/sonoma-overlook-trail/",
+    "citations": [
+      "https://www.sonomacity.org/contacts/sonoma-overlook-trail/",
+      "https://www.sonomacity.org/park-rules/"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null
+  },
+  {
+    "id": "palm-springs-ca-tramway-mountain-station",
+    "destinationId": "palm-springs-ca",
+    "name": "Mountain Station Observation Deck, Palm Springs Aerial Tramway",
+    "type": "viewpoint",
+    "highlight": "Rotating tram cars climb out of Chino Canyon from desert scrub into pine forest, and the deck at the top looks straight down onto the Coachella Valley floor and the street grid of Palm Springs. The temperature drops sharply on the way up.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Unauthorized photography, recording, or activities for commercial purposes.",
+        "sourceUrl": "https://pstramway.com/wp-content/uploads/2025/04/2025.03.23-Palm-Springs-Aerial-Tramway-Rules-Regulations-and-Policies.pdf"
+      },
+      "authority": "Palm Springs Aerial Tramway",
+      "authorityContact": "(888) 515-8726"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://pstramway.com/wp-content/uploads/2025/04/2025.03.23-Palm-Springs-Aerial-Tramway-Rules-Regulations-and-Policies.pdf",
+    "citations": [
+      "https://pstramway.com/wp-content/uploads/2025/04/2025.03.23-Palm-Springs-Aerial-Tramway-Rules-Regulations-and-Policies.pdf",
+      "https://pstramway.com/"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "Other Items: Selfie sticks, tripods, flags, or banners are not allowed. Tripods or monopod stands exceeding a standard backpack size are prohibited."
+  }
+]

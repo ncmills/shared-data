@@ -85,3 +85,82 @@ test("red rows name an authority contact", () => {
   );
   assert.deepEqual(bad.map((s) => s.id), []);
 });
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * 2026-08-07: the 123-row batch, and the three things that were silently wrong.
+ *
+ * Each test below corresponds to a defect that shipped green. They are written
+ * to fail on the OLD behaviour, not merely to describe the new one.
+ */
+
+test("the capstone exclusions actually bind to rows that exist", () => {
+  const excluded = PROPOSAL_SPOTS_DATA.filter((s) => s.capstoneEligible === false);
+  assert.equal(
+    excluded.length,
+    3,
+    "expected exactly the three hand-read exclusions (McWay, Portland Head Light, Breakneck Ridge)",
+  );
+  // An id typo makes an exclusion a no-op that still reads as enforced. This is
+  // the failure the ingest guard caught twice while this batch was landing.
+  for (const s of excluded) {
+    assert.ok(
+      s.ineligibleReason && s.ineligibleReason.length > 40,
+      `${s.id}: an exclusion without a quoted reason is indistinguishable from a typo`,
+    );
+  }
+  assert.deepEqual(
+    excluded.map((s) => s.id).sort(),
+    [
+      "carmel-ca-mcway-falls-overlook",
+      "hudson-valley-ny-breakneck-ridge",
+      "portland-me-portland-head-light",
+    ],
+  );
+});
+
+test("a blocker is NOT an exclusion", () => {
+  // The plan this batch was landed under said to exclude any spot with a
+  // non-null `blocker`. Applied literally that removed 80 of 124 rows, because
+  // the field also holds "no selfie sticks" and "no overnight parking".
+  // This test pins the distinction so nobody re-derives the shortcut.
+  const withBlocker = PROPOSAL_SPOTS_DATA.filter((s) => s.blocker);
+  assert.ok(
+    withBlocker.length > 50,
+    `expected the blocker field to be common (got ${withBlocker.length})`,
+  );
+  const blockedAndEligible = withBlocker.filter((s) => s.capstoneEligible !== false);
+  assert.ok(
+    blockedAndEligible.length > 50,
+    "most rows carrying blocker prose must remain capstone-eligible — " +
+      `only ${blockedAndEligible.length} did, which means the two concepts have been conflated again`,
+  );
+});
+
+test("CAPSTONE_ELIGIBLE_SPOTS excludes exactly the ineligible rows", async () => {
+  const { CAPSTONE_ELIGIBLE_SPOTS } = await import("./proposal-spots-data");
+  assert.equal(CAPSTONE_ELIGIBLE_SPOTS.length, PROPOSAL_SPOTS_DATA.length - 3);
+  assert.ok(
+    !CAPSTONE_ELIGIBLE_SPOTS.some((s) => s.id === "carmel-ca-mcway-falls-overlook"),
+    "McWay Falls — where the park says elopements and filming will not be permitted — " +
+      "must never be selectable as the place the question gets asked",
+  );
+});
+
+test("validateProposalSpot rejects an exclusion with no stated reason", () => {
+  const base = PROPOSAL_SPOTS_DATA.find((s) => s.capstoneEligible !== false)!;
+  const bad = validateProposalSpot({ ...base, capstoneEligible: false });
+  assert.equal(bad.ok, false);
+  assert.ok(
+    !bad.ok && bad.reasons.some((r) => r.includes("ineligibleReason")),
+    "an unexplained exclusion must be rejected, not silently honoured",
+  );
+  // ...and the same row WITH a reason still passes, so the guard is falsifiable
+  // in both directions rather than just strict.
+  const good = validateProposalSpot({
+    ...base,
+    capstoneEligible: false,
+    ineligibleReason: "The authority states the moment is not permitted here.",
+  });
+  assert.equal(good.ok, true, "a properly explained exclusion must still validate");
+});

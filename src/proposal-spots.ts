@@ -146,6 +146,51 @@ export interface ProposalSpot {
   disputed?: SourcedFact[];
   sourceUrl: string;
   citations: string[];
+
+  // ───────────────────── practical fields (2026-08-07) ─────────────────────
+  // Everything above answers "can we say this?". Everything below answers
+  // "can they actually do it?" — the questions a couple hits after they have
+  // believed us.
+
+  /** Minimum advance notice in days, only where the authority publishes one. */
+  leadTimeDays?: number;
+  /** Published fee, verbatim from the authority. Never estimated. */
+  fee?: string;
+  /**
+   * Practical constraints a couple must satisfy — insurance, group caps, no
+   * tripods, "bring your own car". PROSE, shown to the user.
+   *
+   * READ `capstoneEligible` BEFORE FILTERING ON THIS. The 2026-08-06 plan said
+   * to exclude any spot with a non-null `blocker` from capstone selection. That
+   * rule was written from McWay Falls, where the park says elopements and
+   * filming "will not be permitted" — and applied literally it removed 80 of
+   * 124 researched spots, because the field had also collected "no selfie
+   * sticks", "do not bring arches or trellises" and "no overnight parking".
+   * Hand-read on 2026-08-07: 3 of the 80 actually disqualify a spot. A field
+   * that mixes "you may not propose here" with "leave the tripod at home"
+   * cannot be filtered on, so the disqualification is now its own explicit,
+   * reviewable boolean and this one is prose again.
+   */
+  blocker?: string;
+  /** How to reach the spot, where that is not obvious. */
+  accessNote?: string;
+  /** A spot that does not exist for part of the year. */
+  seasonalClosure?: string;
+
+  /**
+   * May this spot carry the proposal itself?
+   *
+   * `false` ONLY when the authority forbids the moment or the place is shut:
+   * McWay Falls (elopements and filming not permitted), Portland Head Light
+   * (ceremonies and photographs not permitted on the parcel), Breakneck Ridge
+   * (closed for a two-year project). Absent means eligible — the common case.
+   *
+   * An ineligible spot is not deleted. It still appears in SEO pages and can
+   * still be someone's `backup`; it just cannot be the capstone.
+   */
+  capstoneEligible?: boolean;
+  /** Required whenever `capstoneEligible` is false. Quotes the authority. */
+  ineligibleReason?: string;
 }
 
 const isHttpUrl = (s: unknown): s is string =>
@@ -311,6 +356,14 @@ export function validateProposalSpot(input: unknown): SpotValidation {
     if (!isNonBlank(p.authorityContact)) {
       reasons.push("red: requires permit.authorityContact so 'check locally' is actionable");
     }
+  }
+
+  // An exclusion without a stated reason is indistinguishable from a typo, and
+  // this flag removes a spot from the only thing the product exists to do.
+  if (s.capstoneEligible === false && !isNonBlank(s.ineligibleReason)) {
+    reasons.push(
+      "capstoneEligible=false requires ineligibleReason quoting the authority",
+    );
   }
 
   for (const [k, v] of [

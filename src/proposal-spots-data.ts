@@ -115,7 +115,29 @@ function usfsPermit(): ProposalSpot["permit"] {
   };
 }
 
-export const PROPOSAL_SPOTS_DATA: ProposalSpot[] = [
+/**
+ * The 123 rows from the 2026-08-06 research batches.
+ *
+ * GENERATED — do not hand-edit. Regenerate with:
+ *   npx tsx scripts/ingest-proposal-spots.ts \
+ *     data/proposal-spot-research/spots-*.json \
+ *     --out src/proposal-spots-ingested.json --write
+ *
+ * The inputs are committed alongside it in `data/proposal-spot-research/`, so
+ * the pipeline is reproducible from the repo rather than from a scratch
+ * directory in /private/tmp — which is where these spent a day, and where 74
+ * primary-source documents nearly went with them.
+ *
+ * They land as JSON rather than as more hand-written TypeScript because
+ * nothing in them was authored here: every field came through the ingest gate,
+ * and retyping 123 rows into a source file is 123 opportunities to alter a
+ * quotation that the whole tier system exists to keep verbatim.
+ */
+import INGESTED from "./proposal-spots-ingested.json" with { type: "json" };
+
+/** Hand-authored rows: they share the `npsPermit()` / `usfsPermit()` helpers
+ *  above, which is worth more than uniformity with the generated set. */
+const HAND_AUTHORED: ProposalSpot[] = [
   // ───────────────────────── National Park Service ─────────────────────────
   {
     id: "jackson-hole-wy-schwabacher-landing",
@@ -538,3 +560,46 @@ export const PROPOSAL_SPOTS_DATA: ProposalSpot[] = [
     ],
   },
 ];
+
+/**
+ * Hand-authored rows first, then the ingested batch.
+ *
+ * Collisions are a build failure rather than a silent last-wins, because the
+ * two sets were researched independently and a duplicate means two different
+ * sets of quotes for one place — which of them renders would then depend on
+ * array order. The ingest already dedupes WITHIN the batch (Dream Lake came
+ * back twice); this catches the across-set case, which nothing else would.
+ */
+function mergeSpots(hand: ProposalSpot[], ingested: ProposalSpot[]): ProposalSpot[] {
+  const byId = new Map<string, ProposalSpot>();
+  const collisions: string[] = [];
+  for (const s of [...hand, ...ingested]) {
+    if (byId.has(s.id)) collisions.push(s.id);
+    byId.set(s.id, s);
+  }
+  if (collisions.length) {
+    throw new Error(
+      `proposal-spots: ${collisions.length} id collision(s) between the ` +
+        `hand-authored and ingested sets: ${collisions.join(", ")}. ` +
+        `Resolve by deleting one row — do not rely on array order.`,
+    );
+  }
+  return [...byId.values()];
+}
+
+export const PROPOSAL_SPOTS_DATA: ProposalSpot[] = mergeSpots(
+  HAND_AUTHORED,
+  INGESTED as ProposalSpot[],
+);
+
+/**
+ * The rows that can actually carry the proposal.
+ *
+ * Exported as its own list so a caller cannot forget the check. Reading
+ * `PROPOSAL_SPOTS_DATA` and filtering by hand is how McWay Falls — where the
+ * park says elopements and filming "will not be permitted" — would get
+ * recommended as a capstone.
+ */
+export const CAPSTONE_ELIGIBLE_SPOTS: ProposalSpot[] = PROPOSAL_SPOTS_DATA.filter(
+  (s) => s.capstoneEligible !== false,
+);

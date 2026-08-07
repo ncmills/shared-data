@@ -1,0 +1,415 @@
+[
+  {
+    "id": "niagara-falls-ny-prospect-point",
+    "destinationId": "niagara-falls-ny",
+    "name": "Prospect Point, Niagara Falls State Park",
+    "type": "scenic-overlook",
+    "highlight": "The railing at Prospect Point puts you at the exact lip where the American Falls turns over — close enough that the mist reaches you and the roar makes you lean in to be heard. America's oldest state park, open year round, so the winter version with frozen spray on the railings is a real option.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Generally, Permits are not required for the following: • Visitors using cameras and/or recording devices for their own personal use.",
+        "sourceUrl": "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf"
+      },
+      "authority": "New York State Office of Parks, Recreation and Historic Preservation (OPRHP)",
+      "authorityContact": "Niagara Falls State Park, (716) 278-1794"
+    },
+    "crowdWindow": {
+      "verbatim": "The park is open year round but attractions are open seasonally.",
+      "sourceUrl": "https://parks.ny.gov/visit/state-parks/niagara-falls-state-park"
+    },
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://parks.ny.gov/visit/state-parks/niagara-falls-state-park",
+    "citations": [
+      "https://parks.ny.gov/visit/state-parks/niagara-falls-state-park",
+      "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf",
+      "https://parks.ny.gov/about/faq.aspx"
+    ],
+    "leadTimeDays": null,
+    "fee": "$10 daily vehicle use fee (March 1–May 26); $10 weekdays / $15 weekends (May 27–October 9). Free entry on foot.",
+    "blocker": null
+  },
+  {
+    "id": "finger-lakes-ny-watkins-glen-gorge",
+    "destinationId": "finger-lakes-ny",
+    "name": "The Gorge Trail, Watkins Glen State Park",
+    "type": "trail",
+    "highlight": "Nineteen waterfalls inside a single mile of shale gorge, with stone stairs cut into the wall and stretches of path that pass behind falling water. The light down there stays green and dim even at midday, and the noise covers everything else.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Generally, Permits are not required for the following: • Visitors using cameras and/or recording devices for their own personal use.",
+        "sourceUrl": "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf"
+      },
+      "authority": "New York State Office of Parks, Recreation and Historic Preservation (OPRHP)",
+      "authorityContact": "Watkins Glen State Park, (607) 535-4511"
+    },
+    "crowdWindow": {
+      "verbatim": "The Gorge Trail will typically open for the season mid to late May and typically closes for the season mid to late October depending on the weather.",
+      "sourceUrl": "https://parks.ny.gov/visit/state-parks/watkins-glen-state-park"
+    },
+    "privacy": null,
+    "backup": "finger-lakes-ny-letchworth-middle-falls",
+    "sourceUrl": "https://parks.ny.gov/visit/state-parks/watkins-glen-state-park",
+    "citations": [
+      "https://parks.ny.gov/visit/state-parks/watkins-glen-state-park",
+      "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf",
+      "https://parks.ny.gov/about/faq.aspx"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "The Gorge Trail is seasonal — it typically opens mid-to-late May and closes mid-to-late October. Park's own page: \"The Gorge Trail will typically open for the season mid to late May and typically closes for the season mid to late October depending on the weather.\""
+  },
+  {
+    "id": "finger-lakes-ny-letchworth-middle-falls",
+    "destinationId": "finger-lakes-ny",
+    "name": "Middle Falls, Letchworth State Park",
+    "type": "scenic-overlook",
+    "highlight": "The Genesee River drops over three major waterfalls here, running between cliffs as high as 600 feet with forest on both rims. The overlook near the Glen Iris Inn faces Middle Falls straight on, and late-day sun works the spray.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Generally, Permits are not required for the following: • Visitors using cameras and/or recording devices for their own personal use.",
+        "sourceUrl": "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf"
+      },
+      "authority": "New York State Office of Parks, Recreation and Historic Preservation (OPRHP)",
+      "authorityContact": "Letchworth State Park, (585) 493-3600"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "finger-lakes-ny-watkins-glen-gorge",
+    "sourceUrl": "https://parks.ny.gov/visit/state-parks/letchworth-state-park",
+    "citations": [
+      "https://parks.ny.gov/visit/state-parks/letchworth-state-park",
+      "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf",
+      "https://parks.ny.gov/about/faq.aspx"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null
+  },
+  {
+    "id": "hudson-valley-ny-lake-minnewaska-overlook",
+    "destinationId": "hudson-valley-ny",
+    "name": "Lake Minnewaska Overlook, Minnewaska State Park Preserve",
+    "type": "overlook",
+    "highlight": "A clear lake held in a bowl of pale Shawangunk cliffs, with pitch pine growing straight out of the rock. A carriage road loops the whole rim, so there are a dozen places to stop where the water sits directly below and the Catskills fill the far horizon.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Generally, Permits are not required for the following: • Visitors using cameras and/or recording devices for their own personal use.",
+        "sourceUrl": "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf"
+      },
+      "authority": "New York State Office of Parks, Recreation and Historic Preservation (OPRHP) — Palisades Region",
+      "authorityContact": "Minnewaska State Park Preserve, (845) 255-0752"
+    },
+    "crowdWindow": {
+      "verbatim": "Lake Minnewaska and Sam's Point are experiencing extensive congestion on good-weather days and both sites are subject to intermittent closures as parking lots reach capacity.",
+      "sourceUrl": "https://parks.ny.gov/visit/state-parks/minnewaska-state-park-preserve"
+    },
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://parks.ny.gov/visit/state-parks/minnewaska-state-park-preserve",
+    "citations": [
+      "https://parks.ny.gov/visit/state-parks/minnewaska-state-park-preserve",
+      "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf",
+      "https://parks.ny.gov/about/faq.aspx"
+    ],
+    "leadTimeDays": null,
+    "fee": "$10 per vehicle (under 15-person capacity). The park's published Special Events site fee is $200.",
+    "blocker": "Parking lots reach capacity on good-weather days and the site is subject to intermittent closures — arrive early or you may not get in."
+  },
+  {
+    "id": "hudson-valley-ny-breakneck-ridge",
+    "destinationId": "hudson-valley-ny",
+    "name": "Breakneck Ridge, Hudson Highlands State Park Preserve",
+    "type": "hike",
+    "highlight": "A scramble straight up bare rock out of the river gorge near Cold Spring, with the Hudson bending south below you and Storm King directly across the water. The payoff ledges come early and fast.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Generally, Permits are not required for the following: • Visitors using cameras and/or recording devices for their own personal use.",
+        "sourceUrl": "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf"
+      },
+      "authority": "New York State Office of Parks, Recreation and Historic Preservation (OPRHP) — Taconic Region",
+      "authorityContact": "Hudson Highlands State Park Preserve, (845) 265-3175"
+    },
+    "crowdWindow": {
+      "verbatim": "Weekends are very busy and trails can be crowded.",
+      "sourceUrl": "https://parks.ny.gov/visit/state-parks/hudson-highlands-state-park-preserve"
+    },
+    "privacy": null,
+    "backup": "hudson-valley-ny-lake-minnewaska-overlook",
+    "sourceUrl": "https://parks.ny.gov/visit/state-parks/hudson-highlands-state-park-preserve",
+    "citations": [
+      "https://parks.ny.gov/visit/state-parks/hudson-highlands-state-park-preserve",
+      "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "CLOSED. Park's own page: \"Beginning April 21, 2025, Breakneck Ridge, other area trails, and the adjacent Breakneck Ridge Metro-North Station will close for a two-year period\" for the Breakneck Connector and Bridge project. Verify reopening with the park before planning anything here."
+  },
+  {
+    "id": "montauk-ny-montauk-point",
+    "destinationId": "montauk-ny",
+    "name": "Montauk Point State Park and Lighthouse Bluff",
+    "type": "historic-site",
+    "highlight": "The last land on Long Island, where the Atlantic meets Block Island Sound and the water goes rough over the reef offshore. The lighthouse above the bluff was commissioned by George Washington in 1792 and is the oldest in New York State.",
+    "tier": "red",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": null,
+      "authority": "New York State Office of Parks, Recreation and Historic Preservation (OPRHP) — Long Island Region. NOTE: the lighthouse itself is independently operated by the Montauk Historical Society, not by the state park.",
+      "authorityContact": "Long Island Regional Permit Office, (631) 321-3770 — or Montauk Point State Park, (631) 668-3781"
+    },
+    "disputed": [
+      {
+        "verbatim": "A Park Use permit is required for any organized event or activity such as: • Walkathons • Religious Ceremonies • Wedding/Engagement Photos • Athletics/Sports • Environmental Studies • Parking Lot Rentals • Field Usage • Field Trips",
+        "sourceUrl": "https://parks.ny.gov/sites/default/files/2025-11/Long%20Island%20Permits%20Guide%20-%202026.pdf"
+      },
+      {
+        "verbatim": "Use this Park Use Application for: Walk-a-thons, marathons, bike races, sports events, wedding/engagement ceremonies & wedding/engagement/family photography, Camp Hero camping, religious ceremonies, environmental trips (not scientific research), and other special events.",
+        "sourceUrl": "https://parks.ny.gov/sites/default/files/2025-11/2026%20PARK%20USE%20APPLICATION%20-%20Fillable%20pdf.pdf"
+      },
+      {
+        "verbatim": "Generally, Permits are not required for the following: • Visitors using cameras and/or recording devices for their own personal use.",
+        "sourceUrl": "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf"
+      }
+    ],
+    "crowdWindow": {
+      "verbatim": "Park is open year-round, sunrise to sunset.",
+      "sourceUrl": "https://parks.ny.gov/visit/state-parks/montauk-point-state-park"
+    },
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://parks.ny.gov/visit/state-parks/montauk-point-state-park",
+    "citations": [
+      "https://parks.ny.gov/visit/state-parks/montauk-point-state-park",
+      "https://parks.ny.gov/sites/default/files/2025-11/Long%20Island%20Permits%20Guide%20-%202026.pdf",
+      "https://parks.ny.gov/sites/default/files/2025-11/2026%20PARK%20USE%20APPLICATION%20-%20Fillable%20pdf.pdf",
+      "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf",
+      "https://parks.ny.gov/about/faq.aspx"
+    ],
+    "leadTimeDays": 14,
+    "fee": "$8 vehicle entrance fee.",
+    "blocker": "Two OPRHP documents give opposite defaults for the same activity. The Long Island Region permit guide lists \"Wedding/Engagement Photos\" as requiring a Park Use permit 14 days in advance; the statewide OPRHP filming/photography permit says permits are generally not required for visitors using cameras for their own personal use. Call the Long Island Regional Permit Office at (631) 321-3770 before hiring a photographer."
+  },
+  {
+    "id": "new-york-ny-bbp-granite-prospect",
+    "destinationId": "new-york-ny",
+    "name": "Pier 1 Granite Prospect, Brooklyn Bridge Park",
+    "type": "waterfront",
+    "highlight": "Wide granite steps stepping down toward the East River, aimed straight at Lower Manhattan with the Brooklyn Bridge off to the right. It is one of the three spots the park will actually permit a ceremony, so the sightline has been thought about.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Permits for wedding or engagement photography are not required unless your group is larger than 20 people or you plan to use more than handheld photography equipment. This is applicable to non-commercial wedding or engagement photos only.",
+        "sourceUrl": "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/wedding-permits/"
+      },
+      "authority": "Brooklyn Bridge Park Corporation (a separate authority from NYC Parks — NYC Parks does not process permits for this park)",
+      "authorityContact": "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/"
+    },
+    "crowdWindow": {
+      "verbatim": "We Are Open 7 Days a Week | 6AM - 1AM",
+      "sourceUrl": "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/"
+    },
+    "privacy": {
+      "verbatim": "Wedding permits do not grant exclusive access to the location listed.",
+      "sourceUrl": "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/wedding-permits/"
+    },
+    "backup": "new-york-ny-bbp-pebble-beach",
+    "sourceUrl": "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/wedding-permits/",
+    "citations": [
+      "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/wedding-permits/",
+      "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/",
+      "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/film-and-photography-permits/",
+      "https://www.nycgovparks.org/permits/film-and-photo-guidelines"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "If you bring more than 20 people it becomes a permitted event: \"Brooklyn Bridge Park is a public park and as such, any events, classes, or gatherings larger than 20 people require a permit.\" The park's own permit form lists \"Social gathering (birthday party, gender reveal, proposal,etc.)\" as a special-event type. Decorations including confetti, glitter, balloons and flower petals (real or fake) cannot be used in the Park, and drones are never permitted."
+  },
+  {
+    "id": "new-york-ny-bbp-pebble-beach",
+    "destinationId": "new-york-ny",
+    "name": "Main Street Pebble Beach, Brooklyn Bridge Park",
+    "type": "beach",
+    "highlight": "A short cobble beach at the foot of Main Street in DUMBO, where you can walk right to the waterline under the Brooklyn Bridge. Quieter than Pier 1 and closer to the water, though swimming is not allowed.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Permits for wedding or engagement photography are not required unless your group is larger than 20 people or you plan to use more than handheld photography equipment. This is applicable to non-commercial wedding or engagement photos only.",
+        "sourceUrl": "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/wedding-permits/"
+      },
+      "authority": "Brooklyn Bridge Park Corporation",
+      "authorityContact": "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Pebble Beach offers access to the water, but no swimming allowed.",
+      "sourceUrl": "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/wedding-permits/"
+    },
+    "backup": "new-york-ny-bbp-granite-prospect",
+    "sourceUrl": "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/wedding-permits/",
+    "citations": [
+      "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/wedding-permits/",
+      "https://brooklynbridgepark.org/plan-your-visit/get-a-permit/"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "If you scale it into a ceremony, the park charges \"a $400.00 site fee in addition to the $25.00 application fee and $1.00 credit card processing fee\" and asks you to \"allow at least 21 business days for permit applications to be reviewed.\" Wedding ceremony applications for the upcoming year open December 1."
+  },
+  {
+    "id": "new-york-ny-central-park-bow-bridge",
+    "destinationId": "new-york-ny",
+    "name": "Bow Bridge, Central Park",
+    "type": "park",
+    "highlight": "A low cast-iron span curving across the Lake at 74th Street, with the Ramble's woods on one side and the twin towers of Central Park West rising past the treeline on the other. First light is the only reliable time you get it to yourselves.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "We require a permit for any event with more than 20 attendees.",
+        "sourceUrl": "https://nyceventpermits.nyc.gov/parks/"
+      },
+      "authority": "NYC Department of Parks & Recreation (NOT the Central Park Conservancy — the Conservancy's proposal/wedding permit rule covers the Conservatory Garden only)",
+      "authorityContact": "NYC Parks Manhattan borough permit office, (212) 408-0226"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Standing on a City sidewalk, walkway of a City bridge or within a City park while using a hand-held camera and not otherwise asserting exclusive use of City property is NOT an activity that requires a permit.",
+      "sourceUrl": "https://www.nyc.gov/site/mome/permits/when-permit-required.page"
+    },
+    "backup": "new-york-ny-central-park-bethesda-terrace",
+    "sourceUrl": "https://www.centralparknyc.org/locations/bow-bridge",
+    "citations": [
+      "https://www.centralparknyc.org/locations/bow-bridge",
+      "https://www.centralparknyc.org/wedding-faqs",
+      "https://nyceventpermits.nyc.gov/parks/",
+      "https://www.nycgovparks.org/highlights/places-to-go/weddings",
+      "https://www.nyc.gov/site/mome/permits/when-permit-required.page"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "The Central Park Conservancy's \"proposals are welcome\" rule does NOT reach here. Its own FAQ scopes it to the Conservatory Garden and says: \"To book a wedding ceremony outside of the Conservatory Garden, please contact NYC Parks for a permit.\" If your proposal turns into a ceremony, NYC Parks says: \"Wedding ceremonies can be conducted in any of the parks, but doing so requires a permit.\""
+  },
+  {
+    "id": "new-york-ny-central-park-bethesda-terrace",
+    "destinationId": "new-york-ny",
+    "name": "Bethesda Terrace, Central Park",
+    "type": "park",
+    "highlight": "The lower arcade under the terrace has a ceiling of patterned Minton tiles and carries sound the way a chapel does, which is why buskers set up there. Step through the arch and the Angel of the Waters is straight ahead with the Lake behind her.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "We require a permit for any event with more than 20 attendees.",
+        "sourceUrl": "https://nyceventpermits.nyc.gov/parks/"
+      },
+      "authority": "NYC Department of Parks & Recreation (NOT the Central Park Conservancy)",
+      "authorityContact": "NYC Parks Manhattan borough permit office, (212) 408-0226"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Standing on a City sidewalk, walkway of a City bridge or within a City park while using a hand-held camera and not otherwise asserting exclusive use of City property is NOT an activity that requires a permit.",
+      "sourceUrl": "https://www.nyc.gov/site/mome/permits/when-permit-required.page"
+    },
+    "backup": "new-york-ny-central-park-bow-bridge",
+    "sourceUrl": "https://www.centralparknyc.org/locations/bethesda-terrace",
+    "citations": [
+      "https://www.centralparknyc.org/locations/bethesda-terrace",
+      "https://www.centralparknyc.org/wedding-faqs",
+      "https://nyceventpermits.nyc.gov/parks/",
+      "https://www.nycgovparks.org/permits/film-and-photo-guidelines",
+      "https://www.nyc.gov/site/mome/permits/when-permit-required.page"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "If you want a photographer with anything beyond handheld gear, the Conservancy — not NYC Parks — handles it: NYC Parks' own film/photo page states \"NYC Parks does not process requests for the following locations. Please apply directly through the appropriate organization linked below,\" and lists Central Park Conservancy. The Conservancy's wedding FAQ directs photo shoots outside the Conservatory Garden to its own email."
+  },
+  {
+    "id": "new-york-ny-fort-tryon-heather-garden",
+    "destinationId": "new-york-ny",
+    "name": "Heather Garden, Fort Tryon Park",
+    "type": "garden",
+    "highlight": "Terraced planting along a ridge high above the Hudson, with the Palisades cliffs directly across the water. NYC Parks calls it the city's largest garden with unrestricted public access, and the Cloisters sits at the north end of the same park.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "We require a permit for any event with more than 20 attendees.",
+        "sourceUrl": "https://nyceventpermits.nyc.gov/parks/"
+      },
+      "authority": "NYC Department of Parks & Recreation",
+      "authorityContact": "Fort Tryon Park, (212) 795-1388 ext. 300 — or NYC Parks Manhattan borough permit office, (212) 408-0226"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "park goers can run or walk on the park's 8 miles of pathways, play on the lawns, and enjoy the city's largest garden with unrestricted public access, the Heather Garden.",
+      "sourceUrl": "https://www.nycgovparks.org/parks/fort-tryon-park"
+    },
+    "backup": "new-york-ny-central-park-bow-bridge",
+    "sourceUrl": "https://www.nycgovparks.org/parks/fort-tryon-park",
+    "citations": [
+      "https://www.nycgovparks.org/parks/fort-tryon-park",
+      "https://nyceventpermits.nyc.gov/parks/",
+      "https://www.nycgovparks.org/highlights/places-to-go/weddings",
+      "https://www.nyc.gov/site/mome/permits/when-permit-required.page"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "The Cloisters is a branch of the Metropolitan Museum of Art, a different authority from NYC Parks — do not assume park rules cover the museum grounds or interior."
+  },
+  {
+    "id": "new-york-ny-gantry-plaza",
+    "destinationId": "new-york-ny",
+    "name": "Gantry Plaza State Park",
+    "type": "waterfront",
+    "highlight": "Piers stepping out over the East River in Long Island City, aimed straight across at the Midtown skyline — the park's own description names the Empire State Building and the United Nations in the view. The old rail-barge gantries still stand at the water's edge.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Permits may be required to film or photograph in state parks in the five boroughs of New York City. This includes student shoots, still photography, video, internet, television and films (shorts, independent, features, etc.).",
+        "sourceUrl": "https://parks.ny.gov/documents/parks/GantryPlazaFilmPhotoPermits.pdf"
+      },
+      "authority": "New York State Office of Parks, Recreation and Historic Preservation (OPRHP) — New York City Region. This is a STATE park inside NYC; NYC Parks permits do not apply here.",
+      "authorityContact": "Gantry Plaza State Park, (347) 935-3039 — film/photo requests to Soleyl.Ovalle@parks.ny.gov, NYS Parks, 163 West 125th Street, 17th Floor, New York, NY 10027"
+    },
+    "crowdWindow": {
+      "verbatim": "Open daily, dawn to dusk.",
+      "sourceUrl": "https://parks.ny.gov/visit/state-parks/gantry-plaza-state-park"
+    },
+    "privacy": null,
+    "backup": "new-york-ny-bbp-granite-prospect",
+    "sourceUrl": "https://parks.ny.gov/visit/state-parks/gantry-plaza-state-park",
+    "citations": [
+      "https://parks.ny.gov/visit/state-parks/gantry-plaza-state-park",
+      "https://parks.ny.gov/documents/parks/GantryPlazaFilmPhotoPermits.pdf",
+      "https://parks.ny.gov/documents/regions/FilmingPhotographySoundRecordingPermitApplication.pdf"
+    ],
+    "leadTimeDays": 5,
+    "fee": "$30 nonrefundable permit application fee (film/photo permit only).",
+    "blocker": "Park closes at dusk, so a night-skyline proposal here is not sanctioned. If a permit is needed: \"Please allow at least five business days for us to get back to you regarding whether or not this request is feasible for a permit.\""
+  }
+]
