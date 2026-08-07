@@ -210,3 +210,71 @@ test("the rows are reachable from the package root", async () => {
     );
   }
 });
+
+import SOURCES from "../data/proposal-spot-research/coordinate-sources.json" with { type: "json" };
+
+/**
+ * Bounding boxes are deliberately GENEROUS — a degree of slop on each side.
+ * The failure being caught is "this pair is in the wrong state or the wrong
+ * hemisphere", not "this pair is 400m from the overlook". A tight box would
+ * fail correct coordinates for a spot near a state line (Lake Tahoe spans
+ * two), and a guard that fails correct data gets switched off.
+ */
+const STATE_BOUNDS: Record<string, [number, number, number, number]> = {
+  // state: [minLat, maxLat, minLng, maxLng]
+  AZ: [30.4, 38.0, -116.0, -108.0],
+  CA: [31.5, 42.9, -125.5, -113.5],
+  CO: [35.9, 42.0, -110.0, -101.0],
+  DC: [37.8, 40.0, -78.5, -76.0],
+  FL: [23.8, 32.0, -88.5, -79.0],
+  GA: [29.5, 36.0, -86.5, -80.0],
+  HI: [17.8, 23.5, -161.5, -153.5],
+  IL: [36.0, 43.5, -92.5, -86.5],
+  MA: [40.7, 43.9, -74.5, -69.0],
+  ME: [42.0, 48.5, -72.0, -66.0],
+  MT: [43.5, 49.9, -117.0, -103.0],
+  NC: [32.5, 37.4, -85.5, -74.5],
+  NV: [34.0, 42.9, -121.0, -113.0],
+  NY: [39.5, 46.0, -80.8, -71.0],
+  OR: [41.0, 47.3, -125.5, -115.5],
+  SC: [31.0, 36.2, -84.5, -77.5],
+  UT: [36.0, 42.9, -115.0, -108.0],
+  WA: [44.5, 49.9, -125.5, -116.0],
+  WY: [40.0, 45.9, -112.0, -103.0],
+};
+
+const withCoords = PROPOSAL_SPOTS_DATA.filter(
+  (s) => typeof s.lat === "number" && typeof s.lng === "number",
+);
+
+test("every coordinate sits inside its destination's state", () => {
+    const wrong: string[] = [];
+    for (const s of withCoords) {
+    const state = s.destinationId.split("-").pop()!.toUpperCase();
+      const box = STATE_BOUNDS[state];
+      // An unknown state is a gap in the table, not a pass. Fail loudly so the
+      // table gets extended rather than silently skipping the check.
+      if (!box) {
+        wrong.push(`${s.id}: no bounding box for state ${state}`);
+        continue;
+      }
+      const [minLat, maxLat, minLng, maxLng] = box;
+    if (s.lat! < minLat || s.lat! > maxLat || s.lng! < minLng || s.lng! > maxLng) {
+      wrong.push(`${s.id}: [${s.lat}, ${s.lng}] is outside ${state}`);
+    }
+  }
+  assert.deepEqual(wrong, [], "a coordinate is outside its destination's state");
+});
+
+test("every coordinate has a recorded source", () => {
+  const sources = SOURCES.sources as Record<string, string>;
+  const unsourced = withCoords.filter((s) => !sources[s.id]).map((s) => s.id);
+  assert.deepEqual(unsourced, [], "a coordinate with no recorded source is indistinguishable from a guess");
+});
+
+test("no coordinate is recorded for a capstone-ineligible spot", () => {
+  const bad = withCoords
+    .filter((s) => (s as { capstoneEligible?: boolean }).capstoneEligible === false)
+    .map((s) => s.id);
+  assert.deepEqual(bad, [], "a spot the authority excludes must not carry a coordinate");
+});

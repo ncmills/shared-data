@@ -1,0 +1,23 @@
+{
+  "$comment": [
+    "Provenance for every pair in coordinates.json. A coordinate with no",
+    "source is indistinguishable from a guess six months later, and this",
+    "dataset's posture is that 'we checked' must be checkable.",
+    "",
+    "'legacy-production' marks the nine that were moved from engagedmoon's",
+    "own copy on 2026-08-07. They were live and computing correct sunset",
+    "windows, but the URL they were originally read from was not recorded.",
+    "Re-source them opportunistically; do not delete them."
+  ],
+  "sources": {
+    "new-york-ny-conservatory-garden": "legacy-production",
+    "new-york-ny-central-park-bethesda-terrace": "legacy-production",
+    "savannah-ga-forsyth-park": "legacy-production",
+    "carmel-ca-point-lobos": "legacy-production",
+    "carmel-ca-carmel-beach": "legacy-production",
+    "lake-tahoe-ca-emerald-bay": "legacy-production",
+    "asheville-nc-craggy-gardens": "legacy-production",
+    "jackson-hole-wy-schwabacher-landing": "legacy-production",
+    "charleston-sc-waterfront-park-pineapple-fountain": "legacy-production"
+  }
+}
