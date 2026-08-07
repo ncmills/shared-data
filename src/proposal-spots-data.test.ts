@@ -168,7 +168,11 @@ test("validateProposalSpot rejects an exclusion with no stated reason", () => {
 
 test("coordinates are complete pairs, in range, and only on matched rows", async () => {
   const { SPOTS_WITH_COORDINATES } = await import("./proposal-spots-data");
-  assert.equal(SPOTS_WITH_COORDINATES.length, 9, "the 9 migrated from engagedmoon");
+  assert.equal(
+    SPOTS_WITH_COORDINATES.length,
+    27,
+    "the 9 migrated from engagedmoon + 18 sourced in Batch 1 (2026-08-07)",
+  );
   for (const s of SPOTS_WITH_COORDINATES) {
     // A half-pair is the dangerous shape: truthy `lat` reads as "we know where
     // this is", and the solar call then gets NaN for the other half.
@@ -238,8 +242,21 @@ const STATE_BOUNDS: Record<string, [number, number, number, number]> = {
   OR: [41.0, 47.3, -125.5, -115.5],
   SC: [31.0, 36.2, -84.5, -77.5],
   UT: [36.0, 42.9, -115.0, -108.0],
+  VA: [36.4, 39.6, -83.8, -75.1],
   WA: [44.5, 49.9, -125.5, -116.0],
   WY: [40.0, 45.9, -112.0, -103.0],
+};
+
+/**
+ * Spots anchored to a destination in a DIFFERENT state. The catalog files a
+ * spot under its nearest plannable city, which is correct for planning and
+ * wrong for a state check derived from the id. Explicit, never inferred —
+ * inferring it would defeat the guard.
+ */
+const STATE_OVERRIDE: Record<string, string> = {
+  "washington-dc-hawksbill-summit": "VA",
+  "bozeman-mt-lake-butte-overlook": "WY",
+  "bozeman-mt-artist-point": "WY",
 };
 
 const withCoords = PROPOSAL_SPOTS_DATA.filter(
@@ -249,7 +266,7 @@ const withCoords = PROPOSAL_SPOTS_DATA.filter(
 test("every coordinate sits inside its destination's state", () => {
     const wrong: string[] = [];
     for (const s of withCoords) {
-    const state = s.destinationId.split("-").pop()!.toUpperCase();
+    const state = STATE_OVERRIDE[s.id] ?? s.destinationId.split("-").pop()!.toUpperCase();
       const box = STATE_BOUNDS[state];
       // An unknown state is a gap in the table, not a pass. Fail loudly so the
       // table gets extended rather than silently skipping the check.
