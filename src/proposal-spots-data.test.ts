@@ -170,8 +170,9 @@ test("coordinates are complete pairs, in range, and only on matched rows", async
   const { SPOTS_WITH_COORDINATES } = await import("./proposal-spots-data");
   assert.equal(
     SPOTS_WITH_COORDINATES.length,
-    27,
-    "the 9 migrated from engagedmoon + 18 sourced in Batch 1 (2026-08-07)",
+    26,
+    "the 9 migrated from engagedmoon + 17 sourced in Batch 1 (2026-08-07, " +
+      "after fix round 1 removed bozeman-mt-lake-butte-overlook)",
   );
   for (const s of SPOTS_WITH_COORDINATES) {
     // A half-pair is the dangerous shape: truthy `lat` reads as "we know where
@@ -255,7 +256,6 @@ const STATE_BOUNDS: Record<string, [number, number, number, number]> = {
  */
 const STATE_OVERRIDE: Record<string, string> = {
   "washington-dc-hawksbill-summit": "VA",
-  "bozeman-mt-lake-butte-overlook": "WY",
   "bozeman-mt-artist-point": "WY",
 };
 
