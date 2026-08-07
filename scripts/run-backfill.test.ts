@@ -13,7 +13,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { runBackfill, deriveBackfillCliConfig } from "./run-backfill";
+import { runBackfill, deriveBackfillCliConfig, runMeasuredNothing } from "./run-backfill";
 import type { BackfillTask } from "./backfill-queue";
 import type { IngestResult } from "./ingest-researched";
 
@@ -423,4 +423,21 @@ test("with ZERO unmeasured calls, the same empty run still records attempts", as
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+// ─── a run that measured nothing is not a successful run (2026-08-06) ───────
+test("runMeasuredNothing: every call unmeasured ⇒ the run failed", () => {
+  assert.equal(runMeasuredNothing(40, 40), true);
+  assert.equal(runMeasuredNothing(1, 1), true);
+});
+
+test("runMeasuredNothing: a PARTIAL failure is still a real run", () => {
+  // ~42% of calls time out normally. That must not fail the job.
+  assert.equal(runMeasuredNothing(40, 17), false);
+  assert.equal(runMeasuredNothing(40, 39), false);
+});
+
+test("runMeasuredNothing: an EMPTY QUEUE makes no calls and is a success", () => {
+  // The drain's terminal state. Failing here would turn "done" into an alarm.
+  assert.equal(runMeasuredNothing(0, 0), false);
 });

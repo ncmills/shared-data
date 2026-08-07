@@ -110,7 +110,12 @@ git -C "$TREE" clean -fdq -e node_modules -e docs/backfill-attempts.json
 cd "$TREE"
 npm install --silent >> "$LOG" 2>&1
 
-LABEL="url-backfill-$(date +%Y%m%d)"
+# TIME, not just the date. propose-pr does `git checkout -b
+# expand/<dataset>-<label>`, which FAILS if the branch already exists — so a
+# second run on the same day (the obvious operator move after a failed Tuesday,
+# or a manual smoke test before one) collided and died AFTER burning a full wave
+# of research calls. Found 2026-08-06 when a same-day drain hit exactly this.
+LABEL="url-backfill-$(date +%Y%m%d-%H%M%S)"
 
 # --auto ⇒ live-URL gate ON + a real PR. Failure is non-fatal to the script so
 # the lock releases and the log records it; `set -e` would otherwise exit silently.
