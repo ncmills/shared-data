@@ -8,6 +8,7 @@ import {
 } from "./proposal-spots";
 import { sharedDestinations } from "./index";
 import SOURCES from "../data/proposal-spot-research/coordinate-sources.json" with { type: "json" };
+import COORDINATES from "../data/proposal-spot-research/coordinates.json" with { type: "json" };
 
 /**
  * These tests exist because the rule they enforce was previously a COMMENT.
@@ -168,9 +169,14 @@ test("validateProposalSpot rejects an exclusion with no stated reason", () => {
 
 test("coordinates are complete pairs, in range, and only on matched rows", async () => {
   const { SPOTS_WITH_COORDINATES } = await import("./proposal-spots-data");
+  // Derived from the overlay itself, not hand-counted, so a future batch never
+  // requires editing a number here. `applyCoordinates` throws on any overlay
+  // key that matches no spot, so the mapping is 1:1: every row in
+  // `coordinates.json` lands on exactly one spot's lat/lng. This still fails
+  // if a coordinate silently disappears — the two counts would then diverge.
   assert.equal(
     SPOTS_WITH_COORDINATES.length,
-    25,
+    Object.keys(COORDINATES.coordinates).length,
     "the 9 migrated from engagedmoon + 16 sourced in Batch 1 (2026-08-07, " +
       "after fix round 1 removed bozeman-mt-lake-butte-overlook and fix round 2 " +
       "removed park-city-ut-jordanelle-hailstone — both were the containing " +
@@ -345,17 +351,17 @@ const withCoords = PROPOSAL_SPOTS_DATA.filter(
 );
 
 test("every coordinate sits inside its destination's state", () => {
-    const wrong: string[] = [];
-    for (const s of withCoords) {
+  const wrong: string[] = [];
+  for (const s of withCoords) {
     const state = STATE_OVERRIDE[s.id] ?? s.destinationId.split("-").pop()!.toUpperCase();
-      const box = STATE_BOUNDS[state];
-      // An unknown state is a gap in the table, not a pass. Fail loudly so the
-      // table gets extended rather than silently skipping the check.
-      if (!box) {
-        wrong.push(`${s.id}: no bounding box for state ${state}`);
-        continue;
-      }
-      const [minLat, maxLat, minLng, maxLng] = box;
+    const box = STATE_BOUNDS[state];
+    // An unknown state is a gap in the table, not a pass. Fail loudly so the
+    // table gets extended rather than silently skipping the check.
+    if (!box) {
+      wrong.push(`${s.id}: no bounding box for state ${state}`);
+      continue;
+    }
+    const [minLat, maxLat, minLng, maxLng] = box;
     if (s.lat! < minLat || s.lat! > maxLat || s.lng! < minLng || s.lng! > maxLng) {
       wrong.push(`${s.id}: [${s.lat}, ${s.lng}] is outside ${state}`);
     }
@@ -424,9 +430,26 @@ test("every coordinate has a recorded source, in a form that can be opened", () 
   assert.equal(shapeOk("https://example.test/page (notes)"), true);
 });
 
+/**
+ * The other direction of the check above. That test proves every coordinate
+ * has a source; it says nothing about a source with no coordinate. A pair
+ * removed from `coordinates.json` (a bad fix round, like the two removed
+ * 2026-08-07) without also removing its `coordinate-sources.json` entry would
+ * leave an orphaned source sitting there looking like coverage for a
+ * coordinate that no longer exists.
+ */
+test("every recorded source resolves to a coordinate that still exists", () => {
+  const sources = SOURCES.sources as Record<string, string>;
+  const coords = COORDINATES.coordinates as Record<string, number[]>;
+  const orphaned = Object.keys(sources).filter((id) => !(id in coords));
+  assert.deepEqual(
+    orphaned,
+    [],
+    "a source entry with no matching coordinate is left-behind provenance for a pair that was removed",
+  );
+});
+
 test("no coordinate is recorded for a capstone-ineligible spot", () => {
-  const bad = withCoords
-    .filter((s) => (s as { capstoneEligible?: boolean }).capstoneEligible === false)
-    .map((s) => s.id);
+  const bad = withCoords.filter((s) => s.capstoneEligible === false).map((s) => s.id);
   assert.deepEqual(bad, [], "a spot the authority excludes must not carry a coordinate");
 });
