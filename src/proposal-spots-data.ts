@@ -134,6 +134,7 @@ function usfsPermit(): ProposalSpot["permit"] {
  * quotation that the whole tier system exists to keep verbatim.
  */
 import INGESTED from "./proposal-spots-ingested.json" with { type: "json" };
+import COORDS from "../data/proposal-spot-research/coordinates.json" with { type: "json" };
 
 /** Hand-authored rows: they share the `npsPermit()` / `usfsPermit()` helpers
  *  above, which is worth more than uniformity with the generated set. */
@@ -587,9 +588,60 @@ function mergeSpots(hand: ProposalSpot[], ingested: ProposalSpot[]): ProposalSpo
   return [...byId.values()];
 }
 
-export const PROPOSAL_SPOTS_DATA: ProposalSpot[] = mergeSpots(
-  HAND_AUTHORED,
-  INGESTED as ProposalSpot[],
+/**
+ * Attach the coordinate overlay.
+ *
+ * Applied here, to both sets at once, rather than written onto rows: the
+ * generated half is regenerated from the research batches and would lose any
+ * hand edit silently, and coordinates living in two places is how the fork
+ * this file exists to end got started.
+ *
+ * An id in the overlay that matches no row is a build failure. A coordinate
+ * that lands nowhere reads, to anyone auditing the file, exactly like one that
+ * landed — and this dataset's whole posture is that "we checked" and "it is
+ * enforced" must not be able to diverge.
+ */
+function applyCoordinates(spots: ProposalSpot[]): ProposalSpot[] {
+  // JSON widens `[40.7, -73.9]` to `number[]`, so the pair-ness has to be
+  // checked rather than asserted. A one-element entry would otherwise assign
+  // `lng: undefined` and produce exactly the half-pair the validator forbids.
+  const table = COORDS.coordinates as Record<string, number[]>;
+  const malformed = Object.entries(table).filter(([, v]) => v.length !== 2);
+  if (malformed.length) {
+    throw new Error(
+      `proposal-spots: coordinate entr(ies) are not [lat, lng] pairs: ` +
+        malformed.map(([id]) => id).join(", "),
+    );
+  }
+  const byId = new Map(spots.map((s) => [s.id, s]));
+  const unmatched = Object.keys(table).filter((id) => !byId.has(id));
+  if (unmatched.length) {
+    throw new Error(
+      `proposal-spots: ${unmatched.length} coordinate entr(ies) match no spot: ` +
+        `${unmatched.join(", ")}. Fix the id or drop the entry — a coordinate ` +
+        `that lands nowhere still reads as coverage.`,
+    );
+  }
+  for (const [id, [lat, lng]] of Object.entries(table)) {
+    Object.assign(byId.get(id)!, { lat, lng });
+  }
+  return spots;
+}
+
+export const PROPOSAL_SPOTS_DATA: ProposalSpot[] = applyCoordinates(
+  mergeSpots(HAND_AUTHORED, INGESTED as ProposalSpot[]),
+);
+
+/**
+ * Spots that can carry a computed golden hour — the capstone's hard gate.
+ *
+ * 9 of 144 today. That is the honest number, and it is the real ceiling on how
+ * many destinations this product can currently plan a proposal in: without
+ * coordinates the moment renders as "late afternoon", which is not what anyone
+ * is here for. Landing more spots does not move it. Only sourced coordinates do.
+ */
+export const SPOTS_WITH_COORDINATES: ProposalSpot[] = PROPOSAL_SPOTS_DATA.filter(
+  (s) => typeof s.lat === "number" && typeof s.lng === "number",
 );
 
 /**

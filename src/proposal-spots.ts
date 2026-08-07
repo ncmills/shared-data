@@ -152,6 +152,24 @@ export interface ProposalSpot {
   // "can they actually do it?" — the questions a couple hits after they have
   // believed us.
 
+  /**
+   * Approximate centroid of the named viewpoint. BOTH OR NEITHER.
+   *
+   * These exist for one reason: golden hour is computed from them, and a
+   * proposal timed to the wrong twenty minutes is the product failing at the
+   * only thing it promises. Solar math is insensitive at this precision (0.1°
+   * of longitude moves sunset by about 24 seconds), so a centroid is honest for
+   * a sunset window and is NOT precise enough to navigate by.
+   *
+   * NEVER GUESS THESE, and never derive them from a city name. A spot without
+   * coordinates is not broken — it renders "late afternoon" instead of a clock
+   * time, and it can still be a backup and carry its own page. A spot with
+   * WRONG coordinates states a time, confidently, and is unfalsifiable to a
+   * reader. Absent is the safe value; approximate-but-real is the good one;
+   * invented is the one that does harm.
+   */
+  lat?: number;
+  lng?: number;
   /** Minimum advance notice in days, only where the authority publishes one. */
   leadTimeDays?: number;
   /** Published fee, verbatim from the authority. Never estimated. */
@@ -357,6 +375,17 @@ export function validateProposalSpot(input: unknown): SpotValidation {
       reasons.push("red: requires permit.authorityContact so 'check locally' is actionable");
     }
   }
+
+  // Half a coordinate pair is worse than none: `lat` alone reads as "we know
+  // where this is" to anything checking truthiness, and then the solar call
+  // gets NaN for the other half.
+  const hasLat = typeof s.lat === "number" && Number.isFinite(s.lat);
+  const hasLng = typeof s.lng === "number" && Number.isFinite(s.lng);
+  if (hasLat !== hasLng) {
+    reasons.push("lat/lng: provide both or neither — half a pair computes a wrong sunset");
+  }
+  if (hasLat && (s.lat! < -90 || s.lat! > 90)) reasons.push("lat: out of range");
+  if (hasLng && (s.lng! < -180 || s.lng! > 180)) reasons.push("lng: out of range");
 
   // An exclusion without a stated reason is indistinguishable from a typo, and
   // this flag removes a spot from the only thing the product exists to do.

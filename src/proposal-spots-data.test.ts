@@ -164,3 +164,32 @@ test("validateProposalSpot rejects an exclusion with no stated reason", () => {
   });
   assert.equal(good.ok, true, "a properly explained exclusion must still validate");
 });
+
+test("coordinates are complete pairs, in range, and only on matched rows", async () => {
+  const { SPOTS_WITH_COORDINATES } = await import("./proposal-spots-data");
+  assert.equal(SPOTS_WITH_COORDINATES.length, 9, "the 9 migrated from engagedmoon");
+  for (const s of SPOTS_WITH_COORDINATES) {
+    // A half-pair is the dangerous shape: truthy `lat` reads as "we know where
+    // this is", and the solar call then gets NaN for the other half.
+    assert.equal(typeof s.lat, "number", `${s.id}: lat`);
+    assert.equal(typeof s.lng, "number", `${s.id}: lng`);
+    assert.ok(s.lat! >= -90 && s.lat! <= 90, `${s.id}: lat out of range`);
+    assert.ok(s.lng! >= -180 && s.lng! <= 180, `${s.id}: lng out of range`);
+  }
+  // The five engagedmoon rows with no same-place row here must NOT have been
+  // attached to a neighbour. Sand Harbor is the sharp one: it is across Lake
+  // Tahoe AND across a state line from Emerald Bay, and both are "lake-tahoe".
+  const emerald = SPOTS_WITH_COORDINATES.find((s) => s.id === "lake-tahoe-ca-emerald-bay");
+  assert.ok(emerald, "Emerald Bay should carry its own coordinate");
+  assert.equal(emerald!.lat, 38.9541, "Emerald Bay must not have taken Sand Harbor's 39.1979");
+});
+
+test("validateProposalSpot rejects half a coordinate pair", () => {
+  const base = PROPOSAL_SPOTS_DATA[0];
+  const half = validateProposalSpot({ ...base, lat: 40.7, lng: undefined });
+  assert.equal(half.ok, false);
+  assert.ok(!half.ok && half.reasons.some((r) => r.includes("lat/lng")));
+  // Falsifiable the other way: a complete pair passes, and so does neither.
+  assert.equal(validateProposalSpot({ ...base, lat: 40.7, lng: -73.9 }).ok, true);
+  assert.equal(validateProposalSpot({ ...base, lat: undefined, lng: undefined }).ok, true);
+});
