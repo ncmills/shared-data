@@ -7,6 +7,7 @@ import {
   PROPOSAL_TYPE_TO_CANONICAL,
 } from "./proposal-spots";
 import { sharedDestinations } from "./index";
+import SOURCES from "../data/proposal-spot-research/coordinate-sources.json" with { type: "json" };
 
 /**
  * These tests exist because the rule they enforce was previously a COMMENT.
@@ -210,8 +211,6 @@ test("the rows are reachable from the package root", async () => {
     );
   }
 });
-
-import SOURCES from "../data/proposal-spot-research/coordinate-sources.json" with { type: "json" };
 
 /**
  * Bounding boxes are deliberately GENEROUS — a degree of slop on each side.
