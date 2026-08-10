@@ -14,7 +14,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { buildUrlBackfillPrompt, researchBackfill } from "./research-backfill";
+import { buildUrlBackfillPrompt, researchBackfill, budgetForVenues } from "./research-backfill";
 import type { BackfillTask } from "./backfill-queue";
 
 const TASK: BackfillTask = {
@@ -163,4 +163,66 @@ test("live URL checking is opt-in and rejects a dead source", async () => {
 
   assert.equal(res.rows.length, 0);
   assert.equal(res.rejected, 1);
+});
+
+// ─── the budget must track the work (2026-08-10) ────────────────────────────
+//
+// Measured, 8 real calls at concurrency 1 against a 600s budget:
+//
+//   1 venue   31.2s, 44.8s          3 venues  65.7s
+//   2 venues  35.3s                 8 venues  85.6s / 130.3s / 232.9s / 438.1s
+//
+// The 8-venue MEDIAN is ~181s against a 180s production budget — the timeout
+// was set at the median of the distribution it is meant to bound, so ~half of
+// those calls were truncated. They are slow-but-productive, not hung:
+// `atlanta-ga:nightlife` timed out in production on 08-06 and, given 438s,
+// returns 3 rows.
+//
+// This matters because `leverageScore = venues x wizards` sorts biggest-first,
+// so TOP_K selects ONLY max-size tasks (all 40 in the 08-06 run were 8-venue).
+// Production attempts exclusively the class the fixed budget cannot cover.
+//
+// A generous budget is close to free: it is a ceiling, not a sleep. Only a call
+// that actually runs long spends it.
+
+test("the budget scales with the venues actually asked about", () => {
+  assert.ok(budgetForVenues(8) > budgetForVenues(3),
+    "8 venues is more work than 3 and must get more time");
+  assert.ok(budgetForVenues(3) > budgetForVenues(2));
+});
+
+test("the budget covers the slowest call actually measured", () => {
+  // 438.1s was the real max for an 8-venue task.
+  assert.ok(budgetForVenues(8) >= 438_100,
+    `8-venue budget ${budgetForVenues(8)}ms must cover the measured 438.1s`);
+});
+
+test("no task gets LESS than the 180s it gets today", () => {
+  // Small tasks measured 31-66s, so the floor is never the binding constraint —
+  // but lowering any budget would be a regression in tolerance, not a fix.
+  for (const n of [0, 1, 2, 3]) {
+    assert.ok(budgetForVenues(n) >= 180_000, `${n} venues must not drop below 180s`);
+  }
+});
+
+test("the budget is capped, so a genuinely hung call cannot run away", () => {
+  // Fail-safe returns [] on timeout, so an uncapped budget just burns wall
+  // clock on a hang — at TOP_K=40 that is the whole run.
+  assert.ok(budgetForVenues(999) <= 600_000, "must stay bounded for absurd input");
+});
+
+test("researchBackfill asks for a budget matching the task it is running", async () => {
+  let seen: unknown;
+  const task = {
+    id: "url-backfill:x:dining", destinationId: "x", category: "dining",
+    city: "X", state: "XX", venues: ["A", "B", "C"], wizardsServed: ["moh"], leverageScore: 3,
+  } as any;
+
+  await researchBackfill(task, async (_p: string, o?: { timeoutMs?: number }) => {
+    seen = o?.timeoutMs;
+    return [];
+  });
+
+  assert.equal(seen, budgetForVenues(3),
+    "the per-call budget must be derived from THIS task's venue count");
 });

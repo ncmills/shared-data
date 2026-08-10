@@ -198,8 +198,12 @@ export interface ClaudeRunResult {
   suspended?: boolean;
 }
 
-/** The seam unit tests inject so NO real `claude` process is spawned. */
-export type ClaudeRunner = (prompt: string) => Promise<ClaudeRunResult>;
+/** The seam unit tests inject so NO real `claude` process is spawned.
+ *
+ *  `timeoutMs` overrides the runner's construction-time default for THIS call.
+ *  The researcher is built once per run, but the right budget depends on how
+ *  many venues the individual call has to research — see `budgetForVenues`. */
+export type ClaudeRunner = (prompt: string, timeoutMs?: number) => Promise<ClaudeRunResult>;
 
 export interface ClaudeResearcherOptions {
   /** Injected runner (tests). Defaults to the real `claude -p` spawn runner. */
@@ -318,8 +322,10 @@ export function defaultClaudeRunner(opts: ClaudeResearcherOptions): ClaudeRunner
   const timeoutMs = opts.timeoutMs ?? 180_000;
   const model = opts.model;
 
-  return (prompt: string) =>
+  return (prompt: string, callTimeoutMs?: number) =>
     new Promise<ClaudeRunResult>((resolve) => {
+      // Per-call budget wins over the construction-time default.
+      const effectiveTimeoutMs = callTimeoutMs ?? timeoutMs;
       // --allowedTools LAST-but-one is a variadic; a following `--model` (a
       // `--`-prefixed token) correctly terminates it. Order matters.
       const args = ["-p", "--output-format", "json", "--allowedTools", "WebSearch", "WebFetch"];
@@ -366,9 +372,9 @@ export function defaultClaudeRunner(opts: ClaudeResearcherOptions): ClaudeRunner
         // call never really got its allotted time — the machine was suspended.
         // 2× is deliberately loose: normal scheduling jitter is nowhere near
         // it, while the observed sleep case overshot by ~54×.
-        suspended = Date.now() - startedAt > timeoutMs * 2;
+        suspended = Date.now() - startedAt > effectiveTimeoutMs * 2;
         killGroup();
-      }, timeoutMs);
+      }, effectiveTimeoutMs);
 
       const done = (code: number) => {
         if (settled) return;
@@ -407,9 +413,9 @@ export function claudeResearcher(opts: ClaudeResearcherOptions = {}): Researcher
   const log = opts.log ?? (() => {});
   const runner = opts.runner ?? defaultClaudeRunner(opts);
 
-  return async (prompt: string): Promise<unknown[]> => {
+  return async (prompt: string, callOpts?: { timeoutMs?: number }): Promise<unknown[]> => {
     try {
-      const res = await runner(wrapPrompt(prompt));
+      const res = await runner(wrapPrompt(prompt), callOpts?.timeoutMs);
       if (res.timedOut) {
         if (res.suspended) {
           // Say which failure this is. "timed out" and "the host slept" look
