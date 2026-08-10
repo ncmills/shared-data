@@ -4796,7 +4796,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       bestman: { tagline: "Colonial romance meets Caribbean nightlife in Colombia's jewel", description: "Cartagena's walled old city is one of the most photogenic places on Earth, and the nightlife in Getsemani is electric. Add in private island day trips, incredible food, and prices that make your dollar go far, and you've got a legendary group trip." },
     },
   },
-  { id: "charlotte-nc", city: "Charlotte", state: "NC", region: "northeast",
+  { id: "charlotte-nc", city: "Charlotte", state: "NC", region: "south",
     nearestAirport: { code: "CLT", name: "Charlotte Douglas International Airport", driveMinutes: 15 },
     bestMonths: [3,4,5,6,9,10,11], vibes: ["chill","balanced","unhinged"], score: 8,
     nightlife: [
@@ -6572,7 +6572,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       bestman: { tagline: "Craft beer, BBQ smoke, and college-town chaos.", description: "The Triangle flies under the radar for bachelor parties but delivers serious value. Durham's got the gritty craft brewery and food scene, Raleigh's got the polished downtown nightlife, and Chapel Hill has the college-town energy. Throw in world-class BBQ and you've got a sleeper hit." },
     },
   },
-  { id: "salt-lake-city-ut", city: "Salt Lake City", state: "UT", region: "northeast",
+  { id: "salt-lake-city-ut", city: "Salt Lake City", state: "UT", region: "west",
     nearestAirport: { code: "SLC", name: "Salt Lake City International Airport", driveMinutes: 10 },
     bestMonths: [1,2,3,6,7,8,9], vibes: ["chill","balanced"], score: 7,
     nightlife: [
