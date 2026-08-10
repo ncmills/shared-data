@@ -46,7 +46,26 @@ export const DEAD_VENUE_URLS: ReadonlyMap<string, string> = new Map([
    "nothing listening on http or https (connect timeout); DNS resolves to a stale A record"],
   ["https://www.hiltonvb.com",
    "https connection refused — only the http vanity redirect survives, so the stored url errors in a browser"],
+  // Confirmed dead 2026-08-10 by curl + dig.
+  ["https://thecapitolbend.com/",
+   "HTTP 404 on apex, www and http — Flywheel serves its 'Unknown Domain' page, so the host no longer knows this site"],
 ]);
+
+/**
+ * NOT quarantined, on purpose — 2026-08-10.
+ *
+ * `https://sagamorespirit.com/` was reported DEAD by the 08-07 audit and
+ * escalated to RED ("users see a broken Reserve link"). Hand-measured: 10 GETs
+ * six seconds apart returned 5× HTTP 521 and 5× HTTP 200, every 200 carrying
+ * `cf-cache-status: DYNAMIC` and the real 343KB homepage — origin-served. It is
+ * a live site with a flapping origin, and dropping its url would have removed a
+ * link that works half the time in favour of none at all.
+ *
+ * The audit now files Cloudflare 520-527 as UNREACHABLE rather than DEAD
+ * (`verdictForStatus` in scripts/audit-url-subject.ts), so this specific false
+ * alarm cannot recur. Left here as the worked example of the standing rule
+ * above: a machine verdict is a reason to LOOK, never a reason to act.
+ */
 
 /** Venue arrays a party destination can carry. */
 const VENUE_ARRAYS = ["activities", "dining", "nightlife", "lodging", "transport"] as const;
