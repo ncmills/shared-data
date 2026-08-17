@@ -681,9 +681,45 @@ export function deriveCliConfig(args: Record<string, string | boolean>): CliConf
   };
 }
 
+/**
+ * Default ceiling on the share of researcher calls that may produce NO
+ * MEASUREMENT before the run is treated as a failure rather than a result.
+ * Override with `--max-unmeasured-rate=<0..1>`.
+ *
+ * 0.8 (not 0.5): a ~50% timeout rate is a MEASURED, known-bad-but-real state of
+ * this backend (see `onUnmeasured`'s note in researcher-claude.ts) and half a
+ * batch is still half a batch. At 80%+ the run has stopped being a measurement
+ * of the gap queue and become a measurement of the researcher being down.
+ */
+const DEFAULT_MAX_UNMEASURED_RATE = 0.8;
+
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
 if (isMain) {
-  const cfg = deriveCliConfig(parseArgs(process.argv.slice(2)));
+  const cliArgs = parseArgs(process.argv.slice(2));
+  const cfg = deriveCliConfig(cliArgs);
+
+  const rawMaxUnmeasured = Number(cliArgs["max-unmeasured-rate"]);
+  const maxUnmeasuredRate =
+    Number.isFinite(rawMaxUnmeasured) && rawMaxUnmeasured >= 0 && rawMaxUnmeasured <= 1
+      ? rawMaxUnmeasured
+      : DEFAULT_MAX_UNMEASURED_RATE;
+
+  // ── Unmeasured-call accounting: "N/A" must never report as "PASS" ──────────
+  //
+  // Every researcher failure — timeout, non-zero exit, usage limit, host sleep —
+  // resolves to `[]`, which is byte-identical downstream to a clean call that
+  // genuinely found nothing. So the run summarises `ingested=0 dropped=0`, exits
+  // 0, and reads as "the queue had nothing to expand" when what actually
+  // happened is "the researcher never answered".
+  //
+  // MEASURED: `com.secondnick.cite-cache-expansion` (Mon 09:30) has reported
+  // exit 0 and ingested exactly zero rows for its entire life; the `.err.log`
+  // for those runs holds 6x `claudeResearcher: timed out — returning []`, i.e.
+  // 100% of calls unmeasured. Those two states demand opposite responses — one
+  // is a healthy no-op, the other is an outage — so they must not share an exit
+  // code. Counted here at the call seam, checked where the batch is summarised.
+  const unmeasured = { timeout: 0, exit: 0, "usage-limit": 0, suspended: 0 };
+  let researchCalls = 0;
 
   // Resolve the researcher for the chosen mode.
   let researcher: Researcher;
@@ -693,7 +729,16 @@ if (isMain) {
       `run-expansion --auto: real headless-claude researcher, live-URL gate ON, ` +
         `push ${cfg.pushPr ? "ON (opens a real PR)" : "OFF (dry run)"}.`,
     );
-    researcher = claudeResearcher({ log: (m) => console.error(m) });
+    researcher = claudeResearcher({
+      log: (m) => console.error(m),
+      onUnmeasured: (reason) => {
+        unmeasured[reason] += 1;
+      },
+      // A host-slept timeout is likewise not a measurement of anything.
+      onSuspended: () => {
+        unmeasured.suspended += 1;
+      },
+    });
   } else if (cfg.candidatesPath) {
     researcher = fixedResearcherFromFile(cfg.candidatesPath);
   } else {
@@ -707,6 +752,18 @@ if (isMain) {
     process.exit(cfg.dryRun ? 0 : 1);
   }
 
+  // Count every call at the seam, whichever backend is wired. A fixed-file
+  // researcher never reports an unmeasured call, so its rate is always 0.
+  // Forward whatever arity `Researcher` currently has rather than naming the
+  // parameters. On main it is `(prompt)`; an unmerged branch widens it to
+  // `(prompt, opts?)`. Spreading `Parameters<Researcher>` compiles against both,
+  // so this counter does not have to land in lockstep with that widening.
+  const backend = researcher;
+  researcher = async (...args: Parameters<Researcher>) => {
+    researchCalls += 1;
+    return backend(...args);
+  };
+
   runExpansion({
     topK: cfg.topK,
     rowCap: cfg.rowCap,
@@ -718,11 +775,51 @@ if (isMain) {
     researcher,
   })
     .then((res) => {
+      const unmeasuredCalls =
+        unmeasured.timeout + unmeasured.exit + unmeasured["usage-limit"] + unmeasured.suspended;
+      const measuredCalls = researchCalls - unmeasuredCalls;
+      const unmeasuredRate = researchCalls === 0 ? 0 : unmeasuredCalls / researchCalls;
+      const breakdown =
+        `timeout=${unmeasured.timeout} exit=${unmeasured.exit} ` +
+        `usage-limit=${unmeasured["usage-limit"]} host-slept=${unmeasured.suspended}`;
+
+      // Always print the denominator. `ingested=0` alone cannot be read.
       console.log(
         `\nrun-expansion done: label=${res.label} dryRun=${res.dryRun} ` +
           `ingested=${res.ingestedRows.length} dropped=${res.droppedByCap.length}` +
-          (res.pr ? ` branch=${res.pr.branch}` : ""),
+          (res.pr ? ` branch=${res.pr.branch}` : "") +
+          `\nresearcher: calls=${researchCalls} measured=${measuredCalls} ` +
+          `unmeasured=${unmeasuredCalls} (${(unmeasuredRate * 100).toFixed(0)}%) [${breakdown}]`,
       );
+
+      // ── N/A is not PASS ─────────────────────────────────────────────────────
+      if (researchCalls === 0) {
+        // Genuinely nothing to do: the gap queue produced no tasks, so no claim
+        // about the researcher is being made either way. A real, clean no-op.
+        console.log(
+          `run-expansion: nothing to expand — the gap queue yielded ` +
+            `${res.tasksConsidered.length} task(s) and no research call was made. Exit 0.`,
+        );
+        return;
+      }
+
+      if (measuredCalls === 0 || unmeasuredRate >= maxUnmeasuredRate) {
+        const verdict =
+          measuredCalls === 0
+            ? `the researcher NEVER ANSWERED: 0 of ${researchCalls} call(s) produced a measurement`
+            : `only ${measuredCalls} of ${researchCalls} call(s) produced a measurement ` +
+              `(${(unmeasuredRate * 100).toFixed(0)}% unmeasured, ceiling ` +
+              `${(maxUnmeasuredRate * 100).toFixed(0)}%)`;
+        console.error(
+          `\nrun-expansion FAILED — ${verdict} [${breakdown}].\n` +
+            `  ingested=${res.ingestedRows.length} is N/A for this run, NOT "nothing to expand": ` +
+            `every unmeasured call returns [] exactly like a clean empty result, so this batch ` +
+            `made no statement about the ${res.tasksConsidered.length} task(s) it considered.\n` +
+            `  Check that the \`claude\` CLI is logged in and reachable, that the host stayed ` +
+            `awake, and that no session/usage limit is in force. Re-run when it is.`,
+        );
+        process.exit(1);
+      }
     })
     .catch((e) => {
       console.error("run-expansion FAILED:", e);
