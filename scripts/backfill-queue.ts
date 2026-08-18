@@ -247,6 +247,33 @@ export function recordAttempts(
 if (import.meta.url === `file://${process.argv[1]}`) {
   const q = buildBackfillQueue(undefined, { maxVenuesPerTask: 8, attempts: loadAttempts() });
   const pct = q.totalRows === 0 ? 0 : ((q.totalRows - q.totalUnsourced) / q.totalRows) * 100;
+
+  /**
+   * `--json` exists so a monitor can MEASURE the drain instead of parsing a
+   * number out of a run log.
+   *
+   * The backfill watchdog read its drain figures from the last
+   * "N of M party rows unsourced" line in ~/work/logs/url-backfill.log, with
+   * the reasoning that a running state's latest write is the truth. That holds
+   * only while one log has every writer. The 08-06 ASAP drain wrote to
+   * url-backfill-drain.log instead, so 318 sourced rows were invisible: on
+   * 08-07 the watchdog reported 6.8% sourced and "~200 weeks to drain" when the
+   * catalog itself said 11.8%. The handoff it produced led with that number.
+   *
+   * The catalog is the only thing that knows how many rows are sourced, so ask
+   * it. No log can go stale relative to itself.
+   */
+  if (process.argv.includes("--json")) {
+    console.log(JSON.stringify({
+      totalRows: q.totalRows,
+      totalUnsourced: q.totalUnsourced,
+      totalSourced: q.totalRows - q.totalUnsourced,
+      pctSourced: Number(pct.toFixed(1)),
+      tasks: q.tasks.length,
+    }));
+    process.exit(0);
+  }
+
   console.log(`backfill-queue — party rows with no followable source\n`);
   console.log(
     `${q.totalUnsourced} of ${q.totalRows} rows unsourced ` +

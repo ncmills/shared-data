@@ -35,6 +35,7 @@
  * Run:  npx tsx scripts/audit-url-subject.ts [--json] [--limit N]
  */
 import { sharedDestinations } from "../src/index";
+import { isOriginUnreachable } from "../src/verify-url";
 
 const CATEGORIES = ["activities", "dining", "nightlife", "lodging", "transport"] as const;
 
@@ -62,6 +63,8 @@ const CONNECT_ERRORS = /ECONNREFUSED|ECONNRESET|ETIMEDOUT|EHOSTUNREACH|ENETUNREA
 const NO_DNS = /ENOTFOUND|EAI_AGAIN/i;
 const TIMEOUT_MS = 12_000;
 const CONCURRENCY = 10;
+/** Pause before the single edge→origin retry. Long enough to miss a flap. */
+const RETRY_DELAY_MS = 2_000;
 
 /** Name fragments that identify no venue on their own. */
 const STOPWORDS = new Set([
@@ -182,18 +185,66 @@ export function sourcedRows(): { name: string; city: string; state: string; cate
   return out;
 }
 
-async function checkOne(row: ReturnType<typeof sourcedRows>[number]): Promise<SubjectResult> {
-  const base = { name: row.name, city: row.city, category: row.category, url: row.url };
-  let res: Response;
+/**
+ * The verdict a response STATUS alone settles, or null when the status is fine
+ * and only the page body can decide.
+ *
+ * Pure and exported so the three-way split is pinned by tests rather than
+ * living inside a network call nothing can reach: a refusal, an origin that
+ * never answered, and a server that told us the URL is wrong are three
+ * different facts, and every past false alarm here came from collapsing them.
+ */
+export function verdictForStatus(
+  status: number,
+): { verdict: SubjectVerdict; why: string } | null {
+  // A refusal tells us about the server's bot policy, not about the url. It is
+  // never counted as a failure of the data.
+  if (status === 401 || status === 403 || status === 429)
+    return { verdict: "BLOCKED", why: `HTTP ${status} — server refused us` };
+
+  // A Cloudflare 520-527 is the edge reporting that IT could not reach the
+  // ORIGIN. Nothing answered, so this belongs with the other
+  // one-try-inconclusive cases, not with a server that answered with an error.
+  if (isOriginUnreachable(status))
+    return { verdict: "UNREACHABLE",
+             why: `HTTP ${status} — the CDN could not reach the origin; retried and still ` +
+                  `no answer. Verify by hand before acting; NOT a dead link` };
+
+  // Anything that is not a 2xx after following redirects, exactly as before —
+  // `res.ok` is 200-299, so a final 3xx stayed actionable and still does.
+  if (status < 200 || status > 299) return { verdict: "DEAD", why: `HTTP ${status}` };
+
+  return null;
+}
+
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
+async function fetchOnce(url: string): Promise<Response> {
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), TIMEOUT_MS);
   try {
-    const ctl = new AbortController();
-    const timer = setTimeout(() => ctl.abort(), TIMEOUT_MS);
-    res = await fetch(row.url, {
+    return await fetch(url, {
       redirect: "follow",
       signal: ctl.signal,
       headers: { "User-Agent": UA, "Accept": ACCEPT, "Accept-Language": "en-US,en;q=0.9" },
     });
+  } finally {
     clearTimeout(timer);
+  }
+}
+
+async function checkOne(row: ReturnType<typeof sourcedRows>[number]): Promise<SubjectResult> {
+  const base = { name: row.name, city: row.city, category: row.category, url: row.url };
+  let res: Response;
+  try {
+    res = await fetchOnce(row.url);
+    // One retry for an edge→origin error, which describes a moment rather than
+    // the URL. sagamorespirit.com flapped 5/10 between 521 and a real 200 from
+    // the origin; a single-shot check called it DEAD and the watchdog went RED.
+    if (isOriginUnreachable(res.status)) {
+      await sleep(RETRY_DELAY_MS);
+      res = await fetchOnce(row.url);
+    }
   } catch (e: any) {
     // Classify by CAUSE. A thrown fetch has several very different meanings and
     // collapsing them into "dead" is what produced seven false alarms.
@@ -211,9 +262,8 @@ async function checkOne(row: ReturnType<typeof sourcedRows>[number]): Promise<Su
 
   // Mirrors verify-url.ts's doctrine: a refusal tells us about the server's bot
   // policy, not about the url. It is never counted as a failure of the data.
-  if (res.status === 401 || res.status === 403 || res.status === 429)
-    return { ...base, verdict: "BLOCKED", why: `HTTP ${res.status} — server refused us` };
-  if (!res.ok) return { ...base, verdict: "DEAD", why: `HTTP ${res.status}` };
+  const byStatus = verdictForStatus(res.status);
+  if (byStatus) return { ...base, ...byStatus };
 
   let html: string;
   try {
