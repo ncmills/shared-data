@@ -283,9 +283,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       `across ${q.tasks.length} task(s)\n`,
   );
 
-  const countingResearcher = async (prompt: string) => {
+  // Forwards the per-call budget. Dropping `callOpts` here would silently pin
+  // every call back to the run-wide default — the counter must be transparent.
+  const countingResearcher = async (prompt: string, callOpts?: { timeoutMs?: number }) => {
     totalCalls++;
-    return researcher(prompt);
+    return researcher(prompt, callOpts);
   };
 
   const res = await runBackfill({

@@ -77,13 +77,49 @@ export function buildUrlBackfillPrompt(task: BackfillTask): string {
  * puts survivors through the same honesty firewall the gap path uses.
  * Never throws on a bad candidate — it is a reject, not a crash.
  */
+/**
+ * How long ONE research call gets, given how many venues it must actually
+ * research. Pure so the policy is pinned by tests rather than tuned by feel.
+ *
+ * The old budget was a single run-wide 180s. Measured 2026-08-10 (8 real calls,
+ * concurrency 1, 600s ceiling):
+ *
+ *   1 venue   31.2s, 44.8s        3 venues  65.7s
+ *   2 venues  35.3s               8 venues  85.6s / 130.3s / 232.9s / 438.1s
+ *
+ * The 8-venue MEDIAN is ~181s — the budget sat exactly on the median of the
+ * distribution it was meant to bound, so about half of those calls were cut off
+ * mid-research. They were slow, not hung: `atlanta-ga:nightlife` timed out in
+ * production on 08-06 and returns 3 rows when given 438s.
+ *
+ * That fell entirely on the tasks production actually runs. `leverageScore =
+ * venues x wizards` sorts biggest-first, so TOP_K selects only max-size tasks —
+ * all 40 in the 08-06 run were 8-venue — i.e. exactly the class the fixed
+ * budget could not cover, every run, forever.
+ *
+ * Being generous is nearly free: this is a ceiling, not a sleep, and a call
+ * that finishes in 35s spends 35s. The cap bounds a genuine hang, and the floor
+ * guarantees no task is given less than it gets today.
+ */
+const BUDGET_BASE_MS = 90_000;
+const BUDGET_PER_VENUE_MS = 60_000;
+const BUDGET_FLOOR_MS = 180_000; // never below today's run-wide budget
+const BUDGET_CAP_MS = 600_000; // a hang must not eat the whole run
+
+export function budgetForVenues(venues: number): number {
+  const want = BUDGET_BASE_MS + BUDGET_PER_VENUE_MS * Math.max(0, venues);
+  return Math.min(BUDGET_CAP_MS, Math.max(BUDGET_FLOOR_MS, want));
+}
+
 export async function researchBackfill(
   task: BackfillTask,
   researcher: Researcher,
   opts: ResearchGapOptions = {},
 ): Promise<ResearchGapResult> {
   const prompt = buildUrlBackfillPrompt(task);
-  const candidates = await researcher(prompt);
+  const candidates = await researcher(prompt, {
+    timeoutMs: budgetForVenues(task.venues.length),
+  });
 
   const asked = new Set(task.venues.map(norm));
   const rows: ResearchedRow[] = [];
