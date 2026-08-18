@@ -894,7 +894,7 @@
   {
     "id": "traverse-city-mi-sleeping-bear-lake-michigan-overlook",
     "destinationId": "traverse-city-mi",
-    "name": "Lake Michigan Overlook, Sleeping Bear Dunes National Lakeshore (FEDERAL LAND)",
+    "name": "Lake Michigan Overlook, Sleeping Bear Dunes National Lakeshore",
     "type": "scenic-overlook",
     "highlight": "A sand bluff 450 feet straight above the water, with the lake filling the whole western horizon and no shoreline development in sight. On a clear day the bluffs at Empire and the sweep of Platte Bay are visible to the south.",
     "tier": "green",
@@ -1126,7 +1126,7 @@
   {
     "id": "st-louis-mo-garden-of-the-gods-observation-trail",
     "destinationId": "st-louis-mo",
-    "name": "Garden of the Gods Observation Trail, Shawnee National Forest (FEDERAL LAND)",
+    "name": "Garden of the Gods Observation Trail, Shawnee National Forest",
     "type": "trail",
     "highlight": "A quarter-mile of flagstone across the top of a sandstone bluff, past Camel Rock and Devil's Smokestack, with the Shawnee Hills running to the horizon. The rock is banded and wind-cut, and the drop-offs are unfenced.",
     "tier": "amber",
@@ -1972,7 +1972,7 @@
   {
     "id": "provincetown-ma-herring-cove",
     "destinationId": "provincetown-ma",
-    "name": "Herring Cove Beach (FEDERAL — Cape Cod National Seashore)",
+    "name": "Herring Cove Beach",
     "type": "beach",
     "highlight": "The one Outer Cape beach that faces west: the sun goes down into the water off the north lot, with the Provincetown skyline and Long Point behind you across the harbor.",
     "tier": "amber",
