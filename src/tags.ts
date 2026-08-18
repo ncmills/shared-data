@@ -230,15 +230,38 @@ type Brand = "moh" | "bestman" | "both";
 
 /** Party brands → bachelor/ette wizards. Offsite-outing is added separately,
  *  based on corporate audience-eligibility, NOT on brand. */
-export function wizardsFromBrands(brands: Brand[]): WizardTag[] {
+/**
+ * `brands` is OPTIONAL, and its absence is a real state — not a defensive cast.
+ *
+ * Every hand-authored party row carries `brands`, so for a year these three
+ * readers could assume it. The sanctioned ingest path cannot: a researched row
+ * is only required to carry its category's fields (`research-schema.ts`), and a
+ * row that belongs to NEITHER party wizard has nothing true to put there.
+ * Writing `brands: []` to satisfy a signature would be the same fact stated
+ * less honestly.
+ *
+ * Until 2026-08-06 that combination threw — `bakeDining` called this with
+ * `undefined` and died on `.includes` — which meant the party-venue ingest gate
+ * structurally could not insert a dining or nightlife row for Friendsmoon,
+ * Engagedmoon or Offsite alone. The gate rejected the whole batch and rolled
+ * back, so it failed loudly rather than silently; but the class of row the two
+ * newest wizards most need was the exact class it could not accept.
+ *
+ * Absent brands therefore means "branded for neither party wizard", and the
+ * per-item bake adds `offsite-outing` / `friendsmoon` / `engagedmoon` on the
+ * audience signal as it always did.
+ */
+export function wizardsFromBrands(brands: Brand[] | undefined): WizardTag[] {
   const out: WizardTag[] = [];
+  if (!brands) return out;
   if (brands.includes("bestman") || brands.includes("both")) out.push("bestman");
   if (brands.includes("moh") || brands.includes("both")) out.push("moh");
   return out;
 }
 
-export function audiencesFromBrands(brands: Brand[]): AudienceTag[] {
+export function audiencesFromBrands(brands: Brand[] | undefined): AudienceTag[] {
   const out: AudienceTag[] = [];
+  if (!brands) return out;
   if (brands.includes("bestman") || brands.includes("both")) out.push("bachelor");
   if (brands.includes("moh") || brands.includes("both")) out.push("bachelorette");
   return out;
@@ -263,7 +286,7 @@ function isGolfType(type: string): boolean {
  * overlay dropped them a layer later — but a tag that survives only because
  * something downstream filters it is a latent bug, not a safe one.
  */
-export function wizardsForActivity(type: string, brands: Brand[]): WizardTag[] {
+export function wizardsForActivity(type: string, brands: Brand[] | undefined): WizardTag[] {
   const audiences = activityAudiences(type) as AudienceTag[];
   // Golf is a bachelor + corporate thing and NEVER a bachelorette one.
   const party = wizardsFromBrands(brands).filter((w) => !(w === "moh" && isGolfType(type)));
@@ -272,8 +295,9 @@ export function wizardsForActivity(type: string, brands: Brand[]): WizardTag[] {
   return Array.from(new Set([...party, ...outing, ...moon]));
 }
 
-export function productsFromBrands(brands: Brand[]): ProductTag[] {
+export function productsFromBrands(brands: Brand[] | undefined): ProductTag[] {
   const out: ProductTag[] = [];
+  if (!brands) return out;
   if (brands.includes("bestman") || brands.includes("both")) out.push("bach-party");
   if (brands.includes("moh") || brands.includes("both")) out.push("bachelorette");
   return out;
