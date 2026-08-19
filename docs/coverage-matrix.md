@@ -4,13 +4,13 @@ Rows = wizard, columns = dataset. Cell = real reachable row count in the canonic
 
 | wizard | party | golf | residence | golf-destination | moh-local | bestman-local | oo-experience | oo-outing |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bestman | 5182 | 999 | 0 | 0 | 0 | 91 | 0 | 0 |
-| moh | 4899 | 0 | 0 | 0 | 50 | 0 | 0 | 0 |
-| offsite-retreat | 1278 | 999 | 339 | 0 | 0 | 0 | 158 | 0 |
-| offsite-outing | 5840 | 999 | 339 | 0 | 0 | 0 | 158 | 107 |
+| bestman | 5201 | 999 | 0 | 0 | 0 | 91 | 0 | 0 |
+| moh | 4918 | 0 | 0 | 0 | 50 | 0 | 0 | 0 |
+| offsite-retreat | 1280 | 999 | 339 | 0 | 0 | 0 | 158 | 0 |
+| offsite-outing | 5859 | 999 | 339 | 0 | 0 | 0 | 158 | 107 |
 | handicap | 0 | 999 | 0 | 234 | 0 | 0 | 0 | 0 |
-| friendsmoon | 5840 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| engagedmoon | 5840 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| friendsmoon | 5859 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| engagedmoon | 5859 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Starved-cell summary (input-space cells below threshold, per wizard)
 

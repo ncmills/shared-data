@@ -54,6 +54,12 @@ import { expansionNortheast } from "./destinations-expansion-northeast";
 import { expansionMidwest } from "./destinations-expansion-midwest";
 import { expansionWest } from "./destinations-expansion-west";
 import { attachPartyVenues } from "./party-venues-attach";
+import { PARTY_VENUES_EXPANSION } from "./party-venues-expansion";
+// Curated batches of rows that land ON EXISTING destinations (not new cities),
+// passed to `attachPartyVenues` alongside the machine-appended
+// `PARTY_VENUES_EXPANSION`. They are separate files so a hand-authored batch
+// never has to be merged into the file `ingest-researched.ts` parses.
+import { northeastProposal0818 } from "./destinations-expansion-northeast-proposal-0818";
 import { applyPartyVenuePatches } from "./party-venue-patch-apply";
 
 // Every canonical item is baked with universe tags (wizards/audiences/products/
@@ -89,7 +95,7 @@ export const sharedDestinations: CanonicalDestination[] = applyPartyVenuePatches
     ...expansionNortheast,
     ...expansionMidwest,
     ...expansionWest,
-  ]),
+  ], [...PARTY_VENUES_EXPANSION, ...northeastProposal0818]),
 )
   .map(bakeDestination)
   .map(stripDeadVenueUrls);
