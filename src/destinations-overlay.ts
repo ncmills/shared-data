@@ -76,6 +76,13 @@ export const BESTMAN_ACTIVITY_TYPES = new Set([
   // loudly instead of quietly shipping a row that renders nowhere.
   "luxe-picnic",
   "photoshoot",
+  // Added 2026-08-18 — the SAME lag, third time. `sleigh-ride` has been in
+  // MOH_ACTIVITY_TYPES since the 2026-04-20 audit and was never mirrored here,
+  // so a horse-drawn sleigh ride authored `brands: ["both"]` was tagged
+  // `bestman` and dropped by this overlay. Caught by the parity test above the
+  // moment Stowe's Trapp Family Lodge sleigh row landed. A winter sleigh ride
+  // is not a gendered activity and there is no brand reason for the asymmetry.
+  "sleigh-ride",
 ]);
 
 /** Strip the universe tag fields (+ brands) so output matches the pre-bake shape. */

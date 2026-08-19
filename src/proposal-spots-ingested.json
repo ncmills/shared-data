@@ -3983,5 +3983,81 @@
     "leadTimeDays": null,
     "fee": null,
     "blocker": "Drone use is not permitted at Heceta Head Lighthouse State Scenic Viewpoint due to the historical nature of the building as well as the presence of wildlife in the area."
+  },
+  {
+    "id": "lake-placid-ny-whiteface-summit",
+    "destinationId": "lake-placid-ny",
+    "name": "Whiteface Mountain summit, Veterans' Memorial Highway",
+    "type": "scenic-overlook",
+    "highlight": "A toll road climbs the shoulder of Whiteface to a parking area just below the summit, where a castle of native stone sits on the ridge. From there it is either a stair-and-tunnel walk or an elevator cut into the rock to the top, and a fifth-of-a-mile Alpine Nature Trail along the crest with the High Peaks on one side and Lake Champlain and Vermont on the other.",
+    "tier": "red",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": null,
+      "authority": "New York State Olympic Regional Development Authority (ORDA) — Whiteface Mountain",
+      "authorityContact": "(518) 946-2223"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "lake-placid-ny-heart-lake",
+    "sourceUrl": "https://www.lakeplacid.com/attractions/whiteface-veterans-memorial-highway",
+    "citations": [
+      "https://www.lakeplacid.com/attractions/whiteface-veterans-memorial-highway",
+      "https://whiteface.com/todo/whiteface-veterans-memorial-highway/",
+      "https://orda.org/2022/05/11/whiteface-mountain-summer-activities-schedule/"
+    ],
+    "seasonalClosure": "A seasonal toll road. It does not open until late spring and closes for the winter; ORDA publishes the year's opening and closing dates, and they move with the snow. Confirm before travelling.",
+    "accessNote": "The highway starts in Wilmington, about 20 minutes from Lake Placid village. There is a per-vehicle toll plus a charge per additional passenger, and the summit is reached from the parking area either on foot through a rock tunnel and stairway or by the elevator."
+  },
+  {
+    "id": "lake-placid-ny-heart-lake",
+    "destinationId": "lake-placid-ny",
+    "name": "Heart Lake shoreline, Adirondak Loj",
+    "type": "trail",
+    "highlight": "A small lake at the end of Adirondack Loj Road with a flat shoreline path around it, kept by the Adirondack Mountain Club on its Heart Lake property. Algonquin and Wright rise straight out of the far shore, and the water is still enough most mornings to hold them.",
+    "tier": "red",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": null,
+      "authority": "Adirondack Mountain Club (ADK) — Heart Lake Program Center",
+      "authorityContact": "(518) 523-3441"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "lake-placid-ny-john-brown-farm",
+    "sourceUrl": "https://adk.org/hiker-parking-at-heart-lake/",
+    "citations": [
+      "https://adk.org/hiker-parking-at-heart-lake/",
+      "https://adk.org/adk-heart-lake-program-center/",
+      "https://adk.org/high-peaks-information-center/"
+    ],
+    "fee": "$25 per day to park anytime before 1 p.m. There is a half-day parking fee of $15 anytime after 1 p.m. Members of the Adirondack Mountain Club get a discounted parking rate: $10 per day, and $6 per half day.",
+    "accessNote": "The lake sits inside ADK's private day-use property at 1002 Adirondack Loj Road, about 20 minutes south of Lake Placid village. Parking is paid at the booth when it is staffed, or at the High Peaks Information Center or the Loj when it is not."
+  },
+  {
+    "id": "lake-placid-ny-john-brown-farm",
+    "destinationId": "lake-placid-ny",
+    "name": "John Brown Farm State Historic Site meadow",
+    "type": "historic-site",
+    "highlight": "270 acres of meadow, woods and trail on the plateau south of the village, kept by New York State around the abolitionist's farmhouse and grave. The field opens west onto the High Peaks, and outside the house's own hours almost nobody is on it.",
+    "tier": "red",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": null,
+      "authority": "New York State Office of Parks, Recreation and Historic Preservation — John Brown Farm State Historic Site",
+      "authorityContact": "(518) 523-3900"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "lake-placid-ny-heart-lake",
+    "sourceUrl": "https://parks.ny.gov/visit/historic-sites/john-brown-farm-state-historic-site",
+    "citations": [
+      "https://parks.ny.gov/visit/historic-sites/john-brown-farm-state-historic-site",
+      "https://www.lakeplacid.com/attractions/john-brown-farm-state-historic-site"
+    ],
+    "accessNote": "115 John Brown Road, five minutes from Main Street. The grounds and trails are open daily, dawn to dusk, all year and free of charge; the farmhouse itself keeps seasonal hours and closes Tuesdays in season. The site does run a permit process for special events, filming and photography — ask the park office what applies before you plan anything staged."
   }
 ]
