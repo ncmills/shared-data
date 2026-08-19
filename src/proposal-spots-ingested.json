@@ -725,6 +725,286 @@
     "accessNote": null
   },
   {
+    "destinationId": "mackinac-island-mi",
+    "name": "Fort Holmes",
+    "type": "historic-site",
+    "highlight": "The highest point on the island, a small reconstructed British earthwork from 1812 sitting above the tree line, with the Straits, the bridge and both Great Lakes laid out around it. There is no road up that a car could use — the island has had none since 1898 — so the walk or the ride up is part of it.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Arrangements for filming, taping, recording, interviewing or photographing at MSHP must be made several days in advance through the Chief of Marketing.",
+        "sourceUrl": "https://www.mackinacparks.com/about/media/film-and-photography-guidelines-2/"
+      },
+      "authority": "Mackinac State Historic Parks (Mackinac Island State Park Commission)",
+      "authorityContact": "https://www.mackinacparks.com/contact-mshp/"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "mackinac-island-mi-sugarloaf-rock",
+    "sourceUrl": "https://www.mackinacparks.com/attraction/mackinac-island-state-parks/",
+    "citations": [
+      "https://www.mackinacparks.com/about/media/film-and-photography-guidelines-2/",
+      "https://www.mackinacparks.com/attraction/mackinac-island-state-parks/"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "Mackinac State Historic Parks names Fort Holmes among the park's landmarks and states the park itself is \"open 24 hours a day, 365 days a year\" across \"70.5 miles of signed and interpreted roads and trails\" (https://www.mackinacparks.com/attraction/mackinac-island-state-parks/). Staffed operations are another matter: \"MSHP's sites are open from early-May through mid-October. Scouting and/or filming on site before or after this time is discouraged due to limited staff and non-winterized buildings.\" (https://www.mackinacparks.com/about/media/film-and-photography-guidelines-2/). Ferry service, not the park, is the real constraint outside summer.",
+    "seasonalClosure": null,
+    "id": "mackinac-island-mi-fort-holmes"
+  },
+  {
+    "destinationId": "mackinac-island-mi",
+    "name": "British Landing",
+    "type": "beach",
+    "highlight": "The shingle beach on the island's northwest shore where the British came ashore in 1812, roughly the halfway mark of the eight-mile shore road. It faces the open water toward the Upper Peninsula, which makes it the island's sunset side.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Arrangements for filming, taping, recording, interviewing or photographing at MSHP must be made several days in advance through the Chief of Marketing.",
+        "sourceUrl": "https://www.mackinacparks.com/about/media/film-and-photography-guidelines-2/"
+      },
+      "authority": "Mackinac State Historic Parks (Mackinac Island State Park Commission)",
+      "authorityContact": "https://www.mackinacparks.com/contact-mshp/"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "mackinac-island-mi-fort-holmes",
+    "sourceUrl": "https://www.mackinacparks.com/attraction/mackinac-island-state-parks/",
+    "citations": [
+      "https://www.mackinacparks.com/about/media/film-and-photography-guidelines-2/",
+      "https://www.mackinacparks.com/attraction/mackinac-island-state-parks/"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "Named by Mackinac State Historic Parks as one of the park's landmarks, on a park \"open 24 hours a day, 365 days a year\" (https://www.mackinacparks.com/attraction/mackinac-island-state-parks/). Reached on foot, by bicycle or by horse along M-185; there is no car access anywhere on the island.",
+    "seasonalClosure": null,
+    "id": "mackinac-island-mi-british-landing"
+  },
+  {
+    "destinationId": "mackinac-island-mi",
+    "name": "Sugarloaf Rock",
+    "type": "scenic-overlook",
+    "highlight": "A freestanding limestone stack in the island's wooded interior, left behind when the post-glacial lake that once covered the island drained away. It is inland and off the shore road, so it is quiet in a way the harbour never is.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Arrangements for filming, taping, recording, interviewing or photographing at MSHP must be made several days in advance through the Chief of Marketing.",
+        "sourceUrl": "https://www.mackinacparks.com/about/media/film-and-photography-guidelines-2/"
+      },
+      "authority": "Mackinac State Historic Parks (Mackinac Island State Park Commission)",
+      "authorityContact": "https://www.mackinacparks.com/contact-mshp/"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "mackinac-island-mi-fort-holmes",
+    "sourceUrl": "https://www.mackinacparks.com/attraction/mackinac-island-state-parks/",
+    "citations": [
+      "https://www.mackinacparks.com/about/media/film-and-photography-guidelines-2/",
+      "https://www.mackinacparks.com/attraction/mackinac-island-state-parks/"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "Mackinac State Historic Parks lists Sugarloaf Rock among the landmarks of Mackinac Island State Park, which covers \"more than 80% of Mackinac Island\" and is \"open 24 hours a day, 365 days a year\" (https://www.mackinacparks.com/attraction/mackinac-island-state-parks/).",
+    "seasonalClosure": null,
+    "id": "mackinac-island-mi-sugarloaf-rock"
+  },
+  {
+    "destinationId": "door-county-wi",
+    "name": "Ellison Bluff County Park",
+    "type": "scenic-overlook",
+    "highlight": "A stairway drops to a viewing platform pinned to the face of a dolomite bluff above Green Bay. The county's own description is that it \"provides an opportunity for awe-inspiring views including sunsets and photographic opportunities of the cliffs, Green Bay waters and the many Green Bay Islands.\" It faces west, so it is a sunset spot.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Various parks may be reserved, (but not closed to the public), for weddings, reunions, birthdays, private and company picnics and other events.",
+        "sourceUrl": "https://www.co.door.wi.gov/766/Door-County-Park-Rentals"
+      },
+      "authority": "Door County Facilities and Parks Department",
+      "authorityContact": "920-743-5511"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Various parks may be reserved, (but not closed to the public), for weddings, reunions, birthdays, private and company picnics and other events.",
+      "sourceUrl": "https://www.co.door.wi.gov/766/Door-County-Park-Rentals"
+    },
+    "backup": "door-county-wi-door-bluff-headlands-county-park",
+    "sourceUrl": "https://www.co.door.wi.gov/534/Ellison-Bluff-County-Park",
+    "citations": [
+      "https://www.co.door.wi.gov/534/Ellison-Bluff-County-Park",
+      "https://www.co.door.wi.gov/766/Door-County-Park-Rentals"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "The county states the park \"consists of 174 acres with seven thousand feet shoreline inaccessible because of the bluff\" and that \"there is no access to the water as the bluff is in excess of 100 feet high\" — the platform is the view, and there is no way down to the water (https://www.co.door.wi.gov/534/Ellison-Bluff-County-Park). Reserving a Door County park never buys privacy: reserved parks are \"not closed to the public,\" and \"all reservations are taken on a first-come, first served basis and are Nonrefundable\" (https://www.co.door.wi.gov/766/Door-County-Park-Rentals).",
+    "seasonalClosure": null,
+    "id": "door-county-wi-ellison-bluff-county-park"
+  },
+  {
+    "destinationId": "door-county-wi",
+    "name": "Door Bluff Headlands County Park",
+    "type": "trail",
+    "highlight": "The largest county park in Door County and deliberately the least built: 252 forested acres and 6,800 feet of shoreline, \"undeveloped except for an access road to its interior,\" under vertical limestone bluffs rising out of Green Bay. Natural trails only, and almost nobody on them.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Various parks may be reserved, (but not closed to the public), for weddings, reunions, birthdays, private and company picnics and other events.",
+        "sourceUrl": "https://www.co.door.wi.gov/766/Door-County-Park-Rentals"
+      },
+      "authority": "Door County Facilities and Parks Department",
+      "authorityContact": "920-743-5511"
+    },
+    "crowdWindow": {
+      "verbatim": "The park receives limited usage because it is not developed for active recreational use.",
+      "sourceUrl": "https://www.co.door.wi.gov/551/Door-Bluff-Headlands-County-Park"
+    },
+    "privacy": null,
+    "backup": "door-county-wi-ellison-bluff-county-park",
+    "sourceUrl": "https://www.co.door.wi.gov/551/Door-Bluff-Headlands-County-Park",
+    "citations": [
+      "https://www.co.door.wi.gov/551/Door-Bluff-Headlands-County-Park",
+      "https://www.co.door.wi.gov/766/Door-County-Park-Rentals"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "The county lists the amenities as an \"access road\" and \"natural hiking trails\" and nothing else — no restrooms, no shelter, no paved path. \"With 252 forested acres, including 6800 feet of shoreline, Door Bluff Headlands is the largest county park in Door County\" (https://www.co.door.wi.gov/551/Door-Bluff-Headlands-County-Park). Door County's parks ordinance carries no photography-permit provision, which is why this is amber rather than green; the Facilities and Parks Department is the office to call.",
+    "seasonalClosure": null,
+    "id": "door-county-wi-door-bluff-headlands-county-park"
+  },
+  {
+    "destinationId": "door-county-wi",
+    "name": "Eagle Tower, Peninsula State Park",
+    "type": "scenic-overlook",
+    "highlight": "A 60-foot tower on top of Eagle Bluff whose observation deck sits 253 feet above Green Bay, looking out over \"the park, surrounding islands, the Upper Michigan shoreline and the village of Ephraim.\" There are 100 steps, or an 850-foot accessible canopy walk that climbs through the treetops instead.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "If you are planning a simple event for a small group, you may conduct the wedding in just about any public place in the property.",
+        "sourceUrl": "https://dnr.wisconsin.gov/topic/parks/rules/weddings"
+      },
+      "authority": "Wisconsin Department of Natural Resources — Peninsula State Park",
+      "authorityContact": "https://dnr.wisconsin.gov/topic/parks/peninsula"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "door-county-wi-cave-point-county-park",
+    "sourceUrl": "https://dnr.wisconsin.gov/topic/parks/peninsula/tower",
+    "citations": [
+      "https://dnr.wisconsin.gov/topic/parks/peninsula/tower",
+      "https://dnr.wisconsin.gov/topic/parks/rules/weddings",
+      "https://dnr.wisconsin.gov/topic/parks/peninsula"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "A Wisconsin state park vehicle admission sticker is required to enter Peninsula State Park (https://dnr.wisconsin.gov/topic/parks/peninsula). The DNR's weddings page never mentions proposals or engagements, which is why this row is amber: the only published rule that comes close is that \"if you are planning a simple event for a small group, you may conduct the wedding in just about any public place in the property,\" and that a photographer working for a fee needs a commercial use permit from the property manager.",
+    "seasonalClosure": "The tower is shut for roughly half the year: \"Eagle Tower is open seasonally from approximately May 1 to Oct. 31\" and \"visitors can expect the tower to always be closed in the middle of winter\" because frost makes the ramps and stairs hazardous (https://dnr.wisconsin.gov/topic/parks/peninsula/tower).",
+    "id": "door-county-wi-eagle-tower-peninsula-state-park"
+  },
+  {
+    "destinationId": "traverse-city-mi",
+    "name": "Pyramid Point Overlook",
+    "type": "scenic-overlook",
+    "highlight": "A sand bluff on the Sleeping Bear shore with the Manitou Islands out in front of it. The Park Service calls it \"one of the most beautiful spots in the entire state\" and is honest about the walk: \"the hike up is steep but not too long, but the reward of going up, up, and then up some more through the sand is the amazing, beautiful view.\"",
+    "tier": "amber",
+    "permit": {
+      "required": false,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service — Sleeping Bear Dunes National Lakeshore (FEDERAL)",
+      "authorityContact": "https://www.nps.gov/slbe/planyourvisit/permitsandreservations.htm"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "traverse-city-mi-sleeping-bear-lake-michigan-overlook",
+    "sourceUrl": "https://www.nps.gov/places/000/pyramid-point-overlook.htm",
+    "citations": [
+      "https://www.nps.gov/places/000/pyramid-point-overlook.htm",
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/slbe/planyourvisit/permitsandreservations.htm"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "FEDERAL LAND — National Park Service jurisdiction, about 35 minutes from Traverse City, not a city or county park. The servicewide rule quoted above says permits are generally not required for eight or fewer people, but Sleeping Bear's own permits page still reads \"the National Park Service (NPS) requires a permit for activities not normally associated with a visit to Sleeping Bear Dunes National Lakeshore. This includes activities such as, commercial photography, memorials, first amendment activities, and powerless flight.\" (https://www.nps.gov/slbe/planyourvisit/permitsandreservations.htm). The two pages have not been reconciled; call the park if a hired photographer is involved.",
+    "accessNote": "A park entrance pass is required for the Lakeshore. The quoted servicewide rule never uses the words proposal or engagement, which is why this row is amber rather than green.",
+    "seasonalClosure": null,
+    "id": "traverse-city-mi-pyramid-point-overlook"
+  },
+  {
+    "destinationId": "traverse-city-mi",
+    "name": "Mission Point Lighthouse Park",
+    "type": "park",
+    "highlight": "The 1870 lighthouse at the tip of Old Mission Peninsula, where the two arms of Grand Traverse Bay meet. Peninsula Township's own description of the park is the reason to go: \"there are miles of wooded trails in Lighthouse Park; the beach is a rock collectors dream; and the overall peace and serenity the park offers at any time of year.\"",
+    "tier": "red",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": null,
+      "authority": "Peninsula Township (Grand Traverse County), 13235 Center Rd., Traverse City, MI 49686",
+      "authorityContact": "https://www.peninsulatownship.com/staff-directory.html"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "traverse-city-mi-clinch-park",
+    "sourceUrl": "https://www.peninsulatownship.com/mission-point-lighthouse.html",
+    "citations": [
+      "https://www.peninsulatownship.com/mission-point-lighthouse.html"
+    ],
+    "leadTimeDays": null,
+    "fee": "Lighthouse admission is published as \"Ages 13+ - $8, Kids ages 6 to 12 - $2, Kids 5 and Under - Free\" (https://www.peninsulatownship.com/mission-point-lighthouse.html). The park and beach themselves carry no published fee.",
+    "blocker": null,
+    "accessNote": "The tower and the grounds keep different calendars. Peninsula Township publishes the lighthouse as \"May - October: 10:00 am - 5:00 pm most days\" and closed \"November 11 - April,\" but adds that \"the park and trails are open year round until 10 pm\" (https://www.peninsulatownship.com/mission-point-lighthouse.html). NO PUBLISHED RULE COVERS PHOTOGRAPHY, CEREMONIES OR PROPOSALS at this park — the township is the authority to ask, and this row carries no permit claim because the township has published none.",
+    "seasonalClosure": null,
+    "id": "traverse-city-mi-mission-point-lighthouse-park"
+  },
+  {
+    "destinationId": "traverse-city-mi",
+    "name": "Clinch Park",
+    "type": "waterfront",
+    "highlight": "The city's own bayfront: \"Clinch Park is along the 2+ mile stretch of public land on West Grand Traverse Bay. The park has a large beach, concessions, splash pad, and the City's municipal marina.\" The TART Trail runs straight through it, so it is walkable from downtown without a car.",
+    "tier": "red",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": null,
+      "authority": "City of Traverse City Parks and Recreation Division",
+      "authorityContact": "https://www.traversecitymi.gov/government/city-departments/parks-and-recreation/parks-and-recreation.html"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "traverse-city-mi-mission-point-lighthouse-park",
+    "sourceUrl": "https://www.traversecitymi.gov/community/recreation-directory/clinch-park-beach/clinch-park.html",
+    "citations": [
+      "https://www.traversecitymi.gov/community/recreation-directory/clinch-park-beach/clinch-park.html",
+      "https://www.traversecitymi.gov/government/city-departments/parks-and-recreation/parks-and-recreation-rules.html"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "The city's own park page publishes no hours and no photography or ceremony rule, and its parks-and-recreation rules page links only two PDFs — alcohol/tobacco/pets, and bicycles — neither of which addresses either. This row therefore carries NO permit claim; the Parks and Recreation Division is the office to ask. The city does note \"Beer/Wine are allowed except on the beach\" (https://www.traversecitymi.gov/community/recreation-directory/clinch-park-beach/clinch-park.html).",
+    "seasonalClosure": null,
+    "id": "traverse-city-mi-clinch-park"
+  },
+  {
     "id": "chicago-il-promontory-point",
     "destinationId": "chicago-il",
     "name": "Promontory Point",
