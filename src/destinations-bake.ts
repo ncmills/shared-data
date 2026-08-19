@@ -52,7 +52,29 @@ type Brand = "moh" | "bestman" | "both";
 export const TAG_OVERRIDES: Record<
   string,
   Partial<{ wizards: WizardTag[]; audiences: AudienceTag[]; products: ProductTag[] }>
-> = {};
+> = {
+  // moh removed — violates moh.json cross_pollination.must_not_have (golf or bachelor-coded content)
+  "amelia-island-fl|lodging|Omni Amelia Island Resort":                    { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "atlantic-city-nj|lodging|Borgata Hotel Casino & Spa":                   { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "bend-or|lodging|Tetherow Lodge":                                         { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "birmingham-al|activity|Topgolf Birmingham":                              { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "coeur-dalene-id|lodging|Coeur d'Alene Resort":                          { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "destin-fl|lodging|Sandestin Golf and Beach Resort":                      { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "fredericksburg-tx|nightlife|Garrison Brothers Distillery tasting room":  { wizards: ["offsite-outing", "friendsmoon", "engagedmoon"] },
+  "galena-il|lodging|Eagle Ridge Resort":                                   { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "hilton-head-sc|lodging|Palmetto Dunes Airbnb Villas":                   { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "hilton-head-sc|lodging|Sea Pines Vacation Home Rentals":                { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "hilton-head-sc|lodging|The Inn & Club at Harbour Town":                 { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "kennebunkport-me|transport|Intown Trolley + private van":               { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "kiawah-island-sc|lodging|Kiawah Island Golf Resort Villas":             { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "kiawah-island-sc|lodging|The Sanctuary at Kiawah Island Golf Resort":   { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "lake-geneva-wi|lodging|Grand Geneva Resort & Spa":                      { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "lake-havasu-city-az|nightlife|Barley Brothers Brewery":                 { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "lake-of-the-ozarks-mo|lodging|Lodge of Four Seasons":                   { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "myrtle-beach-sc|lodging|Airbnb Condos at Barefoot Resort":              { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "myrtle-beach-sc|transport|Myrtle Beach Party Bus":                      { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "new-orleans-la|nightlife|Harrah's New Orleans Casino":                  { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
+};
 
 const uniq = <T>(xs: T[]): T[] => Array.from(new Set(xs));
 
