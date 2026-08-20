@@ -44,7 +44,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Hard Rock Hotel & Casino Punta Cana", type: "resort", pricePerNight: [300, 650], perRoom: true, maxGuests: 24, highlight: "All-inclusive mega-resort with casino, ORO nightclub, and 13 pools" },
       { name: "Breathless Punta Cana Resort & Spa", type: "resort", pricePerNight: [250, 500], perRoom: true, maxGuests: 20, highlight: "Adults-only all-inclusive built around daily pool parties and nightlife" },
-      { name: "Cap Cana Private Villa (Airbnb/VRBO)", type: "airbnb", pricePerNight: [500, 1800], perRoom: false, maxGuests: 16, highlight: "Gated marina villa with private pool, chef option, and golf-cart access" },
+      { name: "Cap Cana private villa", type: "airbnb", pricePerNight: [500, 1800], perRoom: false, maxGuests: 16, highlight: "Gated marina villa with private pool, chef option, and golf-cart access" },
     ],
     transport: [
       { name: "Punta Cana Private Airport Transfer", type: "shuttle", priceRange: "$40-80 per group each way", highlight: "Pre-book a private van from PUJ — no Uber at the resorts, taxis overcharge" },
@@ -84,7 +84,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Atlantis Paradise Island (The Royal)", type: "resort", pricePerNight: [350, 800], perRoom: true, maxGuests: 24, highlight: "The mega-resort — casino, waterpark, Aura club, and dozens of restaurants" },
       { name: "Baha Mar (SLS / Grand Hyatt)", type: "resort", pricePerNight: [300, 700], perRoom: true, maxGuests: 20, highlight: "Cable Beach resort complex with its own casino and beach clubs" },
-      { name: "Paradise Island Villa (Airbnb)", type: "airbnb", pricePerNight: [400, 1500], perRoom: false, maxGuests: 14, highlight: "Private villa with pool a short ride from the casino and beaches" },
+      { name: "Paradise Island private villa", type: "airbnb", pricePerNight: [400, 1500], perRoom: false, maxGuests: 14, highlight: "Private villa with pool a short ride from the casino and beaches" },
     ],
     transport: [
       { name: "Nassau Airport Taxi / Private Transfer", type: "shuttle", priceRange: "$35-70 per group each way", highlight: "Fixed-rate taxis from NAS; pre-book a van for bigger groups" },
@@ -124,7 +124,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Hyatt Zilara Rose Hall", type: "resort", pricePerNight: [300, 600], perRoom: true, maxGuests: 20, highlight: "Adults-only all-inclusive on Rose Hall beach with multiple pools and bars" },
       { name: "Hyatt Ziva Rose Hall", type: "resort", pricePerNight: [280, 550], perRoom: true, maxGuests: 24, highlight: "Sister all-inclusive next door — good for a mixed-age crew" },
-      { name: "Rose Hall Private Villa (Airbnb)", type: "airbnb", pricePerNight: [400, 1600], perRoom: false, maxGuests: 16, highlight: "Gated hillside villa with pool, butler option, and ocean views" },
+      { name: "Rose Hall hillside villa", type: "airbnb", pricePerNight: [400, 1600], perRoom: false, maxGuests: 16, highlight: "Gated hillside villa with pool, butler option, and ocean views" },
     ],
     transport: [
       { name: "MBJ Private Airport Transfer", type: "shuttle", priceRange: "$30-70 per group each way", highlight: "Pre-book a van from Sangster — 15 minutes to Rose Hall, longer to Negril" },
@@ -164,7 +164,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Rockhouse Hotel", type: "boutique-hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 16, highlight: "Iconic clifftop villas over the West End with ladders into the sea" },
       { name: "Couples Negril", type: "resort", pricePerNight: [350, 700], perRoom: true, maxGuests: 16, highlight: "All-inclusive on Seven Mile Beach — popular for wedding-party crews" },
-      { name: "Seven Mile Beach Villa (Airbnb)", type: "airbnb", pricePerNight: [350, 1200], perRoom: false, maxGuests: 14, highlight: "Private beach house steps from the water with cook and pool options" },
+      { name: "Seven Mile Beach villa", type: "airbnb", pricePerNight: [350, 1200], perRoom: false, maxGuests: 14, highlight: "Private beach house steps from the water with cook and pool options" },
     ],
     transport: [
       { name: "MBJ → Negril Private Transfer", type: "shuttle", priceRange: "$80-140 per group each way", highlight: "Pre-book the 80-minute van ride from Sangster — no rideshare in Negril" },
@@ -204,7 +204,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Thompson Playa del Carmen", type: "hotel", pricePerNight: [250, 550], perRoom: true, maxGuests: 16, highlight: "Design hotel a block off 5th Ave with the Catch rooftop and beach club" },
       { name: "Hotel Xcaret México", type: "resort", pricePerNight: [400, 800], perRoom: true, maxGuests: 24, highlight: "All-inclusive resort with river pools and free access to the Xcaret parks" },
-      { name: "Playacar Private Villa (Airbnb)", type: "airbnb", pricePerNight: [350, 1200], perRoom: false, maxGuests: 16, highlight: "Gated Playacar villa with pool, walkable to the beach and 5th Ave" },
+      { name: "Playacar gated villa", type: "airbnb", pricePerNight: [350, 1200], perRoom: false, maxGuests: 16, highlight: "Gated Playacar villa with pool, walkable to the beach and 5th Ave" },
     ],
     transport: [
       { name: "CUN → Playa Private Transfer", type: "shuttle", priceRange: "$60-90 per group each way", highlight: "Pre-book the 50-minute van from Cancun airport down the highway" },
@@ -244,7 +244,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Hilton Vallarta Riviera All-Inclusive", type: "resort", pricePerNight: [250, 500], perRoom: true, maxGuests: 20, highlight: "Hotel-zone all-inclusive with pools, beach, and easy nightlife access" },
       { name: "Hotel Mousai", type: "hotel", pricePerNight: [300, 650], perRoom: true, maxGuests: 16, highlight: "Adults-only design hotel with a rooftop infinity pool over Conchas Chinas" },
-      { name: "Conchas Chinas Private Villa (Airbnb)", type: "airbnb", pricePerNight: [350, 1500], perRoom: false, maxGuests: 16, highlight: "Hillside villa with infinity pool and bay views, walkable to Zona Romántica" },
+      { name: "Conchas Chinas hillside villa", type: "airbnb", pricePerNight: [350, 1500], perRoom: false, maxGuests: 16, highlight: "Hillside villa with infinity pool and bay views, walkable to Zona Romántica" },
     ],
     transport: [
       { name: "PVR Private Airport Transfer", type: "shuttle", priceRange: "$30-60 per group each way", highlight: "Pre-book a van from the airport — 20 minutes to most of the action" },
@@ -284,7 +284,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Cozumel Palace All-Inclusive", type: "resort", pricePerNight: [250, 500], perRoom: true, maxGuests: 16, highlight: "Oceanfront all-inclusive in San Miguel with a house reef off the pier" },
       { name: "Hotel B Cozumel", type: "boutique-hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 16, highlight: "Eclectic boutique with a private beach club and great snorkeling" },
-      { name: "Cozumel Beachfront Villa (Airbnb)", type: "airbnb", pricePerNight: [300, 1000], perRoom: false, maxGuests: 12, highlight: "Private villa with pool and snorkel-from-the-dock reef access" },
+      { name: "Cozumel beachfront villa", type: "airbnb", pricePerNight: [300, 1000], perRoom: false, maxGuests: 12, highlight: "Private villa with pool and snorkel-from-the-dock reef access" },
     ],
     transport: [
       { name: "Cozumel Taxi / Airport Transfer", type: "shuttle", priceRange: "$10-30 per group each way", highlight: "Short fixed-rate taxi ride from the airport; no Uber on the island" },
@@ -324,7 +324,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Aruba Marriott Resort & Stellaris Casino", type: "resort", pricePerNight: [300, 600], perRoom: true, maxGuests: 20, highlight: "Palm Beach resort with the island's biggest casino and adults-only Tradewinds club" },
       { name: "Hilton Aruba Caribbean Resort", type: "resort", pricePerNight: [280, 550], perRoom: true, maxGuests: 20, highlight: "Palm Beach resort with two pools, beach cabanas, and a spa" },
-      { name: "Palm/Eagle Beach Villa (Airbnb)", type: "airbnb", pricePerNight: [350, 1200], perRoom: false, maxGuests: 14, highlight: "Private villa with pool a short ride from Palm Beach nightlife" },
+      { name: "Palm–Eagle Beach villa", type: "airbnb", pricePerNight: [350, 1200], perRoom: false, maxGuests: 14, highlight: "Private villa with pool a short ride from Palm Beach nightlife" },
     ],
     transport: [
       { name: "AUA Airport Transfer / Taxi", type: "shuttle", priceRange: "$25-45 per group each way", highlight: "Fixed-rate taxis from the airport; 20 minutes to Palm Beach" },
@@ -364,7 +364,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Grace Bay Club", type: "resort", pricePerNight: [500, 1200], perRoom: true, maxGuests: 16, highlight: "Flagship Grace Bay resort with the Infiniti bar and suites for groups" },
       { name: "The Sands at Grace Bay", type: "hotel", pricePerNight: [300, 700], perRoom: true, maxGuests: 20, highlight: "Family-and-group friendly suites right on Grace Bay with three pools" },
-      { name: "Grace Bay Private Villa (Airbnb)", type: "airbnb", pricePerNight: [600, 2500], perRoom: false, maxGuests: 16, highlight: "Beachfront villa with pool, chef option, and golf-cart access" },
+      { name: "Grace Bay beachfront villa", type: "airbnb", pricePerNight: [600, 2500], perRoom: false, maxGuests: 16, highlight: "Beachfront villa with pool, chef option, and golf-cart access" },
     ],
     transport: [
       { name: "PLS Airport Transfer / Taxi", type: "shuttle", priceRange: "$25-50 per group each way", highlight: "Short fixed-rate taxi to Grace Bay; pre-book a van for groups" },
@@ -404,7 +404,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Hamilton Princess & Beach Club", type: "hotel", pricePerNight: [350, 800], perRoom: true, maxGuests: 16, highlight: "Pink harborfront landmark with Marcus', a marina, and a beach-club shuttle" },
       { name: "The Loren at Pink Beach", type: "boutique-hotel", pricePerNight: [500, 1200], perRoom: true, maxGuests: 12, highlight: "Modern oceanfront boutique on the South Shore for a stylish small group" },
-      { name: "South Shore Private Cottage (Airbnb)", type: "airbnb", pricePerNight: [300, 1000], perRoom: false, maxGuests: 10, highlight: "Pastel Bermuda cottage near a pink-sand cove with a scooter-friendly base" },
+      { name: "South Shore Bermuda cottage", type: "airbnb", pricePerNight: [300, 1000], perRoom: false, maxGuests: 10, highlight: "Pastel Bermuda cottage near a pink-sand cove with a scooter-friendly base" },
       { name: "South Shore 6BR house", type: "house", pricePerNight: [520,1720], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Pink-sand beach below, scooters in the drive, one long table inside" },
     ],
     transport: [
@@ -445,7 +445,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Tamarindo Diria Beach Resort", type: "resort", pricePerNight: [180, 400], perRoom: true, maxGuests: 16, highlight: "Beachfront resort in the center of town, steps from Sharky's and the surf" },
       { name: "Wyndham Tamarindo", type: "hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 16, highlight: "Hilltop hotel with rooftop pool and ocean views above town" },
-      { name: "Langosta / Tamarindo Private Villa (Airbnb)", type: "airbnb", pricePerNight: [300, 1200], perRoom: false, maxGuests: 16, highlight: "Jungle-edge villa with pool a short ride from the beach and bars" },
+      { name: "Langosta jungle-edge villa", type: "airbnb", pricePerNight: [300, 1200], perRoom: false, maxGuests: 16, highlight: "Jungle-edge villa with pool a short ride from the beach and bars" },
     ],
     transport: [
       { name: "LIR → Tamarindo Private Transfer", type: "shuttle", priceRange: "$90-160 per group each way", highlight: "Pre-book the 75-minute van from Liberia airport — no rideshare in town" },
@@ -485,7 +485,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "The Charlee Hotel", type: "boutique-hotel", pricePerNight: [180, 400], perRoom: true, maxGuests: 16, highlight: "Design hotel in the middle of El Poblado with the Envy rooftop pool-bar" },
       { name: "Marquee Medellín / Click Clack", type: "hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 16, highlight: "Stylish Provenza-area hotels walkable to the nightlife" },
-      { name: "El Poblado Penthouse (Airbnb)", type: "airbnb", pricePerNight: [200, 800], perRoom: false, maxGuests: 12, highlight: "Modern penthouse with terrace steps from Parque Lleras — go-to for crews" },
+      { name: "El Poblado penthouse", type: "airbnb", pricePerNight: [200, 800], perRoom: false, maxGuests: 12, highlight: "Modern penthouse with terrace steps from Parque Lleras — go-to for crews" },
     ],
     transport: [
       { name: "MDE → El Poblado Private Transfer", type: "shuttle", priceRange: "$30-60 per group each way", highlight: "Pre-book the 45-minute ride from Rionegro airport down to the city" },
@@ -525,7 +525,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "American Trade Hotel", type: "boutique-hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 16, highlight: "Restored landmark in the heart of Casco Viejo, steps from the rooftops" },
       { name: "Sortis Hotel, Spa & Casino", type: "hotel", pricePerNight: [180, 400], perRoom: true, maxGuests: 20, highlight: "Modern banking-district hotel with a casino, rooftop pool, and spa" },
-      { name: "Casco Viejo Penthouse (Airbnb)", type: "airbnb", pricePerNight: [200, 800], perRoom: false, maxGuests: 12, highlight: "Old-town penthouse with terrace and skyline views, walkable to nightlife" },
+      { name: "Casco Viejo penthouse", type: "airbnb", pricePerNight: [200, 800], perRoom: false, maxGuests: 12, highlight: "Old-town penthouse with terrace and skyline views, walkable to nightlife" },
     ],
     transport: [
       { name: "PTY → Casco Viejo Private Transfer", type: "shuttle", priceRange: "$30-50 per group each way", highlight: "Pre-book a van from Tocumen — 35 minutes to the old town" },
@@ -565,7 +565,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Las Terrazas Resort & Residences", type: "resort", pricePerNight: [300, 600], perRoom: true, maxGuests: 16, highlight: "Beachfront suites north of town with a pool, dock, and easy snorkel access" },
       { name: "Mahogany Bay Resort (Curio by Hilton)", type: "resort", pricePerNight: [200, 450], perRoom: true, maxGuests: 20, highlight: "Village-style resort with a beach club, pool, and golf-cart life" },
-      { name: "Ambergris Beachfront Villa (Airbnb)", type: "airbnb", pricePerNight: [300, 1000], perRoom: false, maxGuests: 14, highlight: "Private villa with pool and dock, golf cart included for island runs" },
+      { name: "Ambergris beachfront villa", type: "airbnb", pricePerNight: [300, 1000], perRoom: false, maxGuests: 14, highlight: "Private villa with pool and dock, golf cart included for island runs" },
     ],
     transport: [
       { name: "BZE → San Pedro Puddle-Jump / Water Taxi", type: "charter", priceRange: "$40-100 per person each way", highlight: "Short Tropic/Maya Air flight or a fast water taxi from Belize City to the island" },
@@ -605,7 +605,7 @@ export const expansionInternational: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Carlota (Cuauhtémoc)", type: "boutique-hotel", pricePerNight: [180, 400], perRoom: true, maxGuests: 16, highlight: "Design hotel with a glass pool courtyard, central to Roma and Reforma" },
       { name: "Andaz Mexico City Condesa", type: "hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 20, highlight: "Stylish hotel in the heart of Condesa nightlife with a rooftop bar" },
-      { name: "Roma Norte Penthouse (Airbnb)", type: "airbnb", pricePerNight: [150, 600], perRoom: false, maxGuests: 12, highlight: "Art-deco apartment in Roma walkable to bars, cafés, and restaurants" },
+      { name: "Roma Norte art-deco apartment", type: "airbnb", pricePerNight: [150, 600], perRoom: false, maxGuests: 12, highlight: "Art-deco apartment in Roma walkable to bars, cafés, and restaurants" },
     ],
     transport: [
       { name: "MEX → Roma/Condesa Private Transfer", type: "shuttle", priceRange: "$20-40 per group each way", highlight: "Pre-book a van from the airport into the central neighborhoods" },
