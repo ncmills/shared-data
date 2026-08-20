@@ -39,6 +39,15 @@ export * from "./proposal-spots";
 // compile. A schema without its rows is the same unreachable module in a
 // smaller costume.
 export * from "./proposal-spots-data";
+// Composed trips — schema AND rows both reachable from the package root, for
+// the same reason spelled twice above: #25 shipped proposal-spots' schema
+// unreachable and #27 fixed the schema while leaving the rows unreachable. A
+// trips module a consumer cannot import is a trips module nothing is checked
+// against. (The composed `EM_COMPOSED_TRIPS` export itself is assembled at the
+// bottom of this file, after `sharedDestinations` exists — see the comment
+// there and in trips/em-trips.ts for the cycle it avoids.)
+export * from "./trips/schema";
+export * from "./trips/em-trips";
 
 // 2026-06-24 expansion: the canonical catalog is now the core set plus the
 // region/international expansion files. New cities land in a
@@ -109,6 +118,19 @@ export const sharedDestinations: CanonicalDestination[] = applyPartyVenuePatches
 )
   .map(bakeDestination)
   .map(stripDeadVenueUrls);
+
+// Composed trips are assembled HERE, below the `sharedDestinations`
+// definition, not in trips/em-trips.ts: composition needs the baked catalog,
+// and em-trips.ts cannot import it back out of this module without an ESM
+// cycle that evaluates em-trips before `sharedDestinations` exists (TDZ crash
+// for every consumer). em-trips.ts owns the authored inputs; this line derives
+// each trip's estPerPerson from the referenced rows' published ranges — the
+// money on a trip can never drift from the catalog because it is never typed.
+// deriveEstPerPerson throws on a dangling row key, so a bad reference is a
+// build failure (scripts/verify-trips.ts reports it more readably first).
+import { EM_COMPOSED_TRIP_INPUTS } from "./trips/em-trips";
+import { composeTrips } from "./trips/schema";
+export const EM_COMPOSED_TRIPS = composeTrips(EM_COMPOSED_TRIP_INPUTS, sharedDestinations);
 
 // Golf is the single golf-cite source (Task 3). The regenerated 994-row
 // `golf-courses.ts` (do-not-hand-edit) plus the `golf-courses-hhq-merge.ts`
