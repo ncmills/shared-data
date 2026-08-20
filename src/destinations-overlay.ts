@@ -112,8 +112,8 @@ export function applyMohOverlay(c: CanonicalDestination): unknown {
     nightlife,
     dining,
     activities,
-    lodging: c.lodging.map((l) => omitTags(l)),
-    transport: c.transport.map((t) => omitTags(t)),
+    lodging: c.lodging.filter((l) => forWizard(l, "moh")).map((l) => omitTags(l)),
+    transport: c.transport.filter((t) => forWizard(t, "moh")).map((t) => omitTags(t)),
     bacheloretteScore: c.score,
   };
 }
@@ -140,8 +140,8 @@ export function applyBestmanOverlay(c: CanonicalDestination): unknown {
     nightlife,
     dining,
     activities,
-    lodging: c.lodging.map((l) => omitTags(l)),
-    transport: c.transport.map((t) => omitTags(t)),
+    lodging: c.lodging.filter((l) => forWizard(l, "bestman")).map((l) => omitTags(l)),
+    transport: c.transport.filter((t) => forWizard(t, "bestman")).map((t) => omitTags(t)),
     bachelorScore: c.score,
   };
 }
@@ -178,8 +178,8 @@ export function applyOutpostOverlay(c: CanonicalDestination): unknown {
     nightlife,
     dining,
     activities,
-    lodging: c.lodging.map((l) => omitTags(l)),
-    transport: c.transport.map((t) => omitTags(t)),
+    lodging: c.lodging.filter((l) => forWizard(l, "offsite-outing")).map((l) => omitTags(l)),
+    transport: c.transport.filter((t) => forWizard(t, "offsite-outing")).map((t) => omitTags(t)),
     /** generic neutral score; OO does its own corporate scoring downstream */
     score: c.score,
   };

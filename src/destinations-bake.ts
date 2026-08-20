@@ -185,7 +185,9 @@ function bakeDining(destId: string, d: CanonicalDining): CanonicalDining {
 // ORPHAN (tag with no reader — the coverage audit rejects it). Giving HHQ this
 // housing needs either wiring handicap to read party-venue or sourcing its
 // lodging from residences — a decision flagged to Nick, not silently tagged.
-// Never brand- or audience-filtered by any overlay (no `brands`).
+// Never brand- or audience-filtered by any overlay (no `brands`); the overlays DO
+// honor the baked `wizards` tag (a pure tag filter), so a TAG_OVERRIDES removal on
+// a lodging/transport row actually lands — see wizard-reach.test.ts PRECISION.
 // friendsmoon/engagedmoon join for the same reason the four above are here: a
 // group house, a boutique hotel room or an airport shuttle is valid housing and
 // getting-around for ANY trip type, and both wizards' ENGINE_READS include
