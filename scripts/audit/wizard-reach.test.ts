@@ -13,10 +13,10 @@
 //
 // The second half guards PRECISION — "each wizard pulls ONLY its data" — by
 // asserting each overlay emits nothing that isn't tagged for that wizard, in
-// EVERY category. Note `lodging`/`transport` are deliberately passed through
-// unfiltered by the party overlays (they're cross-tagged via HOUSING_WIZARDS),
-// so nothing was checking them; this makes that safe-by-assertion rather than
-// safe-by-coincidence.
+// EVERY category. `lodging`/`transport` are cross-tagged via HOUSING_WIZARDS and,
+// since 2026-08-20, the overlays filter them by the baked `wizards` tag too —
+// which is what lets a TAG_OVERRIDES wizard removal on a brands-less housing row
+// actually take effect instead of leaking through an unfiltered pass-through.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
