@@ -1026,7 +1026,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Graduate Nashville", type: "boutique-hotel", pricePerNight: [220,420], perRoom: true, maxGuests: 4, highlight: "Vanderbilt-area boutique with White Limozeen rooftop on top — central, photogenic" },
       { name: "The Joseph", type: "boutique-hotel", pricePerNight: [400,800], perRoom: true, maxGuests: 4, highlight: "SoBro luxury with museum-quality art collection and Yolan downstairs" },
-      { name: "Broadway Party House (Airbnb)", type: "airbnb", pricePerNight: [500,1200], perRoom: false, maxGuests: 16, highlight: "Full house rental near Broadway with rooftop deck and party space" },
+      { name: "Whole-house rental near Broadway", type: "airbnb", pricePerNight: [500,1200], perRoom: false, maxGuests: 16, highlight: "Full house rental near Broadway with rooftop deck and party space" },
     ],
     transport: [
       { name: "Nashville Pedal Tavern", type: "party-bus", priceRange: "$450-$900 for 2 hr", highlight: "BYOB pedal-powered — transport and the activity in one" },
@@ -1078,7 +1078,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Restoration Hotel", type: "boutique-hotel", pricePerNight: [350,750], perRoom: true, maxGuests: 4, highlight: "King Street boutique with The Watch rooftop bar — central, beautiful, group-friendly" },
       { name: "Belmond Charleston Place", type: "hotel", pricePerNight: [350,700], perRoom: true, maxGuests: 4, highlight: "Grand downtown hotel with rooftop pool and full-service spa" },
-      { name: "Charleston Historic House (Airbnb)", type: "airbnb", pricePerNight: [500,1300], perRoom: false, maxGuests: 12, highlight: "Restored 1850s Charleston single-house with piazza, garden, walkable to King" },
+      { name: "Restored Charleston single house", type: "airbnb", pricePerNight: [500,1300], perRoom: false, maxGuests: 12, highlight: "Restored 1850s Charleston single-house with piazza, garden, walkable to King" },
     ],
     transport: [
       { name: "Charleston Party Bus", type: "party-bus", priceRange: "$450-$1,000 for 4 hr", highlight: "For groups of 8+ — handles King Street and downtown loops" },
@@ -1130,7 +1130,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Bohemian Hotel Savannah Riverfront", type: "boutique-hotel", pricePerNight: [200,500], perRoom: true, maxGuests: 4, highlight: "Riverfront boutique with Rocks on the Roof — unbeatable waterfront location" },
       { name: "The Mansion on Forsyth Park", type: "boutique-hotel", pricePerNight: [250,550], perRoom: true, maxGuests: 4, highlight: "Autograph Collection on Forsyth Park with bold art, pool, full spa" },
-      { name: "Historic District House (Airbnb)", type: "airbnb", pricePerNight: [400,1000], perRoom: false, maxGuests: 14, highlight: "Restored Victorian in the Historic District with a courtyard" },
+      { name: "Historic District Victorian", type: "airbnb", pricePerNight: [400,1000], perRoom: false, maxGuests: 14, highlight: "Restored Victorian in the Historic District with a courtyard" },
     ],
     transport: [
       { name: "Savannah Pedicab", type: "shuttle", priceRange: "$5-$20 per ride", highlight: "Bicycle rickshaws — the most charming way to move between squares" },
@@ -1188,7 +1188,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Roosevelt New Orleans", type: "hotel", pricePerNight: [250,550], perRoom: true, maxGuests: 4, highlight: "Grand Waldorf Astoria with rooftop pool and Sazerac Bar" },
       { name: "Hotel Peter & Paul", type: "boutique-hotel", pricePerNight: [280,600], perRoom: true, maxGuests: 4, highlight: "Marigny boutique in a converted 19th-century church and rectory — peak Pinterest stay" },
       { name: "Ace Hotel New Orleans", type: "boutique-hotel", pricePerNight: [180,380], perRoom: true, maxGuests: 4, highlight: "Trendy Warehouse District hotel with rooftop pool and great restaurant" },
-      { name: "French Quarter Courtyard House (Airbnb)", type: "airbnb", pricePerNight: [550,1400], perRoom: false, maxGuests: 12, highlight: "Historic French Quarter house with private courtyard and balconies on Royal Street" },
+      { name: "French Quarter courtyard house", type: "airbnb", pricePerNight: [550,1400], perRoom: false, maxGuests: 12, highlight: "Historic French Quarter house with private courtyard and balconies on Royal Street" },
     ],
     transport: [
       { name: "NOLA Party Bus", type: "party-bus", priceRange: "$450-$1,000 for 4 hr", highlight: "Garden District ↔ French Quarter ↔ Frenchmen runs" },
@@ -1243,7 +1243,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Van Zandt", type: "boutique-hotel", pricePerNight: [280,600], perRoom: true, maxGuests: 4, highlight: "Music-forward boutique on Rainey with a rooftop pool and live music lobby" },
       { name: "South Congress Hotel", type: "boutique-hotel", pricePerNight: [250,550], perRoom: true, maxGuests: 4, highlight: "Design-forward hotel on SoCo with a pool and excellent restaurant" },
-      { name: "Lake Austin Waterfront Rental (Airbnb)", type: "airbnb", pricePerNight: [800,2200], perRoom: false, maxGuests: 14, highlight: "Lakefront house with private dock and paddleboards" },
+      { name: "Lake Austin waterfront house", type: "airbnb", pricePerNight: [800,2200], perRoom: false, maxGuests: 14, highlight: "Lakefront house with private dock and paddleboards" },
       { name: "The Driskill Hotel", type: "hotel", pricePerNight: [280,600], perRoom: true, maxGuests: 4, highlight: "Austin's iconic 1886 landmark downtown — historic, grand, a classic splurge" },
     ],
     transport: [
@@ -1299,7 +1299,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Fontainebleau Miami Beach", type: "resort", pricePerNight: [350,800], perRoom: true, maxGuests: 4, highlight: "Iconic South Beach resort with LIV nightclub, pools, and restaurants" },
       { name: "Faena Hotel Miami Beach", type: "boutique-hotel", pricePerNight: [800,2000], perRoom: true, maxGuests: 4, highlight: "Mid-Beach Faena with red-velvet lobby, beachfront pool, iconic gilded mammoth" },
       { name: "Freehand Miami", type: "boutique-hotel", pricePerNight: [100,450], perRoom: true, maxGuests: 4, highlight: "Boutique with Broken Shaker in the courtyard — affordable, fun, very photogenic" },
-      { name: "Wynwood Loft (Airbnb)", type: "airbnb", pricePerNight: [400,900], perRoom: false, maxGuests: 10, highlight: "Industrial loft in the arts district — central to murals and Wynwood nightlife" },
+      { name: "Wynwood industrial loft", type: "airbnb", pricePerNight: [400,900], perRoom: false, maxGuests: 10, highlight: "Industrial loft in the arts district — central to murals and Wynwood nightlife" },
       { name: "Wynwood 6BR house", type: "house", pricePerNight: [590,1320], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Private pool and a walkable art-district block" },
     ],
     transport: [
@@ -1357,7 +1357,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Andaz Scottsdale Resort & Bungalows", type: "resort", pricePerNight: [400,850], perRoom: true, maxGuests: 4, highlight: "Mid-century modern bungalow resort with three pools and Cala restaurant" },
       { name: "W Scottsdale", type: "boutique-hotel", pricePerNight: [250,700], perRoom: true, maxGuests: 4, highlight: "Old Town W with WET Deck pool club and walkable nightlife" },
       { name: "Hotel Valley Ho", type: "boutique-hotel", pricePerNight: [200,450], perRoom: true, maxGuests: 4, highlight: "Mid-century modern icon with an epic pool deck" },
-      { name: "Old Town Pool House (Airbnb)", type: "airbnb", pricePerNight: [600,1500], perRoom: false, maxGuests: 14, highlight: "Whole-house rental in Old Town — heated pool, hot tub, fire pit" },
+      { name: "Old Town house with heated pool", type: "airbnb", pricePerNight: [600,1500], perRoom: false, maxGuests: 14, highlight: "Whole-house rental in Old Town — heated pool, hot tub, fire pit" },
     ],
     transport: [
       { name: "Scottsdale Party Bus", type: "party-bus", priceRange: "$500-$1,200 for 4 hr", highlight: "Decked-out buses for Old Town nightlife — necessary for groups of 8+" },
@@ -1489,8 +1489,8 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Omni Grove Park Inn", type: "resort", pricePerNight: [300, 700], perRoom: true, maxGuests: 4, highlight: "Historic 1913 Blue Ridge mountain resort with a world-class underground spa — the most iconic property in Asheville." },
       { name: "AC Hotel Asheville Downtown", type: "hotel", pricePerNight: [180, 380], perRoom: true, maxGuests: 3, highlight: "Modern downtown hotel with the rooftop Capella on 9 bar — clean, well-located, and walkable to everything." },
       { name: "The Inn on Biltmore Estate", type: "boutique-hotel", pricePerNight: [400, 900], perRoom: true, maxGuests: 4, highlight: "Stay on the Biltmore grounds with estate access included — a remarkable splurge for the group who wants the full experience." },
-      { name: "West Asheville Craftsman Bungalow (Airbnb)", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 10, highlight: "Renovated craftsman in walkable West Asheville — porch, fire pit, and local coffee shops steps away." },
-      { name: "Mountain View Estate (Airbnb)", type: "airbnb", pricePerNight: [500, 1400], perRoom: false, maxGuests: 14, highlight: "Expansive mountain property with Blue Ridge views, hot tub, and enough bedrooms for the whole group." },
+      { name: "West Asheville craftsman bungalow", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 10, highlight: "Renovated craftsman in walkable West Asheville — porch, fire pit, and local coffee shops steps away." },
+      { name: "Blue Ridge-view mountain house", type: "airbnb", pricePerNight: [500, 1400], perRoom: false, maxGuests: 14, highlight: "Expansive mountain property with Blue Ridge views, hot tub, and enough bedrooms for the whole group." },
       { name: "The Foundry Hotel", type: "boutique-hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 2, highlight: "Converted steel factory with artisan design downtown" },
       { name: "Downtown Asheville Cabin Rentals", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 12, highlight: "Mountain cabins and bungalows near downtown" },
     ],
@@ -1572,7 +1572,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Wicker Park Vintage Greystone", type: "airbnb", pricePerNight: [350, 700], perRoom: false, maxGuests: 10, highlight: "Whole-home rental in a classic Chicago greystone — full kitchen, private yard, and neighborhood walkability." },
       { name: "The Langham Chicago", type: "hotel", pricePerNight: [350, 700], perRoom: true, maxGuests: 2, highlight: "5-star riverfront luxury in the heart of downtown" },
       { name: "The Hoxton Chicago", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Trendy Fulton Market hotel with rooftop bar" },
-      { name: "Wrigleyville Airbnb Houses", type: "airbnb", pricePerNight: [400, 900], perRoom: false, maxGuests: 12, highlight: "Full houses near Cubs bars and nightlife" },
+      { name: "Wrigleyville group house", type: "airbnb", pricePerNight: [400, 900], perRoom: false, maxGuests: 12, highlight: "Full houses near Cubs bars and nightlife" },
       { name: "Virgin Hotels Chicago", type: "hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Party-friendly hotel with rooftop lounge and great vibes" },
       { name: "River North Luxury Condo Rentals", type: "airbnb", pricePerNight: [500, 1200], perRoom: false, maxGuests: 10, highlight: "High-rise condos walking distance to everything" },
     ],
@@ -1650,11 +1650,11 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Crawford Hotel", type: "boutique-hotel", pricePerNight: [280, 550], perRoom: true, maxGuests: 2, highlight: "Built inside Union Station's historic shell — rooms overlook the Great Hall and the location puts the group at the center of everything." },
       { name: "The Source Hotel", type: "boutique-hotel", pricePerNight: [220, 420], perRoom: true, maxGuests: 2, highlight: "RiNo's flagship hotel with a rooftop bar, an in-house market, and a position that makes weekend wandering effortless." },
-      { name: "RiNo Group House (Airbnb)", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 12, highlight: "Renovated Victorian in River North with a backyard and full kitchen — walking distance to every restaurant the group wants to try." },
+      { name: "RiNo Victorian group house", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 12, highlight: "Renovated Victorian in River North with a backyard and full kitchen — walking distance to every restaurant the group wants to try." },
       { name: "Four Seasons Denver", type: "hotel", pricePerNight: [450, 950], perRoom: true, maxGuests: 2, highlight: "Downtown tower with spa access, an indoor pool, and the kind of room service that makes the morning-after feel manageable." },
       { name: "The Maven Hotel", type: "hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 16, highlight: "Dairy Block location with rooftop bar and walkable restaurants" },
       { name: "Denver Vacation Home - Highland", type: "house", pricePerNight: [300, 900], perRoom: false, maxGuests: 14, highlight: "LoHi/Highland houses with rooftop decks and mountain views" },
-      { name: "Airbnb RiNo Arts District", type: "airbnb", pricePerNight: [150, 400], perRoom: false, maxGuests: 10, highlight: "Lofts and condos in Denver's coolest neighborhood" },
+      { name: "RiNo arts-district loft", type: "airbnb", pricePerNight: [150, 400], perRoom: false, maxGuests: 10, highlight: "Lofts and condos in Denver's coolest neighborhood" },
     ],
     transport: [
       { name: "Denver Party Bus", type: "party-bus", priceRange: "$100–$180/hr", highlight: "Climate-controlled party bus for the RiNo-to-LoDo-to-LoHi circuit — the driver handles parking so the group handles the fun." },
@@ -1725,9 +1725,9 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "L'Auberge de Sedona", type: "resort", pricePerNight: [450, 1100], perRoom: true, maxGuests: 4, highlight: "Creek-side luxury resort with private cottage accommodations and the best breakfast patio in Sedona." },
       { name: "Amara Resort & Spa", type: "resort", pricePerNight: [350, 750], perRoom: true, maxGuests: 4, highlight: "Adults-only boutique resort in Uptown Sedona with a pool, spa, and walkable location." },
       { name: "Sky Rock Sedona", type: "boutique-hotel", pricePerNight: [280, 600], perRoom: true, maxGuests: 4, highlight: "Adults-only hilltop hotel with rooftop pool and panoramic red rock views — the coolest new property in town." },
-      { name: "Red Rock View Home (Airbnb)", type: "airbnb", pricePerNight: [500, 1600], perRoom: false, maxGuests: 12, highlight: "Private red rock view home with pool, outdoor dining area, and sunrise views that will break your brain." },
+      { name: "Red-rock-view home with pool", type: "airbnb", pricePerNight: [500, 1600], perRoom: false, maxGuests: 12, highlight: "Private red rock view home with pool, outdoor dining area, and sunrise views that will break your brain." },
       { name: "Sedona Vacation Home", type: "house", pricePerNight: [350, 1200], perRoom: false, maxGuests: 12, highlight: "Red rock view homes with hot tubs and outdoor living areas" },
-      { name: "Airbnb West Sedona", type: "airbnb", pricePerNight: [150, 500], perRoom: false, maxGuests: 10, highlight: "Cozy casitas and homes with desert character" },
+      { name: "West Sedona casita", type: "airbnb", pricePerNight: [150, 500], perRoom: false, maxGuests: 10, highlight: "Cozy casitas and homes with desert character" },
     ],
     transport: [
       { name: "Sedona Jeep Rentals (Pink Jeep Tours)", type: "charter", priceRange: "$100-$180 per person", highlight: "Pink Jeep Tours serves as both transport and activity — book the full-day tour for best value." },
@@ -1777,7 +1777,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Tropicale", cuisine: "International", priceRange: "$$$", highlight: "Tropical-themed restaurant with strong cocktails and live jazz", bestFor: "group-dinner", groupFriendly: true, brands: ["bestman"] },
     ],
     activities: [
-      { name: "Private Pool Day at the Airbnb", type: "pool-party", duration: "All day", pricePerPerson: [0, 15], groupMin: 4, groupMax: 20, highlight: "The Palm Springs bachelorette signature — float in a turquoise pool against mountain backdrops, take approximately 400 photos.", bestFor: "Marquee day activity", brands: ["moh"] },
+      { name: "Private pool day at the rental house", type: "pool-party", duration: "All day", pricePerPerson: [0, 15], groupMin: 4, groupMax: 20, highlight: "The Palm Springs bachelorette signature — float in a turquoise pool against mountain backdrops, take approximately 400 photos.", bestFor: "Marquee day activity", brands: ["moh"] },
       { name: "Coachella Valley Winery Tour (Miramonte Winery)", type: "wine-tour", duration: "Half day", pricePerPerson: [60, 120], groupMin: 4, groupMax: 16, highlight: "Desert wine tasting at Miramonte and Bouchaine in the Coachella Valley with a guide — surprising quality and stunning mountain backdrops.", bestFor: "Wine day trip", brands: ["moh"] },
       { name: "Palm Springs Aerial Tramway", type: "scenic-overlook", duration: "3-4 hours", pricePerPerson: [28, 35], groupMin: 2, groupMax: 20, highlight: "Rotating cable car to the top of Mt. San Jacinto with pine forests and 8,500-foot views — temperature drops 40 degrees from the desert.", bestFor: "Unique afternoon adventure", brands: ["both"] },
       { name: "Boudoir Photography (Desert Backdrop)", type: "boudoir", duration: "2 hours", pricePerPerson: [150, 300], groupMin: 1, groupMax: 8, highlight: "Boudoir or bridal portrait session against the Coachella Valley desert and mountain backdrop — the location sells itself.", bestFor: "Bride portrait keepsake", brands: ["moh"] },
@@ -1797,12 +1797,12 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Parker Palm Springs", type: "resort", pricePerNight: [400, 900], perRoom: true, maxGuests: 4, highlight: "Jonathan Adler-designed resort with a legendary pool scene, incredible brunch, and the best ambiance in Palm Springs." },
       { name: "The Saguaro Palm Springs", type: "hotel", pricePerNight: [200, 500], perRoom: true, maxGuests: 4, highlight: "Colorful rainbow-painted hotel with pool parties, a DJ on weekends, and a central location on Palm Canyon Drive." },
       { name: "Kimpton Rowan Palm Springs", type: "boutique-hotel", pricePerNight: [280, 650], perRoom: true, maxGuests: 4, highlight: "Rooftop pool and the best cocktail terrace in the city — modern design with mountain panoramas." },
-      { name: "Mid-Century Modern Pool Home (Airbnb)", type: "airbnb", pricePerNight: [600, 1800], perRoom: false, maxGuests: 12, highlight: "The quintessential Palm Springs bachelorette house — kidney-shaped pool, pastel walls, mountain views, and parking for the whole group." },
-      { name: "Desert Modern Estate (Airbnb)", type: "airbnb", pricePerNight: [900, 3000], perRoom: false, maxGuests: 18, highlight: "Sprawling estate with multiple pools, a hot tub, chef's kitchen, and enough bedrooms for the whole extended bachelorette crew." },
+      { name: "Mid-century modern pool home", type: "airbnb", pricePerNight: [600, 1800], perRoom: false, maxGuests: 12, highlight: "The quintessential Palm Springs bachelorette house — kidney-shaped pool, pastel walls, mountain views, and parking for the whole group." },
+      { name: "Desert-modern estate with pools", type: "airbnb", pricePerNight: [900, 3000], perRoom: false, maxGuests: 18, highlight: "Sprawling estate with multiple pools, a hot tub, chef's kitchen, and enough bedrooms for the whole extended bachelorette crew." },
       { name: "Ace Hotel & Swim Club", type: "boutique-hotel", pricePerNight: [180, 450], perRoom: true, maxGuests: 3, highlight: "The cool-kid hotel of Palm Springs with a massive pool, weekend DJ sets, and a creative community — for the group that wants scene over luxury." },
       { name: "Palm Springs Vacation Home", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Mid-century modern homes with private pools and mountain views" },
       { name: "La Quinta Resort & Club", type: "resort", pricePerNight: [200, 550], perRoom: true, maxGuests: 20, highlight: "Sprawling resort with 41 pools, golf, and world-class spa" },
-      { name: "Airbnb Palm Springs", type: "airbnb", pricePerNight: [150, 500], perRoom: false, maxGuests: 10, highlight: "Stylish mid-century homes with private pool access" },
+      { name: "Mid-century home with private pool", type: "airbnb", pricePerNight: [150, 500], perRoom: false, maxGuests: 10, highlight: "Stylish mid-century homes with private pool access" },
     ],
     transport: [
       { name: "Palm Springs Party Bus (Desert Bus Co.)", type: "party-bus", priceRange: "$400-$1,000 for 4 hours", highlight: "Best for the winery tour or a night out on Palm Canyon Drive — eliminates Uber surges and keeps the group together." },
@@ -1876,12 +1876,12 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Ocean Key Resort & Spa", type: "resort", pricePerNight: [350, 750], perRoom: true, maxGuests: 4, highlight: "Only resort directly on Mallory Square with the Sunset Pier below — prime location for every activity on the list." },
       { name: "The Gardens Hotel", type: "boutique-hotel", pricePerNight: [300, 650], perRoom: true, maxGuests: 3, highlight: "Lush tropical garden boutique hotel in Old Town — five buildings connected by jasmine-scented pathways, saltwater pool." },
-      { name: "Key West Old Town Guesthouse (Airbnb)", type: "airbnb", pricePerNight: [600, 1600], perRoom: false, maxGuests: 14, highlight: "Entire renovated Conch-style house with a private pool, outdoor dining, and bikes included — ideal for a crew of 8-12." },
+      { name: "Conch-style house with pool", type: "airbnb", pricePerNight: [600, 1600], perRoom: false, maxGuests: 14, highlight: "Entire renovated Conch-style house with a private pool, outdoor dining, and bikes included — ideal for a crew of 8-12." },
       { name: "Southernmost Beach Resort", type: "resort", pricePerNight: [280, 600], perRoom: true, maxGuests: 4, highlight: "On the Atlantic side with a private beach, three pools, and a pool bar — more laid-back than the Duval hotels." },
       { name: "Marquesa Hotel", type: "boutique-hotel", pricePerNight: [320, 700], perRoom: true, maxGuests: 2, highlight: "Four 1884 Victorian houses connected around two garden pools — the most romantic small luxury hotel in Key West." },
       { name: "The Marker Waterfront Resort", type: "resort", pricePerNight: [300, 600], perRoom: true, maxGuests: 4, highlight: "Harbor-front resort with rooftop pool and Cero Bodega bar." },
       { name: "Margaritaville Key West Resort & Marina", type: "resort", pricePerNight: [250, 550], perRoom: true, maxGuests: 4, highlight: "Jimmy Buffett's resort with pool bar and marina right on the Gulf." },
-      { name: "Old Town Key West House (Airbnb)", type: "airbnb", pricePerNight: [500, 1500], perRoom: false, maxGuests: 12, highlight: "Historic Old Town home with pool and walking distance to Duval." },
+      { name: "Old Town house near Duval", type: "airbnb", pricePerNight: [500, 1500], perRoom: false, maxGuests: 12, highlight: "Historic Old Town home with pool and walking distance to Duval." },
       { name: "The Perry Hotel (Stock Island)", type: "boutique-hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 4, highlight: "Marina hotel on Stock Island with great restaurant and pool." },
     ],
     transport: [
@@ -1952,7 +1952,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Park City Vacation Rentals (Deer Valley Area)", type: "house", pricePerNight: [400, 1800], perRoom: false, maxGuests: 16, highlight: "Slope-adjacent ski chalets with full kitchens, private hot tubs, and game rooms — best for groups that want full privacy." },
       { name: "Park City Mountain Cabin", type: "house", pricePerNight: [400, 1500], perRoom: false, maxGuests: 14, highlight: "Ski-in/ski-out cabins with hot tubs and game rooms" },
       { name: "The Chateaux Deer Valley", type: "hotel", pricePerNight: [200, 500], perRoom: true, maxGuests: 16, highlight: "All-suite hotel with fireplace rooms and ski valet" },
-      { name: "Airbnb Main Street Area", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 10, highlight: "Walkable condos near Main Street bars and restaurants" },
+      { name: "Main Street condos — All Seasons Resort Lodging", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 10, highlight: "The Caledonian's condos sit right on Main Street with balconies and private hot tubs; Town Lift units are steps from the lift.", url: "https://www.allseasonsresortlodging.com/park-city/rentals/main-street/" },
     ],
     transport: [
       { name: "Park City Transit (Free Bus)", type: "shuttle", priceRange: "Free", highlight: "Park City's free bus network covers Main Street, Deer Valley, and Park City Mountain — no car needed within town." },
@@ -2025,7 +2025,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Teton Village Vacation Homes", type: "house", pricePerNight: [500, 2500], perRoom: false, maxGuests: 16, highlight: "Slope-side homes with full kitchens, outdoor hot tubs, and ski storage — perfect for self-catering groups." },
       { name: "Hotel Jackson", type: "boutique-hotel", pricePerNight: [350, 800], perRoom: true, maxGuests: 4, highlight: "Luxury boutique hotel on the Town Square with a rooftop hot tub and mountain views." },
       { name: "Snow King Resort", type: "resort", pricePerNight: [200, 500], perRoom: true, maxGuests: 4, highlight: "Full resort at the base of Snow King with condos, spa, and slope access." },
-      { name: "Teton Village Condo (VRBO)", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 12, highlight: "Ski-in/ski-out condo at Teton Village with kitchen, hot tub, and group space." },
+      { name: "Teton Village condos — Jackson Hole Resort Lodging", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 8, highlight: "Slopeside condos at the base of Jackson Hole Mountain Resort — full kitchens, hot-tub access, studio to 4BR.", url: "https://www.jhrl.com/" },
       { name: "Fireside Resort Cabins", type: "house", pricePerNight: [250, 500], perRoom: false, maxGuests: 6, highlight: "Luxury tiny-home cabins with fireplaces and Teton views — cozy and modern." },
     ],
     transport: [
@@ -2112,10 +2112,10 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Bowery Hotel", type: "boutique-hotel", pricePerNight: [400, 900], perRoom: true, maxGuests: 3, highlight: "The coolest address in downtown Manhattan — brick, leather, and downtown energy right on the Bowery." },
       { name: "NoMad Hotel", type: "boutique-hotel", pricePerNight: [350, 750], perRoom: true, maxGuests: 3, highlight: "Restored Beaux-Arts landmark hotel with a legendary cocktail bar downstairs and a Flatiron location that's walkable to everything." },
       { name: "The William Vale (Williamsburg)", type: "hotel", pricePerNight: [280, 600], perRoom: true, maxGuests: 4, highlight: "Brooklyn's most design-forward hotel with Westlight rooftop and full skyline views — ideal for a Williamsburg-based crew." },
-      { name: "West Village Townhouse (Airbnb)", type: "airbnb", pricePerNight: [800, 2200], perRoom: false, maxGuests: 12, highlight: "Entire West Village brownstone rental — private backyard, full kitchen, walking distance to every great bar and restaurant." },
+      { name: "West Village brownstone", type: "airbnb", pricePerNight: [800, 2200], perRoom: false, maxGuests: 12, highlight: "Entire West Village brownstone rental — private backyard, full kitchen, walking distance to every great bar and restaurant." },
       { name: "The Standard, High Line", type: "hotel", pricePerNight: [380, 800], perRoom: true, maxGuests: 3, highlight: "Straddling the High Line in Meatpacking with a rooftop beer garden and the Standard Biergarten below — prime party hotel." },
       { name: "Pod 51", type: "hotel", pricePerNight: [100, 200], perRoom: true, maxGuests: 2, highlight: "Budget-friendly Midtown micro hotel with rooftop deck" },
-      { name: "Lower East Side Airbnb Lofts", type: "airbnb", pricePerNight: [400, 1200], perRoom: false, maxGuests: 10, highlight: "Spacious lofts walking distance to LES bars and restaurants" },
+      { name: "Lower East Side loft", type: "airbnb", pricePerNight: [400, 1200], perRoom: false, maxGuests: 10, highlight: "Spacious lofts walking distance to LES bars and restaurants" },
       { name: "The William Vale", type: "boutique-hotel", pricePerNight: [300, 600], perRoom: true, maxGuests: 2, highlight: "Williamsburg boutique hotel with stunning rooftop pool and views" },
       { name: "Tribeca Luxury Condo Rentals", type: "airbnb", pricePerNight: [600, 1500], perRoom: false, maxGuests: 12, highlight: "High-end condos in one of NYC's most upscale neighborhoods" },
     ],
@@ -2197,7 +2197,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Ponce City Market Loft", type: "airbnb", pricePerNight: [300, 650], perRoom: false, maxGuests: 10, highlight: "Whole-loft rental in the Old Fourth Ward building above the city's best food hall — walkability is unmatched." },
       { name: "Four Seasons Atlanta", type: "hotel", pricePerNight: [300, 700], perRoom: true, maxGuests: 4, highlight: "Midtown's luxury anchor with an indoor pool, Forbes Four-Star spa, and flawless service." },
       { name: "The St. Regis Atlanta", type: "hotel", pricePerNight: [350, 700], perRoom: true, maxGuests: 2, highlight: "Ultra-luxury in Buckhead with butler service" },
-      { name: "Midtown Atlanta Airbnb Houses", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 12, highlight: "Victorian homes walkable to Piedmont Park and bars" },
+      { name: "Midtown Victorian near Piedmont Park", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 12, highlight: "Victorian homes walkable to Piedmont Park and bars" },
       { name: "W Atlanta - Buckhead", type: "hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 2, highlight: "Party-friendly W Hotel with rooftop pool" },
       { name: "The Burgess Hotel", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Trendy hotel on the BeltLine with rooftop bar" },
     ],
@@ -2273,8 +2273,8 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Hotel Crescent Court", type: "hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 4, highlight: "Uptown's grand five-star hotel with a spa, pool, and some of the largest rooms in Dallas." },
       { name: "The Joule", type: "boutique-hotel", pricePerNight: [300, 600], perRoom: true, maxGuests: 4, highlight: "Downtown Dallas design hotel with rooftop pool and Midnight Rambler bar." },
       { name: "Hotel ZaZa Dallas", type: "boutique-hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 4, highlight: "Uptown luxury hotel with a see-and-be-seen pool scene." },
-      { name: "Deep Ellum Loft (Airbnb)", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 12, highlight: "Industrial loft walking distance to Deep Ellum bars and venues." },
-      { name: "Uptown Dallas House (Airbnb)", type: "airbnb", pricePerNight: [400, 1000], perRoom: false, maxGuests: 14, highlight: "Modern home in Uptown with pool and rooftop deck." },
+      { name: "Deep Ellum industrial loft", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 12, highlight: "Industrial loft walking distance to Deep Ellum bars and venues." },
+      { name: "Uptown house with rooftop deck", type: "airbnb", pricePerNight: [400, 1000], perRoom: false, maxGuests: 14, highlight: "Modern home in Uptown with pool and rooftop deck." },
     ],
     transport: [
       { name: "Dallas Party Bus", type: "party-bus", priceRange: "$350–$700/night", highlight: "Non-negotiable for Dallas — covers the Bishop Arts to Deep Ellum to Uptown triangle efficiently." },
@@ -2340,7 +2340,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Inn at Diamond Cove (Great Diamond Island)", type: "resort", pricePerNight: [250, 700], perRoom: true, maxGuests: 60, highlight: "A restored 19th-century fort on a Casco Bay island accessible by ferry — the most genuinely removed experience in the Portland area without feeling isolated." },
       { name: "The Francis", type: "boutique-hotel", pricePerNight: [250, 700], perRoom: true, maxGuests: 46, highlight: "Boutique hotel in a converted 1881 mansion on Congress Street with 18 rooms, an excellent cocktail bar, and a calm, slightly literary atmosphere that suits Portland." },
       { name: "Old Port Vacation Rental", type: "airbnb", pricePerNight: [400, 1500], perRoom: false, maxGuests: 12, highlight: "Renovated brick warehouse apartments and Victorian flats in the Old Port put the whole neighborhood at walking distance — the most immersive way to experience Portland." },
-      { name: "Old Port Airbnb Apartments", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 8, highlight: "Walk to every bar and restaurant from cobblestone streets" },
+      { name: "Old Port cobblestone-district apartment", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 8, highlight: "Walk to every bar and restaurant from cobblestone streets" },
       { name: "The Westin Portland Harborview", type: "hotel", pricePerNight: [220, 450], perRoom: true, maxGuests: 2, highlight: "Historic Congress Square hotel with Top of the East rooftop bar" },
     ],
     transport: [
@@ -2413,12 +2413,12 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Nines Hotel", type: "boutique-hotel", pricePerNight: [280, 520], perRoom: true, maxGuests: 2, highlight: "Portland's most design-forward hotel inside the 1909 Meier & Frank building — nine stories of atrium views and a rooftop bar." },
       { name: "Hotel Eastlund", type: "hotel", pricePerNight: [200, 380], perRoom: true, maxGuests: 2, highlight: "Lloyd District hotel with a rooftop restaurant and city-facing room views — reliable base close to everything." },
-      { name: "Alberta Arts District House (Airbnb)", type: "airbnb", pricePerNight: [250, 700], perRoom: false, maxGuests: 10, highlight: "Craftsman home with a backyard, full kitchen, and walking access to Portland's best restaurants and coffee." },
+      { name: "Alberta Arts District craftsman", type: "airbnb", pricePerNight: [250, 700], perRoom: false, maxGuests: 10, highlight: "Craftsman home with a backyard, full kitchen, and walking access to Portland's best restaurants and coffee." },
       { name: "Sentinel Hotel", type: "boutique-hotel", pricePerNight: [220, 440], perRoom: true, maxGuests: 2, highlight: "Historic downtown property with wood-paneled corridors, a craft cocktail bar, and an intimate scale for a group hotel." },
       { name: "Ace Hotel Portland", type: "boutique-hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 14, highlight: "Hipster-cool hotel with Stumptown coffee and Pepe Le Moko below" },
       { name: "The Nines", type: "hotel", pricePerNight: [200, 500], perRoom: true, maxGuests: 16, highlight: "Luxury downtown hotel with rooftop restaurant and city views" },
       { name: "Portland Vacation Home - Alberta Arts", type: "house", pricePerNight: [250, 700], perRoom: false, maxGuests: 12, highlight: "Craftsman homes in Portland's artsy neighborhoods" },
-      { name: "Airbnb Pearl District", type: "airbnb", pricePerNight: [150, 400], perRoom: false, maxGuests: 10, highlight: "Modern lofts walkable to breweries and restaurants" },
+      { name: "Pearl District loft", type: "airbnb", pricePerNight: [150, 400], perRoom: false, maxGuests: 10, highlight: "Modern lofts walkable to breweries and restaurants" },
     ],
     transport: [
       { name: "Portland MAX Light Rail", type: "shuttle", priceRange: "$2.50 per ride", highlight: "The MAX connects the airport to downtown and runs through the Pearl, Lloyd, and Convention Center corridors — the group uses it daily." },
@@ -2493,7 +2493,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Marina Inn at Grande Dunes", type: "resort", pricePerNight: [200, 450], perRoom: true, maxGuests: 4, highlight: "Upscale resort with Intracoastal waterway views" },
       { name: "North Beach Vacation Houses", type: "house", pricePerNight: [300, 900], perRoom: false, maxGuests: 16, highlight: "Large beach houses with pools and ocean access" },
       { name: "Breakers Resort", type: "resort", pricePerNight: [100, 250], perRoom: true, maxGuests: 4, highlight: "Oceanfront resort with lazy river and multiple pools" },
-      { name: "Airbnb Condos at Barefoot Resort", type: "airbnb", pricePerNight: [150, 400], perRoom: false, maxGuests: 8, highlight: "Golf resort condos with pool and marina access" },
+      { name: "Barefoot Resort golf condo", type: "airbnb", pricePerNight: [150, 400], perRoom: false, maxGuests: 8, highlight: "Golf resort condos with pool and marina access" },
       { name: "Ocean 22 by Hilton Grand Vacations", type: "hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 4, highlight: "Oceanfront suites with rooftop pool" },
     ],
     transport: [
@@ -2562,12 +2562,12 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Sea Pines Resort Villas", type: "resort", pricePerNight: [350, 900], perRoom: false, maxGuests: 12, highlight: "Multi-bedroom private villas inside Sea Pines with beach access, pool, and golf-cart rental — the full island package for a group." },
       { name: "Hilton Head Marriott Resort & Spa", type: "resort", pricePerNight: [200, 450], perRoom: true, maxGuests: 30, highlight: "Full-service oceanfront resort with multiple pools, a spa, and a beach bar — easy for large groups who want hotel infrastructure." },
-      { name: "Private Beach House — VRBO / Airbnb", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 16, highlight: "Hilton Head has a deep stock of privately owned 4–6 bedroom homes with private pools and direct beach access." },
+      { name: "Beach Properties of Hilton Head homes", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 16, highlight: "Local rental office with 4–6+ bedroom homes — private pools, private porches, and beach access.", url: "https://www.beach-property.com/" },
       { name: "South Beach Inn", type: "boutique-hotel", pricePerNight: [150, 280], perRoom: true, maxGuests: 20, highlight: "Charming boutique property in the South Beach Marina village — walking distance to Salty Dog, casual and unpretentious." },
       { name: "The Inn & Club at Harbour Town", type: "resort", pricePerNight: [300, 600], perRoom: true, maxGuests: 2, highlight: "Sea Pines resort steps from the lighthouse and golf" },
       { name: "Omni Hilton Head Oceanfront Resort", type: "resort", pricePerNight: [250, 500], perRoom: true, maxGuests: 4, highlight: "Beachfront resort with pools and on-site dining" },
       { name: "Sea Pines Vacation Home Rentals", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Full homes in gated Sea Pines with golf and beach access" },
-      { name: "Palmetto Dunes Airbnb Villas", type: "airbnb", pricePerNight: [300, 900], perRoom: false, maxGuests: 10, highlight: "Villas near beach and golf courses" },
+      { name: "Palmetto Dunes villa", type: "airbnb", pricePerNight: [300, 900], perRoom: false, maxGuests: 10, highlight: "Villas near beach and golf courses" },
     ],
     transport: [
       { name: "Golf Cart Rental — Adventure Hilton Head", type: "charter", priceRange: "$80–$140/day", highlight: "Golf carts are the island's native transport — rent for the weekend and navigate Sea Pines, Coligny, and the beach paths effortlessly." },
@@ -2642,12 +2642,12 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Epicurean Hotel", type: "boutique-hotel", pricePerNight: [200, 380], perRoom: true, maxGuests: 2, highlight: "Food-and-wine-themed Hyde Park boutique hotel with a rooftop bar, culinary programming, and impeccable service — the bachelorette HQ." },
       { name: "Hilton Tampa Downtown", type: "hotel", pricePerNight: [150, 280], perRoom: true, maxGuests: 4, highlight: "Riverwalk-adjacent full-service hotel with a rooftop pool, walkable to Armature Works and easy Uber distance to Ybor." },
       { name: "Don CeSar (St. Pete Beach)", type: "resort", pricePerNight: [300, 600], perRoom: true, maxGuests: 4, highlight: "Tampa's legendary pink palace resort on St. Pete Beach — Gatsby-era grandeur, Gulf-front pool, and spa services steps from the sand." },
-      { name: "Ybor City Vacation Rental (Airbnb)", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 12, highlight: "Historic Ybor City bungalows and Spanish-style homes sleep entire groups and put nightlife within walking distance." },
+      { name: "Ybor City historic bungalow", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 12, highlight: "Historic Ybor City bungalows and Spanish-style homes sleep entire groups and put nightlife within walking distance." },
       { name: "The Epicurean Hotel (SoHo)", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 4, highlight: "Food-focused boutique hotel on South Howard with rooftop bar." },
       { name: "JW Marriott Tampa Water Street", type: "hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 4, highlight: "New downtown luxury hotel with pool deck and Riverwalk access." },
-      { name: "Ybor City Loft (Airbnb)", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 10, highlight: "Industrial loft walking distance to Ybor nightlife." },
+      { name: "Ybor City industrial loft", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 10, highlight: "Industrial loft walking distance to Ybor nightlife." },
       { name: "Opal Sands Resort (Clearwater Beach)", type: "resort", pricePerNight: [250, 550], perRoom: true, maxGuests: 4, highlight: "Beachfront Clearwater resort with pools and oceanfront rooms." },
-      { name: "SoHo Party House (Airbnb)", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 14, highlight: "Large home near SoHo bars with pool and outdoor entertaining space." },
+      { name: "SoHo pool house near the bars", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 14, highlight: "Large home near SoHo bars with pool and outdoor entertaining space." },
     ],
     transport: [
       { name: "Party Bus Tampa", type: "party-bus", priceRange: "$400–$900/night", highlight: "Chauffeured party buses connect Ybor City, Hyde Park, and St. Pete Beach — most rentals include 4-hour minimums." },
@@ -2723,12 +2723,12 @@ export const sharedDestinations: CanonicalDestination[] = [
     ],
     lodging: [
       { name: "The West Hollywood EDITION", type: "hotel", pricePerNight: [450, 900], perRoom: true, maxGuests: 2, highlight: "Ian Schrager's WeHo flagship — rooftop pool, impeccable design, walkable to every bar the group wants to hit." },
-      { name: "Malibu Beach House (Airbnb)", type: "airbnb", pricePerNight: [800, 2500], perRoom: false, maxGuests: 12, highlight: "Entire beachfront home with direct sand access, outdoor kitchen, and room for the whole group to spread out." },
+      { name: "Malibu beachfront house", type: "airbnb", pricePerNight: [800, 2500], perRoom: false, maxGuests: 12, highlight: "Entire beachfront home with direct sand access, outdoor kitchen, and room for the whole group to spread out." },
       { name: "The LINE Hotel LA", type: "boutique-hotel", pricePerNight: [220, 420], perRoom: true, maxGuests: 2, highlight: "Koreatown's coolest hotel with a rooftop pool, multiple dining concepts, and rooms designed by a James Beard-winning team." },
       { name: "Kimpton La Peer Hotel", type: "boutique-hotel", pricePerNight: [280, 550], perRoom: true, maxGuests: 2, highlight: "Boutique WeHo property steps from the nightlife corridor — rooftop bar opens at 5 PM and the rooms are genuinely beautiful." },
       { name: "The Standard Hollywood", type: "hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 4, highlight: "Sunset Strip hotel with a famous rooftop pool and 360-degree views." },
       { name: "The LINE LA", type: "boutique-hotel", pricePerNight: [180, 380], perRoom: true, maxGuests: 4, highlight: "Koreatown boutique hotel with rooftop pool and POT by Roy Choi restaurant." },
-      { name: "Hollywood Hills House (Airbnb)", type: "airbnb", pricePerNight: [600, 2000], perRoom: false, maxGuests: 14, highlight: "Private mansion with pool, hot tub, and city views in the Hills." },
+      { name: "Hollywood Hills house with pool", type: "airbnb", pricePerNight: [600, 2000], perRoom: false, maxGuests: 14, highlight: "Private mansion with pool, hot tub, and city views in the Hills." },
       { name: "Santa Monica Proper Hotel", type: "boutique-hotel", pricePerNight: [300, 600], perRoom: true, maxGuests: 4, highlight: "Beach-adjacent luxury hotel steps from the Santa Monica Pier." },
       { name: "Freehand Los Angeles", type: "hotel", pricePerNight: [120, 280], perRoom: true, maxGuests: 4, highlight: "Hip DTLA hotel with rooftop pool bar and social hostel vibes." },
     ],
@@ -2806,7 +2806,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Pacific Beach House Rental", type: "airbnb", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Entire house two blocks from the beach with an outdoor deck and enough bedrooms to keep the whole group together." },
       { name: "Kimpton Alma", type: "boutique-hotel", pricePerNight: [280, 520], perRoom: true, maxGuests: 2, highlight: "Little Italy boutique hotel with a stunning rooftop and ground-floor restaurant that handles group dining gracefully." },
       { name: "Pacific Beach Vacation Rental", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Steps-to-beach houses with rooftop decks in PB" },
-      { name: "Airbnb Gaslamp Quarter", type: "airbnb", pricePerNight: [150, 500], perRoom: false, maxGuests: 10, highlight: "Downtown condos walking distance to all nightlife" },
+      { name: "Gaslamp Quarter condo", type: "airbnb", pricePerNight: [150, 500], perRoom: false, maxGuests: 10, highlight: "Downtown condos walking distance to all nightlife" },
       { name: "Catamaran Resort Hotel & Spa", type: "resort", pricePerNight: [200, 450], perRoom: true, maxGuests: 16, highlight: "Mission Bay resort with private beach and tiki bar" },
     ],
     transport: [
@@ -2878,7 +2878,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Hotel Californian", type: "boutique-hotel", pricePerNight: [300, 700], perRoom: true, maxGuests: 14, highlight: "Moorish-style luxury hotel with rooftop pool and Funk Zone access" },
       { name: "The Ritz-Carlton Bacara", type: "resort", pricePerNight: [400, 1000], perRoom: true, maxGuests: 16, highlight: "Beachfront luxury resort with spa, golf, and multiple restaurants" },
       { name: "Santa Barbara Beach House Rental", type: "house", pricePerNight: [400, 1500], perRoom: false, maxGuests: 12, highlight: "Beachside homes with ocean views and outdoor entertaining space" },
-      { name: "Airbnb Funk Zone", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 10, highlight: "Walkable apartments near wineries, restaurants, and the beach" },
+      { name: "Funk Zone apartment", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 10, highlight: "Walkable apartments near wineries, restaurants, and the beach" },
     ],
     transport: [
       { name: "Private Van Rental / Designated Driver Service", type: "charter", priceRange: "$200–$450/day", highlight: "Essential for wine country day trips to Santa Ynez — several local companies offer van transfers with flexible stops." },
@@ -2955,9 +2955,9 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Old San Juan Vacation Rental (Colonial House)", type: "house", pricePerNight: [250, 1200], perRoom: false, maxGuests: 14, highlight: "Entire colonial townhouses in Old San Juan with rooftop terraces and blue-cobblestone-door views — the group's own historic address." },
       { name: "Condado Vanderbilt Hotel", type: "hotel", pricePerNight: [300, 600], perRoom: true, maxGuests: 16, highlight: "Historic luxury hotel on Condado Beach with casino and rooftop pool" },
       { name: "El San Juan Hotel", type: "hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 20, highlight: "Legendary party hotel with on-site nightclub and Isla Verde beach access" },
-      { name: "Old San Juan Colonial House (Airbnb)", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 12, highlight: "Restored colonial townhouse with rooftop terrace in the old city" },
+      { name: "Old San Juan colonial house", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 12, highlight: "Restored colonial townhouse with rooftop terrace in the old city" },
       { name: "Serafina Beach Hotel", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 14, highlight: "Beachfront boutique in Condado with poolside bar and surf vibes" },
-      { name: "Condado Beachfront Villa (VRBO)", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Private villa steps from Condado beach with rooftop and pool" },
+      { name: "Condado beachfront villa", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Private villa steps from Condado beach with rooftop and pool" },
     ],
     transport: [
       { name: "Tren Urbano & Old City Bus", type: "shuttle", priceRange: "$0.75–$1.50 per ride", highlight: "Urban rail and free Old San Juan trolley connect the major neighborhoods — no rental car needed for the city itself." },
@@ -3034,7 +3034,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Capitol Hill Row House", type: "airbnb", pricePerNight: [300, 650], perRoom: false, maxGuests: 8, highlight: "Classic DC row house in a walkable neighborhood — private patio, full kitchen, and Metro nearby." },
       { name: "Eaton DC", type: "boutique-hotel", pricePerNight: [180, 380], perRoom: true, maxGuests: 4, highlight: "Progressive boutique hotel on K Street with a rooftop, cinema, and wellness center." },
       { name: "The Dupont Circle Hotel", type: "hotel", pricePerNight: [220, 500], perRoom: true, maxGuests: 4, highlight: "Central Dupont location walking distance to bars, restaurants, and the Metro." },
-      { name: "DC Row House (Airbnb)", type: "house", pricePerNight: [350, 800], perRoom: false, maxGuests: 12, highlight: "Historic row house in Shaw or Capitol Hill — group space with DC character." },
+      { name: "Shaw / Capitol Hill row house", type: "house", pricePerNight: [350, 800], perRoom: false, maxGuests: 12, highlight: "Historic row house in Shaw or Capitol Hill — group space with DC character." },
       { name: "The Watergate Hotel", type: "hotel", pricePerNight: [250, 600], perRoom: true, maxGuests: 4, highlight: "Iconic Watergate with rooftop pool, whiskey bar, and Potomac views." },
     ],
     transport: [
@@ -3106,13 +3106,13 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Henderson Beach Resort & Spa", type: "resort", pricePerNight: [350, 900], perRoom: true, maxGuests: 30, highlight: "The Panhandle's premier full-service resort on Henderson Beach State Park — oceanfront rooms, rooftop pool, spa, and Gulf-front dining in a single property." },
       { name: "Sandestin Golf and Beach Resort", type: "resort", pricePerNight: [200, 600], perRoom: false, maxGuests: 14, highlight: "2,400-acre resort spanning the Gulf and Choctawhatchee Bay with condo villas, the Baytowne Wharf village, and multiple pools — serious value for groups." },
-      { name: "Private Beach House — 30A / Destin VRBO", type: "house", pricePerNight: [450, 1400], perRoom: false, maxGuests: 16, highlight: "30A's Rosemary Beach, WaterColor, and WaterSound communities have world-class private rental homes steps from the Gulf." },
+      { name: "Ocean Reef Resorts beach houses", type: "house", pricePerNight: [450, 1400], perRoom: false, maxGuests: 16, highlight: "Gulf-front homes across Destin and Scenic 30A with private-pool options — the biggest sleep 24.", url: "https://www.oceanreefresorts.com/gulf-front" },
       { name: "Crystal Beach Suites & Hotels", type: "hotel", pricePerNight: [130, 280], perRoom: true, maxGuests: 20, highlight: "Value-oriented Gulf-front hotel options along Destin's Crystal Beach neighborhood — direct beach access without the resort price tag." },
       { name: "Henderson Beach Resort", type: "resort", pricePerNight: [300, 600], perRoom: true, maxGuests: 4, highlight: "Luxury beachfront resort with pools, spa, and on-site dining." },
-      { name: "Destin Beach House (Airbnb)", type: "airbnb", pricePerNight: [400, 1200], perRoom: false, maxGuests: 16, highlight: "Gulf-front beach house with private pool and beach access." },
-      { name: "Crystal Beach Condo (Airbnb)", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 10, highlight: "Beachfront condo with pool and views at a fraction of hotel prices." },
+      { name: "Destin beach house", type: "airbnb", pricePerNight: [400, 1200], perRoom: false, maxGuests: 16, highlight: "Gulf-front beach house with private pool and beach access." },
+      { name: "Crystal Beach condo", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 10, highlight: "Beachfront condo with pool and views at a fraction of hotel prices." },
       { name: "The Palms of Destin Resort", type: "resort", pricePerNight: [150, 350], perRoom: true, maxGuests: 6, highlight: "Family-friendly resort with lazy river and multiple pools." },
-      { name: "HarborWalk Village Condo (VRBO)", type: "airbnb", pricePerNight: [250, 550], perRoom: false, maxGuests: 8, highlight: "Walk to all HarborWalk restaurants and bars from your front door." },
+      { name: "Emerald Grande at HarborWalk Village", type: "airbnb", pricePerNight: [250, 550], perRoom: false, maxGuests: 8, highlight: "Condo resort right above HarborWalk Village — restaurants, bars, and the charter docks are an elevator ride down.", url: "https://www.emeraldgrande.com/" },
     ],
     transport: [
       { name: "Charter Van / Party Bus — Destin", type: "party-bus", priceRange: "$250–$600/night", highlight: "Essential for covering the distance between Destin Harbor, Baytowne Wharf, and 30A — multiple operators serve the full Emerald Coast corridor." },
@@ -3192,9 +3192,9 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Dalmar Fort Lauderdale", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Rooftop pool boutique hotel in the heart of downtown — hip without being pretentious, walkable to Las Olas nightlife." },
       { name: "Fort Lauderdale Beach House Rental", type: "airbnb", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Private waterfront or canal-front homes with pools and boat docks — the best value for groups of eight or more." },
       { name: "The Ritz-Carlton, Fort Lauderdale", type: "hotel", pricePerNight: [350, 800], perRoom: true, maxGuests: 4, highlight: "Beachfront luxury hotel with pool, spa, and Burlock Coast restaurant." },
-      { name: "Las Olas Townhouse (Airbnb)", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 12, highlight: "Waterfront townhouse walking distance to Las Olas nightlife." },
+      { name: "Las Olas townhouse", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 12, highlight: "Waterfront townhouse walking distance to Las Olas nightlife." },
       { name: "Pelican Grand Beach Resort", type: "resort", pricePerNight: [200, 450], perRoom: true, maxGuests: 4, highlight: "Beachfront resort with lazy river pool and oceanfront dining." },
-      { name: "Fort Lauderdale Beach House (Airbnb)", type: "airbnb", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Full house near the beach with pool and group entertaining space." },
+      { name: "Fort Lauderdale beach house", type: "airbnb", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Full house near the beach with pool and group entertaining space." },
     ],
     transport: [
       { name: "Water Taxi Fort Lauderdale", type: "shuttle", priceRange: "$25/day pass", highlight: "All-day Intracoastal water taxi connecting hotels, restaurants, and nightlife — the most charming way to move through the city." },
@@ -3269,7 +3269,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Lokal Hotel Old City", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: false, maxGuests: 6, highlight: "Curated apartment-style stays in historic Old City — the feeling of living here, not just visiting." },
       { name: "The Rittenhouse Hotel", type: "hotel", pricePerNight: [350, 700], perRoom: true, maxGuests: 2, highlight: "5-star Rittenhouse Square hotel with old-money Philadelphia elegance" },
       { name: "The Notary Hotel", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Stylish Autograph Collection hotel in a converted bank building" },
-      { name: "Fishtown Airbnb Row Homes", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 10, highlight: "Full row homes in Philly's hottest neighborhood for nightlife" },
+      { name: "Fishtown row home", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 10, highlight: "Full row homes in Philly's hottest neighborhood for nightlife" },
       { name: "The Study at University City", type: "boutique-hotel", pricePerNight: [150, 280], perRoom: true, maxGuests: 2, highlight: "Modern hotel near Penn campus with affordable group rates" },
       { name: "Center City Luxury Condo Rentals", type: "airbnb", pricePerNight: [400, 1000], perRoom: false, maxGuests: 10, highlight: "High-rise condos walking distance to Rittenhouse and nightlife" },
       { name: "Fishtown 6BR rowhouse", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Roof deck over the skyline, bars and BYOBs on the block" },
@@ -3346,12 +3346,12 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Kimpton Armory Hotel Bozeman", type: "boutique-hotel", pricePerNight: [280, 580], perRoom: true, maxGuests: 4, highlight: "Downtown Bozeman's most design-forward hotel in a converted National Guard armory — best bar on the property." },
       { name: "The Lark Bozeman", type: "boutique-hotel", pricePerNight: [220, 450], perRoom: true, maxGuests: 3, highlight: "Mid-century modern boutique hotel steps from Main Street — outdoor fire pits, mountain-modern design, and genuinely great staff." },
-      { name: "Big Sky Montana Ranch House (Airbnb)", type: "airbnb", pricePerNight: [500, 1400], perRoom: false, maxGuests: 14, highlight: "Whole ranch-style house 15 minutes from downtown with mountain views, a hot tub, fire pit, and a proper country porch." },
+      { name: "Mountain-view ranch house", type: "airbnb", pricePerNight: [500, 1400], perRoom: false, maxGuests: 14, highlight: "Whole ranch-style house 15 minutes from downtown with mountain views, a hot tub, fire pit, and a proper country porch." },
       { name: "63 Ranch (All-Inclusive Dude Ranch)", type: "resort", pricePerNight: [350, 600], perRoom: true, maxGuests: 4, highlight: "Oldest dude ranch in Montana — all-inclusive with horseback riding, ranch dinners, and genuine Big Sky Montana immersion." },
-      { name: "Bozeman Inn Mountain Suite (Airbnb)", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 10, highlight: "Modern chalet-style home near Bridger Bowl with ski storage, full kitchen, and hot tub — perfect four-season rental." },
+      { name: "Chalet near Bridger Bowl", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 10, highlight: "Modern chalet-style home near Bridger Bowl with ski storage, full kitchen, and hot tub — perfect four-season rental." },
       { name: "Element Bozeman", type: "hotel", pricePerNight: [130, 280], perRoom: true, maxGuests: 4, highlight: "Modern extended-stay hotel with kitchens and outdoor fire pit" },
       { name: "Kimpton Armory Hotel", type: "boutique-hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 4, highlight: "Stylish downtown hotel in a restored armory with rooftop bar" },
-      { name: "Bozeman VRBO Cabin Rentals", type: "house", pricePerNight: [250, 800], perRoom: false, maxGuests: 14, highlight: "Private cabins and homes near downtown or in the surrounding valleys" },
+      { name: "Mountain Home Montana vacation homes", type: "house", pricePerNight: [250, 800], perRoom: false, maxGuests: 14, highlight: "Locally owned outfit with 110+ homes and cabins across Bozeman and the Gallatin Valley.", url: "https://www.mountain-home.com/montana-vacation-rentals/bozeman-gallatin-valley" },
     ],
     transport: [
       { name: "Rideshare (Uber / Lyft / local cabs)", type: "rideshare", priceRange: "$10-$30 per ride", highlight: "Downtown Bozeman is compact enough for rideshare — essential for the Crystal Bar nights when everyone needs a safe ride home." },
@@ -3425,7 +3425,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Tahoe Lakefront Vacation Home", type: "house", pricePerNight: [500, 3000], perRoom: false, maxGuests: 20, highlight: "Private lakefront properties with boat docks, hot tubs, and open living spaces — the group rental that defines the trip." },
       { name: "Lake Tahoe Luxury Cabin", type: "house", pricePerNight: [500, 2000], perRoom: false, maxGuests: 16, highlight: "Multi-bedroom cabins with hot tubs, game rooms, and lake views" },
       { name: "The Landing Resort & Spa", type: "boutique-hotel", pricePerNight: [200, 500], perRoom: true, maxGuests: 12, highlight: "Lakeside boutique hotel walking distance to Heavenly Village" },
-      { name: "Airbnb South Lake Tahoe", type: "airbnb", pricePerNight: [200, 700], perRoom: false, maxGuests: 12, highlight: "Cozy cabins and condos near the slopes and casinos" },
+      { name: "South Lake Tahoe cabin", type: "airbnb", pricePerNight: [200, 700], perRoom: false, maxGuests: 12, highlight: "Cozy cabins and condos near the slopes and casinos" },
       { name: "Harrah's Lake Tahoe", type: "hotel", pricePerNight: [100, 300], perRoom: true, maxGuests: 20, highlight: "Casino hotel with pool, spa, and nightlife under one roof" },
     ],
     transport: [
@@ -3623,7 +3623,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Stockyards Hotel", type: "boutique-hotel", pricePerNight: [200, 420], perRoom: true, maxGuests: 2, highlight: "1907 National Historic Landmark at the Stockyards heart — authentic western rooms, a legendary bar downstairs, and the location the group wants." },
       { name: "Omni Fort Worth Hotel", type: "hotel", pricePerNight: [250, 480], perRoom: true, maxGuests: 2, highlight: "Sundance Square anchor hotel with a rooftop pool, spa, and proximity to both downtown nightlife and the Cultural District." },
-      { name: "Western Ranch Rental (Airbnb)", type: "airbnb", pricePerNight: [300, 750], perRoom: false, maxGuests: 12, highlight: "Ranch-style rental outside the city with a fire pit, a covered porch, and the outdoor space that makes evenings effortless." },
+      { name: "Ranch house outside the city", type: "airbnb", pricePerNight: [300, 750], perRoom: false, maxGuests: 12, highlight: "Ranch-style rental outside the city with a fire pit, a covered porch, and the outdoor space that makes evenings effortless." },
       { name: "Renaissance Fort Worth Hotel", type: "hotel", pricePerNight: [220, 400], perRoom: true, maxGuests: 2, highlight: "Sundance Square property with large rooms and dependable service — the practical anchor hotel for a group that values reliability." },
     ],
     transport: [
@@ -3884,12 +3884,12 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Auberge du Soleil", type: "resort", pricePerNight: [800, 2000], perRoom: true, maxGuests: 3, highlight: "The definitive Napa luxury resort — hillside maison suites, a full spa, and the most beautiful pool in wine country." },
       { name: "Solage, Auberge Resorts Collection", type: "resort", pricePerNight: [600, 1500], perRoom: true, maxGuests: 3, highlight: "Calistoga resort with mineral pool complex, the famous geothermal spa, and a cool California-modern aesthetic that feels very editorial." },
       { name: "The Inn on First (Napa)", type: "boutique-hotel", pricePerNight: [350, 650], perRoom: true, maxGuests: 2, highlight: "Downtown Napa Victorian bed and breakfast with five suites — walkable to Oxbow Market and the Thomas bar." },
-      { name: "Napa Valley Vineyard Estate House (Airbnb)", type: "airbnb", pricePerNight: [1200, 3500], perRoom: false, maxGuests: 16, highlight: "Private estate rental in the valley with a pool, wine cellar, full kitchen, and outdoor fire pits — a fully contained bachelorette compound." },
+      { name: "Vineyard estate house", type: "airbnb", pricePerNight: [1200, 3500], perRoom: false, maxGuests: 16, highlight: "Private estate rental in the valley with a pool, wine cellar, full kitchen, and outdoor fire pits — a fully contained bachelorette compound." },
       { name: "Bardessono Hotel & Spa (Yountville)", type: "boutique-hotel", pricePerNight: [700, 1600], perRoom: true, maxGuests: 3, highlight: "LEED-certified Yountville luxury hotel with a full spa, outdoor soaking tubs, and walking distance to the French Laundry." },
       { name: "Meritage Resort and Spa", type: "resort", pricePerNight: [250, 600], perRoom: true, maxGuests: 16, highlight: "Vineyard estate with cave spa and multiple pools" },
       { name: "The Archer Hotel Napa", type: "boutique-hotel", pricePerNight: [300, 700], perRoom: true, maxGuests: 14, highlight: "Rooftop bar with vineyard views in downtown Napa" },
       { name: "Napa Valley Vacation Home", type: "house", pricePerNight: [500, 1800], perRoom: false, maxGuests: 14, highlight: "Private vineyard estates with pools and wine cellars" },
-      { name: "Airbnb Yountville", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 10, highlight: "Charming cottages walking distance to French Laundry and Bouchon" },
+      { name: "Yountville cottage", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 10, highlight: "Charming cottages walking distance to French Laundry and Bouchon" },
     ],
     transport: [
       { name: "Private Wine Tour Van (Platypus or Wine Country Shuttle)", type: "charter", priceRange: "$600-$1,400 per day", highlight: "A private van and driver is non-negotiable in Napa — keeps everyone safe and lets the whole group drink without logistics stress." },
@@ -4150,7 +4150,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Limelight Hotel", type: "hotel", pricePerNight: [300, 700], perRoom: true, maxGuests: 4, highlight: "Modern hotel steps from the gondola with lounge, spa, and ski valet." },
       { name: "Hotel Jerome", type: "boutique-hotel", pricePerNight: [500, 1500], perRoom: true, maxGuests: 4, highlight: "Iconic 1889 Victorian hotel — Aspen's most historic and luxurious stay." },
       { name: "Aspen Mountain Lodge", type: "hotel", pricePerNight: [200, 500], perRoom: true, maxGuests: 4, highlight: "Value-friendly lodge with hot tub and shuttle — solid budget pick for groups." },
-      { name: "Snowmass Village Condo (VRBO)", type: "house", pricePerNight: [500, 1500], perRoom: false, maxGuests: 12, highlight: "Ski-in/ski-out condo at Snowmass with kitchen, hot tub, and mountain views." },
+      { name: "CoralTree Residence Collection Snowmass", type: "house", pricePerNight: [500, 1500], perRoom: false, maxGuests: 12, highlight: "Managed 1–5BR residences in Snowmass Village — full kitchens, hot tubs, easy access to the slopes.", url: "https://www.coraltreeresidencecollection.com/colorado/snowmass/" },
       { name: "W Aspen", type: "hotel", pricePerNight: [400, 1000], perRoom: true, maxGuests: 4, highlight: "Sleek W Hotel with rooftop pool, living room bar, and ski concierge." },
     ],
     transport: [
@@ -4211,7 +4211,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Borgata Hotel Casino & Spa", type: "resort", pricePerNight: [150, 400], perRoom: true, maxGuests: 4, highlight: "AC's best casino resort with nightlife, pool, spa, and poker room on-site." },
       { name: "Hard Rock Hotel & Casino Atlantic City", type: "resort", pricePerNight: [130, 350], perRoom: true, maxGuests: 4, highlight: "Beach-block casino resort with rooftop pool, clubs, and concert venue." },
       { name: "Ocean Casino Resort", type: "resort", pricePerNight: [120, 300], perRoom: true, maxGuests: 4, highlight: "Newer casino resort with high-floor ocean views and a 160,000 sq ft casino." },
-      { name: "Margate Beach House (Airbnb)", type: "airbnb", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Full beach house in Margate 10 min from the Boardwalk with deck and grill." },
+      { name: "Margate beach house", type: "airbnb", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Full beach house in Margate 10 min from the Boardwalk with deck and grill." },
     ],
     transport: [
       { name: "Uber / Lyft", type: "rideshare", priceRange: "$6-$15 per ride", highlight: "Good coverage on the island — casino hopping is cheap via rideshare." },
@@ -4268,7 +4268,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Revival Baltimore", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Joie de Vivre boutique hotel in Mount Vernon with rooftop bar" },
       { name: "Sagamore Pendry Baltimore", type: "boutique-hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 2, highlight: "Stunning waterfront hotel in a restored Fells Point pier building" },
-      { name: "Fells Point Airbnb Row Houses", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 10, highlight: "Historic row houses steps from bars and waterfront" },
+      { name: "Fells Point row house", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 10, highlight: "Historic row houses steps from bars and waterfront" },
       { name: "Four Seasons Baltimore", type: "hotel", pricePerNight: [350, 700], perRoom: true, maxGuests: 2, highlight: "Luxury Harbor East hotel with waterfront pool and spa" },
       { name: "Fells Point 6BR rowhouse", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Cobblestone block, roof deck, and the harbor two streets over" },
     ],
@@ -4325,7 +4325,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Tetherow Lodge", type: "resort", pricePerNight: [200, 500], perRoom: true, maxGuests: 16, highlight: "Golf resort with mountain views and on-site dining" },
       { name: "Bend Vacation Cabin", type: "house", pricePerNight: [300, 900], perRoom: false, maxGuests: 14, highlight: "River-view cabins with hot tubs and fire pits" },
       { name: "The Oxford Hotel", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 12, highlight: "Downtown Bend boutique hotel with rooftop restaurant" },
-      { name: "Airbnb Bend", type: "airbnb", pricePerNight: [150, 400], perRoom: false, maxGuests: 10, highlight: "Modern homes and cabins near downtown and river trail" },
+      { name: "Bend house near the river trail", type: "airbnb", pricePerNight: [150, 400], perRoom: false, maxGuests: 10, highlight: "Modern homes and cabins near downtown and river trail" },
     ],
     transport: [
       { name: "Bend Party Bus", type: "party-bus", priceRange: "$350-$800 for 4 hours", highlight: "Party buses for brewery crawls and mountain excursions" },
@@ -4438,7 +4438,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Modern Hotel", type: "boutique-hotel", pricePerNight: [120, 250], perRoom: true, maxGuests: 12, highlight: "Mid-century cool with a great bar and downtown location" },
       { name: "The Grove Hotel", type: "hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 16, highlight: "Downtown luxury connected to dining and entertainment" },
       { name: "Boise Vacation Home - North End", type: "house", pricePerNight: [200, 600], perRoom: false, maxGuests: 12, highlight: "Craftsman homes in Boise's charming North End neighborhood" },
-      { name: "Airbnb Downtown Boise", type: "airbnb", pricePerNight: [100, 300], perRoom: false, maxGuests: 10, highlight: "Walkable apartments near Basque Block and brewery district" },
+      { name: "Downtown Boise apartment", type: "airbnb", pricePerNight: [100, 300], perRoom: false, maxGuests: 10, highlight: "Walkable apartments near Basque Block and brewery district" },
     ],
     transport: [
       { name: "Uber / Lyft", type: "rideshare", priceRange: "$6-$15 per ride", highlight: "Good coverage downtown; Boise is compact and easy to navigate" },
@@ -4494,7 +4494,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Liberty Hotel", type: "boutique-hotel", pricePerNight: [300, 600], perRoom: true, maxGuests: 2, highlight: "Converted Charles Street jail with upscale bar scene and Beacon Hill location" },
       { name: "Yotel Boston", type: "hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 2, highlight: "Modern Seaport hotel with rooftop terrace and compact smart rooms" },
-      { name: "South Boston Airbnb Houses", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 10, highlight: "Full houses in Southie near waterfront bars and restaurants" },
+      { name: "Southie group house", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 10, highlight: "Full houses in Southie near waterfront bars and restaurants" },
       { name: "The Verb Hotel", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Rock-and-roll themed hotel steps from Fenway Park" },
       { name: "Back Bay Luxury Condo Rentals", type: "airbnb", pricePerNight: [500, 1200], perRoom: false, maxGuests: 10, highlight: "Brownstone condos in Boston's most walkable neighborhood" },
       { name: "South Boston 6BR townhouse", type: "house", pricePerNight: [510,1320], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Three floors, big kitchen, and a short ride to the Seaport" },
@@ -4554,7 +4554,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Gravity Haus Breckenridge", type: "hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 4, highlight: "Modern adventure hotel with hot tub, co-working, and ski-in access" },
       { name: "Grand Lodge on Peak 7", type: "resort", pricePerNight: [250, 600], perRoom: true, maxGuests: 8, highlight: "Full-service lodge with pool, spa, and mountain-view condos" },
       { name: "One Ski Hill Place", type: "resort", pricePerNight: [350, 800], perRoom: true, maxGuests: 10, highlight: "Luxury ski-in/ski-out condos with bowling alley and game room" },
-      { name: "Main Street VRBO Homes", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 16, highlight: "Private mountain homes within walking distance of Main Street bars" },
+      { name: "Downtown condos — Great Western Lodging", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 9, highlight: "Condos and townhomes walkable to Main Street bars and the Quicksilver lift — many with private hot tubs.", url: "https://www.gwlodging.com/summit-county-vacation-rentals/breckenridge-vacation-rentals/downtown-breckenridge-vacation-rentals" },
     ],
     transport: [
       { name: "Epic Mountain Express", type: "shuttle", priceRange: "$45-65 per person each way", highlight: "Shared and private shuttles from DEN to Breck with door-to-door service" },
@@ -4611,9 +4611,9 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Breathless Cabo San Lucas Resort & Spa", type: "resort", pricePerNight: [250, 500], perRoom: true, maxGuests: 20, highlight: "Adults-only all-inclusive with pool parties and on-site nightlife" },
       { name: "The Cape, a Thompson Hotel", type: "hotel", pricePerNight: [350, 700], perRoom: true, maxGuests: 16, highlight: "Design-forward boutique hotel with rooftop bar and El Arco views" },
-      { name: "Marina Villa Rental (Airbnb)", type: "airbnb", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Private villa near the Marina with pool, hot tub, and chef option" },
+      { name: "Marina-side villa", type: "airbnb", pricePerNight: [400, 1200], perRoom: false, maxGuests: 14, highlight: "Private villa near the Marina with pool, hot tub, and chef option" },
       { name: "Casa Dorada Los Cabos Resort & Spa", type: "resort", pricePerNight: [180, 400], perRoom: true, maxGuests: 20, highlight: "Beachfront resort on Medano Beach with suites and kitchenettes" },
-      { name: "Pedregal Luxury Villa (VRBO)", type: "house", pricePerNight: [800, 2500], perRoom: false, maxGuests: 16, highlight: "Gated Pedregal community mansion with infinity pool and ocean views" },
+      { name: "Cabo Platinum Pedregal villas", type: "house", pricePerNight: [800, 2500], perRoom: false, maxGuests: 16, highlight: "Managed villa collection in gated Pedregal — private pools, ocean views, chef and butler options.", url: "https://caboplatinum.com/areas/pedregal-cabo/" },
     ],
     transport: [
       { name: "Cabo Transfers / SJD Taxi", type: "shuttle", priceRange: "$40-60 per group each way", highlight: "Private airport shuttle for groups — pre-book to avoid taxi markup" },
@@ -4672,7 +4672,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Hyatt Zilara Cancun", type: "resort", pricePerNight: [300, 600], perRoom: true, maxGuests: 20, highlight: "Adults-only all-inclusive right on the beach with rooftop pool" },
       { name: "Grand Oasis Cancun", type: "resort", pricePerNight: [150, 350], perRoom: true, maxGuests: 30, highlight: "Massive all-inclusive with 13 bars and on-site nightclub" },
-      { name: "Cancun Hotel Zone Villa (Airbnb)", type: "airbnb", pricePerNight: [350, 1000], perRoom: false, maxGuests: 14, highlight: "Private villa on the lagoon side with pool and dock" },
+      { name: "Hotel Zone villa", type: "airbnb", pricePerNight: [350, 1000], perRoom: false, maxGuests: 14, highlight: "Private villa on the lagoon side with pool and dock" },
       { name: "Hard Rock Hotel Cancun", type: "resort", pricePerNight: [250, 550], perRoom: true, maxGuests: 20, highlight: "All-inclusive with rock-star suites and swim-up bar" },
       { name: "Selina Cancun Lagoon", type: "boutique-hotel", pricePerNight: [80, 200], perRoom: true, maxGuests: 16, highlight: "Budget-friendly boutique with coworking, yoga, and lagoon access" },
     ],
@@ -4727,7 +4727,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Stephanie Inn", type: "boutique-hotel", pricePerNight: [300, 600], perRoom: true, maxGuests: 4, highlight: "Oceanfront luxury with fireplaces, spa, and Haystack Rock views" },
       { name: "Surfsand Resort", type: "resort", pricePerNight: [200, 500], perRoom: true, maxGuests: 4, highlight: "Beachfront resort with ocean-view rooms and fire pit on the sand" },
       { name: "Tolovana Inn", type: "hotel", pricePerNight: [120, 300], perRoom: true, maxGuests: 6, highlight: "Affordable oceanfront suites with full kitchens and indoor pool" },
-      { name: "Cannon Beach VRBO Beach Houses", type: "house", pricePerNight: [250, 800], perRoom: false, maxGuests: 14, highlight: "Private beach houses with ocean views, hot tubs, and bonfire access" },
+      { name: "Cannon Beach Property Management homes", type: "house", pricePerNight: [250, 800], perRoom: false, maxGuests: 12, highlight: "Oceanfront and ocean-view rental homes, bungalows, and condos from the local property office.", url: "https://www.cbpm.com/" },
     ],
     transport: [
       { name: "Sunset Empire Transportation (The Bus)", type: "shuttle", priceRange: "$1 per ride", highlight: "Public bus connecting Cannon Beach, Seaside, and Astoria" },
@@ -4781,9 +4781,9 @@ export const sharedDestinations: CanonicalDestination[] = [
     ],
     lodging: [
       { name: "Sofitel Legend Santa Clara", type: "hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 16, highlight: "Restored 17th-century convent with pool, spa, and old-city location" },
-      { name: "Old City Colonial Mansion (Airbnb)", type: "airbnb", pricePerNight: [300, 1000], perRoom: false, maxGuests: 16, highlight: "Restored colonial mansion with rooftop plunge pool and staff included" },
+      { name: "Old City colonial mansion", type: "airbnb", pricePerNight: [300, 1000], perRoom: false, maxGuests: 16, highlight: "Restored colonial mansion with rooftop plunge pool and staff included" },
       { name: "Hotel Casa San Agustin", type: "boutique-hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 14, highlight: "Intimate luxury boutique in the old city with rooftop bar and pool" },
-      { name: "Getsemani House Rental (VRBO)", type: "house", pricePerNight: [150, 500], perRoom: false, maxGuests: 12, highlight: "Colorful Getsemani house steps from nightlife with rooftop terrace" },
+      { name: "Getsemaní rooftop-terrace house", type: "house", pricePerNight: [150, 500], perRoom: false, maxGuests: 12, highlight: "Colorful Getsemani house steps from nightlife with rooftop terrace" },
       { name: "Hyatt Regency Cartagena", type: "hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 20, highlight: "Modern hotel in Bocagrande with beach access and ocean-view pool" },
     ],
     transport: [
@@ -4842,7 +4842,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Ritz-Carlton Charlotte", type: "hotel", pricePerNight: [300, 600], perRoom: true, maxGuests: 2, highlight: "Luxury uptown hotel with spa and fine dining" },
       { name: "The Dunhill Hotel", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 2, highlight: "Historic boutique hotel in the heart of uptown" },
-      { name: "South End Airbnb Houses", type: "airbnb", pricePerNight: [300, 700], perRoom: false, maxGuests: 10, highlight: "Walking distance to bars, breweries, and rail trail" },
+      { name: "South End group house", type: "airbnb", pricePerNight: [300, 700], perRoom: false, maxGuests: 10, highlight: "Walking distance to bars, breweries, and rail trail" },
       { name: "Kimpton Tryon Park Hotel", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Stylish hotel with Nuvole rooftop bar" },
       { name: "South End 6BR house", type: "house", pricePerNight: [440,1030], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Backyard and a walk to the rail-trail breweries" },
     ],
@@ -4901,7 +4901,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "21c Museum Hotel Cincinnati", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Contemporary art museum hotel right in OTR" },
       { name: "Hotel Covington", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 2, highlight: "Trendy boutique hotel across the river in Covington with skyline views" },
-      { name: "OTR Airbnb Apartments", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 10, highlight: "Historic renovated apartments in the heart of Over-the-Rhine" },
+      { name: "Over-the-Rhine apartment", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 10, highlight: "Historic renovated apartments in the heart of Over-the-Rhine" },
       { name: "The Lytle Park Hotel", type: "hotel", pricePerNight: [220, 450], perRoom: true, maxGuests: 2, highlight: "Luxury Marriott property overlooking Lytle Park downtown" },
       { name: "Over-the-Rhine 6BR townhouse", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Restored 19th-century brick, walkable to Findlay Market" },
     ],
@@ -4959,7 +4959,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Kimpton Schofield Hotel", type: "boutique-hotel", pricePerNight: [170, 340], perRoom: true, maxGuests: 2, highlight: "Stylish boutique hotel in a 1902 building on East 9th Street" },
       { name: "Metropolitan at The 9", type: "hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Luxury hotel with rooftop bar and bowling alley in the building" },
-      { name: "Ohio City Airbnb Houses", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 10, highlight: "Full houses walking distance to breweries and West Side Market" },
+      { name: "Ohio City group house", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 10, highlight: "Full houses walking distance to breweries and West Side Market" },
       { name: "Drury Plaza Hotel Cleveland", type: "hotel", pricePerNight: [140, 260], perRoom: true, maxGuests: 2, highlight: "Great value downtown hotel with free evening drinks and snacks" },
       { name: "Ohio City 6BR house", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Porch, big kitchen, and the West Side Market around the corner" },
     ],
@@ -5014,7 +5014,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Graduate Columbus", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 2, highlight: "OSU-themed boutique hotel in the Short North" },
       { name: "Hotel LeVeque", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Art Deco luxury in the iconic LeVeque Tower downtown" },
-      { name: "German Village Airbnb Houses", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 10, highlight: "Historic brick homes in one of Columbus's most charming neighborhoods" },
+      { name: "German Village brick house", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 10, highlight: "Historic brick homes in one of Columbus's most charming neighborhoods" },
       { name: "The Hilton Columbus Downtown", type: "hotel", pricePerNight: [170, 340], perRoom: true, maxGuests: 2, highlight: "Connected to convention center, walking distance to Arena District nightlife" },
       { name: "German Village 6BR house", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Brick streets and a courtyard built for a long dinner" },
     ],
@@ -5076,7 +5076,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Shinola Hotel", type: "boutique-hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 2, highlight: "Detroit's coolest hotel with rooftop bar and artisan everything" },
       { name: "The Detroit Foundation Hotel", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Converted fire department HQ with the acclaimed Apparatus Room" },
-      { name: "Corktown Airbnb Houses", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 10, highlight: "Full houses in Detroit's hottest neighborhood near bars and restaurants" },
+      { name: "Corktown group house", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 10, highlight: "Full houses in Detroit's hottest neighborhood near bars and restaurants" },
       { name: "MGM Grand Detroit", type: "hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 2, highlight: "Casino hotel with nightlife, spa, and entertainment built in" },
       { name: "Midtown Detroit Loft Rentals", type: "airbnb", pricePerNight: [250, 700], perRoom: false, maxGuests: 8, highlight: "Lofts near the DIA and Midtown restaurants and bars" },
       { name: "Corktown 6BR house", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Restored Victorian with a porch, walk to Michigan Avenue" },
@@ -5135,7 +5135,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Strater Hotel", type: "boutique-hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 4, highlight: "Iconic 1887 Victorian hotel with the Diamond Belle Saloon on-site" },
       { name: "DoubleTree by Hilton Durango", type: "hotel", pricePerNight: [120, 280], perRoom: true, maxGuests: 4, highlight: "Comfortable riverside hotel with pool and hot tub near downtown" },
       { name: "Purgatory Lodge", type: "resort", pricePerNight: [150, 400], perRoom: true, maxGuests: 8, highlight: "Slope-side condos at Purgatory Resort with ski-in/ski-out access" },
-      { name: "Durango VRBO Mountain Homes", type: "house", pricePerNight: [250, 800], perRoom: false, maxGuests: 14, highlight: "Private homes with hot tubs and mountain views near downtown or river" },
+      { name: "Durango Colorado Vacations homes", type: "house", pricePerNight: [250, 800], perRoom: false, maxGuests: 14, highlight: "Family-owned local outfit since 2005 — homes and cabins downtown and up the Animas Valley, many with private hot tubs and mountain views.", url: "https://vacationdurango.com/" },
     ],
     transport: [
       { name: "Durango Transit", type: "shuttle", priceRange: "Free-$1", highlight: "Public trolley and bus system covering downtown and surrounding areas" },
@@ -5192,7 +5192,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Inn at the 5th", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 4, highlight: "Upscale boutique hotel in the 5th Street Public Market complex" },
       { name: "Graduate Eugene", type: "hotel", pricePerNight: [120, 280], perRoom: true, maxGuests: 4, highlight: "U of O-themed hotel with retro decor and campus-adjacent location" },
       { name: "Valley River Inn", type: "hotel", pricePerNight: [100, 250], perRoom: true, maxGuests: 4, highlight: "Riverside hotel with pool, hot tub, and views of the Willamette" },
-      { name: "Eugene VRBO Downtown Homes", type: "house", pricePerNight: [150, 500], perRoom: false, maxGuests: 12, highlight: "Private homes in the Whiteaker or downtown walking distance to bars" },
+      { name: "Whiteaker district house", type: "house", pricePerNight: [150, 500], perRoom: false, maxGuests: 12, highlight: "Private homes in the Whiteaker or downtown walking distance to bars" },
     ],
     transport: [
       { name: "Lane Transit District (LTD)", type: "shuttle", priceRange: "$1.75 per ride", highlight: "Public bus system including the EMX rapid transit through downtown" },
@@ -5247,7 +5247,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Hoffman Haus", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 4, highlight: "Charming boutique hotel on Main Street with garden suites and a pool." },
       { name: "Cotton Gin Village", type: "house", pricePerNight: [250, 500], perRoom: false, maxGuests: 8, highlight: "Restored historic cabins with private porches and Hill Country charm." },
-      { name: "Hill Country Vacation Home (VRBO)", type: "house", pricePerNight: [400, 1000], perRoom: false, maxGuests: 16, highlight: "Large ranch home with pool, hot tub, and views — perfect for groups." },
+      { name: "Hill Country ranch house with pool", type: "house", pricePerNight: [400, 1000], perRoom: false, maxGuests: 16, highlight: "Large ranch home with pool, hot tub, and views — perfect for groups." },
       { name: "Inn on Barons Creek", type: "resort", pricePerNight: [180, 350], perRoom: true, maxGuests: 4, highlight: "Spa resort with creek-side rooms, a pool, and walking distance to Main Street." },
     ],
     transport: [
@@ -5302,7 +5302,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Galvez & Spa", type: "hotel", pricePerNight: [180, 400], perRoom: true, maxGuests: 4, highlight: "Historic Seawall hotel with pool, spa, and on-site dining." },
       { name: "The Tremont House", type: "boutique-hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 4, highlight: "Strand district boutique hotel with rooftop bar." },
-      { name: "Galveston Beach House (Airbnb)", type: "airbnb", pricePerNight: [250, 700], perRoom: false, maxGuests: 14, highlight: "Beach house with Gulf views, pool, and group space." },
+      { name: "Galveston beach house", type: "airbnb", pricePerNight: [250, 700], perRoom: false, maxGuests: 14, highlight: "Beach house with Gulf views, pool, and group space." },
       { name: "San Luis Resort", type: "resort", pricePerNight: [200, 450], perRoom: true, maxGuests: 4, highlight: "Upscale beachfront resort with adults-only pool and H2O bar." },
     ],
     transport: [
@@ -5357,7 +5357,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Smoky Mountain luxe picnic", type: "luxe-picnic", duration: "2 hr", pricePerPerson: [90, 180], groupMin: 4, groupMax: 12, highlight: "Styled picnic + charcuterie + rosé with mountain backdrop", bestFor: "afternoon", brands: ["moh"] },
     ],
     lodging: [
-      { name: "Smoky Mountain Cabin (Airbnb/VRBO)", type: "airbnb", pricePerNight: [400, 1500], perRoom: false, maxGuests: 16, highlight: "Multi-bedroom mountain cabin with hot tub, game room, and mountain views — the move." },
+      { name: "Cabins For You group cabins", type: "airbnb", pricePerNight: [150, 1050], perRoom: false, maxGuests: 16, highlight: "Gatlinburg cabin outfit with large-group lodges — hot tubs, game rooms, and mountain views, sleeping 12 to 60+.", url: "https://www.cabinsforyou.com/large_group_cabins_gatlinburg.html" },
       { name: "Margaritaville Resort Gatlinburg", type: "resort", pricePerNight: [180, 400], perRoom: true, maxGuests: 4, highlight: "Jimmy Buffett-themed resort on the Parkway with rooftop pool and island vibes." },
       { name: "The Lodge at Buckberry Creek", type: "resort", pricePerNight: [200, 450], perRoom: true, maxGuests: 4, highlight: "Upscale mountain lodge with river views, restaurant, and lodge-style common areas." },
       { name: "Bearskin Lodge on the River", type: "hotel", pricePerNight: [120, 280], perRoom: true, maxGuests: 4, highlight: "Riverside hotel on the Parkway with fireplaces and an outdoor pool." },
@@ -5413,7 +5413,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Lodge at Gulf State Park (Hilton)", type: "resort", pricePerNight: [200, 400], perRoom: true, maxGuests: 4, highlight: "Beachfront resort in Gulf State Park with spa and pools." },
       { name: "Turquoise Place (Orange Beach)", type: "resort", pricePerNight: [300, 600], perRoom: false, maxGuests: 10, highlight: "Luxury condo tower with private hot tubs on every balcony." },
-      { name: "Gulf Shores Beach House (Airbnb)", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 14, highlight: "Beach house with pool and Gulf views walking distance to the sand." },
+      { name: "Gulf-view beach house with pool", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 14, highlight: "Beach house with pool and Gulf views walking distance to the sand." },
       { name: "Perdido Beach Resort", type: "resort", pricePerNight: [150, 350], perRoom: true, maxGuests: 4, highlight: "Full-service beachfront resort with pools and on-site dining." },
     ],
     transport: [
@@ -5472,7 +5472,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Laylow, Autograph Collection", type: "hotel", pricePerNight: [250, 450], perRoom: true, maxGuests: 4, highlight: "Mid-century modern boutique hotel with a killer pool scene in Waikiki." },
       { name: "Outrigger Waikiki Beach Resort", type: "resort", pricePerNight: [300, 600], perRoom: true, maxGuests: 4, highlight: "Beachfront resort right on Waikiki with ocean-view rooms and Duke's on-site." },
-      { name: "North Shore Beach House (VRBO)", type: "house", pricePerNight: [500, 1200], perRoom: false, maxGuests: 12, highlight: "Private beachfront house on the North Shore with surf out front." },
+      { name: "North Shore beachfront house", type: "house", pricePerNight: [500, 1200], perRoom: false, maxGuests: 12, highlight: "Private beachfront house on the North Shore with surf out front." },
       { name: "The Surfjack Hotel & Swim Club", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 4, highlight: "Retro-cool boutique hotel with a social pool and excellent lobby bar." },
     ],
     transport: [
@@ -5529,7 +5529,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Best Western Plus Hood River Inn", type: "hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 4, highlight: "Riverfront hotel with pool, hot tub, and Columbia River views" },
       { name: "Columbia Gorge Hotel & Spa", type: "resort", pricePerNight: [200, 450], perRoom: true, maxGuests: 4, highlight: "Historic 1921 resort on a cliff above the Columbia with a 208-foot waterfall" },
       { name: "The Society Hotel Bingen", type: "boutique-hotel", pricePerNight: [100, 250], perRoom: true, maxGuests: 4, highlight: "Stylish converted schoolhouse across the river with a rooftop soaking pool" },
-      { name: "Hood River VRBO Gorge Homes", type: "house", pricePerNight: [200, 700], perRoom: false, maxGuests: 12, highlight: "Private homes with decks overlooking the Gorge and Mt. Hood" },
+      { name: "Columbia Gorge Vacation Rentals homes", type: "house", pricePerNight: [200, 700], perRoom: false, maxGuests: 8, highlight: "Family-run Hood River outfit — homes, townhomes, and condos, several with river-view decks.", url: "https://www.columbiagorgevacationrentals.com/" },
     ],
     transport: [
       { name: "Columbia Area Transit (CAT)", type: "shuttle", priceRange: "Free-$1", highlight: "Free and low-cost buses connecting Hood River, The Dalles, and Gorge trailheads" },
@@ -5587,8 +5587,8 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Granduca Houston", type: "hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 4, highlight: "Italian-inspired luxury hotel in the Galleria area with fine dining." },
       { name: "The Laura Hotel", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 4, highlight: "Design-forward hotel in Midtown near bars and restaurants." },
-      { name: "Heights Bungalow (Airbnb)", type: "airbnb", pricePerNight: [300, 700], perRoom: false, maxGuests: 10, highlight: "Renovated bungalow in the Heights near Washington Ave nightlife." },
-      { name: "Montrose Party House (Airbnb)", type: "airbnb", pricePerNight: [400, 1000], perRoom: false, maxGuests: 14, highlight: "Large home in Montrose with pool and walkable to bars." },
+      { name: "Heights bungalow", type: "airbnb", pricePerNight: [300, 700], perRoom: false, maxGuests: 10, highlight: "Renovated bungalow in the Heights near Washington Ave nightlife." },
+      { name: "Montrose group house", type: "airbnb", pricePerNight: [400, 1000], perRoom: false, maxGuests: 14, highlight: "Large home in Montrose with pool and walkable to bars." },
       { name: "The Post Oak Hotel", type: "hotel", pricePerNight: [350, 700], perRoom: true, maxGuests: 4, highlight: "Ultra-luxury Uptown hotel with Rolls Royce house car and rooftop pool." },
     ],
     transport: [
@@ -5646,7 +5646,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Alexander Hotel", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Art-forward boutique hotel connected to CityWay on Mass Ave" },
       { name: "Bottleworks Hotel", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Stunning Art Deco restoration in the Mass Ave district" },
-      { name: "Broad Ripple Airbnb Houses", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 10, highlight: "Full houses near Broad Ripple's bar scene" },
+      { name: "Broad Ripple group house", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 10, highlight: "Full houses near Broad Ripple's bar scene" },
       { name: "JW Marriott Indianapolis", type: "hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Largest JW Marriott in the world, connected to convention center" },
       { name: "Broad Ripple 6BR house", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Canal-side, deep backyard, and bars within walking distance" },
     ],
@@ -5703,7 +5703,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Casa Marina Hotel", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 4, highlight: "Historic oceanfront boutique hotel steps from the Jax Beach bar scene." },
       { name: "One Ocean Resort & Spa", type: "resort", pricePerNight: [250, 500], perRoom: true, maxGuests: 4, highlight: "Atlantic Beach luxury resort with a full spa and rooftop pool." },
-      { name: "Jax Beach House (Airbnb)", type: "house", pricePerNight: [250, 600], perRoom: false, maxGuests: 12, highlight: "Private beach house within walking distance of bars and the ocean." },
+      { name: "Jax Beach house", type: "house", pricePerNight: [250, 600], perRoom: false, maxGuests: 12, highlight: "Private beach house within walking distance of bars and the ocean." },
       { name: "Hyatt Regency Jacksonville Riverfront", type: "hotel", pricePerNight: [130, 250], perRoom: true, maxGuests: 4, highlight: "Downtown hotel right on the St. Johns River — connected to the stadium." },
     ],
     transport: [
@@ -5761,7 +5761,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Kansas City", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Restored Art Deco gem in the historic Kansas City Club building" },
       { name: "21c Museum Hotel Kansas City", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Contemporary art museum meets boutique hotel in Crossroads" },
-      { name: "Power & Light District Airbnbs", type: "airbnb", pricePerNight: [300, 700], perRoom: false, maxGuests: 10, highlight: "Loft apartments steps from nightlife and restaurants" },
+      { name: "Power & Light District apartment", type: "airbnb", pricePerNight: [300, 700], perRoom: false, maxGuests: 10, highlight: "Loft apartments steps from nightlife and restaurants" },
       { name: "The Fontaine", type: "hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Country Club Plaza hotel with rooftop pool and skyline views" },
       { name: "Crossroads 6BR loft house", type: "house", pricePerNight: [440,1030], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Warehouse conversion, walkable to barbecue and the jazz district" },
     ],
@@ -5816,7 +5816,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Lake-house dock photoshoot", type: "photoshoot", duration: "1.5 hr", pricePerPerson: [45, 100], groupMin: 4, groupMax: 12, highlight: "Golden-hour portraits on the dock with the boat tied up", bestFor: "content capture", brands: ["moh"] },
     ],
     lodging: [
-      { name: "Lake House with Dock (Airbnb/VRBO)", type: "airbnb", pricePerNight: [400, 1500], perRoom: false, maxGuests: 16, highlight: "Multi-bedroom lake house with private dock, hot tub, and game room — the move." },
+      { name: "Your Lake Vacation lake houses", type: "airbnb", pricePerNight: [400, 1500], perRoom: false, maxGuests: 16, highlight: "125+ managed homes and condos on the lake — boat-slip, game-room, and pool-access options.", url: "https://www.yourlakevacation.com/" },
       { name: "Camden on the Lake Resort", type: "resort", pricePerNight: [200, 450], perRoom: true, maxGuests: 4, highlight: "Lakefront resort with pools, spa, and boat rentals on-site." },
       { name: "Lodge of Four Seasons", type: "resort", pricePerNight: [150, 350], perRoom: true, maxGuests: 4, highlight: "Classic lake resort with golf course, marina, and multiple restaurants." },
       { name: "Margaritaville Lake Resort", type: "resort", pricePerNight: [180, 400], perRoom: true, maxGuests: 4, highlight: "Jimmy Buffett-themed resort with lakefront pool, marina, and party vibes." },
@@ -5875,7 +5875,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Sleeping Lady Mountain Resort", type: "resort", pricePerNight: [180, 400], perRoom: true, maxGuests: 4, highlight: "Secluded creekside resort with pool, hot tub, and organic dining" },
       { name: "Enzian Inn", type: "hotel", pricePerNight: [130, 300], perRoom: true, maxGuests: 4, highlight: "Bavarian-themed hotel with hot tubs, pool, and complimentary breakfast" },
       { name: "Posthotel Leavenworth", type: "boutique-hotel", pricePerNight: [250, 550], perRoom: true, maxGuests: 4, highlight: "Luxury European-style hotel with full spa and rooftop terrace" },
-      { name: "Leavenworth VRBO Cabins", type: "house", pricePerNight: [200, 700], perRoom: false, maxGuests: 14, highlight: "Private mountain cabins with hot tubs and Cascade views near the village" },
+      { name: "NW Comfy Cabins", type: "house", pricePerNight: [200, 700], perRoom: false, maxGuests: 10, highlight: "Family-run Leavenworth rental outfit — log cabins, alpine chalets, and waterfront retreats, many with private hot tubs.", url: "https://comfycabins.com/" },
     ],
     transport: [
       { name: "Link Transit", type: "shuttle", priceRange: "Free", highlight: "Free public bus within Leavenworth and to nearby Wenatchee" },
@@ -5931,7 +5931,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "21c Museum Hotel Louisville", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 4, highlight: "Art museum-hotel hybrid on Main Street with Proof on Main restaurant." },
       { name: "Hotel Distil", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 4, highlight: "Whiskey Row boutique hotel within stumbling distance of every bourbon bar." },
-      { name: "NuLu House (Airbnb)", type: "airbnb", pricePerNight: [300, 750], perRoom: false, maxGuests: 12, highlight: "Full house in NuLu walking distance to restaurants and bourbon bars." },
+      { name: "NuLu group house", type: "airbnb", pricePerNight: [300, 750], perRoom: false, maxGuests: 12, highlight: "Full house in NuLu walking distance to restaurants and bourbon bars." },
       { name: "The Brown Hotel", type: "hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 4, highlight: "Historic 1923 hotel downtown — birthplace of the Hot Brown sandwich." },
       { name: "Omni Louisville Hotel", type: "hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 4, highlight: "Downtown luxury hotel with rooftop pool, speakeasy, and bowling alley." },
     ],
@@ -5992,7 +5992,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Peabody Memphis", type: "hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 4, highlight: "Iconic downtown hotel with the famous Peabody Ducks — the place to stay." },
       { name: "Hu. Hotel", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 4, highlight: "Modern boutique hotel on Main Street steps from Beale Street." },
       { name: "Central Station Hotel", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 4, highlight: "Converted train station hotel in the South Main district with a great rooftop." },
-      { name: "Beale Street House (Airbnb)", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 12, highlight: "Full house near Beale Street with porch and walking distance to everything." },
+      { name: "House near Beale Street", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 12, highlight: "Full house near Beale Street with porch and walking distance to everything." },
     ],
     transport: [
       { name: "Uber / Lyft", type: "rideshare", priceRange: "$6-$15 per ride", highlight: "Cheap rides — downtown to Midtown is under $10." },
@@ -6049,7 +6049,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Kimpton Journeyman Hotel", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Stylish Third Ward hotel with rooftop bar and great restaurant" },
       { name: "The Pfister Hotel", type: "hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 2, highlight: "Grand historic Milwaukee hotel with Victorian art collection" },
-      { name: "Brady Street Airbnb Apartments", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 8, highlight: "Apartments near Brady Street bars and restaurants" },
+      { name: "Brady Street apartment", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 8, highlight: "Apartments near Brady Street bars and restaurants" },
       { name: "Third Ward Loft Rentals", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 10, highlight: "Warehouse lofts in the heart of the Third Ward" },
       { name: "Drury Plaza Hotel Milwaukee Downtown", type: "hotel", pricePerNight: [130, 250], perRoom: true, maxGuests: 2, highlight: "Solid value downtown hotel with free evening drinks and snacks" },
       { name: "Third Ward 6BR loft", type: "house", pricePerNight: [440,1180], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Timber beams and a river walk to the bars" },
@@ -6108,7 +6108,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Hewing Hotel", type: "boutique-hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 2, highlight: "North Loop warehouse hotel with rooftop pool and sauna" },
       { name: "Moxy Minneapolis Uptown", type: "hotel", pricePerNight: [150, 280], perRoom: true, maxGuests: 2, highlight: "Playful Marriott brand in the heart of Uptown nightlife" },
-      { name: "North Loop Airbnb Lofts", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 10, highlight: "Warehouse lofts in Minneapolis' trendiest neighborhood" },
+      { name: "North Loop loft", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 10, highlight: "Warehouse lofts in Minneapolis' trendiest neighborhood" },
       { name: "W Minneapolis - The Foshay", type: "hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 2, highlight: "Art Deco landmark hotel with rooftop bar and observation deck" },
       { name: "Uptown Lake Calhoun Rentals", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 12, highlight: "Houses near the lakes with easy access to Uptown bars" },
     ],
@@ -6165,7 +6165,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Hoodoo Moab", type: "boutique-hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 4, highlight: "Curio Collection hotel with a pool, rooftop bar, and red rock views." },
       { name: "Under Canvas Moab", type: "resort", pricePerNight: [300, 700], perRoom: true, maxGuests: 4, highlight: "Luxury glamping tents with en-suite bathrooms near Arches National Park." },
       { name: "Red Cliffs Lodge", type: "resort", pricePerNight: [200, 400], perRoom: true, maxGuests: 4, highlight: "Riverside lodge on the Colorado River with horseback riding and a winery." },
-      { name: "Moab Springs Ranch (VRBO)", type: "house", pricePerNight: [400, 1000], perRoom: false, maxGuests: 14, highlight: "Private ranch property with multiple cabins, a pool, and cottonwood shade." },
+      { name: "Moab Springs Ranch", type: "house", pricePerNight: [400, 1000], perRoom: false, maxGuests: 8, highlight: "Bungalows and 1–3BR townhouses under the cottonwoods — heated pool, hot tub, and bike-in/bike-out trail access.", url: "https://www.moabspringsranch.com/" },
     ],
     transport: [
       { name: "Rental Car / Jeep (CNY or GJT)", type: "rideshare", priceRange: "$50-120/day", highlight: "Essential — rent a Jeep or SUV at the airport for trail access." },
@@ -6278,9 +6278,9 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Nelligan", type: "boutique-hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 16, highlight: "Old Montreal boutique with exposed brick and the famous rooftop terrace" },
       { name: "W Montreal", type: "hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 20, highlight: "Sleek party-friendly hotel in Old Montreal with buzzy lobby bar" },
-      { name: "Plateau Loft Rental (Airbnb)", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 12, highlight: "Converted loft on the Plateau steps from Saint-Laurent nightlife" },
+      { name: "Plateau loft", type: "airbnb", pricePerNight: [200, 600], perRoom: false, maxGuests: 12, highlight: "Converted loft on the Plateau steps from Saint-Laurent nightlife" },
       { name: "Le Mount Stephen", type: "hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 16, highlight: "Stunning heritage mansion turned luxury hotel on the Golden Square Mile" },
-      { name: "Old Montreal Townhouse (VRBO)", type: "house", pricePerNight: [300, 900], perRoom: false, maxGuests: 14, highlight: "Multi-floor stone townhouse in Old Port with rooftop and modern interiors" },
+      { name: "Old Montréal stone townhouse", type: "house", pricePerNight: [300, 900], perRoom: false, maxGuests: 14, highlight: "Multi-floor stone townhouse in Old Port with rooftop and modern interiors" },
     ],
     transport: [
       { name: "Uber / Lyft Montreal", type: "rideshare", priceRange: "$5-20 CAD per ride", highlight: "Uber and Lyft work everywhere — easy to split between group members" },
@@ -6339,7 +6339,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Colcord Hotel", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 4, highlight: "Historic downtown boutique hotel in a 1910 skyscraper — walkable to Bricktown." },
       { name: "Ambassador Hotel Oklahoma City", type: "boutique-hotel", pricePerNight: [130, 280], perRoom: true, maxGuests: 4, highlight: "Art Deco boutique hotel in Midtown with a rooftop bar." },
       { name: "Omni Oklahoma City Hotel", type: "hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 4, highlight: "Bricktown's flagship hotel connected to the convention center and entertainment." },
-      { name: "OKC Airbnb House (Plaza District)", type: "house", pricePerNight: [200, 500], perRoom: false, maxGuests: 12, highlight: "Group house in the walkable Plaza District — close to bars and restaurants." },
+      { name: "Plaza District house", type: "house", pricePerNight: [200, 500], perRoom: false, maxGuests: 12, highlight: "Group house in the walkable Plaza District — close to bars and restaurants." },
     ],
     transport: [
       { name: "Uber / Lyft OKC", type: "rideshare", priceRange: "$8-20 across metro", highlight: "Cheap rideshare with short waits — 10 min from Bricktown to Plaza District." },
@@ -6392,10 +6392,10 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Jockey's Ridge + Bodie-Lighthouse photoshoot", type: "photoshoot", duration: "1.5 hr", pricePerPerson: [45, 110], groupMin: 4, groupMax: 12, highlight: "Dune + striped-lighthouse golden-hour portraits", bestFor: "content capture", brands: ["moh"] },
     ],
     lodging: [
-      { name: "Oceanfront Mega House (VRBO)", type: "house", pricePerNight: [600, 2000], perRoom: false, maxGuests: 20, highlight: "Multi-level oceanfront house with private pool, hot tub, and game room." },
+      { name: "Twiddy & Company event homes", type: "house", pricePerNight: [600, 2000], perRoom: false, maxGuests: 20, highlight: "Corolla oceanfront event homes up to 12BR — private pools, hot tubs, even indoor pools and mini golf.", url: "https://www.twiddy.com/search/oceanfront/corolla/" },
       { name: "Sanderling Resort", type: "resort", pricePerNight: [250, 500], perRoom: true, maxGuests: 4, highlight: "Upscale Duck resort with spa, restaurant, and soundside views." },
       { name: "Shutters on the Banks", type: "hotel", pricePerNight: [120, 250], perRoom: true, maxGuests: 4, highlight: "Nags Head oceanfront hotel with kitchenettes and a pool — solid budget pick." },
-      { name: "Corolla Beach House (Airbnb)", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 16, highlight: "4x4 beach house in Corolla with wild horse views and total seclusion." },
+      { name: "Corolla beach house", type: "house", pricePerNight: [400, 1200], perRoom: false, maxGuests: 16, highlight: "4x4 beach house in Corolla with wild horse views and total seclusion." },
     ],
     transport: [
       { name: "Rental Car (Enterprise ORF)", type: "rideshare", priceRange: "$40-80/day", highlight: "Essential for OBX — rent at Norfolk airport and drive 90 min to the banks." },
@@ -6449,7 +6449,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Monaco Pittsburgh", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 2, highlight: "Stylish Kimpton hotel in the Cultural District with great bar" },
       { name: "Ace Hotel Pittsburgh", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 2, highlight: "Trendy East Liberty hotel in a converted YMCA" },
-      { name: "South Side Airbnb Houses", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 10, highlight: "Full houses walking distance to South Side bar strip" },
+      { name: "South Side row house", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 10, highlight: "Full houses walking distance to South Side bar strip" },
       { name: "Fairmont Pittsburgh", type: "hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 2, highlight: "Luxury hotel at Point State Park with river views" },
       { name: "South Side 6BR house", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Three floors on a slope, city view from the top deck" },
     ],
@@ -6503,7 +6503,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Dean Hotel", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 2, highlight: "Hip downtown boutique hotel with a karaoke bar in the basement" },
       { name: "Graduate Providence", type: "boutique-hotel", pricePerNight: [170, 340], perRoom: true, maxGuests: 2, highlight: "Design-forward hotel in the historic Biltmore building" },
-      { name: "Federal Hill Airbnb Apartments", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 8, highlight: "Walk to Federal Hill restaurants and downtown bars" },
+      { name: "Federal Hill apartment", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 8, highlight: "Walk to Federal Hill restaurants and downtown bars" },
       { name: "Hotel Providence", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 2, highlight: "Elegant Mathewson Street boutique with Art Deco details" },
       { name: "Federal Hill 6BR house", type: "house", pricePerNight: [400,920], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Above the restaurant row, big table, short walk to everything" },
     ],
@@ -6561,7 +6561,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Durham Hotel", type: "boutique-hotel", pricePerNight: [200, 400], perRoom: true, maxGuests: 4, highlight: "Mid-century modern rooftop hotel in downtown Durham — the coolest stay in the Triangle." },
       { name: "AC Hotel Raleigh Downtown", type: "hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 4, highlight: "Sleek Marriott property on Fayetteville St — walking distance to all the bars." },
       { name: "Unscripted Durham", type: "boutique-hotel", pricePerNight: [170, 350], perRoom: true, maxGuests: 4, highlight: "Playful boutique hotel with a pool, rooftop bar, and retro-mod vibes." },
-      { name: "Jordan Lake House (Airbnb)", type: "house", pricePerNight: [300, 700], perRoom: false, maxGuests: 14, highlight: "Lakefront house with a dock, firepit, and space for the whole crew." },
+      { name: "Jordan Lake house", type: "house", pricePerNight: [300, 700], perRoom: false, maxGuests: 14, highlight: "Lakefront house with a dock, firepit, and space for the whole crew." },
     ],
     transport: [
       { name: "Uber / Lyft Triangle", type: "rideshare", priceRange: "$8-25 between Raleigh/Durham", highlight: "Easy rideshare coverage across the Triangle — 20 min between cities." },
@@ -6619,7 +6619,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Grand America Hotel", type: "hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 2, highlight: "Five-star luxury in the heart of downtown SLC" },
       { name: "Hotel Monaco Salt Lake City", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 2, highlight: "Kimpton boutique hotel with complimentary wine hour" },
       { name: "Park City Mountain Home Rentals", type: "house", pricePerNight: [400, 1500], perRoom: false, maxGuests: 14, highlight: "Ski-in/ski-out mountain homes with hot tubs" },
-      { name: "Airbnb Homes in Sugar House", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 10, highlight: "Walkable neighborhood close to bars and restaurants" },
+      { name: "Sugar House group home", type: "airbnb", pricePerNight: [200, 500], perRoom: false, maxGuests: 10, highlight: "Walkable neighborhood close to bars and restaurants" },
       { name: "Pendry Park City", type: "resort", pricePerNight: [300, 700], perRoom: true, maxGuests: 2, highlight: "Luxury ski resort with spa and slope-side access" },
     ],
     transport: [
@@ -6677,7 +6677,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Hotel Emma", type: "boutique-hotel", pricePerNight: [300, 600], perRoom: true, maxGuests: 4, highlight: "Stunning Pearl District hotel in a converted 1894 brewhouse with world-class cocktail bar." },
       { name: "The St. Anthony", type: "hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 4, highlight: "Historic downtown hotel with a rooftop pool and easy River Walk access." },
-      { name: "River Walk Condo (Airbnb)", type: "airbnb", pricePerNight: [250, 700], perRoom: false, maxGuests: 10, highlight: "Full condo with River Walk access and balcony views of the water." },
+      { name: "River Walk condo", type: "airbnb", pricePerNight: [250, 700], perRoom: false, maxGuests: 10, highlight: "Full condo with River Walk access and balcony views of the water." },
       { name: "Drury Inn & Suites San Antonio Riverwalk", type: "hotel", pricePerNight: [130, 250], perRoom: true, maxGuests: 4, highlight: "Budget-friendly River Walk hotel with free evening drinks and snacks." },
       { name: "King William 6BR house", type: "house", pricePerNight: [400,1030], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Historic district porch, ten minutes from the River Walk" },
     ],
@@ -6739,7 +6739,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Hotel Zephyr", type: "hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 4, highlight: "Playful Fisherman's Wharf hotel with game room, fire pits, and waterfront views." },
       { name: "The Phoenix Hotel", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 4, highlight: "Rock-and-roll motel in the Tenderloin with poolside vibes and a party atmosphere." },
       { name: "Proper Hotel San Francisco", type: "boutique-hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 4, highlight: "Chic Mid-Market boutique hotel with a rooftop bar and design-forward rooms." },
-      { name: "Mission District House (Airbnb)", type: "airbnb", pricePerNight: [400, 1000], perRoom: false, maxGuests: 12, highlight: "Full house in the Mission walking distance to nightlife and taquerias." },
+      { name: "Mission District house", type: "airbnb", pricePerNight: [400, 1000], perRoom: false, maxGuests: 12, highlight: "Full house in the Mission walking distance to nightlife and taquerias." },
       { name: "Hyatt Regency San Francisco", type: "hotel", pricePerNight: [220, 450], perRoom: true, maxGuests: 4, highlight: "Embarcadero waterfront hotel with easy access to the Ferry Building and FiDi." },
     ],
     transport: [
@@ -6797,7 +6797,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Thompson Seattle", type: "boutique-hotel", pricePerNight: [250, 450], perRoom: true, maxGuests: 4, highlight: "Downtown boutique hotel with The Nest rooftop bar and waterfront views." },
       { name: "Hotel Ballard", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 4, highlight: "Walking distance to the Ballard brewery district with an in-house restaurant." },
-      { name: "Capitol Hill House (Airbnb)", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 12, highlight: "Full house on Capitol Hill steps from nightlife and restaurants." },
+      { name: "Capitol Hill house", type: "airbnb", pricePerNight: [350, 900], perRoom: false, maxGuests: 12, highlight: "Full house on Capitol Hill steps from nightlife and restaurants." },
       { name: "The Edgewater Hotel", type: "hotel", pricePerNight: [250, 500], perRoom: true, maxGuests: 4, highlight: "Iconic waterfront hotel on the pier — The Beatles stayed here and fished from the window." },
     ],
     transport: [
@@ -6856,7 +6856,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Davenport Grand Hotel", type: "hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 4, highlight: "Modern downtown hotel connected to the Spokane Convention Center" },
       { name: "The Historic Davenport Hotel", type: "boutique-hotel", pricePerNight: [180, 400], perRoom: true, maxGuests: 4, highlight: "Stunning 1914 landmark hotel with ornate lobbies and rooftop pool" },
       { name: "Northern Quest Resort & Casino", type: "resort", pricePerNight: [130, 300], perRoom: true, maxGuests: 4, highlight: "Full-service resort with casino, spa, pool, and entertainment venue" },
-      { name: "Spokane VRBO Downtown Rentals", type: "house", pricePerNight: [150, 500], perRoom: false, maxGuests: 12, highlight: "Downtown apartments and houses within walking distance of nightlife" },
+      { name: "Downtown Spokane group house", type: "house", pricePerNight: [150, 500], perRoom: false, maxGuests: 12, highlight: "Downtown apartments and houses within walking distance of nightlife" },
     ],
     transport: [
       { name: "Spokane Transit Authority (STA)", type: "shuttle", priceRange: "$2 per ride", highlight: "Public bus system covering downtown and greater Spokane area" },
@@ -6909,7 +6909,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Casa Monica Resort & Spa", type: "resort", pricePerNight: [200, 450], perRoom: true, maxGuests: 4, highlight: "Moorish-style luxury resort in the heart of the historic district." },
       { name: "The Collector Luxury Inn", type: "boutique-hotel", pricePerNight: [180, 350], perRoom: true, maxGuests: 4, highlight: "Nine historic houses converted into a boutique inn with private courtyards." },
-      { name: "St. Augustine Beach House (Airbnb)", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 12, highlight: "Beach house near A1A with porch, grill, and walking distance to sand." },
+      { name: "St. Augustine beach house", type: "airbnb", pricePerNight: [300, 800], perRoom: false, maxGuests: 12, highlight: "Beach house near A1A with porch, grill, and walking distance to sand." },
       { name: "Embassy Suites St. Augustine Beach", type: "hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 4, highlight: "Oceanfront all-suite hotel with free happy hour and breakfast." },
     ],
     transport: [
@@ -6967,7 +6967,7 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "The Last Hotel", type: "boutique-hotel", pricePerNight: [170, 350], perRoom: true, maxGuests: 2, highlight: "Converted shoe factory downtown with rooftop pool and bar" },
       { name: "Angad Arts Hotel", type: "boutique-hotel", pricePerNight: [150, 300], perRoom: true, maxGuests: 2, highlight: "Choose your room by emotion -- unique color-themed hotel in Grand Center" },
-      { name: "Soulard Airbnb Houses", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 12, highlight: "Historic brick homes walking distance from bars and restaurants" },
+      { name: "Soulard brick house", type: "airbnb", pricePerNight: [250, 600], perRoom: false, maxGuests: 12, highlight: "Historic brick homes walking distance from bars and restaurants" },
       { name: "Four Seasons Hotel St. Louis", type: "hotel", pricePerNight: [300, 600], perRoom: true, maxGuests: 2, highlight: "Luxury riverfront hotel with pool and skyline views" },
     ],
     transport: [
@@ -7079,7 +7079,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "Sun Valley Lodge", type: "resort", pricePerNight: [250, 600], perRoom: true, maxGuests: 4, highlight: "Iconic 1936 resort where Hemingway wrote — pool, spa, and bowling alley" },
       { name: "Limelight Hotel Ketchum", type: "boutique-hotel", pricePerNight: [200, 500], perRoom: true, maxGuests: 4, highlight: "Modern boutique hotel with rooftop hot tub and walkable downtown access" },
       { name: "The Hotel Ketchum", type: "hotel", pricePerNight: [120, 300], perRoom: true, maxGuests: 4, highlight: "Comfortable downtown hotel with hot tub and mountain views" },
-      { name: "Sun Valley VRBO Homes", type: "house", pricePerNight: [300, 1000], perRoom: false, maxGuests: 14, highlight: "Private homes and condos with hot tubs near downtown Ketchum" },
+      { name: "Natural Retreats Sun Valley homes", type: "house", pricePerNight: [300, 1000], perRoom: false, maxGuests: 14, highlight: "Managed homes and condos in Ketchum and Sun Valley — hot tubs, mountain views, walk-to-town options.", url: "https://www.naturalretreats.com/destinations/sun-valley" },
     ],
     transport: [
       { name: "Mountain Rides Transit", type: "shuttle", priceRange: "Free", highlight: "Free public bus between Ketchum, Sun Valley, and Hailey" },
@@ -7185,9 +7185,9 @@ export const sharedDestinations: CanonicalDestination[] = [
     lodging: [
       { name: "Be Tulum Hotel", type: "boutique-hotel", pricePerNight: [300, 700], perRoom: true, maxGuests: 12, highlight: "Boho-luxury beachfront hotel with plunge pools and jungle spa" },
       { name: "Nomade Tulum", type: "boutique-hotel", pricePerNight: [250, 600], perRoom: true, maxGuests: 12, highlight: "Spiritual-chic hotel with communal fire pit and beach ceremonies" },
-      { name: "Tulum Beach Zone Villa (Airbnb)", type: "airbnb", pricePerNight: [400, 1500], perRoom: false, maxGuests: 12, highlight: "Private beachfront villa with rooftop, pool, and jungle garden" },
+      { name: "Beach-zone villa", type: "airbnb", pricePerNight: [400, 1500], perRoom: false, maxGuests: 12, highlight: "Private beachfront villa with rooftop, pool, and jungle garden" },
       { name: "La Zebra Tulum", type: "boutique-hotel", pricePerNight: [200, 450], perRoom: true, maxGuests: 14, highlight: "Beachfront hotel with famous Salsa Sundays and swing beds" },
-      { name: "Jungle Villa Tulum (VRBO)", type: "house", pricePerNight: [300, 1000], perRoom: false, maxGuests: 10, highlight: "Secluded jungle compound with pool, outdoor shower, and hammocks" },
+      { name: "Jungle villa with pool", type: "house", pricePerNight: [300, 1000], perRoom: false, maxGuests: 10, highlight: "Secluded jungle compound with pool, outdoor shower, and hammocks" },
     ],
     transport: [
       { name: "Cancun Airport Shuttle (Canada Transfers)", type: "shuttle", priceRange: "$50-80 per group each way", highlight: "Pre-book private van from CUN — 90min ride, avoid colectivos with luggage" },
@@ -7242,7 +7242,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Marcus Whitman Hotel", type: "boutique-hotel", pricePerNight: [150, 350], perRoom: true, maxGuests: 4, highlight: "Historic 1928 downtown hotel with restaurant, bar, and wine country charm" },
       { name: "Eritage Resort", type: "resort", pricePerNight: [300, 600], perRoom: true, maxGuests: 4, highlight: "Luxury vineyard-view resort with pool, spa, and gourmet dining" },
       { name: "The Finch Hotel", type: "boutique-hotel", pricePerNight: [180, 400], perRoom: true, maxGuests: 4, highlight: "Modern boutique hotel with rooftop lounge and wine country views" },
-      { name: "Walla Walla VRBO Vineyard Homes", type: "house", pricePerNight: [200, 700], perRoom: false, maxGuests: 12, highlight: "Private homes among the vineyards with patios and mountain views" },
+      { name: "Walla Walla Vacation Rentals estates", type: "house", pricePerNight: [200, 700], perRoom: false, maxGuests: 16, highlight: "Local outfit with in-town homes and vineyard estates sleeping up to 16 — pool and hot tub on the big villas.", url: "https://wwvacay.com/" },
     ],
     transport: [
       { name: "Valley Transit", type: "shuttle", priceRange: "Free", highlight: "Free public bus serving Walla Walla and College Place" },
@@ -7299,7 +7299,7 @@ export const sharedDestinations: CanonicalDestination[] = [
       { name: "The Lodge at Whitefish Lake", type: "resort", pricePerNight: [200, 500], perRoom: true, maxGuests: 6, highlight: "Lakefront lodge with spa, marina, and fine dining on-site" },
       { name: "Whitefish Mountain Resort Lodging", type: "hotel", pricePerNight: [120, 300], perRoom: true, maxGuests: 6, highlight: "Slope-side condos and hotel rooms with ski-in/ski-out access" },
       { name: "The Pine Lodge", type: "hotel", pricePerNight: [100, 250], perRoom: true, maxGuests: 4, highlight: "Cozy downtown lodge with pool and hot tub steps from Central Avenue" },
-      { name: "Whitefish VRBO Cabins", type: "house", pricePerNight: [250, 800], perRoom: false, maxGuests: 14, highlight: "Private lakeside or mountain cabins with hot tubs and fire pits" },
+      { name: "Five Star Rentals of Montana cabins", type: "house", pricePerNight: [250, 800], perRoom: false, maxGuests: 14, highlight: "Local outfit (30+ years) with cabins on Whitefish Lake and mountain cabins toward Glacier — hot tubs, decks, and docks.", url: "https://fivestarrentals.com/" },
     ],
     transport: [
       { name: "SNOW Bus (Whitefish Transit)", type: "shuttle", priceRange: "Free", highlight: "Free shuttle between downtown Whitefish and the ski resort" },
