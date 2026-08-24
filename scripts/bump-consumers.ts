@@ -16,15 +16,26 @@ import { execSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
+import { CONSUMER_REPOS, SIBLING_ROOT } from "./audit/consumer-reach";
+
 const DEP_NAME = "shared-data";
 const REPO_SPEC = "github:ncmills/shared-data";
 
-export const DEFAULT_CONSUMER_REPOS = [
-  "/Users/bignick/plan-my-party",
-  "/Users/bignick/maid-of-honor-hq",
-  "/Users/bignick/offsite-outpost",
-  "/Users/bignick/handicap-hq",
-];
+/**
+ * DERIVED, not hand-maintained. `CONSUMER_REPOS` in scripts/audit/consumer-reach.ts
+ * is the single roster of who consumes this package: that file VERIFIES each
+ * consumer, this one UPDATES it, and a repo present in one list but not the
+ * other drifts silently in exactly the direction nobody checks.
+ *
+ * This was two hand-copied lists until 2026-08-21, and they had diverged from
+ * reality identically: friendsmoon and engagedmoon were missing from BOTH, so
+ * every release pass skipped them and every reach audit declined to notice.
+ * A comment saying "keep these in sync" would have been the same bug with a
+ * note attached — the roster has to be one array or it is two.
+ */
+export const DEFAULT_CONSUMER_REPOS = CONSUMER_REPOS.map((c) =>
+  path.join(SIBLING_ROOT, c.repo),
+);
 
 /**
  * Pure transform: rewrite the `shared-data` dependency in a package.json
