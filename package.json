@@ -12,7 +12,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "verify": "npm run typecheck && tsx scripts/verify-universe.ts && tsx scripts/verify-trips.ts && tsx scripts/check-brand-rules.ts && tsx scripts/audit/index.ts",
     "new-data-report": "tsx scripts/new-data-report.ts --write",
-    "coord-elevations": "tsx scripts/check-coordinate-elevations.ts"
+    "coord-elevations": "tsx scripts/check-coordinate-elevations.ts",
+    "schema:snapshot": "./scripts/snapshot-schema.sh",
+    "schema:check": "./scripts/snapshot-schema.sh --check"
   },
   "license": "UNLICENSED",
   "devDependencies": {
