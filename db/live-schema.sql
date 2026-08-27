@@ -470,7 +470,6 @@ CREATE TABLE public.wp_plan_selections (
   created_at timestamp with time zone DEFAULT now() NOT NULL,
   payload jsonb NOT NULL,
   is_bot boolean DEFAULT false NOT NULL,
-  bot_reason text,
   CONSTRAINT plan_selections_brand_check CHECK ((brand = ANY (ARRAY['moh'::text, 'bestman'::text, 'tdf'::text, 'offsite'::text, 'handicap'::text]))),
   CONSTRAINT plan_selections_pkey PRIMARY KEY (id)
 );
