@@ -68,7 +68,7 @@ destructive, they cost nothing, and the split rate limiter above means at least 
 is still addressing unprefixed names. Identify the writers first, then drop as one deliberate
 change.
 
-## Open: the snapshot-vs-live check does not run in CI
+## The snapshot-vs-live check, and what it took to run it in CI
 
 `scripts/snapshot-schema.sh --check` (`npm run schema:check`) is the only thing that can catch
 the database being altered by hand without a re-snapshot — the direction where the repo's
@@ -87,8 +87,23 @@ Measured 2026-08-27, exit codes captured directly (piping the script into `tail`
 `audit.yml` as-is turns Audit permanently red. Wrapping it in `continue-on-error` is worse: it
 becomes a check that can only pass, which is the defect class the schema work exists to close.
 
-Doing it properly needs a `SUPABASE_ACCESS_TOKEN` repository secret plus a CLI install step.
-That mints a credential, so it is Nick's decision, not an implementation detail.
+**Resolved 2026-08-27.** Nick approved the credential; `SUPABASE_ACCESS_TOKEN` is set on this
+repo and `audit.yml` now installs the CLI, links, and runs `npm run schema:check`.
+
+Two things were measured rather than assumed, because each would otherwise have shipped as a
+green step that checked nothing:
+
+- **`supabase db query` has no `--project-ref` flag.** Against 2.84.2 the only target flags are
+  `--local`, `--linked` and `--db-url`, and `snapshot-schema.sh` uses `--linked`. A runner must
+  therefore be *linked* before the check can read anything; without a link step `schema:check`
+  exits 2 with `COULD-NOT-RUN … 0 comparisons executed`.
+- **The link needs no database password.** `supabase link --project-ref <ref> --yes` in a
+  directory containing no `supabase/` at all exits 0 with only `SUPABASE_ACCESS_TOKEN` set — the
+  link is a Management API operation — and `db query --linked` then returns rows. No `-p`, and no
+  DB-password secret should be added.
+
+The step carries no `continue-on-error`: exit 2 (could not measure) and exit 1 (snapshot stale)
+must both reach the merge boundary as red, or the check becomes one that can only pass.
 
 **What is covered meanwhile:** `scripts/schema-signal-columns.test.ts` runs in the suite and in
 `audit.yml`, and checks the committed snapshot against the columns the signals route writes —
