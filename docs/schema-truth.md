@@ -97,18 +97,21 @@ green step that checked nothing:
   `--local`, `--linked` and `--db-url`, and `snapshot-schema.sh` uses `--linked`. A runner must
   therefore be *linked* before the check can read anything; without a link step `schema:check`
   exits 2 with `COULD-NOT-RUN … 0 comparisons executed`.
-- **`link` needs no database password; `db query --linked` does.** `supabase link
-  --project-ref <ref> --yes` in a directory containing no `supabase/` at all exits 0 with only
-  `SUPABASE_ACCESS_TOKEN` — the link itself is a Management API operation. The *query* is not.
-  On a GitHub runner it answers `Connect to your database by setting the env var:
-  SUPABASE_DB_PASSWORD`.
+- **`SUPABASE_ACCESS_TOKEN` is enough — no DB password.** `db query --linked` goes through the
+  Management API at 2.84.2. Proven three ways: on a Mac in a clean workdir with
+  `SUPABASE_DB_PASSWORD` unset *and* set to a deliberately wrong value (same rows both times);
+  the login keychain holds only the access token, no DB password; and on a GitHub runner, where
+  three of this workflow's four runs passed with only the token.
 
-  It never asks on a developer Mac because the CLI reads that password from the **login
-  keychain** (`security find-generic-password -s "Supabase CLI"`). A Linux runner has no
-  keychain. **A scratch-directory test on a laptop therefore does not prove a runner will
-  work — the directory was fresh, the machine's credentials were not.** Running this in CI
-  needs a second secret, `SUPABASE_DB_PASSWORD`, which is a credential decision, not an
-  implementation detail.
+- **One run failed with `Connect to your database by setting the env var: SUPABASE_DB_PASSWORD`,
+  and that message is a red herring.** The run that failed and a run that SUCCEEDED were the
+  **same commit, three seconds apart** (`edb6c15`, `pull_request` → failure, `push` → success).
+  It was transient; the CLI named a cause that was not the cause, and a plausible-sounding error
+  string is not a diagnosis. **Do not add a DB-password secret on the strength of it.**
+
+  Two runs of one commit disagreeing is the signature of a flake — and it was visible in the run
+  list before anyone opened a log. Reading only the failing run is how a transient becomes an
+  architecture decision.
 
 The step carries no `continue-on-error`: exit 2 (could not measure) and exit 1 (snapshot stale)
 must both reach the merge boundary as red, or the check becomes one that can only pass.

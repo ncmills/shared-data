@@ -10,19 +10,17 @@
 # `supabase db dump` requires Docker. This does not — it reads pg_catalog through
 # `supabase db query`, so it runs anywhere the CLI is authenticated.
 #
-# "AUTHENTICATED" MEANS MORE THAN SUPABASE_ACCESS_TOKEN, measured 2026-08-27 on a GitHub
-# runner. `db query --linked` needs a database password as well, and on a developer Mac it
-# never asks for one because the CLI reads it from the LOGIN KEYCHAIN. A Linux runner has no
-# keychain, so the same command with the same link and the same access token answers:
+# SUPABASE_ACCESS_TOKEN IS ENOUGH. `db query --linked` goes through the Management API at 2.84.2
+# and needs no database password: proven on a Mac in a clean workdir (with SUPABASE_DB_PASSWORD
+# unset AND set to a deliberately wrong value -- same rows both times, and the login keychain
+# holds only the access token, no DB password) and on a GitHub runner, where three of the four
+# runs of this workflow passed with only the token set.
 #
-#   Connect to your database by setting the env var: SUPABASE_DB_PASSWORD
+# The fourth run failed with "Connect to your database by setting the env var:
+# SUPABASE_DB_PASSWORD". That message is a red herring: the run that failed and a run that
+# SUCCEEDED were the SAME COMMIT, three seconds apart. It was transient, and the CLI named a
+# cause that was not the cause. Do not add a DB-password secret on the strength of that string.
 #
-# This is why a scratch-directory test on a laptop does not prove a runner will work: the
-# directory was fresh, the machine's credentials were not.
-#
-# Usage:  ./scripts/snapshot-schema.sh [--check]
-#   (no args)  rewrite db/live-schema.sql
-#   --check    fail if the committed snapshot differs from live (for CI)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PROJECT_REF="${SUPABASE_PROJECT_REF:-bzmehrytiudgmgdrdlkg}"
