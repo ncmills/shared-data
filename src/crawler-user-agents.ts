@@ -103,12 +103,29 @@ export const AUTOMATION_AGENTS: readonly string[] = [
   "vercel favicon",
 ] as const;
 
-export type BotReason = `declared:${string}` | `automation:${string}`;
+export type BotReason = `declared:${string}` | `automation:${string}` | "unmatched";
 
 export interface BotVerdict {
   /** true when the UA matched a known pattern. NEVER a judgement about intent. */
   is_bot: boolean;
-  /** `declared:googlebot` / `automation:headlesschrome`, or null when nothing matched. */
+  /**
+   * Three states, and they mean three different things:
+   *
+   *   `declared:googlebot` / `automation:curl/`  a UA was present and matched a known pattern
+   *   `unmatched`                                a UA was PRESENT and matched nothing
+   *   null                                       no UA, unreadable, or nothing classified it
+   *
+   * `unmatched` is NOT "human". It records what was measured -- a User-Agent arrived and no
+   * pattern fitted it -- and claims nothing about who sent it. Measured 2026-08-27: the crawler
+   * that inflated handicap's acquisition 5.9x produced 21 consecutive post-deploy rows with no
+   * match, so it presents a generic UA. `unmatched` is exactly the state it lands in, alongside
+   * every real visitor. Reading it as "person" would restore the error this column exists to end.
+   *
+   * NULL now means UNCLASSIFIED ONLY. Before this, a matchless UA and an absent one shared null,
+   * so a row could not distinguish "we looked and found nothing" from "we never looked" -- and
+   * with `is_bot NOT NULL DEFAULT false`, a false/null row was also indistinguishable from a row
+   * the route never wrote at all. A positive marker answers all three.
+   */
   bot_reason: BotReason | null;
 }
 
@@ -121,7 +138,10 @@ export interface BotVerdict {
  * the read-time day-shape rule, which reports itself.
  */
 export function classifyUserAgent(ua: string | null | undefined): BotVerdict {
-  if (!ua) return { is_bot: false, bot_reason: null };
+  // Absent or unreadable: NULL, and NOT a bot. Privacy tooling strips the header, and recording
+  // "we could not tell" as "it was a robot" is the not-measured-as-measured substitution this
+  // module exists to remove.
+  if (!ua || !ua.trim()) return { is_bot: false, bot_reason: null };
   const s = ua.toLowerCase();
   for (const p of DECLARED_CRAWLERS) {
     if (s.includes(p)) return { is_bot: true, bot_reason: `declared:${p}` };
@@ -129,5 +149,8 @@ export function classifyUserAgent(ua: string | null | undefined): BotVerdict {
   for (const p of AUTOMATION_AGENTS) {
     if (s.includes(p)) return { is_bot: true, bot_reason: `automation:${p}` };
   }
-  return { is_bot: false, bot_reason: null };
+  // A UA arrived and nothing fitted it. That is a MEASUREMENT, so it gets a value rather than an
+  // absence -- and `is_bot` stays false, because not matching a crawler pattern is not evidence
+  // of being one.
+  return { is_bot: false, bot_reason: "unmatched" };
 }
