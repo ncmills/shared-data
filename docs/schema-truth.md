@@ -67,3 +67,30 @@ The eight empty unprefixed tables are safe to drop and were left alone: dropping
 destructive, they cost nothing, and the split rate limiter above means at least one code path
 is still addressing unprefixed names. Identify the writers first, then drop as one deliberate
 change.
+
+## Open: the snapshot-vs-live check does not run in CI
+
+`scripts/snapshot-schema.sh --check` (`npm run schema:check`) is the only thing that can catch
+the database being altered by hand without a re-snapshot — the direction where the repo's
+description of the schema silently stops being true. It does not run in CI, and this is what it
+would take to change that.
+
+Measured 2026-08-27, exit codes captured directly (piping the script into `tail` reports
+`tail`'s exit code, which briefly made a correct script look broken):
+
+| environment | exit | output |
+|---|---|---|
+| supabase CLI present and linked (a dev laptop) | `0` | `schema snapshot matches live.` |
+| no `supabase` on `PATH` (a GitHub runner) | `2` | `COULD-NOT-RUN: supabase CLI not installed. 0 comparisons executed — this is NOT a pass.` |
+
+`ubuntu-latest` ships no supabase CLI and this repo has no committed link, so adding the step to
+`audit.yml` as-is turns Audit permanently red. Wrapping it in `continue-on-error` is worse: it
+becomes a check that can only pass, which is the defect class the schema work exists to close.
+
+Doing it properly needs a `SUPABASE_ACCESS_TOKEN` repository secret plus a CLI install step.
+That mints a credential, so it is Nick's decision, not an implementation detail.
+
+**What is covered meanwhile:** `scripts/schema-signal-columns.test.ts` runs in the suite and in
+`audit.yml`, and checks the committed snapshot against the columns the signals route writes —
+the direction that caused the 2026-08-27 outage. **What is not:** drift between that committed
+snapshot and the live database.

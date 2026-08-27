@@ -23,9 +23,21 @@
 --
 -- THE LESSON WORTH KEEPING is not "we missed six tables". It is that the first migration's
 -- coverage was stated as a claim about the route ("BOTH tables the route writes") that nothing
--- checked against the route. `schema:check` now runs in CI; the accompanying test asserts every
--- table `resolveSignalTableName()` can return carries every column the route writes, so this
--- particular sentence can never again be wrong without a red build.
+-- checked against the route. What now checks it, stated as the measured state rather than the
+-- intended one -- this file exists because a comment claimed coverage nothing verified, and the
+-- same mistake one paragraph later would be worse than the first:
+--
+--   RUNS in the suite, and so in CI:  scripts/schema-signal-columns.test.ts -- every wp_* table
+--     in db/live-schema.sql carrying the signal signature must carry every column the route
+--     writes. That is the snapshot-vs-ROUTE direction, i.e. this bug's direction. audit.yml
+--     already globs `scripts/**/*.test.ts`, so it needs no workflow change.
+--   DOES NOT run in CI:  `npm run schema:check` -- the snapshot-vs-LIVE direction, which catches
+--     someone altering the database by hand without re-snapshotting. It shells the supabase CLI
+--     against a linked project; an ubuntu-latest runner has neither, so it exits 2
+--     ("COULD-NOT-RUN ... 0 comparisons executed -- this is NOT a pass") and would turn Audit
+--     permanently red, while `continue-on-error` would make it a check that can only pass.
+--     Enabling it needs a SUPABASE_ACCESS_TOKEN secret plus a CLI install step; minting that
+--     credential is Nick's call. Open item, tracked in docs/schema-truth.md.
 --
 -- WHAT THIS DOES
 -- The same two columns, with types byte-identical to the first migration so all eight agree:
