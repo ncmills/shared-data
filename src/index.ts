@@ -18,6 +18,12 @@ export * from "./destinations-overlay";
 // resolve to the base-only versions, hiding every researched course from every
 // consumer. Do not re-add it. See src/golf.ts.
 export * from "./golf";
+// Exported here, not only as a file, because a consumer imports `from "shared-data"` and the
+// package's `main` is this file. crawler-user-agents shipped in #46 with nine passing tests --
+// and every one of them imported it by RELATIVE path, so none exercised the public surface. It
+// was unreachable from every consumer and the suite could not tell. Found 2026-08-27 when
+// maid-of-honor-hq's route threw `classifyUserAgent is not a function` at runtime.
+export * from "./crawler-user-agents";
 export * from "./residences";
 export * from "./residences-expansion";
 export * from "./golf-destinations";
