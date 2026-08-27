@@ -338,9 +338,12 @@ CREATE TABLE public.wp_acquisition_log (
   brand text NOT NULL,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
   payload jsonb NOT NULL,
+  is_bot boolean DEFAULT false NOT NULL,
+  bot_reason text,
   CONSTRAINT acquisition_log_brand_check CHECK ((brand = ANY (ARRAY['moh'::text, 'bestman'::text, 'tdf'::text, 'offsite'::text, 'handicap'::text]))),
   CONSTRAINT acquisition_log_pkey PRIMARY KEY (id)
 );
+CREATE INDEX idx_acquisition_is_bot ON public.wp_acquisition_log USING btree (created_at) WHERE is_bot;
 CREATE INDEX idx_al_brand_created ON public.wp_acquisition_log USING btree (brand, created_at DESC);
 
 CREATE TABLE public.wp_email_schedule (
@@ -442,10 +445,13 @@ CREATE TABLE public.wp_plan_inputs (
   nights integer GENERATED ALWAYS AS (CASE WHEN (jsonb_typeof((payload -> 'numberOfDays'::text)) = 'number'::text) THEN (((payload ->> 'numberOfDays'::text))::numeric)::integer WHEN (jsonb_typeof((payload -> 'nights'::text)) = 'number'::text) THEN (((payload ->> 'nights'::text))::numeric)::integer ELSE NULL::integer END) STORED,
   budget_raw text GENERATED ALWAYS AS (NULLIF(btrim(COALESCE((payload ->> 'budget'::text), (payload ->> 'budgetPerPersonCap'::text))), ''::text)) STORED,
   destination_key text GENERATED ALWAYS AS (NULLIF(regexp_replace(regexp_replace(btrim(lower(COALESCE((payload ->> 'cityChosen'::text), (payload ->> 'specificCity'::text), ((payload -> 'pickedCities'::text) ->> 0)))), '[,[:space:]]+'::text, '-'::text, 'g'::text), '-+'::text, '-'::text, 'g'::text), ''::text)) STORED,
+  is_bot boolean DEFAULT false NOT NULL,
+  bot_reason text,
   CONSTRAINT plan_inputs_brand_check CHECK ((brand = ANY (ARRAY['moh'::text, 'bestman'::text, 'tdf'::text, 'offsite'::text, 'handicap'::text]))),
   CONSTRAINT plan_inputs_pkey PRIMARY KEY (id)
 );
 CREATE INDEX idx_plan_inputs_brand_created ON public.wp_plan_inputs USING btree (brand, created_at DESC);
+CREATE INDEX idx_plan_inputs_is_bot ON public.wp_plan_inputs USING btree (created_at) WHERE is_bot;
 CREATE INDEX idx_plan_inputs_session ON public.wp_plan_inputs USING btree (session_id);
 CREATE INDEX idx_wp_plan_inputs_brand_destination ON public.wp_plan_inputs USING btree (brand, destination_slug);
 CREATE INDEX idx_wp_plan_inputs_destination ON public.wp_plan_inputs USING btree (destination_slug) WHERE (destination_slug IS NOT NULL);
