@@ -407,6 +407,8 @@ CREATE TABLE public.wp_offer_clicks (
   brand text NOT NULL,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
   payload jsonb NOT NULL,
+  is_bot boolean DEFAULT false NOT NULL,
+  bot_reason text,
   CONSTRAINT offer_clicks_brand_check CHECK ((brand = ANY (ARRAY['moh'::text, 'bestman'::text, 'tdf'::text, 'handicap'::text]))),
   CONSTRAINT offer_clicks_pkey PRIMARY KEY (id)
 );
@@ -418,6 +420,8 @@ CREATE TABLE public.wp_offer_conversions (
   brand text NOT NULL,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
   payload jsonb NOT NULL,
+  is_bot boolean DEFAULT false NOT NULL,
+  bot_reason text,
   CONSTRAINT offer_conversions_brand_check CHECK ((brand = ANY (ARRAY['moh'::text, 'bestman'::text, 'tdf'::text, 'handicap'::text]))),
   CONSTRAINT offer_conversions_pkey PRIMARY KEY (id)
 );
@@ -429,6 +433,8 @@ CREATE TABLE public.wp_plan_bookmarks (
   brand text NOT NULL,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
   payload jsonb NOT NULL,
+  is_bot boolean DEFAULT false NOT NULL,
+  bot_reason text,
   CONSTRAINT plan_bookmarks_brand_check CHECK ((brand = ANY (ARRAY['moh'::text, 'bestman'::text, 'tdf'::text, 'offsite'::text, 'handicap'::text]))),
   CONSTRAINT plan_bookmarks_pkey PRIMARY KEY (id)
 );
@@ -463,6 +469,8 @@ CREATE TABLE public.wp_plan_selections (
   brand text NOT NULL,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
   payload jsonb NOT NULL,
+  is_bot boolean DEFAULT false NOT NULL,
+  bot_reason text,
   CONSTRAINT plan_selections_brand_check CHECK ((brand = ANY (ARRAY['moh'::text, 'bestman'::text, 'tdf'::text, 'offsite'::text, 'handicap'::text]))),
   CONSTRAINT plan_selections_pkey PRIMARY KEY (id)
 );
@@ -482,6 +490,8 @@ CREATE TABLE public.wp_surprise_me_actions (
   brand text NOT NULL,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
   payload jsonb NOT NULL,
+  is_bot boolean DEFAULT false NOT NULL,
+  bot_reason text,
   CONSTRAINT surprise_me_actions_brand_check CHECK ((brand = ANY (ARRAY['moh'::text, 'bestman'::text, 'tdf'::text, 'handicap'::text]))),
   CONSTRAINT surprise_me_actions_pkey PRIMARY KEY (id)
 );
@@ -505,6 +515,8 @@ CREATE TABLE public.wp_trip_room_activity (
   brand text NOT NULL,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
   payload jsonb NOT NULL,
+  is_bot boolean DEFAULT false NOT NULL,
+  bot_reason text,
   CONSTRAINT trip_room_activity_brand_check CHECK ((brand = ANY (ARRAY['moh'::text, 'bestman'::text, 'tdf'::text, 'handicap'::text]))),
   CONSTRAINT trip_room_activity_pkey PRIMARY KEY (id)
 );
