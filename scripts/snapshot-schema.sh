@@ -48,12 +48,26 @@ q() {
   # stderr, and `sed -n '/{/,$p'` then keeps that chatter after the JSON, so render-schema.py
   # dies on "Extra data". Caught by the positive control below, which is the argument for having
   # one — the error path was right and the fix for it broke the path that already worked.
-  out="$(supabase db query --linked "$1" 2>"$TMP/q.err")" || rc=$?
+  # `--agent=no -o json` PINS the output format. The CLI auto-detects whether it is being run
+  # by an AI coding agent and changes shape accordingly: agent -> JSON wrapped in a
+  # {"boundary":…,"rows":[…]} envelope, no agent -> a Unicode TABLE. So this script worked on a
+  # laptop where an agent ran it and produced "COULD-NOT-RUN: cons query returned nothing" on a
+  # GitHub runner, where nothing is detected -- same command, same credentials, different output
+  # format. Measured 2026-08-27, both ways, against this project.
+  #
+  # It was worse than a clean failure. The `cols` query passed the [ ! -s ] non-empty check even
+  # as a table, because column DEFAULTS contain `{` (jsonb `'"'"'{}'"'"'::jsonb`, array literals) and the
+  # `sed` below keeps from the first brace -- so the guard only fired on `cons`, the one table
+  # output with no brace in it. Had a constraint definition contained one, garbage would have
+  # reached render-schema.py instead of an honest refusal.
+  out="$(supabase db query --agent=no -o json --linked "$1" 2>"$TMP/q.err")" || rc=$?
   if [ "$rc" -ne 0 ]; then
     Q_ERR="$(grep -v '^[[:space:]]*$' "$TMP/q.err" 2>/dev/null | tail -2)"
     return 0                    # empty stdout -> the `[ ! -s ]` guard fires and REPORTS
   fi
-  printf '%s\n' "$out" | sed -n '/{/,$p'
+  # Keep from the first `[` OR `{`: `-o json` returns a bare array, the agent envelope an
+  # object. Anchored at line start so a brace inside a value cannot start the capture.
+  printf '%s\n' "$out" | sed -n '/^[[{]/,$p'
 }
 
 q "select c.relname as tbl, a.attnum::int ord, a.attname as col,
