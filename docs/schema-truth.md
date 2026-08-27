@@ -97,10 +97,18 @@ green step that checked nothing:
   `--local`, `--linked` and `--db-url`, and `snapshot-schema.sh` uses `--linked`. A runner must
   therefore be *linked* before the check can read anything; without a link step `schema:check`
   exits 2 with `COULD-NOT-RUN … 0 comparisons executed`.
-- **The link needs no database password.** `supabase link --project-ref <ref> --yes` in a
-  directory containing no `supabase/` at all exits 0 with only `SUPABASE_ACCESS_TOKEN` set — the
-  link is a Management API operation — and `db query --linked` then returns rows. No `-p`, and no
-  DB-password secret should be added.
+- **`link` needs no database password; `db query --linked` does.** `supabase link
+  --project-ref <ref> --yes` in a directory containing no `supabase/` at all exits 0 with only
+  `SUPABASE_ACCESS_TOKEN` — the link itself is a Management API operation. The *query* is not.
+  On a GitHub runner it answers `Connect to your database by setting the env var:
+  SUPABASE_DB_PASSWORD`.
+
+  It never asks on a developer Mac because the CLI reads that password from the **login
+  keychain** (`security find-generic-password -s "Supabase CLI"`). A Linux runner has no
+  keychain. **A scratch-directory test on a laptop therefore does not prove a runner will
+  work — the directory was fresh, the machine's credentials were not.** Running this in CI
+  needs a second secret, `SUPABASE_DB_PASSWORD`, which is a credential decision, not an
+  implementation detail.
 
 The step carries no `continue-on-error`: exit 2 (could not measure) and exit 1 (snapshot stale)
 must both reach the merge boundary as red, or the check becomes one that can only pass.

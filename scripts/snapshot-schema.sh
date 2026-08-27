@@ -10,6 +10,16 @@
 # `supabase db dump` requires Docker. This does not — it reads pg_catalog through
 # `supabase db query`, so it runs anywhere the CLI is authenticated.
 #
+# "AUTHENTICATED" MEANS MORE THAN SUPABASE_ACCESS_TOKEN, measured 2026-08-27 on a GitHub
+# runner. `db query --linked` needs a database password as well, and on a developer Mac it
+# never asks for one because the CLI reads it from the LOGIN KEYCHAIN. A Linux runner has no
+# keychain, so the same command with the same link and the same access token answers:
+#
+#   Connect to your database by setting the env var: SUPABASE_DB_PASSWORD
+#
+# This is why a scratch-directory test on a laptop does not prove a runner will work: the
+# directory was fresh, the machine's credentials were not.
+#
 # Usage:  ./scripts/snapshot-schema.sh [--check]
 #   (no args)  rewrite db/live-schema.sql
 #   --check    fail if the committed snapshot differs from live (for CI)
