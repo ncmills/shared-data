@@ -25,7 +25,36 @@ if ! command -v supabase >/dev/null 2>&1; then
   exit 2
 fi
 
-q() { supabase db query --linked "$1" 2>/dev/null | sed -n '/{/,$p'; }
+# `q` MUST NOT be allowed to abort this script.
+#
+# It used to be `supabase db query --linked "$1" 2>/dev/null | sed -n '/{/,$p'`. Under the
+# `set -euo pipefail` above, that pipeline exits non-zero whenever the CLI cannot reach the
+# project — an unlinked repo, an expired login, no network — and `set -e` then killed the script
+# AT THE FIRST CALL, before reaching the `[ ! -s ]` guard written for exactly that case.
+#
+# Measured 2026-08-27 from an unlinked checkout: exit 1, empty stdout, empty stderr, while this
+# file's own docs promise "exits 2 with a named reason". A well-written error path, made
+# unreachable by a shell setting. The `2>/dev/null` compounded it: the CLI's explanation was
+# discarded too, so there was genuinely nothing to see.
+#
+# So: capture instead of piping, swallow the failure HERE, and let the guard below do the
+# talking. `Q_ERR` carries the CLI's own last words into that message, because "it failed" is
+# less useful than "it failed because you are not linked".
+Q_ERR=""
+q() {
+  local out rc=0
+  # stderr to a FILE, never merged into stdout. Merging them captures the reason on failure but
+  # corrupts the success path: the CLI writes "Initialising login role" and an upgrade notice on
+  # stderr, and `sed -n '/{/,$p'` then keeps that chatter after the JSON, so render-schema.py
+  # dies on "Extra data". Caught by the positive control below, which is the argument for having
+  # one — the error path was right and the fix for it broke the path that already worked.
+  out="$(supabase db query --linked "$1" 2>"$TMP/q.err")" || rc=$?
+  if [ "$rc" -ne 0 ]; then
+    Q_ERR="$(grep -v '^[[:space:]]*$' "$TMP/q.err" 2>/dev/null | tail -2)"
+    return 0                    # empty stdout -> the `[ ! -s ]` guard fires and REPORTS
+  fi
+  printf '%s\n' "$out" | sed -n '/{/,$p'
+}
 
 q "select c.relname as tbl, a.attnum::int ord, a.attname as col,
      format_type(a.atttypid,a.atttypmod) as typ, a.attnotnull as notnull,
@@ -41,6 +70,8 @@ q "select tablename tbl, indexname, indexdef from pg_indexes where schemaname='p
 for f in cols cons idx; do
   if [ ! -s "$TMP/$f.json" ]; then
     echo "COULD-NOT-RUN: $f query returned nothing (auth or link problem). 0 comparisons executed — this is NOT a pass." >&2
+    [ -n "$Q_ERR" ] && echo "  supabase said: $Q_ERR" >&2
+    echo "  fix: run \`supabase link --project-ref $PROJECT_REF\` in this repo, or check \`supabase projects list\`." >&2
     exit 2
   fi
 done
