@@ -369,7 +369,6 @@ CREATE TABLE public.wp_leads (
   email text NOT NULL,
   brand text NOT NULL,
   source text NOT NULL,
-  lead_magnet text,
   ip_hash text,
   user_agent text,
   unsubscribed_at timestamp with time zone,
