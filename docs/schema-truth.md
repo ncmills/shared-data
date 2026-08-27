@@ -68,7 +68,7 @@ destructive, they cost nothing, and the split rate limiter above means at least 
 is still addressing unprefixed names. Identify the writers first, then drop as one deliberate
 change.
 
-## Open: the snapshot-vs-live check does not run in CI
+## The snapshot-vs-live check, and what it took to run it in CI
 
 `scripts/snapshot-schema.sh --check` (`npm run schema:check`) is the only thing that can catch
 the database being altered by hand without a re-snapshot — the direction where the repo's
@@ -87,8 +87,34 @@ Measured 2026-08-27, exit codes captured directly (piping the script into `tail`
 `audit.yml` as-is turns Audit permanently red. Wrapping it in `continue-on-error` is worse: it
 becomes a check that can only pass, which is the defect class the schema work exists to close.
 
-Doing it properly needs a `SUPABASE_ACCESS_TOKEN` repository secret plus a CLI install step.
-That mints a credential, so it is Nick's decision, not an implementation detail.
+**Resolved 2026-08-27.** Nick approved the credential; `SUPABASE_ACCESS_TOKEN` is set on this
+repo and `audit.yml` now installs the CLI, links, and runs `npm run schema:check`.
+
+Two things were measured rather than assumed, because each would otherwise have shipped as a
+green step that checked nothing:
+
+- **`supabase db query` has no `--project-ref` flag.** Against 2.84.2 the only target flags are
+  `--local`, `--linked` and `--db-url`, and `snapshot-schema.sh` uses `--linked`. A runner must
+  therefore be *linked* before the check can read anything; without a link step `schema:check`
+  exits 2 with `COULD-NOT-RUN … 0 comparisons executed`.
+- **`SUPABASE_ACCESS_TOKEN` is enough — no DB password.** `db query --linked` goes through the
+  Management API at 2.84.2. Proven three ways: on a Mac in a clean workdir with
+  `SUPABASE_DB_PASSWORD` unset *and* set to a deliberately wrong value (same rows both times);
+  the login keychain holds only the access token, no DB password; and on a GitHub runner, where
+  three of this workflow's four runs passed with only the token.
+
+- **One run failed with `Connect to your database by setting the env var: SUPABASE_DB_PASSWORD`,
+  and that message is a red herring.** The run that failed and a run that SUCCEEDED were the
+  **same commit, three seconds apart** (`edb6c15`, `pull_request` → failure, `push` → success).
+  It was transient; the CLI named a cause that was not the cause, and a plausible-sounding error
+  string is not a diagnosis. **Do not add a DB-password secret on the strength of it.**
+
+  Two runs of one commit disagreeing is the signature of a flake — and it was visible in the run
+  list before anyone opened a log. Reading only the failing run is how a transient becomes an
+  architecture decision.
+
+The step carries no `continue-on-error`: exit 2 (could not measure) and exit 1 (snapshot stale)
+must both reach the merge boundary as red, or the check becomes one that can only pass.
 
 **What is covered meanwhile:** `scripts/schema-signal-columns.test.ts` runs in the suite and in
 `audit.yml`, and checks the committed snapshot against the columns the signals route writes —

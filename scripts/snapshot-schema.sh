@@ -10,9 +10,17 @@
 # `supabase db dump` requires Docker. This does not — it reads pg_catalog through
 # `supabase db query`, so it runs anywhere the CLI is authenticated.
 #
-# Usage:  ./scripts/snapshot-schema.sh [--check]
-#   (no args)  rewrite db/live-schema.sql
-#   --check    fail if the committed snapshot differs from live (for CI)
+# SUPABASE_ACCESS_TOKEN IS ENOUGH. `db query --linked` goes through the Management API at 2.84.2
+# and needs no database password: proven on a Mac in a clean workdir (with SUPABASE_DB_PASSWORD
+# unset AND set to a deliberately wrong value -- same rows both times, and the login keychain
+# holds only the access token, no DB password) and on a GitHub runner, where three of the four
+# runs of this workflow passed with only the token set.
+#
+# The fourth run failed with "Connect to your database by setting the env var:
+# SUPABASE_DB_PASSWORD". That message is a red herring: the run that failed and a run that
+# SUCCEEDED were the SAME COMMIT, three seconds apart. It was transient, and the CLI named a
+# cause that was not the cause. Do not add a DB-password secret on the strength of that string.
+#
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PROJECT_REF="${SUPABASE_PROJECT_REF:-bzmehrytiudgmgdrdlkg}"
@@ -48,12 +56,26 @@ q() {
   # stderr, and `sed -n '/{/,$p'` then keeps that chatter after the JSON, so render-schema.py
   # dies on "Extra data". Caught by the positive control below, which is the argument for having
   # one — the error path was right and the fix for it broke the path that already worked.
-  out="$(supabase db query --linked "$1" 2>"$TMP/q.err")" || rc=$?
+  # `--agent=no -o json` PINS the output format. The CLI auto-detects whether it is being run
+  # by an AI coding agent and changes shape accordingly: agent -> JSON wrapped in a
+  # {"boundary":…,"rows":[…]} envelope, no agent -> a Unicode TABLE. So this script worked on a
+  # laptop where an agent ran it and produced "COULD-NOT-RUN: cons query returned nothing" on a
+  # GitHub runner, where nothing is detected -- same command, same credentials, different output
+  # format. Measured 2026-08-27, both ways, against this project.
+  #
+  # It was worse than a clean failure. The `cols` query passed the [ ! -s ] non-empty check even
+  # as a table, because column DEFAULTS contain `{` (jsonb `'"'"'{}'"'"'::jsonb`, array literals) and the
+  # `sed` below keeps from the first brace -- so the guard only fired on `cons`, the one table
+  # output with no brace in it. Had a constraint definition contained one, garbage would have
+  # reached render-schema.py instead of an honest refusal.
+  out="$(supabase db query --agent=no -o json --linked "$1" 2>"$TMP/q.err")" || rc=$?
   if [ "$rc" -ne 0 ]; then
     Q_ERR="$(grep -v '^[[:space:]]*$' "$TMP/q.err" 2>/dev/null | tail -2)"
     return 0                    # empty stdout -> the `[ ! -s ]` guard fires and REPORTS
   fi
-  printf '%s\n' "$out" | sed -n '/{/,$p'
+  # Keep from the first `[` OR `{`: `-o json` returns a bare array, the agent envelope an
+  # object. Anchored at line start so a brace inside a value cannot start the capture.
+  printf '%s\n' "$out" | sed -n '/^[[{]/,$p'
 }
 
 q "select c.relname as tbl, a.attnum::int ord, a.attname as col,

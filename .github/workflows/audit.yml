@@ -35,3 +35,46 @@ jobs:
 
       - name: Run coverage audit (fails on new regressions beyond docs/audit-baseline.json)
         run: npm run audit
+
+      # ── snapshot vs LIVE ────────────────────────────────────────────────────────────
+      # The test suite above checks db/live-schema.sql against what the signals route
+      # writes. This checks it against the DATABASE. They are different questions, and on
+      # 2026-08-27 the second one was the one nobody could answer: two of eight signal
+      # tables had is_bot/bot_reason, the routes wrote all eight, PostgREST rejected six
+      # with 400 PGRST204, and six signal types dropped silently on three live sites for
+      # two hours.
+      #
+      # PINNED to the version measured against this database (2.84.2), and installed from
+      # the release asset rather than a marketplace action, so the thing that decides
+      # whether a merge is safe is not a floating third-party tag.
+      - name: Install Supabase CLI (pinned)
+        run: |
+          curl -fsSL -o /tmp/supabase.deb \
+            https://github.com/supabase/cli/releases/download/v2.84.2/supabase_2.84.2_linux_amd64.deb
+          sudo dpkg -i /tmp/supabase.deb
+          supabase --version
+
+      # `supabase db query` has NO --project-ref flag (measured against 2.84.2: the only
+      # target flags are --local, --linked and --db-url), and snapshot-schema.sh uses
+      # --linked. So a runner MUST be linked before the check can read anything; without
+      # this step schema:check exits 2 with "COULD-NOT-RUN ... 0 comparisons executed".
+      #
+      # Measured, not assumed: `supabase link --project-ref <ref> --yes` in a directory
+      # with no supabase/ at all exits 0 WITHOUT a database password -- the link is a
+      # Management API operation, authenticated by SUPABASE_ACCESS_TOKEN -- and
+      # `db query --linked` then returns rows from that fresh link. No -p / no DB password
+      # secret is needed, and none should be added.
+      - name: Link to the wizard project
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: supabase link --project-ref bzmehrytiudgmgdrdlkg --yes
+
+      # NO continue-on-error, deliberately. This step exits 2 with a named reason when it
+      # could not measure -- CLI missing, unlinked, token expired -- and 1 with a diff when
+      # the snapshot is stale. Swallowing either would turn it into a check that can only
+      # pass, which is the exact defect the schema work exists to close: "0 comparisons
+      # executed" is NOT a pass, and it must reach the merge boundary as red.
+      - name: Schema snapshot matches the live database
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: npm run schema:check
