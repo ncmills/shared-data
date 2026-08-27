@@ -133,6 +133,13 @@ test("it leaves no worktree behind", () => {
 test("a fetch that cannot reach its remote fails loudly and writes NO report", () => {
   // The old script's `|| true` made an unreachable remote indistinguishable from a clean pull,
   // and `> "$OUT"` then truncated the report to zero bytes — which reads as "no gaps found".
+  //
+  // AN ABSENCE ASSERTION IS SATISFIED BY EVERY WAY OF NEVER GETTING THERE. This test passed
+  // twice today against a broken script: once on Linux CI, where the run died four lines later
+  // at a BSD-only `mktemp -t` and therefore also wrote no report; and once under a skewed TZ,
+  // where the report existed under a name this test was not looking at. Both times "no report"
+  // was true and meant nothing. Its companion below asserts the healthy path REACHES the same
+  // point — same fixture, same script, working remote, and a report that is really there.
   const { home, repo, cleanup } = fixtureHome();
   try {
     git(repo, "remote", "set-url", "origin", join(home, "does-not-exist.git"));
@@ -141,6 +148,23 @@ test("a fetch that cannot reach its remote fails loudly and writes NO report", (
     assert.match(r.stderr, /could not fetch origin\/main/);
     const out = reportPath(home);
     assert.equal(existsSync(out), false, "a failed run must not leave a report file at all");
+  } finally { cleanup(); }
+});
+
+
+test("...and the same script on a REACHABLE remote gets all the way to a written report", () => {
+  // The companion. Without it, every assertion in the test above is also satisfied by a script
+  // that cannot start at all — which is exactly the state CI caught and this suite did not.
+  const { home, cleanup } = fixtureHome();
+  try {
+    const r = run(home);
+    assert.equal(r.status, 0, `the healthy path must reach the end: ${r.stderr}`);
+    const out = reportPath(home);
+    assert.ok(existsSync(out), "the healthy path wrote no report — the absence test above is vacuous");
+    assert.ok(readFileSync(out, "utf8").length > 0, "the report is empty; a zero-byte scan reads as 'no gaps'");
+    const log = join(home, "work", "logs", "universe-gap-scan.log");
+    assert.ok(existsSync(log) && /source=origin\/main@/.test(readFileSync(log, "utf8")),
+      "the run logged no completion line, so it did not reach the end of the script");
   } finally { cleanup(); }
 });
 
