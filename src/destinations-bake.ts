@@ -74,6 +74,41 @@ export const TAG_OVERRIDES: Record<
   "myrtle-beach-sc|lodging|Airbnb Condos at Barefoot Resort":              { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
   "myrtle-beach-sc|transport|Myrtle Beach Party Bus":                      { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
   "new-orleans-la|nightlife|Harrah's New Orleans Casino":                  { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
+
+  // offsite-outing removed — party/bachelorette-coded rows that violate
+  // stewards/wizard-profiles/oo-outing.json (rules.cross_pollination.must_not_have
+  // or branding.cross_voice_bleed_banned). Each row's own words are the evidence:
+  // "the late-night bachelor party staple", "bachelorette group-dinner standby",
+  // "LIV nightclub", "Dress-the-bride portraits", "Spiritual, chill bride".
+  //
+  // `audiences` drops "corporate" in the SAME entry, and that pairing is not
+  // cosmetic: verify-universe.ts asserts `audiences⊇corporate ⟺ wizards⊇offsite-outing`
+  // per item, so dropping either one alone fails `npm run verify`. It also keeps the
+  // two removal paths agreeing — the Offsite overlay filters events by corporate
+  // AUDIENCE but lodging by the offsite-outing WIZARD tag.
+  // friendsmoon/engagedmoon are RETAINED deliberately: their derivation happens to
+  // read the same corporate signal, but a bachelorette-coded dinner is still valid
+  // for a friends trip or a proposal trip. The override is what keeps that true.
+  "hudson-valley-ny|lodging|The Maker Hotel (Hudson)":                        { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "indianapolis-in|dining|Livery":                                            { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "jackson-hole-wy|activity|Bachelorette Photoshoot — Antler Arches & Tetons": { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "jackson-hole-wy|dining|Pinky G's Pizzeria":                                { wizards: ["bestman", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "jacksonville-fl|activity|Escape Room Jacksonville":                        { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "jacksonville-fl|dining|Taverna":                                           { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "kansas-city-mo|dining|The Savoy at 21c":                                   { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "key-west-fl|activity|Luxe Beach Picnic (Spectacular Key West)":            { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "key-west-fl|activity|Sunset Sailing on a Catamaran (Fury Water Adventures)": { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "kiawah-island-sc|activity|Bachelorette Photoshoot — Kiawah Beach":         { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "lake-of-the-ozarks-mo|activity|Bachelorette pontoon luxe picnic":          { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "lake-tahoe-ca|activity|Bachelorette Photoshoot at Emerald Bay Overlook":   { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "lake-tahoe-ca|nightlife|Harrah's Lake Tahoe Casino":                       { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "lake-tahoe-ca|nightlife|Opal Ultra Lounge":                                { wizards: ["bestman", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "leavenworth-wa|dining|Mana Restaurant":                                    { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "lexington-ky|activity|Keeneland paddock photoshoot + fascinators":         { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "los-angeles-ca|activity|Sound Bath at Neuehouse Hollywood":                { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "louisville-ky|dining|Jack Fry's":                                          { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "memphis-tn|dining|Restaurant Iris":                                        { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "miami-fl|lodging|Fontainebleau Miami Beach":                               { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
 };
 
 const uniq = <T>(xs: T[]): T[] => Array.from(new Set(xs));
