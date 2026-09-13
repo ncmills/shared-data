@@ -74,6 +74,27 @@ export const TAG_OVERRIDES: Record<
   "myrtle-beach-sc|lodging|Airbnb Condos at Barefoot Resort":              { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
   "myrtle-beach-sc|transport|Myrtle Beach Party Bus":                      { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
   "new-orleans-la|nightlife|Harrah's New Orleans Casino":                  { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  // offsite-outing removed (+ corporate audience, paired invariant) — violates oo-outing.json cross_pollination.must_not_have / cross_voice_bleed_banned (party/bachelorette or club/bottle-service content)
+  "denver-co|activity|The Escape Game Denver":                              { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "detroit-mi|dining|San Morello":                                          { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "durango-co|dining|Eolus Bar & Dining":                                   { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "eugene-or|dining|Holy Cow Café at the Saturday Market":                  { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "eureka-springs-ar|activity|Eureka Flower Farm crown workshop":           { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "finger-lakes-ny|activity|Photoshoot on the Seneca Lake Shore":           { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "fort-lauderdale-fl|activity|Flower Crown Workshop":                      { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "fort-lauderdale-fl|activity|Photoshoot at Las Olas & Riverwalk":         { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "fredericksburg-tx|activity|Grape Creek Vineyards Wine & Paint":          { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "fredericksburg-tx|activity|Wildseed Farms":                              { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "fredericksburg-tx|dining|Cabernet Grill":                                { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "galveston-tx|dining|Rudy & Paco":                                        { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "gatlinburg-tn|dining|The Park Grill":                                     { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "gulf-shores-al|activity|Gulf Shores bachelorette beach photoshoot":       { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "gulfport-ms|lodging|Beau Rivage Resort":                                 { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "gulfport-ms|nightlife|Beau Rivage Casino":                               { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "hamptons-ny|activity|Bachelorette Photoshoot":                           { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "hilton-head-sc|activity|Bachelorette Photoshoot — Golden Hour Beach Session": { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "honolulu-hi|dining|Morimoto Asia Waikiki":                               { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "honolulu-hi|nightlife|SKY Waikiki":                                      { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
 };
 
 const uniq = <T>(xs: T[]): T[] => Array.from(new Set(xs));
