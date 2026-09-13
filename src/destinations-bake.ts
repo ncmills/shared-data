@@ -74,6 +74,27 @@ export const TAG_OVERRIDES: Record<
   "myrtle-beach-sc|lodging|Airbnb Condos at Barefoot Resort":              { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
   "myrtle-beach-sc|transport|Myrtle Beach Party Bus":                      { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
   "new-orleans-la|nightlife|Harrah's New Orleans Casino":                  { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  // offsite-outing removed (+ corporate audience, paired invariant) — violates oo-outing.json cross_pollination.must_not_have / cross_voice_bleed_banned (party/bachelorette-coded content)
+  "asheville-nc|activity|Sound Bath at Asheville Salt Cave & Spa":         { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "atlantic-city-nj|activity|Boardwalk bachelorette photoshoot":           { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "atlantic-city-nj|nightlife|MiXx Rooftop at Borgata":                    { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "baltimore-md|activity|Fells Point bachelorette photoshoot":             { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "boston-ma|activity|Boston Public Garden bachelorette photoshoot":       { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "bozeman-mt|transport|Party Bus Bozeman (Big Sky Party Bus)":            { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "branson-mo|activity|Silver Dollar City day":                            { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "cabo-mx|activity|Luxe catamaran bachelorette sunset charter":           { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "cabo-mx|dining|Flora Farms Field Kitchen":                              { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "cancun-mx|activity|Isla Mujeres catamaran bachelorette sail":           { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "cancun-mx|lodging|Grand Oasis Cancun":                                  { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "cannon-beach-or|activity|Haystack Rock bachelorette photoshoot":        { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "cannon-beach-or|dining|Stephanie Inn Dining Room":                      { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "cape-cod-ma|activity|Bachelorette Photoshoot in Provincetown":          { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "cartagena-co|nightlife|Taboo Lounge Cartagena":                         { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "charlotte-nc|nightlife|Fahrenheit Rooftop":                             { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "chicago-il|transport|Rideshare + CTA L":                                 { wizards: ["bestman", "moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "cleveland-oh|activity|Rock Hall + lakefront bachelorette photoshoot":   { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "columbus-oh|dining|The Guild House":                                    { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
+  "denver-co|activity|Tarot Reading Circle":                               { wizards: ["moh", "friendsmoon", "engagedmoon"], audiences: ["clients", "bachelor", "bachelorette"] },
 };
 
 const uniq = <T>(xs: T[]): T[] => Array.from(new Set(xs));
