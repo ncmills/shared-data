@@ -74,6 +74,14 @@ export const TAG_OVERRIDES: Record<
   "myrtle-beach-sc|lodging|Airbnb Condos at Barefoot Resort":              { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
   "myrtle-beach-sc|transport|Myrtle Beach Party Bus":                      { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
   "new-orleans-la|nightlife|Harrah's New Orleans Casino":                  { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "outer-banks-nc|activity|Wright Brothers National Memorial":             { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "palm-springs-ca|lodging|La Quinta Resort & Club":                       { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "providence-ri|dining|Haven Brothers Diner":                             { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "santa-barbara-ca|lodging|The Ritz-Carlton Bacara":                      { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "sonoma-ca|lodging|Fairmont Sonoma Mission Inn & Spa":                   { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "tunica-ms|activity|Casino floor gaming":                                { wizards: ["bestman"] },
+  "tunica-ms|nightlife|Hollywood Casino & Hotel Tunica":                   { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "wichita-ks|nightlife|Mort's Martini & Cigar Bar":                       { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
 };
 
 const uniq = <T>(xs: T[]): T[] => Array.from(new Set(xs));
