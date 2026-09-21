@@ -388,7 +388,7 @@ export const expansionSouth: CanonicalDestination[] = [
     ],
     lodging: [
       { name: "Omni Amelia Island Resort", type: "resort", pricePerNight: [350,800], perRoom: false, maxGuests: 8, highlight: "Beach + golf with big-group villas that sleep crews" },
-      { name: "Fernandina Beach 6BR rental", type: "house", pricePerNight: [700,1800], perRoom: false, maxGuests: 12, highlight: "Historic-district or beach house for the whole group" },
+      { name: "Fernandina Beach 6BR rental", type: "house", pricePerNight: [700,1800], perRoom: false, maxGuests: 12, bedrooms: 6, highlight: "Historic-district or beach house for the whole group" },
     ],
     transport: [
       { name: "Amelia Island shuttle charter", type: "shuttle", priceRange: "$150-$350/hr", highlight: "JAX transfers + island bar-crawl runs" },
