@@ -30,6 +30,7 @@
  * rows sourced, two batches in, with no third batch coming.
  */
 import { buildBackfillQueue, loadAttempts, recordAttempts, type BackfillTask } from "./backfill-queue";
+import { loadPendingKeys } from "./open-pr-rows";
 import { researchBackfill } from "./research-backfill";
 import {
   DEFAULT_RESEARCH_CONCURRENCY,
@@ -60,6 +61,9 @@ export interface RunBackfillOptions
   hostSuspended?: () => boolean;
   /** How many research calls produced NO measurement (timeout / non-zero exit). */
   unmeasuredCalls?: () => number;
+  /** Venues already proposed in an open `expand/*` PR; never offered again.
+   *  See `BackfillQueueOptions.pending` and scripts/open-pr-rows.ts. */
+  pendingKeys?: ReadonlySet<string>;
 }
 
 export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<BackfillTask>> {
@@ -71,6 +75,7 @@ export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<B
       // queue head does not silt up with residue (yield fell 22 -> 3 per batch
       // across the 31-batch run for exactly this reason).
       attempts: opts.recordAttempts === false ? {} : loadAttempts(opts.attemptsPath),
+      pending: opts.pendingKeys,
     }).tasks;
 
   const result = await runExpansion<BackfillTask>({
@@ -276,11 +281,20 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     Math.floor(num("research-concurrency", DEFAULT_RESEARCH_CONCURRENCY)),
   );
 
+  // PR-AWARE. An unattended run MUST say which rows open PRs already propose;
+  // loadPendingKeys throws when --auto has no file, so the lane cannot quietly
+  // fall back to re-proposing everything.
+  const pendingKeys = loadPendingKeys(args.get("pending-keys"), args.get("auto") === "true");
+
   const maxVenuesPerTask = num("max-venues-per-task", 8);
-  const q = buildBackfillQueue(undefined, { maxVenuesPerTask });
+  const q = buildBackfillQueue(undefined, { maxVenuesPerTask, pending: pendingKeys });
   console.log(
     `run-backfill: ${q.totalUnsourced} of ${q.totalRows} party rows unsourced ` +
       `across ${q.tasks.length} task(s)\n`,
+  );
+  console.log(
+    `run-backfill: skipped ${q.pendingSkipped} venue(s) already proposed in open PR(s) ` +
+      `(${pendingKeys.size} pending key(s) loaded)\n`,
   );
 
   // Forwards the per-call budget. Dropping `callOpts` here would silently pin
@@ -302,6 +316,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     researchConcurrency,
     hostSuspended: () => hostSuspended,
     unmeasuredCalls: () => unmeasuredCalls,
+    pendingKeys,
   });
 
   // Print what was actually sourced. On a dry run this IS the deliverable —

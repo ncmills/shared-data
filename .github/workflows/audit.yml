@@ -7,6 +7,10 @@ on:
     branches: ["**"]
 
 jobs:
+  # The DATA gate. It needs no credential, so nothing outside this repo can turn it red, and
+  # it can never be hidden behind the schema check again: until 2026-09-24 both lived in one
+  # job, the schema step ran last, and every PR (#44-#66) showed the same red X whether the
+  # data was bad, the snapshot was stale, or the pooler refused a login. The X said nothing.
   audit:
     name: Coverage audit (under-tagged / orphaned / starved regression gate)
     runs-on: ubuntu-latest
@@ -36,17 +40,46 @@ jobs:
       - name: Run coverage audit (fails on new regressions beyond docs/audit-baseline.json)
         run: npm run audit
 
-      # ── snapshot vs LIVE ────────────────────────────────────────────────────────────
-      # The test suite above checks db/live-schema.sql against what the signals route
-      # writes. This checks it against the DATABASE. They are different questions, and on
-      # 2026-08-27 the second one was the one nobody could answer: two of eight signal
-      # tables had is_bot/bot_reason, the routes wrote all eight, PostgREST rejected six
-      # with 400 PGRST204, and six signal types dropped silently on three live sites for
-      # two hours.
-      #
-      # PINNED to the version measured against this database (2.84.2), and installed from
-      # the release asset rather than a marketplace action, so the thing that decides
-      # whether a merge is safe is not a floating third-party tag.
+  # ── snapshot vs LIVE ────────────────────────────────────────────────────────────
+  # The test suite above checks db/live-schema.sql against what the signals route
+  # writes. This checks it against the DATABASE. They are different questions, and on
+  # 2026-08-27 the second one was the one nobody could answer: two of eight signal
+  # tables had is_bot/bot_reason, the routes wrote all eight, PostgREST rejected six
+  # with 400 PGRST204, and six signal types dropped silently on three live sites for
+  # two hours.
+  #
+  # Two jobs, so that "could not measure" and "measured and it matches" can never share a
+  # colour:
+  #   schema-preflight  asks ONLY "can this run reach the live database?". It never compares
+  #                     anything, its name says so, and when the answer is no it writes a
+  #                     ::warning:: and a job summary naming the reason.
+  #   schema            the real check. It runs only when the preflight reached the database,
+  #                     so when it cannot run it shows as SKIPPED (grey), never as success.
+  #                     When it runs, a mismatch exits 1 and fails red, exactly as before.
+  #
+  # Why not continue-on-error on the old step: that paints the job green with the failure
+  # folded inside it, which is the "check that can only pass" this schema work exists to
+  # close. A skipped job cannot be read as "schema verified" by anyone scanning the checks.
+  #
+  # PINNED to the version measured against this database (2.84.2), and installed from
+  # the release asset rather than a marketplace action, so the thing that decides
+  # whether a merge is safe is not a floating third-party tag.
+  #
+  # `supabase db query` has NO --project-ref flag (measured against 2.84.2: the only
+  # target flags are --local, --linked and --db-url), and snapshot-schema.sh uses
+  # --linked. So a runner MUST be linked before the check can read anything.
+  #
+  # Measured, not assumed: `supabase link --project-ref <ref> --yes` in a directory
+  # with no supabase/ at all exits 0 WITHOUT a database password -- the link is a
+  # Management API operation, authenticated by SUPABASE_ACCESS_TOKEN -- and
+  # `db query --linked` then returns rows from that fresh link. No -p / no DB password
+  # secret is needed, and none should be added.
+  schema-preflight:
+    name: Schema check preflight (can we reach the live DB? verifies nothing)
+    runs-on: ubuntu-latest
+    outputs:
+      can_run: ${{ steps.probe.outputs.can_run }}
+    steps:
       - name: Install Supabase CLI (pinned)
         run: |
           curl -fsSL -o /tmp/supabase.deb \
@@ -54,26 +87,63 @@ jobs:
           sudo dpkg -i /tmp/supabase.deb
           supabase --version
 
-      # `supabase db query` has NO --project-ref flag (measured against 2.84.2: the only
-      # target flags are --local, --linked and --db-url), and snapshot-schema.sh uses
-      # --linked. So a runner MUST be linked before the check can read anything; without
-      # this step schema:check exits 2 with "COULD-NOT-RUN ... 0 comparisons executed".
-      #
-      # Measured, not assumed: `supabase link --project-ref <ref> --yes` in a directory
-      # with no supabase/ at all exits 0 WITHOUT a database password -- the link is a
-      # Management API operation, authenticated by SUPABASE_ACCESS_TOKEN -- and
-      # `db query --linked` then returns rows from that fresh link. No -p / no DB password
-      # secret is needed, and none should be added.
+      # Every "no" is written three ways: the can_run output (which skips the real check),
+      # a ::warning:: annotation on the run, and the job summary. The token only ever travels
+      # in env, and Actions masks it in logs.
+      - name: Probe the live database
+        id: probe
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          cant() {
+            echo "can_run=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=schema NOT verified::Schema check could not run: $1. The snapshot was NOT compared with the live database."
+            {
+              echo "### Schema snapshot: NOT verified"
+              echo ""
+              echo "The schema check could not run: **$1**."
+              echo "Nothing was compared. The skipped \`Schema snapshot matches the live database\` job is not a pass."
+            } >> "$GITHUB_STEP_SUMMARY"
+            # The CLI's own words go to the LOG (secret-masked by Actions), not the summary.
+            if [ -s /tmp/probe.err ]; then
+              echo "supabase said:"; grep -v '^[[:space:]]*$' /tmp/probe.err | tail -3
+            fi
+            exit 0
+          }
+          mkdir -p /tmp/probe && cd /tmp/probe
+          [ -n "${SUPABASE_ACCESS_TOKEN:-}" ] || cant "SUPABASE_ACCESS_TOKEN is not available to this run (unset, or a fork PR)"
+          supabase link --project-ref bzmehrytiudgmgdrdlkg --yes >/dev/null 2>/tmp/probe.err \
+            || cant "supabase link failed (token rejected, expired, or API unreachable)"
+          supabase db query --agent=no -o json --linked "select 1 as ok" >/dev/null 2>/tmp/probe.err \
+            || cant "linked, but no database session could be opened (pooler login refused or unreachable)"
+          echo "can_run=true" >> "$GITHUB_OUTPUT"
+          echo "Reached the live database. The comparison runs in the next job."
+
+  schema:
+    name: Schema snapshot matches the live database
+    needs: schema-preflight
+    if: needs.schema-preflight.outputs.can_run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Supabase CLI (pinned)
+        run: |
+          curl -fsSL -o /tmp/supabase.deb \
+            https://github.com/supabase/cli/releases/download/v2.84.2/supabase_2.84.2_linux_amd64.deb
+          sudo dpkg -i /tmp/supabase.deb
+          supabase --version
+
       - name: Link to the wizard project
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: supabase link --project-ref bzmehrytiudgmgdrdlkg --yes
 
-      # NO continue-on-error, deliberately. This step exits 2 with a named reason when it
-      # could not measure -- CLI missing, unlinked, token expired -- and 1 with a diff when
-      # the snapshot is stale. Swallowing either would turn it into a check that can only
-      # pass, which is the exact defect the schema work exists to close: "0 comparisons
-      # executed" is NOT a pass, and it must reach the merge boundary as red.
+      # NO continue-on-error, deliberately. snapshot-schema.sh exits 1 with a diff when the
+      # snapshot is stale, and that must reach the merge boundary as red. It exits 2 when it
+      # could not measure; the preflight above catches the common causes and skips this job,
+      # so a 2 here means the database went away between the two jobs. That stays red too:
+      # "0 comparisons executed" is NOT a pass.
       - name: Schema snapshot matches the live database
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
