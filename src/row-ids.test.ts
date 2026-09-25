@@ -68,7 +68,7 @@ test("every canonical nested row and golf course carries a unique id (real data)
   assert.equal(new Set(g).size, g.length);
 });
 
-test("overrides still land on the same 18 rows as the old exact-string keys (measured 2026-09-24)", () => {
+test("overrides still land on the same 33 rows as the old exact-string keys (measured 2026-09-25)", () => {
   const hit: string[] = [];
   const cat = { nightlife: "nightlife", dining: "dining", activities: "activity", lodging: "lodging", transport: "transport" } as const;
   for (const d of sharedDestinations)
@@ -78,7 +78,7 @@ test("overrides still land on the same 18 rows as the old exact-string keys (mea
           assert.ok(`${d.id}|${c}|${r.name}` in TAG_OVERRIDES, `override now reaches a different row: ${r.id}`);
           hit.push(r.id);
         }
-  assert.equal(hit.length, 18);
+  assert.equal(hit.length, 33);
 });
 
 test("derived copies carry ids: locals and embedded golf courses", () => {

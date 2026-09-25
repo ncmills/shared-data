@@ -86,6 +86,23 @@ export const TAG_OVERRIDES: Record<
   "myrtle-beach-sc|lodging|Airbnb Condos at Barefoot Resort":              { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
   "myrtle-beach-sc|transport|Myrtle Beach Party Bus":                      { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
   "new-orleans-la|nightlife|Harrah's New Orleans Casino":                  { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
+
+  // bestman removed — violates bm.json cross_pollination.must_not_have (MOH product register)
+  "bozeman-mt|transport|Party Bus Bozeman (Big Sky Party Bus)":       { wizards: ["moh", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "branson-mo|activity|Silver Dollar City day":                       { wizards: ["moh", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "chicago-il|transport|Rideshare + CTA L":                           { wizards: ["moh", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "fredericksburg-tx|activity|Grape Creek Vineyards Wine & Paint":    { wizards: ["moh", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "fredericksburg-tx|activity|Wildseed Farms":                        { wizards: ["moh", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "hudson-valley-ny|lodging|The Maker Hotel (Hudson)":                { wizards: ["moh", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "key-west-fl|nightlife|Aqua Nightclub":                             { wizards: ["moh"] },
+  "lake-tahoe-ca|nightlife|Harrah's Lake Tahoe Casino":               { wizards: ["moh", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "montreal-ca|activity|Jean-Talon Market Visit & Cooking Class":     { wizards: ["moh", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "naples-fl|activity|Cool Beans 'Last Sail Before the Veil' cruise": { wizards: ["moh", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "park-city-ut|lodging|Montage Deer Valley":                         { wizards: ["moh", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "scottsdale-az|dining|Hash Kitchen":                                { wizards: ["moh", "offsite-outing", "friendsmoon", "engagedmoon"] },
+  "sonoma-ca|lodging|Sonoma Vineyard Guest House":                    { wizards: ["moh", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "tampa-fl|lodging|The Epicurean Hotel":                             { wizards: ["moh", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
+  "wisconsin-dells-wi|nightlife|Old Time Saloon & Grill":             { wizards: ["moh"] },
 };
 
 /** TAG_OVERRIDES re-keyed by row id. Two keys that name the same row throw. */
