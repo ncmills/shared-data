@@ -8,6 +8,9 @@
  *   4. forbidden-leak    — the Offsite overlay emits ZERO non-corporate items
  *   5. per-entity routing — golf→sites⊆{handicap,offsite}; residences→offsite;
  *                           golf-dests→[handicap]; moh/bestman locals→their wizard
+ *   7. row identity (CORPUS-M3a) — every nested row and golf course has an id,
+ *                           0 duplicate ids, every alias resolves, every override
+ *                           key resolves (src/row-identity-check.ts)
  *
  * Run: npx tsx scripts/verify-universe.ts  (exits non-zero on any violation).
  * This is the gate the monthly growth agents must pass before any auto-commit,
@@ -37,7 +40,13 @@ import {
   ooPoolOutingsUrban,
   ALL_WIZARD_TAGS,
   ALL_AUDIENCE_TAGS,
+  GOLF_COURSES_CANONICAL,
+  golfDestinations,
+  SHARED_MOH_LOCALS,
+  SHARED_BESTMAN_LOCALS,
 } from "../src/index";
+import { TAG_OVERRIDES } from "../src/destinations-bake";
+import { checkRowIdentity, type IdRow, type ViewGroup } from "../src/row-identity-check";
 
 // Derived from the tag vocabulary, never hand-copied. These were hardcoded
 // literals and the wizard set had already drifted — it was missing "handicap",
@@ -167,6 +176,37 @@ for (const o of allOoOut) {
   if (o.experienceId && !expIds.has(o.experienceId)) fail(`oo-outing ${o.id}: experienceId "${o.experienceId}" does not resolve`);
 }
 console.log(`  oo-atlas: ${allOoExp.length} experiences · ${allOoOut.length} outings checked`);
+
+// 7: row identity (CORPUS-M3a). Canonical party rows are unique across the
+// whole catalog; golf courses across all courses; a derived view's rows within
+// their destination + array.
+const idViews: ViewGroup[] = [];
+for (const [label, dests, arrays] of [
+  ["moh-locals", SHARED_MOH_LOCALS, ITEM_CATS],
+  ["bestman-locals", SHARED_BESTMAN_LOCALS, ITEM_CATS],
+  ["golf-dest courses", golfDestinations(), ["courses"]],
+] as const)
+  for (const d of dests as Record<string, unknown>[])
+    for (const arr of arrays) idViews.push({ label: `${label} ${d.id}/${arr}`, rows: (d[arr] as IdRow[]) ?? [] });
+const identity = checkRowIdentity({
+  canonical: [
+    { label: "party rows", rows: sharedDestinations.flatMap((d) => ITEM_CATS.flatMap((c) => d[c] as IdRow[])) },
+    { label: "golf courses", rows: GOLF_COURSES_CANONICAL },
+    { label: "golf catalog (flat)", rows: SHARED_GOLF_COURSES as IdRow[] },
+  ],
+  views: idViews,
+  overrideKeys: Object.keys(TAG_OVERRIDES),
+  overrideSetLabel: "party rows",
+  // Measured 2026-09-24: both rows were retired from the canonical catalog by
+  // #41 (marketplace-placeholder lodging names) and survive only inside the
+  // Best Man locals copy, which overrides never touched. Dead before M3a too.
+  knownDeadOverrideKeys: {
+    "hilton-head-sc|lodging|Palmetto Dunes Airbnb Villas": "row retired in #41",
+    "myrtle-beach-sc|lodging|Airbnb Condos at Barefoot Resort": "row retired in #41",
+  },
+});
+for (const v of identity.violations) fail(`row identity: ${v}`);
+console.log(`  row identity: ${JSON.stringify(identity.counts)}`);
 
 console.log(
   `universe: ${sharedDestinations.length} party-dests (${itemCount} items) · ` +

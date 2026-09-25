@@ -55,11 +55,13 @@ CREATE TABLE public.bestman_subscribers (
   budget numeric,
   ip text,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
+  is_test boolean DEFAULT false NOT NULL,
   CONSTRAINT bestman_subscribers_pkey PRIMARY KEY (id),
   CONSTRAINT bestman_subscribers_email_key UNIQUE (email)
 );
 CREATE INDEX bestman_subscribers_created_at_idx ON public.bestman_subscribers USING btree (created_at DESC);
 CREATE UNIQUE INDEX bestman_subscribers_email_key ON public.bestman_subscribers USING btree (email);
+CREATE INDEX bestman_subscribers_is_test_idx ON public.bestman_subscribers USING btree (is_test) WHERE (is_test = false);
 
 CREATE TABLE public.bestman_trip_submissions (
   id bigint DEFAULT nextval('bestman_trip_submissions_id_seq'::regclass) NOT NULL,
@@ -76,9 +78,11 @@ CREATE TABLE public.bestman_trip_submissions (
   notes text,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
   updated_at timestamp with time zone DEFAULT now() NOT NULL,
+  is_test boolean DEFAULT false NOT NULL,
   CONSTRAINT bestman_trip_submissions_status_check CHECK ((status = ANY (ARRAY['pending'::text, 'approved'::text, 'featured'::text, 'rejected'::text]))),
   CONSTRAINT bestman_trip_submissions_pkey PRIMARY KEY (id)
 );
+CREATE INDEX bestman_trip_submissions_is_test_idx ON public.bestman_trip_submissions USING btree (is_test) WHERE (is_test = false);
 CREATE INDEX bestman_trip_submissions_status_created_idx ON public.bestman_trip_submissions USING btree (status, created_at DESC);
 
 CREATE TABLE public.crew_responses (
@@ -115,8 +119,10 @@ CREATE TABLE public.funnel_events (
   event text NOT NULL,
   properties jsonb DEFAULT '{}'::jsonb,
   created_at timestamp with time zone DEFAULT now(),
+  is_test boolean DEFAULT false NOT NULL,
   CONSTRAINT funnel_events_pkey PRIMARY KEY (id)
 );
+CREATE INDEX funnel_events_is_test_idx ON public.funnel_events USING btree (is_test) WHERE (is_test = false);
 CREATE INDEX idx_funnel_events_created ON public.funnel_events USING btree (created_at);
 CREATE INDEX idx_funnel_events_event ON public.funnel_events USING btree (event);
 
@@ -128,10 +134,12 @@ CREATE TABLE public.imfrustrated_intake (
   message text,
   ip text,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
+  is_test boolean DEFAULT false NOT NULL,
   CONSTRAINT imfrustrated_intake_pkey PRIMARY KEY (id)
 );
 CREATE INDEX imfrustrated_intake_created_at_idx ON public.imfrustrated_intake USING btree (created_at DESC);
 CREATE INDEX imfrustrated_intake_email_idx ON public.imfrustrated_intake USING btree (email);
+CREATE INDEX imfrustrated_intake_is_test_idx ON public.imfrustrated_intake USING btree (is_test) WHERE (is_test = false);
 
 CREATE TABLE public.moh_trip_submissions (
   id bigint DEFAULT nextval('moh_trip_submissions_id_seq'::regclass) NOT NULL,
@@ -148,9 +156,11 @@ CREATE TABLE public.moh_trip_submissions (
   notes text,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
   updated_at timestamp with time zone DEFAULT now() NOT NULL,
+  is_test boolean DEFAULT false NOT NULL,
   CONSTRAINT moh_trip_submissions_status_check CHECK ((status = ANY (ARRAY['pending'::text, 'approved'::text, 'featured'::text, 'rejected'::text]))),
   CONSTRAINT moh_trip_submissions_pkey PRIMARY KEY (id)
 );
+CREATE INDEX moh_trip_submissions_is_test_idx ON public.moh_trip_submissions USING btree (is_test) WHERE (is_test = false);
 CREATE INDEX moh_trip_submissions_status_created_idx ON public.moh_trip_submissions USING btree (status, created_at DESC);
 
 CREATE TABLE public.mohhq_subscribers (
@@ -329,8 +339,10 @@ CREATE TABLE public.will_stats (
   include_simultaneous_death boolean NOT NULL,
   has_funeral_wishes boolean NOT NULL,
   is_community_property_state boolean NOT NULL,
+  is_test boolean DEFAULT false NOT NULL,
   CONSTRAINT will_stats_pkey PRIMARY KEY (id)
 );
+CREATE INDEX will_stats_is_test_idx ON public.will_stats USING btree (is_test) WHERE (is_test = false);
 
 CREATE TABLE public.wp_acquisition_log (
   id bigint DEFAULT nextval('acquisition_log_id_seq'::regclass) NOT NULL,
@@ -637,8 +649,10 @@ CREATE TABLE public.wpd_leads (
   ip text,
   user_agent text,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
+  is_test boolean DEFAULT false NOT NULL,
   CONSTRAINT wpd_leads_pkey PRIMARY KEY (id)
 );
 CREATE INDEX wpd_leads_created_at_idx ON public.wpd_leads USING btree (created_at DESC);
 CREATE INDEX wpd_leads_email_idx ON public.wpd_leads USING btree (email);
+CREATE INDEX wpd_leads_is_test_idx ON public.wpd_leads USING btree (is_test) WHERE (is_test = false);
 

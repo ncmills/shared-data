@@ -41,13 +41,25 @@ import {
   tierFromPerPerson,
   tierFromPerNight,
 } from "./tags";
+import { assignIds, legacyKeyToId, partyRowIdBase, type RowCategory } from "./row-ids";
 
 type Brand = "moh" | "bestman" | "both";
 
 /**
- * Hand-tuning overrides, keyed `${destId}|${category}|${itemName}`. A partial
- * tag object here is shallow-merged over the derived tags for that one item —
- * the "overrideable" half of "per-item and overrideable". Empty today.
+ * Hand-tuning overrides. A partial tag object here is shallow-merged over the
+ * derived tags for that one item — the "overrideable" half of "per-item and
+ * overrideable".
+ *
+ * Keys are resolved to a ROW ID (src/row-ids.ts) since CORPUS-M3a, and matched
+ * against the row's `id` first, then its `aliases`. A key may be written either
+ * way:
+ *   - the legacy `${destId}|${category}|${itemName}` (every key below), which is
+ *     turned into an id by `legacyKeyToId` — so it no longer depends on the
+ *     exact punctuation of the name, only on its normalised slug;
+ *   - or the id itself: `bend-or--lodging--tetherow-lodge`.
+ * After a venue is renamed, the override keeps applying as long as the renamed
+ * row carries its old id in `aliases`. `scripts/verify-universe.ts` fails on a
+ * key that resolves to no row, except the known-dead ones it lists.
  */
 export const TAG_OVERRIDES: Record<
   string,
@@ -75,6 +87,17 @@ export const TAG_OVERRIDES: Record<
   "myrtle-beach-sc|transport|Myrtle Beach Party Bus":                      { wizards: ["bestman", "offsite-outing", "offsite-retreat", "friendsmoon", "engagedmoon"] },
   "new-orleans-la|nightlife|Harrah's New Orleans Casino":                  { wizards: ["bestman", "offsite-outing", "friendsmoon", "engagedmoon"] },
 };
+
+/** TAG_OVERRIDES re-keyed by row id. Two keys that name the same row throw. */
+export const OVERRIDES_BY_ID: ReadonlyMap<string, (typeof TAG_OVERRIDES)[string]> = (() => {
+  const m = new Map<string, (typeof TAG_OVERRIDES)[string]>();
+  for (const [key, o] of Object.entries(TAG_OVERRIDES)) {
+    const id = legacyKeyToId(key);
+    if (m.has(id)) throw new Error(`TAG_OVERRIDES: two keys resolve to the same row id "${id}"`);
+    m.set(id, o);
+  }
+  return m;
+})();
 
 const uniq = <T>(xs: T[]): T[] => Array.from(new Set(xs));
 
@@ -107,9 +130,20 @@ const moonWizards = (audiences: AudienceTag[]): WizardTag[] =>
 const moonProducts = (audiences: AudienceTag[]): ProductTag[] =>
   isGeneralAudience(audiences) ? ["friends-trip", "proposal-trip"] : [];
 
-function applyOverride<T extends object>(key: string, base: T): T {
-  const o = TAG_OVERRIDES[key];
+/** By id, then by alias. The row already carries its id (see `withIds`). */
+function applyOverride<T extends { id?: string; aliases?: string[] }>(base: T): T {
+  let o = base.id ? OVERRIDES_BY_ID.get(base.id) : undefined;
+  for (const a of base.aliases ?? []) o ??= OVERRIDES_BY_ID.get(a);
   return o ? { ...base, ...o } : base;
+}
+
+/**
+ * Put the row id FIRST on every row of one category, disambiguating collisions
+ * in source order (row-ids.ts). An authored id is kept as-is.
+ */
+function withIds<T extends { name: string; id?: string }>(destId: string, category: RowCategory, rows: T[]): T[] {
+  const ids = assignIds(rows, (r) => partyRowIdBase(destId, category, r.name));
+  return rows.map((r, i) => ({ id: ids[i], ...r }));
 }
 
 function bakeActivity(destId: string, a: CanonicalActivity): CanonicalActivity {
@@ -123,7 +157,7 @@ function bakeActivity(destId: string, a: CanonicalActivity): CanonicalActivity {
     ...outingProducts(audiences),
     ...moonProducts(audiences),
   ]);
-  return applyOverride(`${destId}|activity|${a.name}`, {
+  return applyOverride({
     ...a,
     wizards,
     audiences,
@@ -144,7 +178,7 @@ function bakeNightlife(destId: string, n: CanonicalNightlife): CanonicalNightlif
     ...outingProducts(audiences),
     ...moonProducts(audiences),
   ]);
-  return applyOverride(`${destId}|nightlife|${n.name}`, {
+  return applyOverride({
     ...n,
     wizards,
     audiences,
@@ -166,7 +200,7 @@ function bakeDining(destId: string, d: CanonicalDining): CanonicalDining {
     "outing" as ProductTag,
     ...moonProducts(audiences),
   ]);
-  return applyOverride(`${destId}|dining|${d.name}`, {
+  return applyOverride({
     ...d,
     wizards,
     audiences,
@@ -213,7 +247,7 @@ const HOUSING_PRODUCTS: ProductTag[] = [
 ];
 
 function bakeLodging(destId: string, l: CanonicalLodging): CanonicalLodging {
-  return applyOverride(`${destId}|lodging|${l.name}`, {
+  return applyOverride({
     ...l,
     wizards: HOUSING_WIZARDS,
     audiences: ALL_AUD,
@@ -223,7 +257,7 @@ function bakeLodging(destId: string, l: CanonicalLodging): CanonicalLodging {
 }
 
 function bakeTransport(destId: string, t: CanonicalTransport): CanonicalTransport {
-  return applyOverride(`${destId}|transport|${t.name}`, {
+  return applyOverride({
     ...t,
     wizards: HOUSING_WIZARDS,
     audiences: ALL_AUD,
@@ -233,11 +267,11 @@ function bakeTransport(destId: string, t: CanonicalTransport): CanonicalTranspor
 
 /** Bake one destination: tag every item, then roll item tags up to the city. */
 export function bakeDestination(c: CanonicalDestination): CanonicalDestination {
-  const nightlife = c.nightlife.map((n) => bakeNightlife(c.id, n));
-  const dining = c.dining.map((d) => bakeDining(c.id, d));
-  const activities = c.activities.map((a) => bakeActivity(c.id, a));
-  const lodging = c.lodging.map((l) => bakeLodging(c.id, l));
-  const transport = c.transport.map((t) => bakeTransport(c.id, t));
+  const nightlife = withIds(c.id, "nightlife", c.nightlife).map((n) => bakeNightlife(c.id, n));
+  const dining = withIds(c.id, "dining", c.dining).map((d) => bakeDining(c.id, d));
+  const activities = withIds(c.id, "activity", c.activities).map((a) => bakeActivity(c.id, a));
+  const lodging = withIds(c.id, "lodging", c.lodging).map((l) => bakeLodging(c.id, l));
+  const transport = withIds(c.id, "transport", c.transport).map((t) => bakeTransport(c.id, t));
 
   const items = [...nightlife, ...dining, ...activities, ...lodging, ...transport];
   const wizards = uniq(items.flatMap((i) => i.wizards ?? []));
