@@ -1,0 +1,82 @@
+# rubrics/moh.yaml — CORPUS-M5 fit rubric for Maid of Honor HQ (scorer input).
+# Every criterion cites the line of profiles/moh.yaml it is written from, with a quote that
+# must appear on that line (checked by scripts/corpus/verify-suitability.ts). Nothing here
+# overrides a hard exclude: a row the rules mark "no" is never scored.
+# The rubric version stamped on every score is rubric-moh@<version>+<git blob sha of this file>.
+site: "moh"
+version: "1.0.1"
+profile: "profiles/moh.yaml"
+voice: "Cup of Jo / The Cut / editorial-feminine"
+# The scorer sees the row's own fields only (name, type, highlight, price, group, place) —
+# never the legacy routing tags (brands/wizards/audiences/products/sites): those are the
+# tags this layer replaces, so reading them would just copy the old answer.
+scale:
+  - {band: "0.90-1.00", means: "signature: a pick the site would lead a city page with, in its own voice"}
+  - {band: "0.70-0.85", means: "strong: plainly right for a bachelorette weekend, specific and on-voice"}
+  - {band: "0.50-0.65", means: "usable: fine for the group but generic, or neutral on voice"}
+  - {band: "0.30-0.45", means: "weak: off-voice, awkward for this audience, or too generic to name"}
+  - {band: "0.00-0.25", means: "poor: pitched at the other brand (bachelor, groom, stag, bro-coded) or against a content rule"}
+caps:
+  - id: "moh-cap-golf"
+    text: "Any row whose name or highlight is golf-coded (golf, golfing, Topgolf, mini-golf, golf cart) scores 0, decided by rule before any model call. The golf ban holds."
+    field: "name+highlight"
+    pattern: "\\b(top)?golf(ing)?\\b"
+    fit: 0
+    cite: "profiles/moh.yaml:83"
+    quote: "Golf is never Maid of Honor HQ"
+    cite_2: "profiles/moh.yaml:152"
+    quote_2: "(bachelor|bachelors|groom|grooms|stag|golf|golfing)"
+criteria:
+  - id: "moh-c-voice"
+    direction: "+"
+    text: "Would the friend-who-has-been write this place up? Specific, observed, stylish, a little wry scores up; sparkly filler or a generic chain scores down."
+    cite: "profiles/moh.yaml:12"
+    quote: "warm, observant, a little wry, specific, never sparkly filler"
+  - id: "moh-c-product"
+    direction: "+"
+    text: "It belongs in an editorial atlas of US bachelorette weekends: a place a bridal party would plan a slot of the weekend around."
+    cite: "profiles/moh.yaml:28"
+    quote: "Editorial atlas of US bachelorette weekends"
+  - id: "moh-c-audience"
+    direction: "+"
+    text: "It works for the bride as honoree and the bridesmaids as the group running the weekend: somewhere she is celebrated and they can book it."
+    cite: "profiles/moh.yaml:19"
+    quote: "the bride is the honoree, bridesmaids are the audience/executors."
+  - id: "moh-c-group"
+    direction: "+"
+    text: "It takes a bridal party of 2 to 30 (group-friendly, bookable for a group, a house that sleeps the group). A venue that plainly cannot take a group scores down."
+    cite: "profiles/moh.yaml:24"
+    quote: "max: 30"
+  - id: "moh-c-rental-house"
+    direction: "+"
+    text: "Lodging: one big rental house beats a hotel. A whole house or estate scores up; a standard hotel room block scores lower, except in Las Vegas and Miami where the hotel is the pool and club access."
+    cite: "profiles/moh.yaml:139"
+    quote: "one big rental house beats a hotel (exception Vegas/Miami)"
+  - id: "moh-c-not-before-10"
+    direction: "-"
+    text: "Something that only happens before 10 AM (sunrise-only, dawn departures) is a weaker fit."
+    cite: "profiles/moh.yaml:143"
+    quote: "nothing scheduled before 10 AM"
+  - id: "moh-c-adult"
+    direction: "note"
+    text: "The group is 21 and over: bars, tastings and nightlife are in scope and are not marked down for being adult."
+    cite: "profiles/moh.yaml:147"
+    quote: "Accepted age ranges start at 21."
+  - id: "moh-c-named"
+    direction: "+"
+    text: "A real, named operator (the inn, the chef, the instructor) scores up; a generic placeholder ('local brewery tour', 'a rooftop bar') scores down."
+    cite: "profiles/moh.yaml:70"
+    quote: "name real inns/chefs/instructors"
+  - id: "moh-c-cross-brand"
+    direction: "-"
+    text: "Pitched at the other brand scores 0.00-0.25: the row sells itself on bachelor parties, grooms, stag nights, 'the guys'/'the boys', 'no survivors', 'send-it'. A place name that merely contains a word (Mt. Bachelor, a 'Bros.' restaurant) is not a pitch and is not marked down for it."
+    cite: "profiles/moh.yaml:50"
+    quote: "legend, bachelor, groom, the guys, the boys, no survivors"
+    cite_2: "profiles/moh.yaml:46"
+    quote_2: "BMHQ/Proposalmoon-coded terms"
+reason_rules:
+  text: "One sentence, at most 160 characters, naming the criterion ids that decided the score. Never write these banned words, singular or plural, not even inside a quote of the row's own text: crew, squad, send-it, babe, bride tribe, world-class, premium, trusted, cutting-edge. Paraphrase instead. Call the group only the bridesmaids, the girls, or her bridal party."
+  banned_cite: "profiles/moh.yaml:15"
+  banned_quote: "banned_words: [\"crew\", \"squad\", \"send-it\", \"babe\", \"bride tribe\""
+  address_cite: "profiles/moh.yaml:54"
+  address_quote: "never the crew, the squad, the guys, the boys, the group."

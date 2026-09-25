@@ -1,0 +1,81 @@
+# rubrics/bestman.yaml — CORPUS-M5 fit rubric for Best Man HQ (scorer input).
+# Every criterion cites the line of profiles/bestman.yaml it is written from, with a quote that
+# must appear on that line (checked by scripts/corpus/verify-suitability.ts). Nothing here
+# overrides a hard exclude: a row the rules mark "no" is never scored.
+# The rubric version stamped on every score is rubric-bestman@<version>+<git blob sha of this file>.
+site: "bestman"
+version: "1.0.1"
+profile: "profiles/bestman.yaml"
+voice: "Garden & Gun / Field Mag / Yeti Presents"
+# The scorer sees the row's own fields only (name, type, highlight, price, group, place) —
+# never the legacy routing tags (brands/wizards/audiences/products/sites): those are the
+# tags this layer replaces, so reading them would just copy the old answer.
+scale:
+  - {band: "0.90-1.00", means: "signature: a pick the site would lead a city page with, in its own voice"}
+  - {band: "0.70-0.85", means: "strong: plainly right for a bachelor weekend, specific and on-voice"}
+  - {band: "0.50-0.65", means: "usable: fine for the group but generic, or neutral on voice"}
+  - {band: "0.30-0.45", means: "weak: off-voice, awkward for this audience, or too generic to name"}
+  - {band: "0.00-0.25", means: "poor: pitched at the other brand (bachelorette, bride, bridesmaids) or against a content rule (strip-club tropes, frat-party copy)"}
+caps: []
+criteria:
+  - id: "bestman-c-voice"
+    direction: "+"
+    text: "Sporting and field-story: a place, an operator, a season, gear, and the man it is for. Rivers, guides, boats, ranges, steakhouses, whiskey, honest bars and outdoor days score up when they are specific."
+    cite: "profiles/bestman.yaml:12"
+    quote: "sporting/field-story telling — place, operator, season, gear, the man it is for"
+  - id: "bestman-c-named"
+    direction: "+"
+    text: "Specific nouns beat bluster: a named guide, river, steakhouse or boat scores up; 'a fun bar' or a generic placeholder scores down."
+    cite: "profiles/bestman.yaml:53"
+    quote: "Specific nouns beat bluster"
+  - id: "bestman-c-audience"
+    direction: "+"
+    text: "It works for the groom's group on a bachelor weekend, organized by the best man."
+    cite: "profiles/bestman.yaml:27"
+    quote: "The groom's crew planning a bachelor party"
+  - id: "bestman-c-not-frat"
+    direction: "-"
+    text: "A guys' trip, not a frat party: strip clubs, strip-club tropes and 'we're gonna rage' copy score 0.00-0.25."
+    cite: "profiles/bestman.yaml:49"
+    quote: "no strip-club tropes"
+  - id: "bestman-c-never-cross"
+    direction: "-"
+    text: "Voices never cross: a row pitched as bachelorette, bridal, bride or bridesmaid territory, or sold on the bachelorette-coded register (linen, quiet luxury, 'elevated' styling, girls' trip), scores 0.00-0.25. A place that serves both only because it says 'bachelor/bachelorette' is not pitched at the other brand."
+    cite: "profiles/bestman.yaml:57"
+    quote: "Nothing MOH-coded appears here"
+    cite_2: "profiles/bestman.yaml:19"
+    quote_2: "bachelorette-coded words in every output field"
+  - id: "bestman-c-mixed-gen"
+    direction: "+"
+    text: "Steakhouses, whiskey bars and cigar lounges work across generations, so they score up."
+    cite: "profiles/bestman.yaml:61"
+    quote: "tilt to steakhouses/whiskey bars/cigar lounges"
+  - id: "bestman-c-age-range"
+    direction: "note"
+    text: "Clubs suit the younger groups and steakhouses and dive bars the older ones: neither is marked down for its age range."
+    cite: "profiles/bestman.yaml:162"
+    quote: "21-25/25-30 reward clubs (+10); 35-40/40+ reward steakhouses (+10) and dive bars (+5)"
+  - id: "bestman-c-group"
+    direction: "+"
+    text: "It takes a group of 2 to 30; big-group activities matter for groups of 14 and up. A venue that plainly cannot take a group scores down."
+    cite: "profiles/bestman.yaml:170"
+    quote: "big-group activities at 14+"
+  - id: "bestman-c-day-window"
+    direction: "-"
+    text: "Day activities run 10 AM to 4 PM: something that only happens before 10 AM is a weaker fit."
+    cite: "profiles/bestman.yaml:73"
+    quote: "Day activities 10:00 AM–4:00 PM (never before 10:00)."
+  - id: "bestman-c-golf"
+    direction: "note"
+    text: "Golf courses are in the catalog and golf is an allowed activity: judge a course on the same voice and group criteria (a named, storied course scores up; an anonymous municipal nine scores lower)."
+    cite: "profiles/bestman.yaml:37"
+    quote: "lodging, transport, golf courses)."
+  - id: "bestman-c-international"
+    direction: "note"
+    text: "International destinations are fully plannable: a row is not marked down for being outside the US."
+    cite: "profiles/bestman.yaml:41"
+    quote: "21 international catalog destinations are fully plannable and in the picker"
+reason_rules:
+  text: "One sentence, at most 160 characters, naming the criterion ids that decided the score. Never write these banned words, singular or plural, not even inside a quote of the row's own text: king, goat, legend, premium, world-class, trusted, cutting-edge, gold chain, and no emoji; never the MOH register (her, she, the bride). Paraphrase instead."
+  banned_cite: "profiles/bestman.yaml:15"
+  banned_quote: "banned_words: [\"world-class\", \"premium\", \"trusted\", \"cutting-edge\""

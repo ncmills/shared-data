@@ -13,6 +13,12 @@
  *      eligible ∈ {no, unreviewed}, no `fit`, every "no" cites a real rule id of
  *      that site's profile, tagger = rules@<blob sha of the profile>, and the
  *      file equals what scripts/corpus/suitability.ts produces now.
+ *   V5 scores (M5, sites with a rubric): every rubric criterion/cap cites a line of
+ *      its profile and the quote is on that line; every scores/<site>.json row is a
+ *      facts id the rules left unreviewed (a score never lands on a "no"), fit in
+ *      [0,1], a reason with none of the site's banned words, provenance stamped
+ *      with the current rubric version; and every MOH golf-coded row has fit 0.
+ *      A "scored" row in suitability must carry exactly that score.
  */
 import { readFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
@@ -31,6 +37,7 @@ import {
   type Match,
   type Rule,
 } from "./suitability.ts";
+import { SCORED_SITES, loadRubric, rubricPath, checkScore, isMohGolfText, type ScoreRow } from "./score.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const CITE_RE = /^[\w.-]+\/[^\s:@]+:\d+(-\d+)?(,\d+(-\d+)?)*@[0-9a-f]{7,40}$/;
@@ -45,6 +52,8 @@ export interface VerifyOptions {
   suitabilityText?: Partial<Record<string, string>>;
   /** skip the "file equals regenerated" checks (tests that plant rows use this to reach the row checks) */
   skipDrift?: boolean;
+  /** injected scores/<site>.json (sabotage tests) */
+  scores?: Partial<Record<string, { rubricVersion: string; rows: ScoreRow[] }>>;
 }
 
 function termsOf(m: Match, out: { facet: string; term: string }[] = []) {
@@ -79,6 +88,7 @@ export function verifySuitability(opts: VerifyOptions = {}): string[] {
   // V3 facts
   const facts = factsRows();
   const factIds = new Set(facts.map((r) => r.id));
+  const factById = new Map(facts.map((r) => [r.id, r]));
   const badFacet = new Map<string, number>();
   for (const r of facts)
     for (const [f, vals] of Object.entries(r.facets))
@@ -159,8 +169,15 @@ export function verifySuitability(opts: VerifyOptions = {}): string[] {
         if (dup++ < 5) p(`suitability/${site}.json: duplicate row for "${row.id}"`);
       }
       seen.add(row.id);
-      if (row.eligible !== "no" && row.eligible !== "unreviewed") p(`suitability/${site}.json: ${row.id} eligible="${row.eligible}" (rules write only no/unreviewed)`);
-      if ("fit" in row) p(`suitability/${site}.json: ${row.id} has a fit score (M5, not rules)`);
+      const scoredOk = (SCORED_SITES as readonly string[]).includes(site);
+      if (row.eligible !== "no" && row.eligible !== "unreviewed" && !(row.eligible === "scored" && scoredOk))
+        p(`suitability/${site}.json: ${row.id} eligible="${row.eligible}" (only no/unreviewed${scoredOk ? "/scored" : ""})`);
+      if ("fit" in row && row.eligible !== "scored") p(`suitability/${site}.json: ${row.id} has a fit but is not a scored row`);
+      if (row.eligible === "scored") {
+        if (!(typeof row.fit === "number" && row.fit >= 0 && row.fit <= 1) || !row.reason || !row.provenance?.promptOrRulesVersion)
+          p(`suitability/${site}.json: ${row.id} is scored but lacks fit/reason/provenance`);
+        continue;
+      }
       if (row.eligible === "no") {
         if (!ids.has(row.reason)) p(`suitability/${site}.json: ${row.id} reason "${row.reason}" is not a rule id in profiles/${site}.yaml`);
         for (const rid of row.rules ?? []) if (!ids.has(rid)) p(`suitability/${site}.json: ${row.id} cites unknown rule "${rid}"`);
@@ -168,6 +185,52 @@ export function verifySuitability(opts: VerifyOptions = {}): string[] {
       } else if (row.reason || row.provenance) p(`suitability/${site}.json: ${row.id} is unreviewed but carries a reason/provenance`);
     }
     if (unknown > 5) p(`suitability/${site}.json: … ${unknown} unknown ids in total`);
+
+    // V5
+    if ((SCORED_SITES as readonly string[]).includes(site)) {
+      let rub;
+      try {
+        rub = loadRubric(site, root);
+      } catch (e) {
+        p(`rubrics/${site}.yaml: ${existsSync(rubricPath(site, root)) ? (e as Error).message : "missing"}`);
+        rub = null;
+      }
+      if (rub) {
+        const profLines = prof.text.split("\n");
+        const items = [...(rub.rubric.caps ?? []), ...(rub.rubric.criteria ?? []), { id: "reason_rules", cite: rub.rubric.reason_rules?.banned_cite, quote: rub.rubric.reason_rules?.banned_quote }];
+        const cids = new Set<string>();
+        for (const c of items as any[]) {
+          if (c.id !== "reason_rules") {
+            if (!c.id?.startsWith(`${site}-`)) p(`rubrics/${site}.yaml ${c.id}: id must start with "${site}-"`);
+            if (cids.has(c.id)) p(`rubrics/${site}.yaml ${c.id}: duplicate id`);
+            cids.add(c.id);
+          }
+          for (const k of Object.keys(c).filter((k) => /^cite(_\d+)?$/.test(k))) {
+            const m = new RegExp(`^profiles/${site}\\.yaml:(\\d+)$`).exec(String(c[k]));
+            const q = c[k.replace("cite", "quote")];
+            if (!m) p(`rubrics/${site}.yaml ${c.id}: ${k} "${c[k]}" is not profiles/${site}.yaml:<line>`);
+            else if (!q || !profLines[+m[1] - 1]?.includes(q)) p(`rubrics/${site}.yaml ${c.id}: quote not found on profiles/${site}.yaml:${m[1]}`);
+          }
+        }
+        const sc = opts.scores?.[site] ?? (existsSync(resolve(root, "scores", `${site}.json`)) ? JSON.parse(readFileSync(resolve(root, "scores", `${site}.json`), "utf8")) : null);
+        if (sc) {
+          const noIds = new Set((s.rows ?? []).filter((r: any) => r.eligible === "no").map((r: any) => r.id));
+          const bySuit = new Map((s.rows ?? []).map((r: any) => [r.id, r]));
+          const sseen = new Set<string>();
+          for (const row of sc.rows as ScoreRow[]) {
+            const f = factById.get(row.id);
+            if (!f) { p(`scores/${site}.json: unknown id "${row.id}" (not a facts id)`); continue; }
+            if (sseen.has(row.id)) p(`scores/${site}.json: duplicate score for "${row.id}"`);
+            sseen.add(row.id);
+            if (noIds.has(row.id)) p(`scores/${site}.json: ${row.id} is scored but a hard exclude marks it "no" (a score never overrides a rule)`);
+            for (const x of checkScore(site, row, rub.version, site === "moh" && isMohGolfText(f))) p(`scores/${site}.json: ${x}`);
+            const sr: any = bySuit.get(row.id);
+            if (sr && !noIds.has(row.id) && !opts.scores?.[site] && (sr.eligible !== "scored" || sr.fit !== row.fit || sr.reason !== row.reason))
+              p(`suitability/${site}.json: ${row.id} does not carry its score (regenerate)`);
+          }
+        }
+      }
+    }
     const missing = [...factIds].filter((id) => !seen.has(id));
     if (missing.length) p(`suitability/${site}.json: ${missing.length} facts ids have no row (e.g. ${missing.slice(0, 3).join(", ")})`);
     if (!opts.skipDrift && !opts.profileText?.[site] && !opts.suitabilityText?.[site] && sText !== renderSuitability(buildSuitability(site, root)))
@@ -185,7 +248,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   }
   const sites = SITES.map((s) => {
     const j = JSON.parse(readFileSync(suitabilityPath(s), "utf8"));
-    return `${s} no=${j.counts.no}`;
+    return `${s} no=${j.counts.no}${j.counts.scored ? ` scored=${j.counts.scored}` : ""}`;
   });
   console.log(`✓ suitability: vocab ${VOCAB_VERSION}, ${SITES.length} profiles, ${factsRows().length} facts rows per site (${sites.join(", ")})`);
 }
