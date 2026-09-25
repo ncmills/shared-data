@@ -51,6 +51,10 @@ export interface SharedGolfCourse {
   id?: string;
   /** Former ids (renames); resolve wherever an id does. */
   aliases?: string[];
+  /** CORPUS-M4: ISO date the row was last confirmed against its source. Optional; empty today. */
+  checkedAt?: string;
+  /** CORPUS-M4: Google Places `place_id`. Optional; empty today. */
+  placeId?: string;
 }
 
 /**
