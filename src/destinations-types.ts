@@ -47,13 +47,25 @@ export interface RowIdentity {
   aliases?: string[];
 }
 
+/**
+ * Freshness + external identity (CORPUS-M4, 2026-09-24). Optional and EMPTY:
+ * the fields exist so a row can carry them, and no row is filled in this unit.
+ * Absent means UNKNOWN — never render a missing `checkedAt` as "current".
+ */
+export interface FactsFreshness {
+  /** ISO-8601 date (YYYY-MM-DD) someone last confirmed the row against its source. */
+  checkedAt?: string;
+  /** Google Places `place_id`. Lifts the per-site, index-keyed enrichment upstream onto the row. */
+  placeId?: string;
+}
+
 export interface CanonicalAirport {
   code: string;
   name: string;
   driveMinutes: number;
 }
 
-export interface CanonicalNightlife extends UniverseTags, RowIdentity {
+export interface CanonicalNightlife extends UniverseTags, RowIdentity, FactsFreshness {
   name: string;
   type: string; // "club" | "bar" | "rooftop" | "honky-tonk" | ... — unioned per-brand
   vibe: PartyVibe;
@@ -67,7 +79,7 @@ export interface CanonicalNightlife extends UniverseTags, RowIdentity {
   dressCode?: string;
 }
 
-export interface CanonicalActivity extends UniverseTags, RowIdentity {
+export interface CanonicalActivity extends UniverseTags, RowIdentity, FactsFreshness {
   name: string;
   type: string; // string for forward compat; overlays narrow per brand
   duration: string;
@@ -115,7 +127,7 @@ export interface CanonicalActivity extends UniverseTags, RowIdentity {
 
 }
 
-export interface CanonicalDining extends UniverseTags, RowIdentity {
+export interface CanonicalDining extends UniverseTags, RowIdentity, FactsFreshness {
   name: string;
   cuisine: string;
   priceRange: "$" | "$$" | "$$$" | "$$$$";
@@ -147,7 +159,7 @@ export interface CanonicalDining extends UniverseTags, RowIdentity {
 
 }
 
-export interface CanonicalLodging extends UniverseTags, RowIdentity {
+export interface CanonicalLodging extends UniverseTags, RowIdentity, FactsFreshness {
   name: string;
   type: "house" | "hotel" | "resort" | "airbnb" | "boutique-hotel" | "hostel";
   pricePerNight: [number, number];
@@ -175,7 +187,7 @@ export interface CanonicalLodging extends UniverseTags, RowIdentity {
 
 }
 
-export interface CanonicalTransport extends UniverseTags, RowIdentity {
+export interface CanonicalTransport extends UniverseTags, RowIdentity, FactsFreshness {
   name: string;
   type: "party-bus" | "limo" | "shuttle" | "rideshare" | "charter";
   priceRange: string;
