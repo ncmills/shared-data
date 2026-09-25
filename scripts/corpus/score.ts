@@ -26,7 +26,7 @@ import { parseYamlSubset } from "./yaml-subset.ts";
 import { gitBlobSha } from "./suitability.ts";
 import { sharedDestinations } from "../../src/destinations-canonical.ts";
 import { SHARED_GOLF_COURSES } from "../../src/golf.ts";
-import type { FactsRow } from "./facts.ts";
+import { factsRows, type FactsRow } from "./facts.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -36,6 +36,7 @@ export const SCORED_SITES = ["moh", "bestman"] as const;
 export interface Cap { id: string; text: string; field: "name" | "name+highlight"; pattern: string; fit: number; cite: string; quote: string; [k: string]: unknown }
 export interface Criterion { id: string; direction: "+" | "-"; part: "kind" | "practical"; weight: number; rationale: string; text: string; cite: string; quote: string; [k: string]: unknown }
 export interface Rule { id: string; part: "practical"; weight: number; kinds?: string[]; rationale: string; text: string; cite: string; quote: string; [k: string]: unknown }
+export interface Anchor { id: string; band: "low" | "mid" | "high"; example: string; scores: Record<string, number> }
 export interface Rubric {
   site: string;
   version: string;
@@ -49,6 +50,8 @@ export interface Rubric {
   occasion: { id: string; effect: "flag"; text: string; cite: string; quote: string; [k: string]: unknown };
   /** the before-10 rule (MOH only): decides a row by rule when its fields say it only happens before 10 AM */
   window?: { id: string; effect: "cap"; fit: number; kinds: string[]; text: string; cite: string; quote: string; [k: string]: unknown };
+  /** calibration anchors (MOH, DRV CORPUS-M5-FIX3 ruling 2): the same rows head every batch, with reference scores */
+  anchors?: Anchor[];
   rules: Rule[];
   criteria: Criterion[];
   notes: { id: string; text: string; cite: string; quote: string }[];
@@ -296,6 +299,64 @@ export function decide(site: string, row: FactsRow, root = ROOT): { by: "cap"; c
   return { by: "llm" };
 }
 
+// ── calibration anchors (DRV CORPUS-M5-FIX3 ruling 2) ────────────────────────
+
+/** An anchor's reference fit: the rubric's combine over its reference scores and its own rules. */
+export function anchorRef(site: string, a: Anchor, root = ROOT): number {
+  const row = factsById(a.id);
+  if (!row) throw new Error(`anchor ${a.id} is not a facts row`);
+  return combineFit(site, a.scores, ruleScores(site, row, root), root);
+}
+
+/**
+ * What is wrong with a site's anchors (none = []): each must be a facts row decided by a model call,
+ * not a control, with reference scores for exactly the rubric's criteria, a reference fit inside its
+ * band, and an `example` that is the rubric's own text. `list` overrides the rubric's (for tests).
+ */
+export function anchorProblems(site: string, list?: Anchor[], root = ROOT): string[] {
+  const { rubric, text } = rubricOf(site, root);
+  const anchors = list ?? rubric.anchors ?? [];
+  const out: string[] = [];
+  const ctlPath = resolve(root, "rubrics", "controls.json");
+  const ctl = existsSync(ctlPath) ? JSON.parse(readFileSync(ctlPath, "utf8"))[site] ?? {} : {};
+  const controls = new Set<string>([...(ctl.bad ?? []), ...(ctl.good ?? [])]);
+  const body = text.split("\n").filter((l) => !/^\s*#/.test(l) && !/^\s*- \{id: /.test(l)).join("\n");
+  const want = rubric.criteria.map((c) => c.id);
+  const seen = new Set<string>();
+  for (const a of anchors) {
+    if (seen.has(a.id)) out.push(`anchor ${a.id}: listed twice`);
+    seen.add(a.id);
+    const row = factsById(a.id);
+    if (!row) { out.push(`anchor ${a.id}: not a facts row`); continue; }
+    if (decide(site, row, root).by !== "llm") out.push(`anchor ${a.id}: decided by rule, not a model call`);
+    if (controls.has(a.id)) out.push(`anchor ${a.id}: is a control (controls test the scorer; an anchor calibrates it)`);
+    if (!a.example || !body.includes(a.example)) out.push(`anchor ${a.id}: example "${a.example}" is not text of rubrics/${site}.yaml`);
+    if (!sameSet(Object.keys(a.scores ?? {}), want)) { out.push(`anchor ${a.id}: reference scores must cover exactly ${want.join(", ")}`); continue; }
+    const ref = anchorRef(site, a, root), t = rubric.thresholds;
+    const inBand = a.band === "low" ? ref <= t.low : a.band === "high" ? ref >= t.good : ref > t.low && ref < t.good;
+    if (!inBand) out.push(`anchor ${a.id}: reference fit ${ref} is not in its band "${a.band}"`);
+  }
+  return out;
+}
+
+/** The anchors' fits in one answer, in rubric order, next to their reference fit. */
+export function anchorFits(site: string, answer: unknown, root = ROOT): { id: string; band: string; ref: number; fit: number; scores: Record<string, number> }[] {
+  const { rubric } = rubricOf(site, root);
+  const byId = new Map(((answer as any[]) ?? []).map((a) => [a?.id, a]));
+  return (rubric.anchors ?? []).map((a) => {
+    const got = byId.get(a.id);
+    if (!got) throw new Error(`answer is missing anchor ${a.id}`);
+    const scores = Object.fromEntries(rubric.criteria.map((c) => [c.id, round20(Number(got.scores?.[c.id]))]));
+    return { id: a.id, band: a.band, ref: anchorRef(site, a, root), fit: combineFit(site, scores, ruleScores(site, factsById(a.id)!, root), root), scores };
+  });
+}
+
+let factsIndex: Map<string, FactsRow> | null = null;
+function factsById(id: string): FactsRow | undefined {
+  if (!factsIndex) factsIndex = new Map(factsRows().map((r) => [r.id, r]));
+  return factsIndex.get(id);
+}
+
 // ── score rows ───────────────────────────────────────────────────────────────
 
 export interface Provenance {
@@ -440,8 +501,15 @@ export function renderScoringPrompt(site: string, rows: FactsRow[], root = ROOT)
   L.push("", "NOTES (never mark a row down for these):");
   for (const n of rubric.notes ?? []) L.push(`- [${n.id}] ${n.text}`);
   L.push("", `REASON: ${rubric.reason_rules.text}`);
+  const anchors = rubric.anchors ?? [];
+  const anchorIds = new Set(anchors.map((a) => a.id));
+  for (const r of rows) if (anchorIds.has(r.id)) throw new Error(`score: ${r.id} is a calibration anchor and cannot be a batch row`);
+  if (anchors.length) {
+    L.push("", `CALIBRATION. The first ${anchors.length} rows below are fixed reference rows. They head every batch, in this order, with the scores this rubric gives them (band = where their fit lands: low <= ${rubric.thresholds.low}, good >= ${rubric.thresholds.good}). Use them to set your scale, then score them too, like any other row:`);
+    for (const a of anchors) L.push(`- ${a.id} (${a.band}; the rubric's "${a.example}"): ${JSON.stringify(a.scores)}`);
+  }
   L.push("", "ROWS (JSON, one per line):");
-  for (const r of rows) L.push(JSON.stringify(scorerView(r)));
+  for (const r of [...anchors.map((a) => factsById(a.id)!), ...rows]) L.push(JSON.stringify(scorerView(r)));
   L.push("", `Answer with ONLY a JSON array, one object per row in the same order, exactly: [{"id": "<row id>", "scores": {${ids.map((i) => `"${i}": <0-1>`).join(", ")}}, "reason": "<one sentence>"}]. No prose before or after.`);
   return L.join("\n");
 }
@@ -452,8 +520,10 @@ export function ingestAnswer(site: string, asked: FactsRow[], answer: unknown, m
   if (!Array.isArray(answer)) throw new Error("answer is not a JSON array");
   const byId = new Map(asked.map((r) => [r.id, r]));
   const want = new Set(byId.keys());
+  const anchorsLeft = new Set((rubric.anchors ?? []).map((a) => a.id));
   const out: ScoreRow[] = [];
   for (const a of answer as any[]) {
+    if (anchorsLeft.delete(a?.id)) continue; // reported by anchorFits, never a score row
     if (!want.has(a?.id)) throw new Error(`answer has an id that was not asked (or twice): ${a?.id}`);
     want.delete(a.id);
     const scores: Record<string, number> = {};
@@ -465,6 +535,7 @@ export function ingestAnswer(site: string, asked: FactsRow[], answer: unknown, m
     out.push(buildLlmScore(site, byId.get(a.id)!, scores, String(a.reason ?? "").trim(), meta, root));
   }
   if (want.size) throw new Error(`answer is missing ${want.size} row(s): ${[...want].slice(0, 3).join(", ")}`);
+  if (anchorsLeft.size) throw new Error(`answer is missing ${anchorsLeft.size} calibration anchor(s): ${[...anchorsLeft].join(", ")}`);
   return out;
 }
 

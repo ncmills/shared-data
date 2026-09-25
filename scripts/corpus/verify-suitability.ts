@@ -43,7 +43,7 @@ import {
   type Match,
   type Rule,
 } from "./suitability.ts";
-import { SCORED_SITES, loadRubric, rubricPath, checkScore, isMohGolfText, type ScoreRow } from "./score.ts";
+import { SCORED_SITES, loadRubric, rubricPath, checkScore, isMohGolfText, anchorProblems, type ScoreRow } from "./score.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const CITE_RE = /^[\w.-]+\/[^\s:@]+:\d+(-\d+)?(,\d+(-\d+)?)*@[0-9a-f]{7,40}$/;
@@ -221,6 +221,8 @@ export function verifySuitability(opts: VerifyOptions = {}): string[] {
         }
         if (!(R.criteria ?? []).some((c) => c.part === "kind")) p(`rubrics/${site}.yaml: no part-kind criterion`);
         for (const k of R.conditional ?? []) if (!k.applies_when) p(`rubrics/${site}.yaml ${k.id}: a conditional rule needs applies_when`);
+        // FIX3 (DRV ruling 2): calibration anchors are valid facts rows, llm-decided, not controls, in their band
+        for (const x of anchorProblems(site, undefined, root)) p(`rubrics/${site}.yaml: ${x}`);
         const cids = new Set<string>();
         for (const c of items as any[]) {
           if (c.id !== "reason_rules") {

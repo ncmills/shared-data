@@ -1,4 +1,6 @@
-# rubrics/moh.yaml — CORPUS-M5 fit rubric for Maid of Honor HQ (scorer input), v1.2 (R1 FIX round 2: the before-10 rule).
+# rubrics/moh.yaml — CORPUS-M5 fit rubric for Maid of Honor HQ (scorer input), v1.3 (R1 FIX round 3: calibration anchors).
+# Allowlist vs low list (DRV CORPUS-M5-FIX3 ruling 1): the code allowlist (MOH_ACTIVITY_TYPES) decides whether a row may be SHOWN
+# (eligibility, hard rules); this rubric's low list decides its FIT. A row can be allowed and still score low.
 # Every cap, rule and criterion cites the line of profiles/moh.yaml it is written from, with a quote that
 # must appear on that line (checked by scripts/corpus/verify-suitability.ts). Nothing here
 # overrides a hard exclude: a row the rules mark "no" is never scored.
@@ -12,7 +14,7 @@
 #   - conditional rules are listed under `conditional` and are OFF in this unconditioned score (R1 F6);
 #   - transport rows are a `utility` class with no fit (DRV ruling on R1 F4).
 site: "moh"
-version: "1.2.0"
+version: "1.3.0"
 profile: "profiles/moh.yaml"
 voice: "Cup of Jo / The Cut / editorial-feminine"
 # The scorer sees the row's own fields only (name, type, highlight, price, group, place) —
@@ -61,6 +63,17 @@ window:
   rationale: "activities are what the plan schedules into a time slot; a restaurant or bar that opens early is open later too"
   cite: "profiles/moh.yaml:143"
   quote: "nothing scheduled before 10 AM"
+# Calibration anchors (DRV CORPUS-M5-FIX3 ruling 2): the same 6 rows head every scoring batch, in this order, with
+# the reference scores below, and are scored in the same call so each run scales against the same references.
+# Picked from the rubric's own examples (`example` is text of this rubric) before any v1.3 scoring; never a control,
+# never a pilot row, never a batch row. Reference fit = combine over `scores` and the row's rules, and must land in `band`.
+anchors:
+  - {id: "kansas-city-mo--nightlife--no-other-pub", band: "low", example: "sports bars score low", scores: {moh-c-venue: 0.1, moh-c-audience: 0.2, moh-c-named: 1, moh-c-not-before-10: 1}}
+  - {id: "gulfport-ms--activity--beau-rivage-poker-room-night", band: "low", example: "poker rooms", scores: {moh-c-venue: 0.1, moh-c-audience: 0.3, moh-c-named: 1, moh-c-not-before-10: 1}}
+  - {id: "burlington-vt--lodging--hotel-vermont", band: "mid", example: "a hotel room block", scores: {moh-c-venue: 0.5, moh-c-audience: 0.5, moh-c-named: 1, moh-c-not-before-10: 1}}
+  - {id: "cody-wy--dining--local-grill", band: "mid", example: "a placeholder", scores: {moh-c-venue: 0.6, moh-c-audience: 0.6, moh-c-named: 0.2, moh-c-not-before-10: 1}}
+  - {id: "savannah-ga--dining--the-collins-quarter", band: "high", example: "Brunch and supper rooms", scores: {moh-c-venue: 0.9, moh-c-audience: 0.9, moh-c-named: 1, moh-c-not-before-10: 1}}
+  - {id: "tucson-az--activity--desert-spa-day-at-miraval", band: "high", example: "spas and bathhouses", scores: {moh-c-venue: 0.9, moh-c-audience: 0.8, moh-c-named: 1, moh-c-not-before-10: 1}}
 rules:
   - id: "moh-r-group"
     part: "practical"
