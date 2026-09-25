@@ -110,6 +110,21 @@ git -C "$TREE" clean -fdq -e node_modules -e docs/backfill-attempts.json
 cd "$TREE"
 npm install --silent >> "$LOG" 2>&1
 
+# PR-AWARE (2026-09-24). The queue is built from "unsourced on main", and a row
+# waiting in an open expand/* PR is not on main, so every Tuesday re-proposed it:
+# five open PRs held 565 rows, 189 distinct. open-pr-rows.ts lists those rows and
+# run-backfill skips them (it refuses --auto without this file).
+#
+# FAIL CLOSED. If gh or git cannot answer, STOP: no research, no PR. Treating
+# "could not list the PRs" as "no open PRs" would re-propose everything, which is
+# the bug this block exists to fix. Exit non-zero so launchd records the failure.
+PENDING="$HOME/work/logs/url-backfill-open-pr-rows.json"
+rm -f "$PENDING"
+if ! npx tsx scripts/open-pr-rows.ts --out="$PENDING" >> "$LOG" 2>&1; then
+  say "=== STOP: could not list the rows already in open expand/* PRs (gh/git failed, see above) — no research, no PR ==="
+  exit 1
+fi
+
 # TIME, not just the date. propose-pr does `git checkout -b
 # expand/<dataset>-<label>`, which FAILS if the branch already exists — so a
 # second run on the same day (the obvious operator move after a failed Tuesday,
@@ -143,7 +158,8 @@ if /usr/bin/caffeinate -i -s -m npx tsx scripts/run-backfill.ts \
       --label="$LABEL" \
       --top-k="$TOP_K" \
       --row-cap="$ROW_CAP" \
-      --research-concurrency="$RESEARCH_CONCURRENCY" >> "$LOG" 2>&1; then
+      --research-concurrency="$RESEARCH_CONCURRENCY" \
+      --pending-keys="$PENDING" >> "$LOG" 2>&1; then
   say "=== run OK ($LABEL) ==="
 else
   # PROPAGATE. This `if/else` used to swallow the status and let the script fall

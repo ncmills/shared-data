@@ -65,6 +65,10 @@ export interface BackfillQueue {
   exhausted: number;
   /** `<destinationId>/<category>: <name>` for each, so the residue is legible. */
   exhaustedVenues: string[];
+  /** Unsourced venues NOT offered because an open `expand/*` PR already proposes them. */
+  pendingSkipped: number;
+  /** `<destinationId>/<category>: <name>` for each pending skip. */
+  pendingVenues: string[];
 }
 
 export interface BackfillQueueOptions {
@@ -103,6 +107,17 @@ export interface BackfillQueueOptions {
    * quietly discarding work is how coverage numbers start lying.
    */
   maxAttempts?: number;
+  /**
+   * Venues an OPEN `expand/*` PR already proposes, keyed like `attempts`
+   * (`<destinationId>|<category>|<normalised name>`). They are not offered.
+   *
+   * The queue re-derives from "still unsourced on main", and a row in an open PR
+   * is not on main. Without this the weekly lane re-researched and re-proposed
+   * the same rows every Tuesday: five open PRs held 565 rows, 189 distinct
+   * (measured 2026-09-24). Skipped, not forgotten: `totalUnsourced` still
+   * counts them, and `pendingSkipped` reports them.
+   */
+  pending?: ReadonlySet<string>;
 }
 
 const CATEGORIES: readonly { category: PartyVenueCategory; field: keyof CanonicalDestination }[] = [
@@ -116,6 +131,10 @@ const CATEGORIES: readonly { category: PartyVenueCategory; field: keyof Canonica
 /** Venue-name normalisation — same shape the patch layer and the drift guard
  *  use, so an attempt recorded by one is recognised by the other. */
 const norm = (s: string): string => s.trim().toLowerCase();
+
+/** The venue key shared by `attempts`, `pending` and the patch layer. */
+export const venueKey = (destinationId: string, category: string, name: string): string =>
+  `${norm(destinationId)}|${norm(category)}|${norm(name)}`;
 
 /** A row is sourced iff it carries a non-blank `url`. */
 function isSourced(row: { url?: unknown }): boolean {
@@ -131,6 +150,8 @@ export function buildBackfillQueue(
   let totalUnsourced = 0;
   let exhausted = 0;
   const exhaustedVenues: string[] = [];
+  let pendingSkipped = 0;
+  const pendingVenues: string[] = [];
 
   for (const dest of destinations) {
     for (const { category, field } of CATEGORIES) {
@@ -152,6 +173,11 @@ export function buildBackfillQueue(
       const ceiling = opts.maxAttempts ?? 3;
 
       const offerable = missing.filter((r) => {
+        if (opts.pending?.has(venueKey(dest.id, category, r.name))) {
+          pendingSkipped++;
+          pendingVenues.push(`${dest.id}/${category}: ${r.name}`);
+          return false;
+        }
         if (attemptOf(r.name) < ceiling) return true;
         exhausted++;
         exhaustedVenues.push(`${dest.id}/${category}: ${r.name}`);
@@ -200,6 +226,8 @@ export function buildBackfillQueue(
     droppedTasks: tasks.length - kept.length,
     exhausted,
     exhaustedVenues,
+    pendingSkipped,
+    pendingVenues,
   };
 }
 
