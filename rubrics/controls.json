@@ -5,17 +5,23 @@
       "burlington-vt--activity--ethan-allen-firing-range",
       "black-hills-sd--activity--deadwood-mountain-grand-poker-night",
       "cody-wy--activity--cody-firearms-experience-live-fire",
-      "galena-il--activity--galena-cigars-whiskey-lounge",
+      "new-york-ny--nightlife--stout-nyc",
       "nantucket-ma--activity--striped-bass-charter-out-of-madaket"
     ],
-    "heldOut": ["galena-il--activity--galena-cigars-whiskey-lounge", "nantucket-ma--activity--striped-bass-charter-out-of-madaket"],
+    "heldOut": [
+      "nantucket-ma--activity--striped-bass-charter-out-of-madaket"
+    ],
     "good": [
       "rehoboth-beach-de--activity--drag-brunch-at-aqua",
       "galena-il--activity--wine-tasting-at-galena-cellars",
       "burlington-vt--activity--flower-crown-workshop-at-a-burlington-florist",
       "provincetown-ma--lodging--west-end-5br-cottage",
       "mackinac-island-mi--nightlife--pink-pony-bar"
-    ]
+    ],
+    "why": {
+      "new-york-ny--nightlife--stout-nyc": "CORPUS-M5-FIX2, DRV ruling 1: replaces galena-cigars-whiskey-lounge, which MOH's own code allowlists (cigar-bar in MOH_ACTIVITY_TYPES), so it cannot be known-bad. Stout NYC is a sports bar (type sports-bar, '100+ screens'), a kind moh-c-venue's existing low list already names ('sports bars score low'): plainly wrong for a bridal party by the rubric as written, not by a new taste call. Its text has no occasion word. Chosen before any v1.2 scoring; not one of the pilot rows. It is on the low list, so it is not held out.",
+      "nantucket-ma--activity--striped-bass-charter-out-of-madaket": "CORPUS-M5-FIX2: from rubric v1.2 this row is decided by moh-r-before-10 (bestFor morning, 5 hr, back by lunch), so it now tests the rule, not the model's judgement."
+    }
   },
   "bestman": {
     "bad": [
@@ -25,7 +31,10 @@
       "palm-springs-ca--activity--photoshoot-at-the-saguaro-hotel",
       "tucson-az--activity--saguaro-sunset-photoshoot-at-gates-pass"
     ],
-    "heldOut": ["palm-springs-ca--activity--photoshoot-at-the-saguaro-hotel", "tucson-az--activity--saguaro-sunset-photoshoot-at-gates-pass"],
+    "heldOut": [
+      "palm-springs-ca--activity--photoshoot-at-the-saguaro-hotel",
+      "tucson-az--activity--saguaro-sunset-photoshoot-at-gates-pass"
+    ],
     "good": [
       "tucson-az--activity--tucson-clay-pigeon-shooting-park",
       "cody-wy--activity--whitewater-raft-shoshone-canyon",

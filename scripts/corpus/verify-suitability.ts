@@ -207,7 +207,7 @@ export function verifySuitability(opts: VerifyOptions = {}): string[] {
         const R = rub.rubric;
         const items = [
           ...(R.caps ?? []), ...(R.rules ?? []), ...(R.criteria ?? []), ...(R.notes ?? []), ...(R.conditional ?? []),
-          ...(R.occasion ? [R.occasion] : []), ...(R.utility?.cite ? [R.utility] : []),
+          ...(R.occasion ? [R.occasion] : []), ...(R.window ? [R.window] : []), ...(R.utility?.cite ? [R.utility] : []),
           { id: "reason_rules", cite: R.reason_rules?.banned_cite, quote: R.reason_rules?.banned_quote },
         ];
         // v1.1 shape (R1 F3/F6): thresholds, the combine rule, a rationale per band and per weight, weights per part

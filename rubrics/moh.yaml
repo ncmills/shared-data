@@ -1,4 +1,4 @@
-# rubrics/moh.yaml — CORPUS-M5 fit rubric for Maid of Honor HQ (scorer input), v1.1 (R1 FIX round 1).
+# rubrics/moh.yaml — CORPUS-M5 fit rubric for Maid of Honor HQ (scorer input), v1.2 (R1 FIX round 2: the before-10 rule).
 # Every cap, rule and criterion cites the line of profiles/moh.yaml it is written from, with a quote that
 # must appear on that line (checked by scripts/corpus/verify-suitability.ts). Nothing here
 # overrides a hard exclude: a row the rules mark "no" is never scored.
@@ -12,7 +12,7 @@
 #   - conditional rules are listed under `conditional` and are OFF in this unconditioned score (R1 F6);
 #   - transport rows are a `utility` class with no fit (DRV ruling on R1 F4).
 site: "moh"
-version: "1.1.0"
+version: "1.2.0"
 profile: "profiles/moh.yaml"
 voice: "Cup of Jo / The Cut / editorial-feminine"
 # The scorer sees the row's own fields only (name, type, highlight, price, group, place) —
@@ -51,6 +51,16 @@ occasion:
   quote: "legend, bachelor, groom, the guys, the boys, no survivors"
   cite_2: "profiles/moh.yaml:46"
   quote_2: "BMHQ/Proposalmoon-coded terms"
+# Decided by rule where the row's fields say so (DRV CORPUS-M5-FIX2 ruling 2); moh-c-not-before-10 still judges the rest.
+window:
+  id: "moh-r-before-10"
+  effect: "cap"
+  fit: 0.2
+  kinds: ["activity"]
+  text: "An activity whose fields say it only happens before 10 AM: its copy (never its name) names dawn, sunrise, early morning or a 4-9 AM start, or it is a morning slot (bestFor morning, or back by lunch) longer than 3 hours, which must start before 10 to end by 1 PM. Never when the copy also names a later time (sunset, afternoon, evening, after dark, a PM time) or offers the early time as one option of two. Fit 0.2 by rule, before any model call."
+  rationale: "activities are what the plan schedules into a time slot; a restaurant or bar that opens early is open later too"
+  cite: "profiles/moh.yaml:143"
+  quote: "nothing scheduled before 10 AM"
 rules:
   - id: "moh-r-group"
     part: "practical"

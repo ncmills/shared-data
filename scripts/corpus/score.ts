@@ -47,6 +47,8 @@ export interface Rubric {
   caps: Cap[];
   utility: { id: string; kinds: string[]; text: string; ruling: string; [k: string]: unknown };
   occasion: { id: string; effect: "flag"; text: string; cite: string; quote: string; [k: string]: unknown };
+  /** the before-10 rule (MOH only): decides a row by rule when its fields say it only happens before 10 AM */
+  window?: { id: string; effect: "cap"; fit: number; kinds: string[]; text: string; cite: string; quote: string; [k: string]: unknown };
   rules: Rule[];
   criteria: Criterion[];
   notes: { id: string; text: string; cite: string; quote: string }[];
@@ -245,12 +247,52 @@ export function combineFit(site: string, scores: Record<string, number>, rules: 
   return round20(K * (0.5 + 0.5 * P));
 }
 
+// ── the before-10 rule (DRV CORPUS-M5-FIX2 ruling 2) ─────────────────────────
+
+/** An early time named in the copy: dawn and its synonyms, early morning, or a 4-9 AM clock time that is not a closing time. */
+const EARLY = /\b(?:pre-dawn|dawn|sunrise|first light|daybreak|early[- ]morning)\b|(?<!\b(?:until|till|til|to)\s)\b0?[4-9](?::[0-5]\d)?\s?a\.?m\.?(?![a-z])/i;
+/** A later time named in the copy, or the early time offered as one option of two: the rule stays off. */
+const LATER = /\b(?:sunset|dusk|afternoons?|evenings?|nights?|nighttime|after dark)\b|\b(?:1[0-2]|0?[1-9])(?::[0-5]\d)?\s?p\.?m\.?(?![a-z])|\b(?:sunrise|dawn)\s+or\b|\bor\s+(?:at\s+)?(?:sunrise|dawn)\b/i;
+const BACK_BY_NOON = /\bback (?:by|before) (?:lunch|noon|midday)\b/i;
+/** The site's own "morning" slot (never "morning-after", the recovery day). */
+const MORNING_SLOT = /\bmorning\b(?!-after)/i;
+/** A morning slot ends by 1 PM, so one longer than 3 hours has to start before 10. */
+const MORNING_MAX_HOURS = 3;
+
+/** The shortest duration a row's `duration` field states, in hours; undefined when it states none. */
+export function durationHours(d: unknown): number | undefined {
+  if (typeof d !== "string") return undefined;
+  if (/\bhalf[- ]day\b/i.test(d)) return 4;
+  if (/\b(?:full[- ]day|all day)\b/i.test(d)) return 8;
+  const h = /(\d+(?:\.\d+)?)(?:\s*[-–]\s*\d+(?:\.\d+)?)?\s*(?:h|hrs?|hours?)\b/i.exec(d);
+  if (h) return Number(h[1]);
+  const m = /(\d+)(?:\s*[-–]\s*\d+)?\s*min/i.exec(d);
+  return m ? Number(m[1]) / 60 : undefined;
+}
+
+/**
+ * The row's fields say it only happens before 10 AM: its copy (never its name) names
+ * dawn, sunrise, early morning or a 4-9 AM start; or it is a morning slot (bestFor
+ * "morning", or "back by lunch") longer than 3 hours, which must start before 10 to end
+ * by 1 PM. Never when the copy also names a later time or offers the early time as one
+ * option of two. Reads the row's fields only; no venue names are listed.
+ */
+export function beforeTen(raw: Record<string, unknown>): boolean {
+  const copy = copyOf(raw);
+  if (LATER.test(copy)) return false;
+  if (EARLY.test(copy)) return true;
+  const morningSlot = MORNING_SLOT.test(String(raw.bestFor ?? "")) || BACK_BY_NOON.test(copy);
+  const h = durationHours(raw.duration);
+  return morningSlot && h !== undefined && h > MORNING_MAX_HOURS;
+}
+
 /** How a row is decided: a cap by rule, the utility class by rule, or a model score. */
-export function decide(site: string, row: FactsRow, root = ROOT): { by: "cap"; cap: Cap } | { by: "utility" } | { by: "llm" } {
+export function decide(site: string, row: FactsRow, root = ROOT): { by: "cap"; cap: Pick<Cap, "id" | "text" | "fit"> } | { by: "utility" } | { by: "llm" } {
   const { rubric } = rubricOf(site, root);
   const cap = capFor(rubric, row);
   if (cap) return { by: "cap", cap };
   if (rubric.utility?.kinds.includes(row.kind)) return { by: "utility" };
+  if (rubric.window?.kinds.includes(row.kind) && beforeTen(rawRow(row.id)?.raw ?? {})) return { by: "cap", cap: rubric.window };
   return { by: "llm" };
 }
 
@@ -314,6 +356,7 @@ export function citableIds(rubric: Rubric): Set<string> {
     ...(rubric.caps ?? []).map((c) => c.id),
     ...(rubric.utility ? [rubric.utility.id] : []),
     ...(rubric.occasion ? [rubric.occasion.id] : []),
+    ...(rubric.window ? [rubric.window.id] : []),
     ...(rubric.rules ?? []).map((r) => r.id),
     ...(rubric.criteria ?? []).map((c) => c.id),
     ...(rubric.notes ?? []).map((n) => n.id),
