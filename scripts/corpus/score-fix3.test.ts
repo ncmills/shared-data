@@ -77,8 +77,19 @@ test("ruling 2: a batch may not contain an anchor row", () => {
 test("ruling 2: ingest requires the anchors in the answer, keeps them out of the scores, and reports them", () => {
   const ids = anchors().map((x) => x.id);
   const rows = BATCH.map((id) => facts.get(id)!);
-  assert.throws(() => S.ingestAnswer("moh", rows, answerFor(BATCH), meta), /anchor/, "an answer without the anchors fails");
-  const got = S.ingestAnswer("moh", rows, answerFor([...ids, ...BATCH]), meta);
+  // CORPUS-M5-PRERUN: anchors must now be answered near their reference (F4) and the drift sentinels must be
+  // answered near their pilot fit (F1), so the fixture answers both that way; the batch rows stay at 0.5.
+  const onFit = (id: string, fit: number) => {
+    for (let v = 0; v <= 1.0001; v += 0.05) {
+      const sc = { "moh-c-venue": +v.toFixed(2), "moh-c-audience": +v.toFixed(2), "moh-c-named": 1, "moh-c-not-before-10": 1 };
+      if (Math.abs(S.combineFit("moh", sc, S.ruleScores("moh", facts.get(id)!)) - fit) < 0.026) return { id, scores: sc, reason: "moh-c-venue: a test row." };
+    }
+    throw new Error(`no scores give ${id} fit ${fit}`);
+  };
+  const tail = X.loadSentinels("moh").map((x: any) => onFit(x.id, x.pilot));
+  const good = [...anchors().map((a) => ({ id: a.id, scores: a.scores, reason: "moh-c-venue: a test row." })), ...answerFor(BATCH), ...tail];
+  assert.throws(() => S.ingestAnswer("moh", rows, [...answerFor(BATCH), ...tail], meta), /anchor/, "an answer without the anchors fails");
+  const got = S.ingestAnswer("moh", rows, good, meta);
   assert.deepEqual(got.map((r) => r.id).sort(), [...BATCH].sort(), "anchors are not score rows");
   assert.equal(typeof X.anchorFits, "function", "score.ts exports anchorFits(site, answer)");
   const af = X.anchorFits("moh", answerFor([...ids, ...BATCH]));

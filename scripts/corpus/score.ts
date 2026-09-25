@@ -351,6 +351,50 @@ export function anchorFits(site: string, answer: unknown, root = ROOT): { id: st
   });
 }
 
+/** The flag an anchor's score row carries: it was scored with its reference scores shown (R1 close-out (a)). */
+export const ANCHOR_FLAG = "anchor";
+/** How far an anchor's answered fit may sit from its reference fit before the batch is re-asked (R1 close-out F4). */
+export const ANCHOR_TOLERANCE = 0.05;
+
+/** The anchors that are also rows the full run must score: they are written from the first batch's answer. */
+export function anchorsInScope(site: string, scope: Iterable<string>, root = ROOT): string[] {
+  const s = new Set(scope);
+  return (rubricOf(site, root).rubric.anchors ?? []).map((a) => a.id).filter((id) => s.has(id));
+}
+
+// ── drift sentinels (DRV CORPUS-M5-PRERUN, R1 close-out F1) ──────────────────
+
+export interface Sentinel { id: string; pilot: number; runs?: number[]; band?: string }
+/** How far a sentinel's fit may sit from its pilot fit before the batch is re-asked. */
+export const SENTINEL_TOLERANCE = 0.15;
+
+/** rubrics/sentinels.json for a site ([] when it has none). Kept out of the rubric so its blob sha is unchanged. */
+export function loadSentinels(site: string, root = ROOT): Sentinel[] {
+  const p = resolve(root, "rubrics", "sentinels.json");
+  return existsSync(p) ? JSON.parse(readFileSync(p, "utf8"))[site] ?? [] : [];
+}
+
+/** What is wrong with a site's sentinels (none = []): each is a facts row decided by a model call, never an anchor or a control, with a 0-1 pilot fit. */
+export function sentinelProblems(site: string, list?: Sentinel[], root = ROOT): string[] {
+  const sentinels = list ?? loadSentinels(site, root);
+  const anchorIds = new Set((rubricOf(site, root).rubric.anchors ?? []).map((a) => a.id));
+  const ctlPath = resolve(root, "rubrics", "controls.json");
+  const ctl = existsSync(ctlPath) ? JSON.parse(readFileSync(ctlPath, "utf8"))[site] ?? {} : {};
+  const controls = new Set<string>([...(ctl.bad ?? []), ...(ctl.good ?? [])]);
+  const out: string[] = [], seen = new Set<string>();
+  for (const x of sentinels) {
+    if (seen.has(x.id)) out.push(`sentinel ${x.id}: listed twice`);
+    seen.add(x.id);
+    const row = factsById(x.id);
+    if (!row) { out.push(`sentinel ${x.id}: not a facts row`); continue; }
+    if (decide(site, row, root).by !== "llm") out.push(`sentinel ${x.id}: decided by rule, not a model call`);
+    if (anchorIds.has(x.id)) out.push(`sentinel ${x.id}: is an anchor (an anchor shows its reference; a sentinel must not)`);
+    if (controls.has(x.id)) out.push(`sentinel ${x.id}: is a control`);
+    if (!(typeof x.pilot === "number" && x.pilot >= 0 && x.pilot <= 1)) out.push(`sentinel ${x.id}: pilot fit ${x.pilot} is not in [0,1]`);
+  }
+  return out;
+}
+
 let factsIndex: Map<string, FactsRow> | null = null;
 function factsById(id: string): FactsRow | undefined {
   if (!factsIndex) factsIndex = new Map(factsRows().map((r) => [r.id, r]));
@@ -392,12 +436,12 @@ export function loadScores(site: string, root = ROOT): { rubricVersion: string; 
 const withFlags = (r: ScoreRow, flags: string[]): ScoreRow => (flags.length ? { ...r, flags } : r);
 
 /** An llm score: the model's per-criterion scores, the rules and the fit computed here. */
-export function buildLlmScore(site: string, row: FactsRow, scores: Record<string, number>, reason: string, meta: RunMeta, root = ROOT): ScoreRow {
+export function buildLlmScore(site: string, row: FactsRow, scores: Record<string, number>, reason: string, meta: RunMeta, root = ROOT, anchor = false): ScoreRow {
   const { version } = rubricOf(site, root);
   const rules = ruleScores(site, row, root);
   return withFlags(
     { id: row.id, class: "fit", fit: combineFit(site, scores, rules, root), scores, rules, reason, provenance: { tagger: "llm", model: meta.model, promptOrRulesVersion: version, scoredAt: meta.scoredAt, runId: meta.runId } },
-    pitchFlags(site, row, root),
+    [...pitchFlags(site, row, root), ...(anchor ? [ANCHOR_FLAG] : [])],
   );
 }
 
@@ -480,7 +524,8 @@ export function checkScore(site: string, s: ScoreRow, rub: { rubric: Rubric; ver
       else if (s.scores && sameSet(Object.keys(s.scores), rubric.criteria.map((c) => c.id)) && combineFit(site, s.scores, rules) !== s.fit)
         out.push(`${s.id}: fit ${s.fit} ≠ ${combineFit(site, s.scores, rules)} computed from its scores (rubric combine)`);
     }
-    const flags = pitchFlags(site, row);
+    // an anchor's score row is always written from an anchor answer, so it carries the anchor flag and nothing else does
+    const flags = [...pitchFlags(site, row), ...((rubric.anchors ?? []).some((a) => a.id === row.id) ? [ANCHOR_FLAG] : [])];
     if (!sameSet(s.flags ?? [], flags)) out.push(`${s.id}: flags ${JSON.stringify(s.flags ?? [])} ≠ recomputed ${JSON.stringify(flags)}`);
   }
   if (golfCapped && !(s.class === "fit" && s.fit === 0)) out.push(`${s.id}: a golf-capped row has fit ${s.fit} (> 0)`);
@@ -508,35 +553,121 @@ export function renderScoringPrompt(site: string, rows: FactsRow[], root = ROOT)
     L.push("", `CALIBRATION. The first ${anchors.length} rows below are fixed reference rows. They head every batch, in this order, with the scores this rubric gives them (band = where their fit lands: low <= ${rubric.thresholds.low}, good >= ${rubric.thresholds.good}). Use them to set your scale, then score them too, like any other row:`);
     for (const a of anchors) L.push(`- ${a.id} (${a.band}; the rubric's "${a.example}"): ${JSON.stringify(a.scores)}`);
   }
+  // drift sentinels (R1 close-out F1): ordinary rows after the batch, with no reference scores; one the batch already asks is not repeated
+  const asked = new Set(rows.map((r) => r.id));
+  const sentinels = loadSentinels(site, root).filter((x) => !asked.has(x.id)).map((x) => factsById(x.id)!);
   L.push("", "ROWS (JSON, one per line):");
-  for (const r of [...anchors.map((a) => factsById(a.id)!), ...rows]) L.push(JSON.stringify(scorerView(r)));
+  for (const r of [...anchors.map((a) => factsById(a.id)!), ...rows, ...sentinels]) L.push(JSON.stringify(scorerView(r)));
   L.push("", `Answer with ONLY a JSON array, one object per row in the same order, exactly: [{"id": "<row id>", "scores": {${ids.map((i) => `"${i}": <0-1>`).join(", ")}}, "reason": "<one sentence>"}]. No prose before or after.`);
   return L.join("\n");
 }
 
-/** Validate one batch answer against the rows asked; returns ScoreRows or throws naming the fault. */
-export function ingestAnswer(site: string, asked: FactsRow[], answer: unknown, meta: RunMeta, root = ROOT): ScoreRow[] {
+export interface IngestOptions {
+  /** anchors to write as score rows from this answer: the in-scope anchors, on the run's FIRST batch only (R1 close-out (a)) */
+  writeAnchors?: string[];
+}
+
+/**
+ * Validate one batch answer against the rows asked; returns ScoreRows or throws naming the fault.
+ * Every anchor and sentinel must be answered. The batch fails (and is re-asked) when an anchor's fit
+ * is more than ANCHOR_TOLERANCE from its reference (F4) or a sentinel's is more than SENTINEL_TOLERANCE
+ * from its pilot fit (F1). Anchors are written only when `writeAnchors` names them; sentinels are
+ * written only when the batch asked them as its own rows.
+ */
+export function ingestAnswer(site: string, asked: FactsRow[], answer: unknown, meta: RunMeta, root = ROOT, opts: IngestOptions = {}): ScoreRow[] {
   const { rubric } = loadRubric(site, root);
   if (!Array.isArray(answer)) throw new Error("answer is not a JSON array");
   const byId = new Map(asked.map((r) => [r.id, r]));
   const want = new Set(byId.keys());
-  const anchorsLeft = new Set((rubric.anchors ?? []).map((a) => a.id));
-  const out: ScoreRow[] = [];
-  for (const a of answer as any[]) {
-    if (anchorsLeft.delete(a?.id)) continue; // reported by anchorFits, never a score row
-    if (!want.has(a?.id)) throw new Error(`answer has an id that was not asked (or twice): ${a?.id}`);
-    want.delete(a.id);
+  const anchorById = new Map((rubric.anchors ?? []).map((a) => [a.id, a]));
+  for (const id of opts.writeAnchors ?? []) if (!anchorById.has(id)) throw new Error(`writeAnchors: ${id} is not a calibration anchor`);
+  const toWrite = new Set(opts.writeAnchors ?? []);
+  const anchorsLeft = new Set(anchorById.keys());
+  const sentinelById = new Map(loadSentinels(site, root).map((x) => [x.id, x]));
+  const sentinelsLeft = new Set([...sentinelById.keys()].filter((id) => !want.has(id)));
+  const out: ScoreRow[] = [], drift: string[] = [];
+  const scoresOf = (a: any) => {
     const scores: Record<string, number> = {};
     for (const c of rubric.criteria) {
       const v = Number(a.scores?.[c.id]);
       if (!(v >= 0 && v <= 1)) throw new Error(`${a.id}: score ${c.id}=${a.scores?.[c.id]} is not in [0,1]`);
       scores[c.id] = round20(v);
     }
-    out.push(buildLlmScore(site, byId.get(a.id)!, scores, String(a.reason ?? "").trim(), meta, root));
+    return scores;
+  };
+  const fitOf = (id: string, scores: Record<string, number>) => combineFit(site, scores, ruleScores(site, factsById(id)!, root), root);
+  const checkSentinel = (id: string, fit: number) => {
+    const x = sentinelById.get(id);
+    if (x && Math.abs(fit - x.pilot) > SENTINEL_TOLERANCE + 1e-9) drift.push(`sentinel ${id} fit ${fit} is more than ${SENTINEL_TOLERANCE} from its pilot ${x.pilot}`);
+  };
+  for (const a of answer as any[]) {
+    if (anchorsLeft.delete(a?.id)) {
+      const scores = scoresOf(a), fit = fitOf(a.id, scores), ref = anchorRef(site, anchorById.get(a.id)!, root);
+      if (Math.abs(fit - ref) > ANCHOR_TOLERANCE + 1e-9) drift.push(`anchor ${a.id} fit ${fit} is more than ${ANCHOR_TOLERANCE} from its reference ${ref}`);
+      if (toWrite.has(a.id)) out.push(buildLlmScore(site, factsById(a.id)!, scores, String(a.reason ?? "").trim(), meta, root, true));
+      continue;
+    }
+    if (sentinelsLeft.delete(a?.id)) { checkSentinel(a.id, fitOf(a.id, scoresOf(a))); continue; } // never a score row
+    if (!want.has(a?.id)) throw new Error(`answer has an id that was not asked (or twice): ${a?.id}`);
+    want.delete(a.id);
+    const row = buildLlmScore(site, byId.get(a.id)!, scoresOf(a), String(a.reason ?? "").trim(), meta, root);
+    checkSentinel(a.id, row.fit!);
+    out.push(row);
   }
   if (want.size) throw new Error(`answer is missing ${want.size} row(s): ${[...want].slice(0, 3).join(", ")}`);
   if (anchorsLeft.size) throw new Error(`answer is missing ${anchorsLeft.size} calibration anchor(s): ${[...anchorsLeft].join(", ")}`);
+  if (sentinelsLeft.size) throw new Error(`answer is missing ${sentinelsLeft.size} drift sentinel(s): ${[...sentinelsLeft].join(", ")}`);
+  if (drift.length) throw new Error(`re-ask this batch: ${drift.join("; ")}`);
   return out;
+}
+
+// ── the full-run plan (DRV CORPUS-M5-PRERUN) ─────────────────────────────────
+
+/**
+ * Venue kinds the MOH venue criterion names neither high nor low (R1 close-out F1: 352 of the 1,242
+ * model rows, none but cigar-bar in the pilot). Read from the row's nightlife.type / activity.type facet.
+ */
+export const SILENT_KINDS: Record<string, string[]> = {
+  moh: ["dive-bar", "axe-throwing", "sports-event", "distillery-tour", "beer-garden", "brewery-tour", "cigar-bar", "atv", "casino", "paintball", "escape-room", "go-karts"],
+};
+export function isSilentKind(site: string, row: FactsRow): boolean {
+  const kinds = SILENT_KINDS[site] ?? [];
+  return [...(row.facets["nightlife.type"] ?? []), ...(row.facets["activity.type"] ?? [])].some((t) => kinds.includes(t));
+}
+
+/** A fixed-seed shuffle (mulberry32 + Fisher-Yates), so a plan is reproducible and batches are not one city each. */
+function seededShuffle<T>(xs: T[], seed: number): T[] {
+  const out = [...xs];
+  let a = seed >>> 0;
+  const rnd = () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  for (let i = out.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [out[i], out[j]] = [out[j], out[i]]; }
+  return out;
+}
+
+/**
+ * The full run for one site: its model-decided scope rows (anchors excluded: they head every batch)
+ * shuffled with a fixed seed into batches of at most `size`; `writeAnchors[i]` = the anchors batch i
+ * writes (the in-scope anchors on batch 0, none after); `doubleScore` = (MOH) the batch with the most
+ * rubric-silent-kind rows, re-scored once more before merge so its mean |Δfit| (meanAbsDeltaFit) is
+ * reported. Scoring itself is the orchestrator's: render each batch, dispatch, ingestAnswer, re-ask on a throw.
+ */
+export function planRun(site: string, scope: string[], size = 50, seed = 5, root = ROOT): { batches: string[][]; writeAnchors: string[][]; doubleScore: number | null } {
+  const anchorIds = new Set((rubricOf(site, root).rubric.anchors ?? []).map((a) => a.id));
+  const ids = seededShuffle([...new Set(scope)].filter((id) => !anchorIds.has(id) && decide(site, factsById(id)!, root).by === "llm").sort(), seed);
+  const n = Math.ceil(ids.length / size), batches: string[][] = [];
+  for (let i = 0; i < n; i++) batches.push(ids.slice(Math.floor((i * ids.length) / n), Math.floor(((i + 1) * ids.length) / n)));
+  const inScope = anchorsInScope(site, scope, root);
+  const silent = batches.map((b) => b.filter((id) => isSilentKind(site, factsById(id)!)).length);
+  // a site with no rubric-silent kinds listed (BMHQ) has no double-score step
+  return { batches, writeAnchors: batches.map((_, i) => (i === 0 ? inScope : [])), doubleScore: SILENT_KINDS[site] && batches.length ? silent.indexOf(Math.max(...silent)) : null };
+}
+
+/** Mean |Δfit| between two scorings of the same rows (fit rows only), matched by id. */
+export function meanAbsDeltaFit(a: ScoreRow[], b: ScoreRow[]): number {
+  const bm = new Map(b.map((r) => [r.id, r]));
+  if (a.length !== b.length || a.some((r) => !bm.has(r.id))) throw new Error("meanAbsDeltaFit: the two scorings must cover the same rows");
+  const d = a.filter((r) => r.class === "fit").map((r) => Math.abs(r.fit! - bm.get(r.id)!.fit!));
+  return Math.round((d.reduce((x, y) => x + y, 0) / d.length) * 1e4) / 1e4;
 }
 
 // ── the call's transcript (R1 F1 + F7) ───────────────────────────────────────
