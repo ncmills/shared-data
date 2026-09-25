@@ -18,6 +18,12 @@
  *      facts id the rules left unreviewed (a score never lands on a "no"), fit in
  *      [0,1], a reason with none of the site's banned words, provenance stamped
  *      with the current rubric version; and every MOH golf-coded row has fit 0.
+ *      v1.1 (R1 FIX round 1): every cap/rule/criterion/note/conditional/flag cites
+ *      its profile line; thresholds, combine, weights and rationales are present;
+ *      each score is re-derived from the facts row (cap, utility class, rule values,
+ *      flags, and fit from the per-criterion scores); a reason cites a real rubric
+ *      id, no shorthand, and never grades the row's copy; provenance has scoredAt,
+ *      runId and (llm) a model id.
  *      A "scored" row in suitability must carry exactly that score.
  */
 import { readFileSync, existsSync } from "node:fs";
@@ -174,8 +180,9 @@ export function verifySuitability(opts: VerifyOptions = {}): string[] {
         p(`suitability/${site}.json: ${row.id} eligible="${row.eligible}" (only no/unreviewed${scoredOk ? "/scored" : ""})`);
       if ("fit" in row && row.eligible !== "scored") p(`suitability/${site}.json: ${row.id} has a fit but is not a scored row`);
       if (row.eligible === "scored") {
-        if (!(typeof row.fit === "number" && row.fit >= 0 && row.fit <= 1) || !row.reason || !row.provenance?.promptOrRulesVersion)
-          p(`suitability/${site}.json: ${row.id} is scored but lacks fit/reason/provenance`);
+        const fitOk = row.class === "utility" ? !("fit" in row) : typeof row.fit === "number" && row.fit >= 0 && row.fit <= 1;
+        if (!fitOk || !row.reason || !row.provenance?.promptOrRulesVersion)
+          p(`suitability/${site}.json: ${row.id} is scored but lacks class/fit/reason/provenance`);
         continue;
       }
       if (row.eligible === "no") {
@@ -197,7 +204,23 @@ export function verifySuitability(opts: VerifyOptions = {}): string[] {
       }
       if (rub) {
         const profLines = prof.text.split("\n");
-        const items = [...(rub.rubric.caps ?? []), ...(rub.rubric.criteria ?? []), { id: "reason_rules", cite: rub.rubric.reason_rules?.banned_cite, quote: rub.rubric.reason_rules?.banned_quote }];
+        const R = rub.rubric;
+        const items = [
+          ...(R.caps ?? []), ...(R.rules ?? []), ...(R.criteria ?? []), ...(R.notes ?? []), ...(R.conditional ?? []),
+          ...(R.occasion ? [R.occasion] : []), ...(R.utility?.cite ? [R.utility] : []),
+          { id: "reason_rules", cite: R.reason_rules?.banned_cite, quote: R.reason_rules?.banned_quote },
+        ];
+        // v1.1 shape (R1 F3/F6): thresholds, the combine rule, a rationale per band and per weight, weights per part
+        if (!(R.thresholds?.low === 0.3 && R.thresholds?.good === 0.6)) p(`rubrics/${site}.yaml: thresholds must be low 0.3 / good 0.6 (DRV ruling)`);
+        if (!R.combine?.formula || !R.combine?.rationale) p(`rubrics/${site}.yaml: combine needs a formula and a rationale`);
+        for (const b of R.scale ?? []) if (!b.rationale) p(`rubrics/${site}.yaml: scale band ${b.band} has no rationale`);
+        for (const c of [...(R.criteria ?? []), ...(R.rules ?? [])]) {
+          if (!(typeof c.weight === "number" && c.weight > 0)) p(`rubrics/${site}.yaml ${c.id}: no positive weight`);
+          if (!c.rationale) p(`rubrics/${site}.yaml ${c.id}: weight has no rationale`);
+          if (c.part !== "kind" && c.part !== "practical") p(`rubrics/${site}.yaml ${c.id}: part must be kind or practical`);
+        }
+        if (!(R.criteria ?? []).some((c) => c.part === "kind")) p(`rubrics/${site}.yaml: no part-kind criterion`);
+        for (const k of R.conditional ?? []) if (!k.applies_when) p(`rubrics/${site}.yaml ${k.id}: a conditional rule needs applies_when`);
         const cids = new Set<string>();
         for (const c of items as any[]) {
           if (c.id !== "reason_rules") {
@@ -223,9 +246,9 @@ export function verifySuitability(opts: VerifyOptions = {}): string[] {
             if (sseen.has(row.id)) p(`scores/${site}.json: duplicate score for "${row.id}"`);
             sseen.add(row.id);
             if (noIds.has(row.id)) p(`scores/${site}.json: ${row.id} is scored but a hard exclude marks it "no" (a score never overrides a rule)`);
-            for (const x of checkScore(site, row, rub.version, site === "moh" && isMohGolfText(f))) p(`scores/${site}.json: ${x}`);
+            for (const x of checkScore(site, row, rub, noIds.has(row.id) ? undefined : f, site === "moh" && isMohGolfText(f))) p(`scores/${site}.json: ${x}`);
             const sr: any = bySuit.get(row.id);
-            if (sr && !noIds.has(row.id) && !opts.scores?.[site] && (sr.eligible !== "scored" || sr.fit !== row.fit || sr.reason !== row.reason))
+            if (sr && !noIds.has(row.id) && !opts.scores?.[site] && (sr.eligible !== "scored" || sr.class !== row.class || sr.fit !== row.fit || sr.reason !== row.reason || JSON.stringify(sr.flags ?? []) !== JSON.stringify(row.flags ?? [])))
               p(`suitability/${site}.json: ${row.id} does not carry its score (regenerate)`);
           }
         }

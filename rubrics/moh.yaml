@@ -1,21 +1,33 @@
-# rubrics/moh.yaml — CORPUS-M5 fit rubric for Maid of Honor HQ (scorer input).
-# Every criterion cites the line of profiles/moh.yaml it is written from, with a quote that
+# rubrics/moh.yaml — CORPUS-M5 fit rubric for Maid of Honor HQ (scorer input), v1.1 (R1 FIX round 1).
+# Every cap, rule and criterion cites the line of profiles/moh.yaml it is written from, with a quote that
 # must appear on that line (checked by scripts/corpus/verify-suitability.ts). Nothing here
 # overrides a hard exclude: a row the rules mark "no" is never scored.
 # The rubric version stamped on every score is rubric-moh@<version>+<git blob sha of this file>.
+#
+# v1.1 scores what the venue IS, not how its row is written (R1 F2):
+#   - the scorer view replaces occasion words in the row's copy with "[occasion]" (the name is kept);
+#   - the other-occasion pitch is a deterministic flag (`occasion`), never a model judgement;
+#   - group size and rental-house-vs-hotel are computed from the row's fields (`rules`), not judged;
+#   - the model gives one 0-1 score per judged criterion; fit is computed in code (see `combine`);
+#   - conditional rules are listed under `conditional` and are OFF in this unconditioned score (R1 F6);
+#   - transport rows are a `utility` class with no fit (DRV ruling on R1 F4).
 site: "moh"
-version: "1.0.1"
+version: "1.1.0"
 profile: "profiles/moh.yaml"
 voice: "Cup of Jo / The Cut / editorial-feminine"
 # The scorer sees the row's own fields only (name, type, highlight, price, group, place) —
-# never the legacy routing tags (brands/wizards/audiences/products/sites): those are the
-# tags this layer replaces, so reading them would just copy the old answer.
+# never the legacy routing tags (brands/wizards/audiences/products/sites).
+thresholds:
+  low: 0.3
+  good: 0.6
+  ruling: "DRV CORPUS-M5-FIX1 brief, ruling on R1 F3: low <= 0.30, good >= 0.60."
+combine:
+  formula: "fit = K x (0.5 + 0.5 x P), rounded to 0.05. K = weighted mean of the part-kind criteria; P = weighted mean of the part-practical criteria and rules that apply to the row."
+  rationale: "what the venue is and who it is for decide the band; practical fit (named, group, timing, house) can halve a score but can never lift a venue of the wrong kind"
 scale:
-  - {band: "0.90-1.00", means: "signature: a pick the site would lead a city page with, in its own voice"}
-  - {band: "0.70-0.85", means: "strong: plainly right for a bachelorette weekend, specific and on-voice"}
-  - {band: "0.50-0.65", means: "usable: fine for the group but generic, or neutral on voice"}
-  - {band: "0.30-0.45", means: "weak: off-voice, awkward for this audience, or too generic to name"}
-  - {band: "0.00-0.25", means: "poor: pitched at the other brand (bachelor, groom, stag, bro-coded) or against a content rule"}
+  - {band: "0.60-1.00", means: "good: a venue the site would put in a bachelorette weekend", rationale: "the DRV good line; known-good controls must land here"}
+  - {band: "0.30-0.55", means: "middling: usable but not a pick (a placeholder, a hotel room block, a weak venue kind)", rationale: "between the two DRV lines; M7 decides what it does with this band"}
+  - {band: "0.00-0.25", means: "low: not a bachelorette venue", rationale: "the DRV low line; known-bad controls without an occasion word must land here"}
 caps:
   - id: "moh-cap-golf"
     text: "Any row whose name or highlight is golf-coded (golf, golfing, Topgolf, mini-golf, golf cart) scores 0, decided by rule before any model call. The golf ban holds."
@@ -26,56 +38,78 @@ caps:
     quote: "Golf is never Maid of Honor HQ"
     cite_2: "profiles/moh.yaml:152"
     quote_2: "(bachelor|bachelors|groom|grooms|stag|golf|golfing)"
-criteria:
-  - id: "moh-c-voice"
-    direction: "+"
-    text: "Would the friend-who-has-been write this place up? Specific, observed, stylish, a little wry scores up; sparkly filler or a generic chain scores down."
-    cite: "profiles/moh.yaml:12"
-    quote: "warm, observant, a little wry, specific, never sparkly filler"
-  - id: "moh-c-product"
-    direction: "+"
-    text: "It belongs in an editorial atlas of US bachelorette weekends: a place a bridal party would plan a slot of the weekend around."
-    cite: "profiles/moh.yaml:28"
-    quote: "Editorial atlas of US bachelorette weekends"
-  - id: "moh-c-audience"
-    direction: "+"
-    text: "It works for the bride as honoree and the bridesmaids as the group running the weekend: somewhere she is celebrated and they can book it."
-    cite: "profiles/moh.yaml:19"
-    quote: "the bride is the honoree, bridesmaids are the audience/executors."
-  - id: "moh-c-group"
-    direction: "+"
-    text: "It takes a bridal party of 2 to 30 (group-friendly, bookable for a group, a house that sleeps the group). A venue that plainly cannot take a group scores down."
+utility:
+  id: "moh-utility"
+  kinds: ["transport"]
+  text: "Transport (rideshare, shuttles, vans, charters, party buses) is a utility the plan needs, not a venue: it is not graded on brand fit and gets no fit."
+  ruling: "DRV CORPUS-M5-FIX1 brief, ruling on R1 F4: utility and transport rows are not graded on brand fit."
+occasion:
+  id: "moh-r-pitched-at-other-occasion"
+  effect: "flag"
+  text: "The row's copy (every text field but the name) names the other occasion (bachelor, groom, groomsmen, best man, stag party, the guys, the boys) and never its own (bachelorette, bride, bridal, bridesmaid, the girls). Set by rule; the fit is not changed by it."
+  cite: "profiles/moh.yaml:50"
+  quote: "legend, bachelor, groom, the guys, the boys, no survivors"
+  cite_2: "profiles/moh.yaml:46"
+  quote_2: "BMHQ/Proposalmoon-coded terms"
+rules:
+  - id: "moh-r-group"
+    part: "practical"
+    weight: 0.4
+    rationale: "a group of 2-30 is the product's fixed range; the fields say whether a venue takes one, so no judgement is needed"
+    text: "From the fields: nightlife/dining groupFriendly true 1.0, false 0.3; activity groupMax >= 8 1.0, 4-7 0.6, < 4 0.3; lodging per-room 0.6, else maxGuests >= 8 1.0, 4-7 0.6, < 4 0.3."
     cite: "profiles/moh.yaml:24"
     quote: "max: 30"
-  - id: "moh-c-rental-house"
-    direction: "+"
-    text: "Lodging: one big rental house beats a hotel. A whole house or estate scores up; a standard hotel room block scores lower, except in Las Vegas and Miami where the hotel is the pool and club access."
+  - id: "moh-r-rental-house"
+    part: "practical"
+    weight: 0.4
+    kinds: ["lodging"]
+    rationale: "the profile's lodging preference, read off lodging.type; applies to lodging rows only"
+    text: "Lodging only, from lodging.type: house or airbnb 1.0; a hotel, boutique hotel or resort 0.4, or 0.9 in Las Vegas and Miami, where the hotel is the pool and club access."
     cite: "profiles/moh.yaml:139"
     quote: "one big rental house beats a hotel (exception Vegas/Miami)"
+criteria:
+  - id: "moh-c-venue"
+    direction: "+"
+    part: "kind"
+    weight: 0.7
+    rationale: "the main question (what the place is) carries most of the band"
+    text: "What the venue IS, judged from its type and what it offers, never from how its row is worded: is it the kind of place an editorial atlas of US bachelorette weekends plans a slot around, written up by a warm, observant, specific friend? Brunch and supper rooms, wine and cocktail rooms, dance bars, drag shows, spas and bathhouses, cooking or craft workshops, boat days, beach and pool days, shows, photo sessions and big rental houses score high. Firing ranges, poker rooms and sports bars score low. Ignore promotional wording, and ignore the [occasion] token."
+    cite: "profiles/moh.yaml:28"
+    quote: "Editorial atlas of US bachelorette weekends"
+    cite_2: "profiles/moh.yaml:12"
+    quote_2: "warm, observant, a little wry, specific, never sparkly filler"
+  - id: "moh-c-audience"
+    direction: "+"
+    part: "kind"
+    weight: 0.3
+    rationale: "who it is for is the second question; lighter than venue because the two overlap"
+    text: "It works for the bride as honoree and the bridesmaids as the group running the weekend: somewhere she is celebrated and they can book it together."
+    cite: "profiles/moh.yaml:19"
+    quote: "the bride is the honoree, bridesmaids are the audience/executors."
+  - id: "moh-c-named"
+    direction: "+"
+    part: "practical"
+    weight: 0.4
+    rationale: "a real operator is a content rule, but a placeholder can still be the right venue kind, so it weighs less"
+    text: "A real, named operator (the inn, the chef, the instructor, the bar) scores 1; an unnamed placeholder ('local brewery tour', 'a rooftop bar', 'private chef dinner') scores 0.2."
+    cite: "profiles/moh.yaml:70"
+    quote: "name real inns/chefs/instructors"
   - id: "moh-c-not-before-10"
     direction: "-"
-    text: "Something that only happens before 10 AM (sunrise-only, dawn departures) is a weaker fit."
+    part: "practical"
+    weight: 0.2
+    rationale: "a timing rule that marks down few rows; the smallest practical weight"
+    text: "Scores 1 unless the thing only happens before 10 AM (sunrise-only, dawn departures), which scores 0.2."
     cite: "profiles/moh.yaml:143"
     quote: "nothing scheduled before 10 AM"
-  - id: "moh-c-adult"
-    direction: "note"
+notes:
+  - id: "moh-n-adult"
     text: "The group is 21 and over: bars, tastings and nightlife are in scope and are not marked down for being adult."
     cite: "profiles/moh.yaml:147"
     quote: "Accepted age ranges start at 21."
-  - id: "moh-c-named"
-    direction: "+"
-    text: "A real, named operator (the inn, the chef, the instructor) scores up; a generic placeholder ('local brewery tour', 'a rooftop bar') scores down."
-    cite: "profiles/moh.yaml:70"
-    quote: "name real inns/chefs/instructors"
-  - id: "moh-c-cross-brand"
-    direction: "-"
-    text: "Pitched at the other brand scores 0.00-0.25: the row sells itself on bachelor parties, grooms, stag nights, 'the guys'/'the boys', 'no survivors', 'send-it'. A place name that merely contains a word (Mt. Bachelor, a 'Bros.' restaurant) is not a pitch and is not marked down for it."
-    cite: "profiles/moh.yaml:50"
-    quote: "legend, bachelor, groom, the guys, the boys, no survivors"
-    cite_2: "profiles/moh.yaml:46"
-    quote_2: "BMHQ/Proposalmoon-coded terms"
+conditional: []
 reason_rules:
-  text: "One sentence, at most 160 characters, naming the criterion ids that decided the score. Never write these banned words, singular or plural, not even inside a quote of the row's own text: crew, squad, send-it, babe, bride tribe, world-class, premium, trusted, cutting-edge. Paraphrase instead. Call the group only the bridesmaids, the girls, or her bridal party."
+  text: "One sentence, at most 160 characters. Start with the id of the criterion that decided the score, written in full (for example moh-c-venue); never shorten an id. Say what the venue is and why it fits or does not; never comment on how the row is written. Never write these banned words, singular or plural, not even inside a quote of the row's own text: crew, squad, send-it, babe, bride tribe, world-class, premium, trusted, cutting-edge. Never write generic, filler, hype, blurb or copy. Call the group only the bridesmaids, the girls, or her bridal party."
   banned_cite: "profiles/moh.yaml:15"
   banned_quote: "banned_words: [\"crew\", \"squad\", \"send-it\", \"babe\", \"bride tribe\""
   address_cite: "profiles/moh.yaml:54"

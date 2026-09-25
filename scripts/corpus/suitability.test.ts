@@ -88,6 +88,8 @@ test("nothing writes yes; a fit appears only on a scored row, and only on a site
     assert.equal(s.rows.length, factsRows().length);
     const scoredSite = site === "moh" || site === "bestman";
     assert.ok(s.rows.every((r) => r.eligible === "no" || r.eligible === "unreviewed" || (scoredSite && r.eligible === "scored")));
-    assert.ok(s.rows.every((r) => ("fit" in r) === (r.eligible === "scored")));
+    // a utility-class score (transport, rubric v1.1) is scored but carries no fit
+    assert.ok(s.rows.every((r) => ("fit" in r) === (r.eligible === "scored" && r.class === "fit")));
+    assert.ok(s.rows.every((r) => r.eligible !== "scored" || r.class === "fit" || r.class === "utility"));
   }
 });

@@ -1,0 +1,37 @@
+{
+  "note": "CORPUS-M5-FIX1 pilot controls (R1 F3, DRV ruling): per site 5 known-bad rows whose text carries no occasion word (a grep for bachelor/bride/groom finds none of them) and 5 known-good rows. Pass lines are the rubric thresholds: bad <= low (0.30), good >= good (0.60). heldOut = a bad row whose venue kind the rubric's venue criterion does NOT name, so it tests judgement rather than list-matching. Chosen before any v1.1 scoring; none is one of the 70 stratified pilot rows.",
+  "moh": {
+    "bad": [
+      "burlington-vt--activity--ethan-allen-firing-range",
+      "black-hills-sd--activity--deadwood-mountain-grand-poker-night",
+      "cody-wy--activity--cody-firearms-experience-live-fire",
+      "galena-il--activity--galena-cigars-whiskey-lounge",
+      "nantucket-ma--activity--striped-bass-charter-out-of-madaket"
+    ],
+    "heldOut": ["galena-il--activity--galena-cigars-whiskey-lounge", "nantucket-ma--activity--striped-bass-charter-out-of-madaket"],
+    "good": [
+      "rehoboth-beach-de--activity--drag-brunch-at-aqua",
+      "galena-il--activity--wine-tasting-at-galena-cellars",
+      "burlington-vt--activity--flower-crown-workshop-at-a-burlington-florist",
+      "provincetown-ma--lodging--west-end-5br-cottage",
+      "mackinac-island-mi--nightlife--pink-pony-bar"
+    ]
+  },
+  "bestman": {
+    "bad": [
+      "stowe-vt--activity--spa-day-at-topnotch",
+      "block-island-ri--activity--crescent-beach-luxe-picnic",
+      "flagstaff-az--activity--flagstaff-aerial-yoga-herbal-soak",
+      "palm-springs-ca--activity--photoshoot-at-the-saguaro-hotel",
+      "tucson-az--activity--saguaro-sunset-photoshoot-at-gates-pass"
+    ],
+    "heldOut": ["palm-springs-ca--activity--photoshoot-at-the-saguaro-hotel", "tucson-az--activity--saguaro-sunset-photoshoot-at-gates-pass"],
+    "good": [
+      "tucson-az--activity--tucson-clay-pigeon-shooting-park",
+      "cody-wy--activity--whitewater-raft-shoshone-canyon",
+      "door-county-wi--activity--lakeshore-adventures-charter-out-of-baileys-harbor",
+      "knoxville-tn--activity--sugarlands-distilling-moonshine-flight",
+      "coeur-dalene-id--dining--the-cedars-floating-restaurant"
+    ]
+  }
+}
