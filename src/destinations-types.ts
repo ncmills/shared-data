@@ -35,13 +35,25 @@ export interface UniverseTags {
   priceTier?: PriceTier;
 }
 
+/**
+ * Row identity (CORPUS-M3a, 2026-09-24). Filled at bake for every nested row;
+ * see src/row-ids.ts for the id rules. Optional in the SOURCE shape so data
+ * files never have to type an id — authoring one pins it.
+ */
+export interface RowIdentity {
+  /** Stable id — `${destId}--${category}--${slug(name)}` unless authored. */
+  id?: string;
+  /** Former ids of this row (renames). Resolve wherever an id does. */
+  aliases?: string[];
+}
+
 export interface CanonicalAirport {
   code: string;
   name: string;
   driveMinutes: number;
 }
 
-export interface CanonicalNightlife extends UniverseTags {
+export interface CanonicalNightlife extends UniverseTags, RowIdentity {
   name: string;
   type: string; // "club" | "bar" | "rooftop" | "honky-tonk" | ... — unioned per-brand
   vibe: PartyVibe;
@@ -55,7 +67,7 @@ export interface CanonicalNightlife extends UniverseTags {
   dressCode?: string;
 }
 
-export interface CanonicalActivity extends UniverseTags {
+export interface CanonicalActivity extends UniverseTags, RowIdentity {
   name: string;
   type: string; // string for forward compat; overlays narrow per brand
   duration: string;
@@ -103,7 +115,7 @@ export interface CanonicalActivity extends UniverseTags {
 
 }
 
-export interface CanonicalDining extends UniverseTags {
+export interface CanonicalDining extends UniverseTags, RowIdentity {
   name: string;
   cuisine: string;
   priceRange: "$" | "$$" | "$$$" | "$$$$";
@@ -135,7 +147,7 @@ export interface CanonicalDining extends UniverseTags {
 
 }
 
-export interface CanonicalLodging extends UniverseTags {
+export interface CanonicalLodging extends UniverseTags, RowIdentity {
   name: string;
   type: "house" | "hotel" | "resort" | "airbnb" | "boutique-hotel" | "hostel";
   pricePerNight: [number, number];
@@ -163,7 +175,7 @@ export interface CanonicalLodging extends UniverseTags {
 
 }
 
-export interface CanonicalTransport extends UniverseTags {
+export interface CanonicalTransport extends UniverseTags, RowIdentity {
   name: string;
   type: "party-bus" | "limo" | "shuttle" | "rideshare" | "charter";
   priceRange: string;
