@@ -230,7 +230,7 @@ export const expansionWest: CanonicalDestination[] = [
     ],
     lodging: [
       { name: "Hotel Andaluz", type: "boutique-hotel", pricePerNight: [170,320], perRoom: true, maxGuests: 2, highlight: "Conrad Hilton's 1939 downtown hotel + rooftop bar" },
-      { name: "Los Ranchos 4BR adobe", type: "airbnb", pricePerNight: [400,850], perRoom: false, maxGuests: 12, highlight: "Bosque-side adobe near Los Poblanos" },
+      { name: "Los Ranchos 4BR adobe", type: "airbnb", pricePerNight: [400,850], perRoom: false, maxGuests: 12, bedrooms: 4, highlight: "Bosque-side adobe near Los Poblanos" },
     ],
     transport: [
       { name: "ABQ party bus", type: "party-bus", priceRange: "$140-$280/group", highlight: "Brewery + tram + balloon-field runs" },
