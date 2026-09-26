@@ -472,6 +472,8 @@ const ID_TOKEN = /(?<![\w-])(?:(?:moh|bestman)-)?(?:c|r|n|k|cap)-[a-z0-9]+(?:-[a
 const citesId = (reason: string, id: string) => new RegExp(`(?<![\\w-])${id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w-])`).test(reason);
 /** A reason must judge the venue, not the writing (R1 F2). */
 export const COPY_GRADING = /generic|filler|hype|blurb|copy/i;
+/** The words checkScore uses for a COPY_GRADING hit, so a copy-grading-only row can be told apart (FIX4). */
+export const COPY_GRADING_PROBLEM = "reason grades the row's copy";
 
 const sameSet = (a: string[] = [], b: string[] = []) => a.length === b.length && [...a].sort().every((x, i) => x === [...b].sort()[i]);
 const sameMap = (a: Record<string, number> = {}, b: Record<string, number> = {}) =>
@@ -494,7 +496,7 @@ export function checkScore(site: string, s: ScoreRow, rub: { rubric: Rubric; ver
     if (s.reason.length > 200) out.push(`${s.id}: reason is ${s.reason.length} chars (max 200)`);
     for (const b of bannedInReason(site, s.reason)) out.push(`${s.id}: reason uses a banned word (${b})`);
     const cg = COPY_GRADING.exec(s.reason);
-    if (cg) out.push(`${s.id}: reason grades the row's copy ("${cg[0]}") — score the venue`);
+    if (cg) out.push(`${s.id}: ${COPY_GRADING_PROBLEM} ("${cg[0]}") — score the venue`);
     const ids = citableIds(rubric);
     const toks = s.reason.match(ID_TOKEN) ?? [];
     if (![...ids].some((id) => citesId(s.reason, id))) out.push(`${s.id}: reason cites no rubric id`);
@@ -619,6 +621,46 @@ export function ingestAnswer(site: string, asked: FactsRow[], answer: unknown, m
   if (sentinelsLeft.size) throw new Error(`answer is missing ${sentinelsLeft.size} drift sentinel(s): ${[...sentinelsLeft].join(", ")}`);
   if (drift.length) throw new Error(`re-ask this batch: ${drift.join("; ")}`);
   return out;
+}
+
+// ── row-level re-ask (DRV CORPUS-M5-FIX4 ruling 2) ───────────────────────────
+
+/**
+ * One batch answer through ingestAnswer and then checkScore on every row. It throws "re-ask this batch"
+ * (a whole-batch re-ask) on anything ingestAnswer throws on (an anchor or sentinel miss, a missing or
+ * extra row) and on any row fault other than a COPY_GRADING hit. When the only faults are COPY_GRADING
+ * hits, it returns the passing rows and the ids to re-ask on their own (`reask`); COPY_GRADING itself
+ * and the prompt are unchanged.
+ */
+export function ingestBatch(site: string, asked: FactsRow[], answer: unknown, meta: RunMeta, root = ROOT, opts: IngestOptions = {}): { rows: ScoreRow[]; reask: string[]; reaskWhy: Record<string, string> } {
+  const rows = ingestAnswer(site, asked, answer, meta, root, opts);
+  const rub = loadRubric(site, root);
+  const anchorIds = new Set((rub.rubric.anchors ?? []).map((a) => a.id));
+  const ok: ScoreRow[] = [], reask: string[] = [], reaskWhy: Record<string, string> = {}, other: string[] = [];
+  for (const r of rows) {
+    const probs = checkScore(site, r, rub, factsById(r.id));
+    if (!probs.length) ok.push(r);
+    // an anchor row is never a batch row, so it cannot be re-asked on its own
+    else if (!anchorIds.has(r.id) && probs.every((p) => p.includes(COPY_GRADING_PROBLEM))) { reask.push(r.id); reaskWhy[r.id] = probs.join(" | "); }
+    else other.push(...probs);
+  }
+  if (other.length) throw new Error(`re-ask this batch: checkScore ${other.length}: ${other.slice(0, 3).join(" | ")}`);
+  return { rows: ok, reask, reaskWhy };
+}
+
+/**
+ * The one re-ask of a batch's copy-grading rows (a prompt rendered from just those rows, so it carries
+ * the same anchors and sentinels), under the same checks. A row that fails again, for any reason, is
+ * not re-asked a second time: it ends unscored, with why.
+ */
+export function ingestRowReask(site: string, asked: FactsRow[], answer: unknown, meta: RunMeta, root = ROOT): { rows: ScoreRow[]; unscored: { id: string; why: string }[] } {
+  try {
+    const { rows, reask, reaskWhy } = ingestBatch(site, asked, answer, meta, root);
+    return { rows, unscored: reask.map((id) => ({ id, why: reaskWhy[id] })) };
+  } catch (e) {
+    const why = (e as Error).message.slice(0, 400);
+    return { rows: [], unscored: asked.map((r) => ({ id: r.id, why })) };
+  }
 }
 
 // ── the full-run plan (DRV CORPUS-M5-PRERUN) ─────────────────────────────────
