@@ -96,12 +96,14 @@ export const isMohGolfText = (row: Pick<FactsRow, "text">) => MOH_GOLF_RE.test(`
  * voice.banned_words). Entries that are not words (emoji, imagery, "as noun")
  * are reduced to the word or glyph they name. Plurals count: MOH's own scrub
  * rewrites crew(s)/squad(s) (profiles/moh.yaml:58), so "crews" is the same ban.
+ * One exception (CORPUS-M5-FIX5, DRV ruling): BMHQ's king(s) spares "King Street" / "King St",
+ * a place name; every other king or kings is still banned.
  */
 export const REASON_BANNED: Record<string, RegExp[]> = {
   moh: [/\bcrews?\b/i, /\bsquads?\b/i, /\bsend-it\b/i, /\bbabes?\b/i, /\bbride tribe\b/i, /\bworld-class\b/i, /\bpremium\b/i, /\btrusted\b/i, /\bcutting-edge\b/i],
   bestman: [
     /\bworld-class\b/i, /\bpremium\b/i, /\btrusted\b/i, /\bcutting-edge\b/i,
-    /\bkings?\b/i, /\bgoats?\b/i, /\blegends?\b/i, /🔥/u, /👑/u, /\bgold[- ]chains?\b/i,
+    /\bkings?\b(?!\s+st(?:reet|\.)?\b)/i, /\bgoats?\b/i, /\blegends?\b/i, /🔥/u, /👑/u, /\bgold[- ]chains?\b/i,
     /\bher\b/i, /\bshe\b/i, /\bthe bride\b/i,
   ],
 };
