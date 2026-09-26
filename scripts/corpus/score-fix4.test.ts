@@ -53,7 +53,7 @@ test("FIX4: the fixture batch is a real full-run batch, sized off the plan (not 
   assert.ok(BATCH && BATCH.length > 0);
   assert.ok(BATCH.length <= 50, "planRun caps every batch at 50 rows");
   assert.ok(nonFirstBatches.every((b) => b.length <= BATCH.length), "BATCH is the plan's largest non-first batch");
-  assert.ok(BATCH.length > IDX_B, "the fixture's late-row index must still land inside the batch");
+  assert.ok(IDX_B > IDX_A, "the two probe rows must be distinct (batch ≥ 13 rows)");
   assert.equal(typeof X.ingestBatch, "function", "ingestBatch is exported");
   assert.equal(typeof X.ingestRowReask, "function", "ingestRowReask is exported");
 });

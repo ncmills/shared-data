@@ -10,6 +10,18 @@ Code: `scripts/corpus/score.ts` (rubric load, caps and rules, prompt, ingest, pl
 - **M7 treats 0.55–0.65 as uncertain, not good** (R1 F2 option i). Rubric-silent kinds such as cigar bars move together by ±0.1 around this line from run to run.
 - This is recorded here and not in `rubrics/moh.yaml`, because any rubric edit changes its blob sha. Every score would then go stale and need a new pilot. Add the ceiling line to the rubric's bands the next time it is edited for another reason.
 
+## Reading a BMHQ fit (R2 required fix, 2026-09-25)
+
+- **BMHQ has no anchors or sentinels.** Its prompt is byte-identical to FIX1's, and nothing in the full run checks a BMHQ batch for drift.
+- **Full-run same-prompt stability is worse than MOH's:** mean |Δfit| 0.059 (MOH 0.041), max pair 0.112 (MOH 0.054), and 17.7% of row-draws flip across the 0.6 line (MOH 7.6%).
+- **The committed b17 is the most generous of 5 draws:** +0.085 over the median of the other four, 13 rows crossing into "good" and 0 crossing out.
+- **Therefore M7 applies the same rules to BMHQ as to MOH:** 0.55–0.65 is uncertain, not good, and nothing ranks on a fit difference under 0.1.
+
+## M7 must handle (R2 required fix, 2026-09-25)
+
+- **(a) The `<site>-r-pitched-at-other-occasion` flag.** 24 BMHQ and 3 MOH in-scope *good* rows carry the other occasion's copy in their reason/highlight. DRV decides at M7: hide, cap or rewrite. M7 must not show a flagged row's highlight on that brand without one of those three choices.
+- **(b) Scored rows that are out of scope.** 15 MOH rows moved out of scope by #60 keep their scores (13 of the 15 are below 0.6), plus the 10 good controls (out of scope by construction). M7 needs an explicit precedence rule between the site's tag and the M5 fit for these rows: tag wins, fit wins with a named list, or a re-review of scored-out-of-scope rows. This must be decided, not left as whatever the consumer code happens to do.
+
 ## Full-run plan (per site)
 
 `planRun(site, scopeIds(site))` builds the plan. Scoring is the orchestrator's job (a fresh, small Opus driver), with one Sonnet subagent per batch.
