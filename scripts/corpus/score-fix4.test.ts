@@ -18,8 +18,15 @@ const meta = { model: "claude-sonnet-5", runId: "m5-fullrun-moh-b05", scoredAt: 
 const MID = { "moh-c-venue": 0.5, "moh-c-audience": 0.5, "moh-c-named": 1, "moh-c-not-before-10": 1 };
 const SPORTS_BAR = "kansas-city-mo--nightlife--no-other-pub";
 const plan = S.planRun("moh", scopeIds("moh"));
-// a real 50-row full-run batch that is not the first (so it writes no anchors)
-const BATCH = plan.batches.find((b, i) => i > 0 && b.length === 50)!;
+// The plan's largest batch that is not the first (so it writes no anchors). Not pinned to a
+// literal row count: the scope shrinks whenever an upstream catalog change (e.g. #60) moves rows
+// out of it, and every batch shrinks with it.
+const nonFirstBatches = plan.batches.filter((_, i) => i > 0);
+const BATCH = nonFirstBatches.reduce((a, b) => (b.length > a.length ? b : a));
+// mirrors the original fixture's picks in a 50-row batch (an early row, index 3; a late-but-not-last
+// row, index 40) so the two indices stay proportionally placed as the batch size moves.
+const IDX_A = 3;
+const IDX_B = BATCH.length - 9;
 const ask = (ids: string[]) => ids.map((id) => facts.get(id)!);
 
 function scoresFor(id: string, fit: number): Record<string, number> {
@@ -42,17 +49,20 @@ const COPY = "moh-c-venue: a generic tour with no named operator.";
 const ingestBatch = (...a: any[]) => X.ingestBatch(...a);
 const ingestRowReask = (...a: any[]) => X.ingestRowReask(...a);
 
-test("FIX4: the fixture batch is a real 50-row full-run batch", () => {
-  assert.ok(BATCH && BATCH.length === 50);
+test("FIX4: the fixture batch is a real full-run batch, sized off the plan (not a pinned literal)", () => {
+  assert.ok(BATCH && BATCH.length > 0);
+  assert.ok(BATCH.length <= 50, "planRun caps every batch at 50 rows");
+  assert.ok(nonFirstBatches.every((b) => b.length <= BATCH.length), "BATCH is the plan's largest non-first batch");
+  assert.ok(BATCH.length > IDX_B, "the fixture's late-row index must still land inside the batch");
   assert.equal(typeof X.ingestBatch, "function", "ingestBatch is exported");
   assert.equal(typeof X.ingestRowReask, "function", "ingestRowReask is exported");
 });
 
-test("FIX4: a batch with 2 copy-grading rows ingests 48 rows and re-asks the 2", () => {
-  const bad = [BATCH[3], BATCH[40]].filter((id) => !sentinels().some((s) => s.id === id));
+test("FIX4: a batch with 2 copy-grading rows ingests N-2 rows and re-asks the 2", () => {
+  const bad = [BATCH[IDX_A], BATCH[IDX_B]].filter((id) => !sentinels().some((s) => s.id === id));
   assert.equal(bad.length, 2);
   const r = ingestBatch("moh", ask(BATCH), answer(BATCH, { [bad[0]]: COPY, [bad[1]]: COPY }), meta);
-  assert.equal(r.rows.length, 48);
+  assert.equal(r.rows.length, BATCH.length - 2);
   assert.deepEqual([...r.reask].sort(), [...bad].sort());
   for (const id of bad) assert.ok(!r.rows.some((x: S.ScoreRow) => x.id === id), `${id} is not ingested`);
   const rub = S.loadRubric("moh");
@@ -61,35 +71,35 @@ test("FIX4: a batch with 2 copy-grading rows ingests 48 rows and re-asks the 2",
 
 test("FIX4: a clean batch ingests every row and re-asks none", () => {
   const r = ingestBatch("moh", ask(BATCH), answer(BATCH), meta);
-  assert.equal(r.rows.length, 50);
+  assert.equal(r.rows.length, BATCH.length);
   assert.deepEqual(r.reask, []);
 });
 
 test("FIX4: a sentinel miss still re-asks the whole batch, even with copy-grading rows in it", () => {
   const x = sentinels()[0];
   const far = x.pilot >= 0.5 ? x.pilot - 0.2 : x.pilot + 0.2;
-  assert.throws(() => ingestBatch("moh", ask(BATCH), answer(BATCH, { [BATCH[3]]: COPY }, { [x.id]: scoresFor(x.id, far) }), meta), (e: Error) => /re-ask this batch/.test(e.message) && /sentinel/.test(e.message));
+  assert.throws(() => ingestBatch("moh", ask(BATCH), answer(BATCH, { [BATCH[IDX_A]]: COPY }, { [x.id]: scoresFor(x.id, far) }), meta), (e: Error) => /re-ask this batch/.test(e.message) && /sentinel/.test(e.message));
 });
 
 test("FIX4: an anchor miss still re-asks the whole batch, even with copy-grading rows in it", () => {
-  assert.throws(() => ingestBatch("moh", ask(BATCH), answer(BATCH, { [BATCH[3]]: COPY }, { [SPORTS_BAR]: scoresFor(SPORTS_BAR, 0.5) }), meta), (e: Error) => /re-ask this batch/.test(e.message) && /anchor/.test(e.message));
+  assert.throws(() => ingestBatch("moh", ask(BATCH), answer(BATCH, { [BATCH[IDX_A]]: COPY }, { [SPORTS_BAR]: scoresFor(SPORTS_BAR, 0.5) }), meta), (e: Error) => /re-ask this batch/.test(e.message) && /anchor/.test(e.message));
 });
 
 test("FIX4: any other row fault (not copy grading) re-asks the whole batch", () => {
-  assert.throws(() => ingestBatch("moh", ask(BATCH), answer(BATCH, { [BATCH[3]]: COPY, [BATCH[5]]: "a good bar for the group." }), meta), (e: Error) => /re-ask this batch/.test(e.message) && /cites no rubric id/.test(e.message));
+  assert.throws(() => ingestBatch("moh", ask(BATCH), answer(BATCH, { [BATCH[IDX_A]]: COPY, [BATCH[5]]: "a good bar for the group." }), meta), (e: Error) => /re-ask this batch/.test(e.message) && /cites no rubric id/.test(e.message));
   // a row whose reason both grades copy AND breaks another check is not a copy-grading-only row
-  assert.throws(() => ingestBatch("moh", ask(BATCH), answer(BATCH, { [BATCH[3]]: "a generic tour." }), meta), /re-ask this batch/);
+  assert.throws(() => ingestBatch("moh", ask(BATCH), answer(BATCH, { [BATCH[IDX_A]]: "a generic tour." }), meta), /re-ask this batch/);
 });
 
 test("FIX4: the row re-ask prompt carries the same anchors and sentinels, and only the failing rows", () => {
-  const p = S.renderScoringPrompt("moh", ask([BATCH[3], BATCH[40]]));
+  const p = S.renderScoringPrompt("moh", ask([BATCH[IDX_A], BATCH[IDX_B]]));
   for (const a of anchors()) assert.ok(p.includes(`"id":"${a.id}"`), `anchor ${a.id}`);
   for (const s of sentinels()) assert.ok(p.includes(`"id":"${s.id}"`), `sentinel ${s.id}`);
-  for (const id of BATCH.filter((id) => id !== BATCH[3] && id !== BATCH[40] && !sentinels().some((s) => s.id === id))) assert.ok(!p.includes(`"id":"${id}"`));
+  for (const id of BATCH.filter((id) => id !== BATCH[IDX_A] && id !== BATCH[IDX_B] && !sentinels().some((s) => s.id === id))) assert.ok(!p.includes(`"id":"${id}"`));
 });
 
 test("FIX4: a re-asked row that passes is scored; one that fails again ends unscored", () => {
-  const bad = [BATCH[3], BATCH[40]];
+  const bad = [BATCH[IDX_A], BATCH[IDX_B]];
   const r = ingestRowReask("moh", ask(bad), answer(bad, { [bad[1]]: COPY }), meta);
   assert.deepEqual(r.rows.map((x: S.ScoreRow) => x.id), [bad[0]]);
   assert.deepEqual(r.unscored.map((u: { id: string }) => u.id), [bad[1]]);
@@ -97,7 +107,7 @@ test("FIX4: a re-asked row that passes is scored; one that fails again ends unsc
 });
 
 test("FIX4: the re-ask gets the same checks: a sentinel or anchor miss leaves every re-asked row unscored", () => {
-  const bad = [BATCH[3], BATCH[40]];
+  const bad = [BATCH[IDX_A], BATCH[IDX_B]];
   const x = sentinels()[0];
   const far = x.pilot >= 0.5 ? x.pilot - 0.2 : x.pilot + 0.2;
   const r = ingestRowReask("moh", ask(bad), answer(bad, {}, { [x.id]: scoresFor(x.id, far) }), meta);
