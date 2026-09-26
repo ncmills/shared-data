@@ -82,10 +82,14 @@ test("G-moh-golf: every golf row is ineligible for Maid of Honor HQ", () => {
   assert.deepEqual(golf.filter((r) => byId.get(r.id)?.eligible !== "no").map((r) => r.id), []);
 });
 
-test("rules never write yes and never write fit, on any site", () => {
+test("nothing writes yes; a fit appears only on a scored row, and only on a site with a rubric", () => {
   for (const site of SITES) {
     const s = buildSuitability(site);
     assert.equal(s.rows.length, factsRows().length);
-    assert.ok(s.rows.every((r) => (r.eligible === "no" || r.eligible === "unreviewed") && !("fit" in r)));
+    const scoredSite = site === "moh" || site === "bestman";
+    assert.ok(s.rows.every((r) => r.eligible === "no" || r.eligible === "unreviewed" || (scoredSite && r.eligible === "scored")));
+    // a utility-class score (transport, rubric v1.1) is scored but carries no fit
+    assert.ok(s.rows.every((r) => ("fit" in r) === (r.eligible === "scored" && r.class === "fit")));
+    assert.ok(s.rows.every((r) => r.eligible !== "scored" || r.class === "fit" || r.class === "utility"));
   }
 });
