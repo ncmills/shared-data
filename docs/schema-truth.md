@@ -120,3 +120,29 @@ must both reach the merge boundary as red, or the check becomes one that can onl
 `audit.yml`, and checks the committed snapshot against the columns the signals route writes —
 the direction that caused the 2026-08-27 outage. **What is not:** drift between that committed
 snapshot and the live database.
+
+## CI: the three jobs (`.github/workflows/audit.yml`)
+
+`npm run verify`/typecheck/tests/the coverage audit live in one job, deliberately separate from
+the live-schema check, so a credential problem on one can never hide behind the other:
+
+1. **`audit`** — the data gate (typecheck, test suite, `npm run verify`, `npm run audit`). Needs
+   no credential, so nothing outside this repo can turn it red.
+2. **`schema-preflight`** — asks only "can this run reach the live database?". It never compares
+   anything. On any failure to link or query it writes `can_run=false`, a `::warning::`, and a
+   job-summary line, then exits **0** (a probe failing to reach the DB is not itself a schema
+   defect).
+3. **`schema`** — `needs: schema-preflight`, gated by `if: needs.schema-preflight.outputs.can_run
+   == 'true'`. This is the real check (`npm run schema:check`). When the preflight could not
+   reach the database, this job is **SKIPPED**, not green.
+
+**A skipped `schema` job is NOT a pass.** Grey on a PR means "0 comparisons executed", not
+"schema verified" — it means the snapshot was never compared against live for that run. Read the
+preflight job's summary for the reason (token missing/expired, link failed, or the pooler
+refused a connection) before treating the PR as schema-clean.
+
+**`continue-on-error` is banned on the `schema` step**, on purpose: it would make the job color
+green while folding a real failure (exit 1 = snapshot stale, exit 2 = could not measure) inside
+it, which is exactly the "check that can only pass" this schema work exists to close. Do not add
+it even to silence a known-flaky run — diagnose the flake (see the two-runs-of-one-commit case
+above) instead.
