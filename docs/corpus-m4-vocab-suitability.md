@@ -28,13 +28,23 @@ image layer) build on top of.
 
 - **`suitability/<site>.json`** (`scripts/corpus/suitability.ts`) — one row per CORPUS-M3a facts
   id (6,398 party rows + 999 golf courses, as of the M4 commit). For each site, `hard_excludes` in
-  that site's profile are evaluated against the row's facets:
-  - matched by any rule → `eligible: "no"`, `reason` = the first matching rule id, `rules` =
-    every matching rule id if more than one matched, `provenance.tagger = "rules@<git blob sha of
-    the profile file>"`.
-  - everything else → `eligible: "unreviewed"` — no reason, no provenance, nothing decided it.
-  - Rules **never** write `"yes"`, and nothing here writes `fit` (that is M5, see
-    `docs/corpus-m5-scored-suitability.md`).
+  that site's profile are evaluated against the row's facets, and the same script merges in a
+  CORPUS-M5 rubric score wherever one exists (`scripts/corpus/suitability.ts:148`,
+  `buildSuitability`) — a score is only ever merged onto a row the rules left unreviewed, never
+  onto a `"no"`. This produces three `eligible` states:
+  - matched by any hard-exclude rule → `eligible: "no"`, `reason` = the first matching rule id,
+    `rules` = every matching rule id if more than one matched, `provenance.tagger =
+    "rules@<git blob sha of the profile file>"`.
+  - not matched by a rule, and the site is scored (`SCORED_SITES = ["moh", "bestman"]`,
+    `scripts/corpus/score.ts:34`) with a score on record for that row → `eligible: "scored"`,
+    carrying `class` (`"fit"` or `"utility"`), `fit` (0–1, present only when `class: "fit"`),
+    `flags` (if any), `reason`, and `provenance` — all copied from the matching row in
+    `scores/<site>.json`. See `docs/corpus-m5-scored-suitability.md` for how those scores are
+    produced.
+  - everything else (not matched by a rule, and either not a scored site or no score for that
+    row) → `eligible: "unreviewed"` — no reason, no provenance, nothing decided it.
+  - Hard-exclude rules themselves **never** write `"yes"` or `"scored"` — only the M5 merge in
+    this same script writes `"scored"` and `fit`.
   - Regenerate (all six site files): `npx tsx scripts/corpus/suitability.ts`
   - Check for staleness only: `npx tsx scripts/corpus/suitability.ts --check` (exit 1 if stale)
 
@@ -60,10 +70,14 @@ npm run verify                               # 3. runs scripts/corpus/verify-sui
   (and `dead_terms` — terms the vocab no longer has — must be empty);
 - a facts row whose facet value is not a vocab term;
 - a `suitability/<site>.json` where an id is missing from facts, an id appears more than once,
-  `eligible` is outside `{no, unreviewed}`, a row carries `fit` (M4 never writes it), a `"no"`
-  cites a rule id that doesn't exist in that site's profile, the tagger sha doesn't match the
-  profile's current git blob sha, or the file no longer equals what `suitability.ts` would
-  produce now.
+  `eligible` is outside `{no, unreviewed, scored}` (and `scored` is only accepted for
+  `SCORED_SITES = ["moh", "bestman"]` — any other site's `scored` row still fails), a row carries
+  `fit` while `eligible` is not `"scored"`, a `"scored"` row that lacks a valid `class`/`fit`
+  (`class: "fit"` rows need `fit` in `[0,1]`; `class: "utility"` rows must have none)/`reason`/
+  `provenance.promptOrRulesVersion`, an `"unreviewed"` row that carries a `reason` or
+  `provenance`, a `"no"` row that cites a rule id that doesn't exist in that site's profile, the
+  tagger sha doesn't match the profile's current git blob sha, or the file no longer equals what
+  `suitability.ts` would produce now (`scripts/corpus/verify-suitability.ts:178-185`).
 
 A red `verify` here means the committed file is stale relative to its generator or its inputs —
 regenerate with the commands above before trusting the committed JSON/YAML.
