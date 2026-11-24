@@ -35,6 +35,13 @@ CREATE TABLE public.acquisition_log (
 );
 CREATE UNIQUE INDEX acquisition_log_pkey1 ON public.acquisition_log USING btree (id);
 
+CREATE TABLE public.aissdi_page_counts (
+  path text NOT NULL,
+  day date NOT NULL,
+  count integer DEFAULT 0 NOT NULL,
+  CONSTRAINT aissdi_page_counts_pkey PRIMARY KEY (path, day)
+);
+
 CREATE TABLE public.aissdi_subscribers (
   email text NOT NULL,
   source_page text,
@@ -126,6 +133,103 @@ CREATE INDEX funnel_events_is_test_idx ON public.funnel_events USING btree (is_t
 CREATE INDEX idx_funnel_events_created ON public.funnel_events USING btree (created_at);
 CREATE INDEX idx_funnel_events_event ON public.funnel_events USING btree (event);
 
+CREATE TABLE public.imf_chat_cases (
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  token_hash text NOT NULL,
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  is_test boolean DEFAULT false NOT NULL,
+  review_fixture boolean DEFAULT false NOT NULL,
+  disclaimer_v text,
+  state text,
+  category text,
+  counterparty text,
+  amount_usd numeric(12,2),
+  key_dates jsonb,
+  turns jsonb DEFAULT '[]'::jsonb NOT NULL,
+  status text DEFAULT 'intake'::text NOT NULL,
+  stop_reason text,
+  verdict text,
+  letter text,
+  cover text,
+  sources jsonb,
+  followups jsonb DEFAULT '[]'::jsonb NOT NULL,
+  cost_usd numeric(8,4) DEFAULT 0 NOT NULL,
+  held_for_nick boolean DEFAULT false NOT NULL,
+  letter_version integer DEFAULT 1 NOT NULL,
+  review text,
+  review_reason text,
+  review_at timestamp with time zone,
+  purge_after timestamp with time zone DEFAULT (now() + '30 days'::interval) NOT NULL,
+  CONSTRAINT imf_chat_cases_cost_usd_check CHECK ((cost_usd >= (0)::numeric)),
+  CONSTRAINT imf_chat_cases_followups_check CHECK (((jsonb_typeof(followups) = 'array'::text) AND (jsonb_array_length(followups) <= 2))),
+  CONSTRAINT imf_chat_cases_letter_version_check CHECK ((letter_version >= 1)),
+  CONSTRAINT imf_chat_cases_review_check CHECK ((review = ANY (ARRAY['ok'::text, 'rerun'::text, 'close'::text]))),
+  CONSTRAINT imf_chat_cases_review_reason_check CHECK ((review_reason = ANY (ARRAY['wrong_state_law'::text, 'missed_fact'::text, 'wrong_remedy'::text, 'tone'::text, 'format'::text]))),
+  CONSTRAINT imf_chat_cases_test_xor_fixture CHECK ((NOT (is_test AND review_fixture))),
+  CONSTRAINT imf_chat_cases_token_hash_check CHECK ((token_hash ~ '^[0-9a-f]{64}$'::text)),
+  CONSTRAINT imf_chat_cases_pkey PRIMARY KEY (id),
+  CONSTRAINT imf_chat_cases_token_hash_key UNIQUE (token_hash)
+);
+CREATE UNIQUE INDEX imf_chat_cases_token_hash_key ON public.imf_chat_cases USING btree (token_hash);
+
+CREATE TABLE public.imf_chat_jobs (
+  id bigint NOT NULL,
+  case_id uuid NOT NULL,
+  kind text NOT NULL,
+  status text DEFAULT 'queued'::text NOT NULL,
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  claimed_at timestamp with time zone,
+  heartbeat_at timestamp with time zone,
+  attempts integer DEFAULT 0 NOT NULL,
+  is_test boolean DEFAULT false NOT NULL,
+  CONSTRAINT imf_chat_jobs_kind_check CHECK ((kind = ANY (ARRAY['letter'::text, 'followup'::text, 'revision'::text, 'rerun'::text]))),
+  CONSTRAINT imf_chat_jobs_status_check CHECK ((status = ANY (ARRAY['queued'::text, 'claimed'::text, 'done'::text, 'failed'::text]))),
+  CONSTRAINT imf_chat_jobs_case_id_fkey FOREIGN KEY (case_id) REFERENCES imf_chat_cases(id) ON DELETE CASCADE,
+  CONSTRAINT imf_chat_jobs_pkey PRIMARY KEY (id)
+);
+CREATE INDEX imf_chat_jobs_case_idx ON public.imf_chat_jobs USING btree (case_id);
+CREATE UNIQUE INDEX imf_chat_jobs_one_active_letter ON public.imf_chat_jobs USING btree (case_id) WHERE ((kind = 'letter'::text) AND (status = ANY (ARRAY['queued'::text, 'claimed'::text])));
+CREATE INDEX imf_chat_jobs_queue_idx ON public.imf_chat_jobs USING btree (status, created_at);
+
+CREATE TABLE public.imf_chat_reviews (
+  id bigint NOT NULL,
+  case_id uuid NOT NULL,
+  letter_version integer NOT NULL,
+  review text NOT NULL,
+  rerun_reason text,
+  note text,
+  reviewed_at timestamp with time zone DEFAULT now() NOT NULL,
+  CONSTRAINT imf_chat_reviews_letter_version_check CHECK ((letter_version >= 1)),
+  CONSTRAINT imf_chat_reviews_reason CHECK (((review = 'rerun'::text) = (rerun_reason IS NOT NULL))),
+  CONSTRAINT imf_chat_reviews_rerun_reason_check CHECK ((rerun_reason = ANY (ARRAY['wrong_state_law'::text, 'missed_fact'::text, 'wrong_remedy'::text, 'tone'::text, 'format'::text]))),
+  CONSTRAINT imf_chat_reviews_review_check CHECK ((review = ANY (ARRAY['ok'::text, 'rerun'::text, 'close'::text]))),
+  CONSTRAINT imf_chat_reviews_case_id_fkey FOREIGN KEY (case_id) REFERENCES imf_chat_cases(id) ON DELETE CASCADE,
+  CONSTRAINT imf_chat_reviews_pkey PRIMARY KEY (id),
+  CONSTRAINT imf_chat_reviews_one_per_version UNIQUE (case_id, letter_version)
+);
+CREATE UNIQUE INDEX imf_chat_reviews_one_per_version ON public.imf_chat_reviews USING btree (case_id, letter_version);
+
+CREATE TABLE public.imf_chat_rl (
+  key text NOT NULL,
+  scope text NOT NULL,
+  window_secs integer NOT NULL,
+  window_start timestamp with time zone NOT NULL,
+  count integer DEFAULT 0 NOT NULL,
+  CONSTRAINT imf_chat_rl_key_check CHECK ((key ~ '^[0-9a-f]{64}$'::text)),
+  CONSTRAINT imf_chat_rl_window_secs_check CHECK ((window_secs > 0)),
+  CONSTRAINT imf_chat_rl_pkey PRIMARY KEY (key, scope, window_secs, window_start)
+);
+CREATE INDEX imf_chat_rl_window_idx ON public.imf_chat_rl USING btree (window_start);
+
+CREATE TABLE public.imf_chat_worker_state (
+  id integer DEFAULT 1 NOT NULL,
+  paused_reason text,
+  updated_at timestamp with time zone DEFAULT now() NOT NULL,
+  CONSTRAINT imf_chat_worker_state_id_check CHECK ((id = 1)),
+  CONSTRAINT imf_chat_worker_state_paused_reason_check CHECK (((paused_reason IS NULL) OR (paused_reason = 'day_cap'::text))),
+  CONSTRAINT imf_chat_worker_state_pkey PRIMARY KEY (id)
+);
+
 CREATE TABLE public.imfrustrated_intake (
   id bigint DEFAULT nextval('imfrustrated_intake_id_seq'::regclass) NOT NULL,
   email text NOT NULL,
@@ -140,6 +244,13 @@ CREATE TABLE public.imfrustrated_intake (
 CREATE INDEX imfrustrated_intake_created_at_idx ON public.imfrustrated_intake USING btree (created_at DESC);
 CREATE INDEX imfrustrated_intake_email_idx ON public.imfrustrated_intake USING btree (email);
 CREATE INDEX imfrustrated_intake_is_test_idx ON public.imfrustrated_intake USING btree (is_test) WHERE (is_test = false);
+
+CREATE TABLE public.imfrustrated_page_counts (
+  path text NOT NULL,
+  day date NOT NULL,
+  count integer DEFAULT 0 NOT NULL,
+  CONSTRAINT imfrustrated_page_counts_pkey PRIMARY KEY (path, day)
+);
 
 CREATE TABLE public.moh_trip_submissions (
   id bigint DEFAULT nextval('moh_trip_submissions_id_seq'::regclass) NOT NULL,
