@@ -117,6 +117,8 @@ export interface Ledger {
   lagLimitDays: number;
   lag: { site: string; status: "GREEN" | "RED"; lagDays: number | null; pinSha: string | null }[];
   days: LedgerDay[];
+  /** Written by automerge-data-prs.ts; carried forward here, never rebuilt. */
+  autoMerge?: { merged: { date: string; pr: number; rows_added: number; lane: string }[]; red: { date: string; pr: number; reason: string }[] };
 }
 
 const emptyLanes = (): Record<Lane, number> => ({ backfill: 0, expansion: 0, "site-intake": 0 });
@@ -132,7 +134,13 @@ export function dayStatus(lanes: Record<Lane, number>): "RED" | "GREEN" {
   return total === 0 ? "RED" : "GREEN";
 }
 
-export function buildLedger(events: MergedEvent[], lag: LagLine[], now: Date, days: number): Ledger {
+export function buildLedger(
+  events: MergedEvent[],
+  lag: LagLine[],
+  now: Date,
+  days: number,
+  autoMerge?: Ledger["autoMerge"],
+): Ledger {
   const today = isoDay(now);
   const dates: string[] = [];
   for (let i = days; i >= 0; i--) dates.push(isoDay(new Date(now.getTime() - i * DAY_MS)));
@@ -150,6 +158,9 @@ export function buildLedger(events: MergedEvent[], lag: LagLine[], now: Date, da
   const reasons: string[] = [];
   if (judged.status === "RED") reasons.push(`${judged.date}: 0 merged rows from every lane (backfill, expansion, site-intake)`);
   for (const l of lag) if (l.status === "RED") reasons.push(l.message);
+  // A data PR the auto-merge refused is RED the same day it was refused.
+  for (const r of autoMerge?.red ?? [])
+    if (r.date === today || r.date === judged.date) reasons.push(`${r.date}: shared-data #${r.pr} not auto-merged: ${r.reason}`);
   return {
     generatedAt: now.toISOString(),
     judgedDay: judged.date,
@@ -158,6 +169,7 @@ export function buildLedger(events: MergedEvent[], lag: LagLine[], now: Date, da
     lagLimitDays: LAG_LIMIT_DAYS,
     lag: lag.map((l) => ({ site: l.site, status: l.status, lagDays: l.lagDays, pinSha: l.pinSha })),
     days: out,
+    ...(autoMerge ? { autoMerge } : {}),
   };
 }
 
@@ -238,7 +250,13 @@ export async function runGrowthDaily(
   }
 
   // 7 ledger
-  const ledger = buildLedger(deps.mergedRows(opts.days, opts.now), lag, opts.now, opts.days);
+  let prior: Ledger["autoMerge"];
+  try {
+    if (opts.ledgerPath && existsSync(opts.ledgerPath)) prior = JSON.parse(readFileSync(opts.ledgerPath, "utf8")).autoMerge;
+  } catch {
+    prior = undefined;
+  }
+  const ledger = buildLedger(deps.mergedRows(opts.days, opts.now), lag, opts.now, opts.days, prior);
   if (opts.ledgerPath) writeFileSync(opts.ledgerPath, JSON.stringify(ledger, null, 2) + "\n");
   const j = ledger.days.find((d) => d.date === ledger.judgedDay)!;
   log(
