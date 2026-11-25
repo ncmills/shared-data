@@ -104,6 +104,14 @@ if [ "${1:-}" = "--check" ]; then
   if diff -u "$OUT" "$TMP/live-schema.sql"; then
     echo "schema snapshot matches live."
   else
+    # CI has the live database but no one can log in to regenerate the snapshot (it sat red
+    # 4 weeks, 2026-10-27 on). So when SCHEMA_FRESH_OUT is set, hand the freshly rendered file
+    # out BEFORE exiting -- the EXIT trap deletes $TMP. It is pg_catalog DDL only. Unset =
+    # behaviour unchanged; the exit code stays 1 either way.
+    if [ -n "${SCHEMA_FRESH_OUT:-}" ]; then
+      cp "$TMP/live-schema.sql" "$SCHEMA_FRESH_OUT"
+      echo "fresh snapshot written to $SCHEMA_FRESH_OUT" >&2
+    fi
     echo "::error title=schema drift::db/live-schema.sql does not match the live database. Run ./scripts/snapshot-schema.sh and commit." >&2
     exit 1
   fi
