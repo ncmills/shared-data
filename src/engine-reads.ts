@@ -72,4 +72,8 @@ export const ENGINE_READS: Record<WizardTag, EntityKind[]> = {
   // the SAME commit that tags the rows and ships the engine read, never before.
   friendsmoon: ["party-venue"],
   engagedmoon: ["party-venue"],
+  // honeymoon — party-venue ONLY (activities, dining, nightlife, lodging). A
+  // local-only consumer outside this repo reads the honeymoon tag; it is not
+  // published and is deliberately absent from CONSUMER_REPOS / bump lists.
+  honeymoon: ["party-venue"],
 };

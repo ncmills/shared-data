@@ -84,6 +84,12 @@ export const ALL_WIZARD_TAGS = [
   "handicap",
   "friendsmoon",
   "engagedmoon",
+  // `honeymoon` — READER: a local-only consumer outside this repo reads the
+  // honeymoon tag; it is not published. Tag + reader land together (a tag is
+  // inert without one). Like friendsmoon/engagedmoon it reads party-venue rows
+  // only (activities, dining, nightlife, lodging) and is routed on the same
+  // general-audience predicate; group size is a query-time filter, not routing.
+  "honeymoon",
 ] as const;
 
 export type WizardTag = (typeof ALL_WIZARD_TAGS)[number];
@@ -291,7 +297,7 @@ export function wizardsForActivity(type: string, brands: Brand[] | undefined): W
   // Golf is a bachelor + corporate thing and NEVER a bachelorette one.
   const party = wizardsFromBrands(brands).filter((w) => !(w === "moh" && isGolfType(type)));
   const outing: WizardTag[] = audiences.includes("corporate") ? ["offsite-outing"] : [];
-  const moon: WizardTag[] = isGeneralAudience(audiences) ? ["friendsmoon", "engagedmoon"] : [];
+  const moon: WizardTag[] = isGeneralAudience(audiences) ? ["friendsmoon", "engagedmoon", "honeymoon"] : [];
   return Array.from(new Set([...party, ...outing, ...moon]));
 }
 
