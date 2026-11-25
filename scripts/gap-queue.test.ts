@@ -165,3 +165,16 @@ test("id is (dataset, cell)-based, not wizard-based, so it's stable and unique p
   const [task] = buildGapQueueFrom([{ wizard: "handicap", cell: { golfRegion: "International", tier: "budget" }, count: 1 }], 3);
   assert.equal(task.id, "golf:golfRegion=International;tier=budget");
 });
+
+// SHARED-AUDIT: the committed docs/gap-queue.json is what the research queue
+// reads. It must only name live wizard tags (it once named retired `tdf`).
+test("committed docs/gap-queue.json names only live wizard tags", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { ALL_WIZARD_TAGS } = await import("../src/tags");
+  const q = JSON.parse(
+    readFileSync(new URL("../docs/gap-queue.json", import.meta.url), "utf8"),
+  ) as { wizardsServed: string[]; starvedForWizards: string[] }[];
+  const live = new Set<string>(ALL_WIZARD_TAGS);
+  const bad = q.flatMap((t) => [...t.wizardsServed, ...t.starvedForWizards]).filter((w) => !live.has(w));
+  assert.deepEqual([...new Set(bad)], []);
+});
