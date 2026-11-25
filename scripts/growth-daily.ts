@@ -14,11 +14,11 @@
  *   7 ledger    docs/growth-ledger.json: rows MERGED into main per day, per
  *               brand, per lane; RED on a zero day, RED on a lag over the limit.
  *
- * THE SWITCH. `--paid` is wired and DISABLED: it throws "not ruled: Nick picks a
- * budget". When a budget is ruled, flip PAID_RULED and require GROWTH_DAILY_BUDGET_USD;
- * until then there is no code path from here to a model call. The paid researcher
- * lives only behind `spendOnResearch()`, and growth-daily.test.ts stubs it and
- * asserts it is never invoked.
+ * THE SWITCH. `--paid` is LOCKED: it throws "not ruled: CONTROL reads the dry run
+ * first" unless env SHARED_DATA_RESEARCH_ENABLED=1 (set by nothing in the repo).
+ * Unlocked, the only call path is spendOnResearch(): estimate -> canSpend ($1/day
+ * hard cap, research-budget.ts) -> SN router -> record actual. A day that would
+ * cross the cap stops; it never borrows from tomorrow.
  *
  * RED is not amber and is never excused by "no budget": free lanes count, and a
  * day with 0 merged rows from every lane is RED.
@@ -43,15 +43,30 @@ import { LAG_LIMIT_DAYS, lagReport, readPinFromOrigin, type LagCommit, type LagL
 import type { GapTask } from "./gap-queue";
 import { buildAdoptionQueue, type WizardAdoptionQueue } from "./new-data-report";
 import { deriveBranchName } from "./propose-pr";
+import { buildResearchPrompt } from "./research-gap";
+import {
+  DAILY_CAP_USD,
+  RESEARCH_JOB_TYPE,
+  callRouter,
+  canSpend,
+  ledgerPath,
+  recordSpend,
+  spentOn,
+  utcDay,
+  type RouterResult,
+} from "./research-budget";
 import { COST_BASIS, estimateCalls, type CallEstimate } from "./weekly-queue";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "..");
 const DAY_MS = 86_400_000;
 
-/** The one place a budget gets ruled. false = `--paid` throws. Do not flip without Nick. */
-const PAID_RULED = false as boolean;
-export const NOT_RULED_MESSAGE = "not ruled: Nick picks a budget";
+/**
+ * THE LOCK. `--paid` throws unless the env below is "1". Nothing in the repo or a plist
+ * sets it: CONTROL flips it by hand after reading #87's dry-run output.
+ */
+export const ENABLE_ENV = "SHARED_DATA_RESEARCH_ENABLED";
+export const NOT_RULED_MESSAGE = "not ruled: CONTROL reads the dry run first";
 
 export const LANES = ["backfill", "expansion", "site-intake"] as const;
 export type Lane = (typeof LANES)[number];
@@ -94,8 +109,10 @@ export interface GrowthDeps {
   commits: () => LagCommit[];
   mergedRows: (days: number, now: Date) => MergedEvent[];
   adoption: () => WizardAdoptionQueue[];
-  /** PAID. Reached only through spendOnResearch(), which is unreachable while PAID_RULED is false. */
-  researcher: (tasks: GapTask[]) => Promise<unknown>;
+  /** PAID. The SN-router adapter. Reached only through spendOnResearch(), behind the lock and the $1/day cap. */
+  router: (jobType: string, prompt: string) => RouterResult;
+  /** Spend ledger path (outside the repo; tests pass a temp file). */
+  spendLedger: string;
   log: (m: string) => void;
 }
 
@@ -162,13 +179,50 @@ export function buildLedger(events: MergedEvent[], lag: LagLine[], now: Date, da
 }
 
 // ─── the paid door (shut) ───────────────────────────────────────────────────
-/** The only call site of the researcher. Unreachable while PAID_RULED is false. */
-async function spendOnResearch(opts: GrowthOptions, deps: GrowthDeps, tasks: GapTask[], env: NodeJS.ProcessEnv) {
-  if (!opts.paid) return false;
-  if (!PAID_RULED) throw new Error(NOT_RULED_MESSAGE);
-  if (!env.GROWTH_DAILY_BUDGET_USD) throw new Error("--paid needs GROWTH_DAILY_BUDGET_USD");
-  await deps.researcher(tasks);
-  return true;
+export interface SpendOutcome {
+  calls: number;
+  spentUsd: number;
+  stopped: string | null;
+}
+
+/**
+ * The ONLY path to a model call: estimate -> canSpend -> call -> record the actual.
+ * A call that would cross the daily cap is not made and the run STOPS (no borrowing
+ * from tomorrow). A router error (e.g. KeyError: job type not in SN's policy) stops too.
+ */
+export async function spendOnResearch(
+  opts: GrowthOptions,
+  deps: GrowthDeps,
+  tasks: GapTask[],
+  env: NodeJS.ProcessEnv,
+): Promise<SpendOutcome> {
+  const out: SpendOutcome = { calls: 0, spentUsd: 0, stopped: null };
+  if (!opts.paid) return out;
+  if (env[ENABLE_ENV] !== "1") throw new Error(NOT_RULED_MESSAGE);
+  const day = utcDay(opts.now);
+  const estUsd = estimateCalls(1).usdPerRun[1]; // worst case per call
+  for (const t of tasks) {
+    if (!canSpend(estUsd, day, deps.spendLedger)) {
+      out.stopped = `cap reached: $${spentOn(day, deps.spendLedger).toFixed(2)} of $${DAILY_CAP_USD.toFixed(2)}`;
+      deps.log(out.stopped);
+      return out;
+    }
+    let r: RouterResult;
+    try {
+      r = deps.router(RESEARCH_JOB_TYPE, buildResearchPrompt(t));
+    } catch (e) {
+      out.stopped = `router stopped the run: ${e instanceof Error ? e.message : e}`;
+      deps.log(out.stopped);
+      return out;
+    }
+    recordSpend(
+      { ts: opts.now.toISOString(), day, job: RESEARCH_JOB_TYPE, model: r.model, est_usd: estUsd, actual_usd: r.costUsd },
+      deps.spendLedger,
+    );
+    out.calls++;
+    out.spentUsd += r.costUsd;
+  }
+  return out;
 }
 
 // ─── the run ────────────────────────────────────────────────────────────────
@@ -184,9 +238,9 @@ export async function runGrowthDaily(
   env: NodeJS.ProcessEnv = process.env,
 ): Promise<GrowthResult> {
   const log = deps.log;
-  // `--paid` is refused up front, before any step runs.
-  if (opts.paid) throw new Error(NOT_RULED_MESSAGE);
-  log(`growth-daily: DRY RUN (zero model calls)`);
+  // `--paid` is refused up front (before any step runs) unless the lock env is set.
+  if (opts.paid && env[ENABLE_ENV] !== "1") throw new Error(NOT_RULED_MESSAGE);
+  log(opts.paid ? `growth-daily: PAID (cap $${DAILY_CAP_USD.toFixed(2)}/day, via SN router)` : `growth-daily: DRY RUN (zero model calls)`);
 
   // 1 acquire
   const gaps = deps.gapQueue().slice(0, Math.max(0, opts.topK));
@@ -198,7 +252,7 @@ export async function runGrowthDaily(
   log(
     `    est $${est.usdPerRun[0].toFixed(2)}-$${est.usdPerRun[1].toFixed(2)}/day (ESTIMATED, ${COST_BASIS.model}; basis ${COST_BASIS.source}). Called nothing.`,
   );
-  await spendOnResearch(opts, deps, gaps, env); // no-op in dry run
+  const spent = await spendOnResearch(opts, deps, gaps, env); // no-op in dry run
 
   // 2 vet + 3 tag
   const queued = deps.queuedRows();
@@ -247,7 +301,7 @@ export async function runGrowthDaily(
       `${opts.ledgerPath ? `; wrote ${opts.ledgerPath}` : ""}`,
   );
   for (const r of ledger.reasons) log(`    RED: ${r}`);
-  return { ledger, est, modelCalls: 0 };
+  return { ledger, est, modelCalls: spent.calls };
 }
 
 function brandsForRow(row: Record<string, unknown>): string[] {
@@ -347,9 +401,8 @@ export function realDeps(log: (m: string) => void = console.log): GrowthDeps {
       }),
     mergedRows: realMergedRows,
     adoption: () => buildAdoptionQueue(sharedDestinations),
-    researcher: async () => {
-      throw new Error(NOT_RULED_MESSAGE);
-    },
+    router: callRouter,
+    spendLedger: ledgerPath(),
     log,
   };
 }
