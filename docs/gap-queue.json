@@ -1,120 +1,10 @@
 [
   {
-    "id": "golf:golfRegion=International;tier=budget",
-    "dataset": "golf",
-    "cell": {
-      "golfRegion": "International",
-      "tier": "budget"
-    },
-    "deficit": 3,
-    "wizardsServed": [
-      "bestman",
-      "offsite-retreat",
-      "offsite-outing",
-      "handicap",
-      "tdf"
-    ],
-    "starvedForWizards": [
-      "handicap",
-      "tdf"
-    ],
-    "leverageScore": 15
-  },
-  {
-    "id": "golf:golfRegion=International;tier=solid",
-    "dataset": "golf",
-    "cell": {
-      "golfRegion": "International",
-      "tier": "solid"
-    },
-    "deficit": 2,
-    "wizardsServed": [
-      "bestman",
-      "offsite-retreat",
-      "offsite-outing",
-      "handicap",
-      "tdf"
-    ],
-    "starvedForWizards": [
-      "handicap",
-      "tdf"
-    ],
-    "leverageScore": 10
-  },
-  {
     "id": "residence:setting=alpine;worldRegion=Middle East",
     "dataset": "residence",
     "cell": {
       "setting": "alpine",
       "worldRegion": "Middle East"
-    },
-    "deficit": 3,
-    "wizardsServed": [
-      "offsite-retreat",
-      "offsite-outing"
-    ],
-    "starvedForWizards": [
-      "offsite-retreat"
-    ],
-    "leverageScore": 6
-  },
-  {
-    "id": "residence:setting=alpine;worldRegion=Africa",
-    "dataset": "residence",
-    "cell": {
-      "setting": "alpine",
-      "worldRegion": "Africa"
-    },
-    "deficit": 3,
-    "wizardsServed": [
-      "offsite-retreat",
-      "offsite-outing"
-    ],
-    "starvedForWizards": [
-      "offsite-retreat"
-    ],
-    "leverageScore": 6
-  },
-  {
-    "id": "residence:setting=alpine;worldRegion=Other",
-    "dataset": "residence",
-    "cell": {
-      "setting": "alpine",
-      "worldRegion": "Other"
-    },
-    "deficit": 3,
-    "wizardsServed": [
-      "offsite-retreat",
-      "offsite-outing"
-    ],
-    "starvedForWizards": [
-      "offsite-retreat"
-    ],
-    "leverageScore": 6
-  },
-  {
-    "id": "residence:setting=castle;worldRegion=North America",
-    "dataset": "residence",
-    "cell": {
-      "setting": "castle",
-      "worldRegion": "North America"
-    },
-    "deficit": 3,
-    "wizardsServed": [
-      "offsite-retreat",
-      "offsite-outing"
-    ],
-    "starvedForWizards": [
-      "offsite-retreat"
-    ],
-    "leverageScore": 6
-  },
-  {
-    "id": "residence:setting=castle;worldRegion=Latin America & Caribbean",
-    "dataset": "residence",
-    "cell": {
-      "setting": "castle",
-      "worldRegion": "Latin America & Caribbean"
     },
     "deficit": 3,
     "wizardsServed": [
@@ -965,6 +855,23 @@
     "cell": {
       "setting": "alpine",
       "worldRegion": "Latin America & Caribbean"
+    },
+    "deficit": 2,
+    "wizardsServed": [
+      "offsite-retreat",
+      "offsite-outing"
+    ],
+    "starvedForWizards": [
+      "offsite-retreat"
+    ],
+    "leverageScore": 4
+  },
+  {
+    "id": "residence:setting=alpine;worldRegion=Africa",
+    "dataset": "residence",
+    "cell": {
+      "setting": "alpine",
+      "worldRegion": "Africa"
     },
     "deficit": 2,
     "wizardsServed": [
