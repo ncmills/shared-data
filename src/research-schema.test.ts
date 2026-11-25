@@ -387,3 +387,65 @@ test("retreat facet: REJECTS the facet on a non-residence row", () => {
   assert.equal(res.ok, false);
   if (!res.ok) assert.ok(res.reasons.some((r) => /retreat facet/.test(r)));
 });
+
+// ── retreat facet: practice fields ──────────────────────────────────────────
+const PRACTICE_FACET = {
+  worshipSpace: { value: "chapel", seats: 40, source: SRC },
+  worshipKit: { value: ["piano", "organ", "pa-system", "projector-screen"], source: SRC },
+  alcoholPolicy: { value: "none-served-to-group", source: SRC },
+  blessedSacramentReserved: { value: true, source: SRC },
+  confessionPlace: { value: true, source: SRC },
+  kosherKitchen: { value: "meat-and-dairy", agency: "Example Kosher Supervision", source: SRC },
+  sealedKosherCateringAllowed: { value: true, source: SRC },
+  shabbatWalkable: { value: true, source: SRC },
+  mechanicalKeysOrStaffDoors: { value: true, source: SRC },
+  motionSensorsDisableable: { value: false, source: SRC },
+  lowFloorOrWalkUp: { value: true, source: SRC },
+  eruv: { value: "community", source: SRC },
+  mechitzaPossible: { value: true, source: SRC },
+  openFlameAllowed: { value: false, source: SRC },
+  fireArea: { value: true, text: "Fire pit by the lake, supervised", source: SRC },
+};
+
+test("practice fields: a full cited set passes", () => {
+  const res = validateResearchedRow({ ...GOOD_RESIDENCE, retreat: PRACTICE_FACET });
+  assert.equal(res.ok, true, res.ok ? "" : res.reasons.join(" | "));
+});
+
+for (const field of Object.keys(PRACTICE_FACET) as (keyof typeof PRACTICE_FACET)[]) {
+  test(`practice fields: ${field} alone, cited, passes`, () => {
+    const res = validateResearchedRow({ ...GOOD_RESIDENCE, retreat: { [field]: PRACTICE_FACET[field] } });
+    assert.equal(res.ok, true, res.ok ? "" : res.reasons.join(" | "));
+  });
+  test(`practice fields: REJECTS ${field} with no source`, () => {
+    const { source: _s, ...noSource } = PRACTICE_FACET[field];
+    rejectsNaming({ [field]: noSource }, new RegExp(`retreat\\.${field}\\.source`));
+  });
+}
+
+test("practice fields: REJECTS off-vocab kosherKitchen", () => {
+  rejectsNaming({ kosherKitchen: { value: "glatt", source: SRC } }, /retreat\.kosherKitchen\.value/);
+});
+test("practice fields: REJECTS off-vocab alcoholPolicy", () => {
+  rejectsNaming({ alcoholPolicy: { value: "cash-bar", source: SRC } }, /retreat\.alcoholPolicy\.value/);
+});
+test("practice fields: REJECTS off-vocab eruv", () => {
+  rejectsNaming({ eruv: { value: "yes", source: SRC } }, /retreat\.eruv\.value/);
+});
+test("practice fields: REJECTS off-vocab worshipKit entry", () => {
+  rejectsNaming({ worshipKit: { value: ["piano", "harp"], source: SRC } }, /retreat\.worshipKit\.value/);
+});
+test("practice fields: REJECTS blank kosherKitchen agency", () => {
+  rejectsNaming({ kosherKitchen: { value: "meat", agency: "  ", source: SRC } }, /retreat\.kosherKitchen\.agency/);
+  rejectsNaming({ kosherKitchen: { value: "meat", agency: 5, source: SRC } }, /retreat\.kosherKitchen\.agency/);
+});
+test("practice fields: REJECTS worshipSpace seats that are not positive integers", () => {
+  for (const seats of [0, -3, 2.5, "40", null]) {
+    rejectsNaming({ worshipSpace: { value: "chapel", seats, source: SRC } }, /retreat\.worshipSpace\.seats/);
+  }
+});
+test("practice fields: REJECTS non-boolean practice values", () => {
+  rejectsNaming({ shabbatWalkable: { value: "yes", source: SRC } }, /retreat\.shabbatWalkable\.value/);
+  rejectsNaming({ fireArea: { value: 1, source: SRC } }, /retreat\.fireArea\.value/);
+  rejectsNaming({ fireArea: { value: true, text: " ", source: SRC } }, /retreat\.fireArea\.text/);
+});
