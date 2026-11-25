@@ -105,7 +105,7 @@ export function lagReport(
 }
 
 // ── CLI ────────────────────────────────────────────────────────────────────
-function readPinFromOrigin(repo: string): string | null {
+export function readPinFromOrigin(repo: string): string | null {
   const out = execFileSync(
     "gh",
     ["api", `repos/ncmills/${repo}/contents/package.json`, "--jq", ".content"],
