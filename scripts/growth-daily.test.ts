@@ -22,7 +22,7 @@ const gap = (i: number): GapTask => ({
 });
 const bq: BackfillQueue = { tasks: [], totalRows: 10, totalUnsourced: 0 } as unknown as BackfillQueue;
 
-function deps(events: MergedEvent[], researcher: GrowthDeps["researcher"], logs: string[] = []): GrowthDeps {
+function deps(events: MergedEvent[], router: GrowthDeps["router"], logs: string[] = []): GrowthDeps {
   return {
     gapQueue: () => [gap(1), gap(2)],
     backfillQueue: () => bq,
@@ -32,7 +32,8 @@ function deps(events: MergedEvent[], researcher: GrowthDeps["researcher"], logs:
     commits: () => [{ sha: "c".repeat(40), date: NOW.toISOString(), parents: [] }],
     mergedRows: () => events,
     adoption: () => [],
-    researcher,
+    router,
+    spendLedger: "/nonexistent/never-written.jsonl",
     log: (m) => logs.push(m),
   };
 }
@@ -42,7 +43,7 @@ const opts = (o: Partial<GrowthOptions> = {}): GrowthOptions => ({
 
 test("dry run makes zero model calls: the stubbed researcher is never invoked", async () => {
   let calls = 0;
-  const r = await runGrowthDaily(opts(), deps([], async () => { calls++; }));
+  const r = await runGrowthDaily(opts(), deps([], () => { calls++; return { text: "", costUsd: 0, model: "stub" }; }));
   assert.equal(calls, 0);
   assert.equal(r.modelCalls, 0);
   assert.equal(r.est.calls, 2); // tasks were listed and priced, not run
@@ -51,7 +52,7 @@ test("dry run makes zero model calls: the stubbed researcher is never invoked", 
 test("--paid throws 'not ruled' even with the budget env set, and calls nothing", async () => {
   let calls = 0;
   await assert.rejects(
-    runGrowthDaily(opts({ paid: true }), deps([], async () => { calls++; }), { GROWTH_DAILY_BUDGET_USD: "5" }),
+    runGrowthDaily(opts({ paid: true }), deps([], () => { calls++; return { text: "", costUsd: 0, model: "stub" }; }), { GROWTH_DAILY_BUDGET_USD: "5" }),
     new RegExp(NOT_RULED_MESSAGE),
   );
   assert.equal(calls, 0);
