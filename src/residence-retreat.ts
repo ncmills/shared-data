@@ -32,14 +32,49 @@ export const RETREAT_DIETARY = [
 ] as const;
 export type RetreatDietary = (typeof RETREAT_DIETARY)[number];
 
+export const RETREAT_WORSHIP_KIT = ["piano", "organ", "pa-system", "projector-screen"] as const;
+export type RetreatWorshipKit = (typeof RETREAT_WORSHIP_KIT)[number];
+
+export const RETREAT_ALCOHOL_POLICIES = [
+  "none-on-site",
+  "none-served-to-group",
+  "allowed",
+  "byo",
+] as const;
+export type RetreatAlcoholPolicy = (typeof RETREAT_ALCOHOL_POLICIES)[number];
+
+export const RETREAT_KOSHER_KITCHENS = ["meat", "dairy", "pareve", "meat-and-dairy", "none"] as const;
+export type RetreatKosherKitchen = (typeof RETREAT_KOSHER_KITCHENS)[number];
+
+export const RETREAT_ERUV = ["premises", "community", "none"] as const;
+export type RetreatEruv = (typeof RETREAT_ERUV)[number];
+
 export interface ResidenceRetreatFacet {
-  worshipSpace?: { value: RetreatWorshipSpace; source: string };
+  worshipSpace?: { value: RetreatWorshipSpace; seats?: number; source: string };
   quietHours?: { value: boolean; text?: string; source: string };
   dietary?: { value: RetreatDietary[]; source: string };
   singleSexLodging?: { value: boolean; source: string };
   alcoholFree?: { value: boolean; source: string };
   /** Free text, copied verbatim from the venue's own page. Never empty. */
   traditionsHosted?: { value: string[]; source: string };
+  worshipKit?: { value: RetreatWorshipKit[]; source: string };
+  alcoholPolicy?: { value: RetreatAlcoholPolicy; source: string };
+  blessedSacramentReserved?: { value: boolean; source: string };
+  /** An oratory or confessional on site. */
+  confessionPlace?: { value: boolean; source: string };
+  /** `agency` is the name as printed on the venue or agency page. */
+  kosherKitchen?: { value: RetreatKosherKitchen; agency?: string; source: string };
+  sealedKosherCateringAllowed?: { value: boolean; source: string };
+  /** Lodging, dining and worship all reachable on foot. */
+  shabbatWalkable?: { value: boolean; source: string };
+  mechanicalKeysOrStaffDoors?: { value: boolean; source: string };
+  motionSensorsDisableable?: { value: boolean; source: string };
+  lowFloorOrWalkUp?: { value: boolean; source: string };
+  /** As stated by the venue or the eruv's own page. */
+  eruv?: { value: RetreatEruv; source: string };
+  mechitzaPossible?: { value: boolean; source: string };
+  openFlameAllowed?: { value: boolean; source: string };
+  fireArea?: { value: boolean; text?: string; source: string };
 }
 
 export const RETREAT_FACET_FIELDS = [
@@ -49,6 +84,20 @@ export const RETREAT_FACET_FIELDS = [
   "singleSexLodging",
   "alcoholFree",
   "traditionsHosted",
+  "worshipKit",
+  "alcoholPolicy",
+  "blessedSacramentReserved",
+  "confessionPlace",
+  "kosherKitchen",
+  "sealedKosherCateringAllowed",
+  "shabbatWalkable",
+  "mechanicalKeysOrStaffDoors",
+  "motionSensorsDisableable",
+  "lowFloorOrWalkUp",
+  "eruv",
+  "mechitzaPossible",
+  "openFlameAllowed",
+  "fireArea",
 ] as const;
 
 function isHttpsUrl(v: unknown): boolean {
@@ -102,6 +151,56 @@ export function validateRetreatFacet(facet: unknown): string[] {
             `retreat.worshipSpace.value must be one of ${RETREAT_WORSHIP_SPACES.join("/")}, got ${JSON.stringify(value)}`,
           );
         }
+        if (e.seats !== undefined && !(Number.isInteger(e.seats) && (e.seats as number) > 0)) {
+          reasons.push(
+            `retreat.worshipSpace.seats, when present, must be a positive integer, got ${JSON.stringify(e.seats)}`,
+          );
+        }
+        break;
+      case "worshipKit":
+        if (!Array.isArray(value)) {
+          reasons.push(`retreat.worshipKit.value must be an array of ${RETREAT_WORSHIP_KIT.join("/")}`);
+        } else {
+          for (const k of value) {
+            if (!(RETREAT_WORSHIP_KIT as readonly unknown[]).includes(k)) {
+              reasons.push(
+                `retreat.worshipKit.value has off-vocab entry ${JSON.stringify(k)} (allowed: ${RETREAT_WORSHIP_KIT.join("/")})`,
+              );
+            }
+          }
+        }
+        break;
+      case "alcoholPolicy":
+        if (!(RETREAT_ALCOHOL_POLICIES as readonly unknown[]).includes(value)) {
+          reasons.push(
+            `retreat.alcoholPolicy.value must be one of ${RETREAT_ALCOHOL_POLICIES.join("/")}, got ${JSON.stringify(value)}`,
+          );
+        }
+        break;
+      case "kosherKitchen":
+        if (!(RETREAT_KOSHER_KITCHENS as readonly unknown[]).includes(value)) {
+          reasons.push(
+            `retreat.kosherKitchen.value must be one of ${RETREAT_KOSHER_KITCHENS.join("/")}, got ${JSON.stringify(value)}`,
+          );
+        }
+        if (e.agency !== undefined && !isNonEmptyString(e.agency)) {
+          reasons.push("retreat.kosherKitchen.agency, when present, must be a non-empty string");
+        }
+        break;
+      case "eruv":
+        if (!(RETREAT_ERUV as readonly unknown[]).includes(value)) {
+          reasons.push(
+            `retreat.eruv.value must be one of ${RETREAT_ERUV.join("/")}, got ${JSON.stringify(value)}`,
+          );
+        }
+        break;
+      case "fireArea":
+        if (typeof value !== "boolean") {
+          reasons.push(`retreat.fireArea.value must be a boolean, got ${JSON.stringify(value)}`);
+        }
+        if (e.text !== undefined && !isNonEmptyString(e.text)) {
+          reasons.push("retreat.fireArea.text, when present, must be non-blank");
+        }
         break;
       case "dietary":
         if (!Array.isArray(value)) {
@@ -133,6 +232,15 @@ export function validateRetreatFacet(facet: unknown): string[] {
         break;
       case "singleSexLodging":
       case "alcoholFree":
+      case "blessedSacramentReserved":
+      case "confessionPlace":
+      case "sealedKosherCateringAllowed":
+      case "shabbatWalkable":
+      case "mechanicalKeysOrStaffDoors":
+      case "motionSensorsDisableable":
+      case "lowFloorOrWalkUp":
+      case "mechitzaPossible":
+      case "openFlameAllowed":
         if (typeof value !== "boolean") {
           reasons.push(`retreat.${field}.value must be a boolean, got ${JSON.stringify(value)}`);
         }
