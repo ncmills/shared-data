@@ -25,6 +25,7 @@ export * from "./golf";
 // maid-of-honor-hq's route threw `classifyUserAgent is not a function` at runtime.
 export * from "./crawler-user-agents";
 export * from "./residences";
+export * from "./residence-retreat";
 export * from "./residences-expansion";
 export * from "./golf-destinations";
 export * from "./moh-locals";

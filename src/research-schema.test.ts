@@ -316,3 +316,74 @@ test("party-venue still enforces provenance", () => {
     assert.ok(r.reasons.some((x) => x.includes("citations")), r.reasons.join("; "));
   }
 });
+
+// ── optional retreat facet (residences) ─────────────────────────────────────
+// Absent = unknown, so a row with no facet is unchanged. A present facet field
+// must cite an https source and stay inside the fixed vocab; every reject names
+// the field so the harness log says which fact was uncited.
+const SRC = "https://www.some-alpine-lodge.fr/retreats";
+const GOOD_FACET = {
+  worshipSpace: { value: "chapel", source: SRC },
+  quietHours: { value: true, text: "Quiet hours 22:00 to 07:00", source: SRC },
+  dietary: { value: ["vegetarian", "kosher"], source: SRC },
+  singleSexLodging: { value: false, source: SRC },
+  alcoholFree: { value: true, source: SRC },
+  traditionsHosted: { value: ["Silent meditation retreats"], source: SRC },
+};
+
+function rejectsNaming(facet: unknown, field: RegExp) {
+  const res = validateResearchedRow({ ...GOOD_RESIDENCE, retreat: facet });
+  assert.equal(res.ok, false);
+  if (!res.ok) assert.ok(res.reasons.some((r) => field.test(r)), res.reasons.join(" | "));
+}
+
+test("retreat facet: a residence with NO facet still passes unchanged", () => {
+  assert.equal("retreat" in GOOD_RESIDENCE, false);
+  assert.equal(validateResearchedRow(GOOD_RESIDENCE).ok, true);
+});
+
+test("retreat facet: a full, cited facet passes", () => {
+  const res = validateResearchedRow({ ...GOOD_RESIDENCE, retreat: GOOD_FACET });
+  assert.equal(res.ok, true, res.ok ? "" : res.reasons.join(" | "));
+});
+
+test("retreat facet: a single cited field passes (others absent = unknown)", () => {
+  const res = validateResearchedRow({ ...GOOD_RESIDENCE, retreat: { alcoholFree: GOOD_FACET.alcoholFree } });
+  assert.equal(res.ok, true);
+});
+
+for (const field of Object.keys(GOOD_FACET) as (keyof typeof GOOD_FACET)[]) {
+  test(`retreat facet: REJECTS ${field} with no source, naming the field`, () => {
+    const { source: _s, ...noSource } = GOOD_FACET[field];
+    rejectsNaming({ ...GOOD_FACET, [field]: noSource }, new RegExp(`retreat\\.${field}\\.source`));
+  });
+}
+
+test("retreat facet: REJECTS a non-https source (http)", () => {
+  rejectsNaming(
+    { ...GOOD_FACET, alcoholFree: { value: true, source: "http://www.some-alpine-lodge.fr/" } },
+    /retreat\.alcoholFree\.source/,
+  );
+});
+
+test("retreat facet: REJECTS an off-vocab worshipSpace", () => {
+  rejectsNaming({ ...GOOD_FACET, worshipSpace: { value: "temple", source: SRC } }, /retreat\.worshipSpace\.value/);
+});
+
+test("retreat facet: REJECTS an off-vocab dietary entry", () => {
+  rejectsNaming({ ...GOOD_FACET, dietary: { value: ["vegetarian", "paleo"], source: SRC } }, /retreat\.dietary\.value/);
+});
+
+test("retreat facet: REJECTS an empty traditionsHosted list", () => {
+  rejectsNaming({ ...GOOD_FACET, traditionsHosted: { value: [], source: SRC } }, /retreat\.traditionsHosted/);
+});
+
+test("retreat facet: REJECTS an unknown facet key, naming it", () => {
+  rejectsNaming({ ...GOOD_FACET, denomination: { value: "x", source: SRC } }, /retreat\.denomination/);
+});
+
+test("retreat facet: REJECTS the facet on a non-residence row", () => {
+  const res = validateResearchedRow({ ...GOOD_GOLF, retreat: GOOD_FACET });
+  assert.equal(res.ok, false);
+  if (!res.ok) assert.ok(res.reasons.some((r) => /retreat facet/.test(r)));
+});
