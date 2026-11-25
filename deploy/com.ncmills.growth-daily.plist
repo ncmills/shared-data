@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- STAGED, not loaded. growth-daily: the whole shared-data loop in DRY RUN (zero model calls) + red-on-zero ledger.
+       CONTROL loads it. Paid runs need a ruled budget; --paid throws until then. -->
+  <key>Label</key><string>com.ncmills.growth-daily</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string><string>-lc</string>
+    <string>cd "$HOME/shared-data" &amp;&amp; git pull --ff-only -q &amp;&amp; npx tsx scripts/growth-daily.ts</string>
+  </array>
+  <key>StartCalendarInterval</key><dict><key>Hour</key><integer>6</integer><key>Minute</key><integer>15</integer></dict>
+  <key>StandardOutPath</key><string>/Users/bignick/work/logs/growth-daily.log</string>
+  <key>StandardErrorPath</key><string>/Users/bignick/work/logs/growth-daily.log</string>
+</dict>
+</plist>

@@ -1,0 +1,214 @@
+{
+  "generatedAt": "2026-11-25T00:55:47.532Z",
+  "judgedDay": "2026-11-24",
+  "status": "RED",
+  "reasons": [
+    "2026-11-24: 0 merged rows from every lane (backfill, expansion, site-intake)"
+  ],
+  "lagLimitDays": 7,
+  "lag": [
+    {
+      "site": "plan-my-party",
+      "status": "GREEN",
+      "lagDays": 0.5948325462962963,
+      "pinSha": "9468ada2d10832d02b03f9e457c14c3a527bd488"
+    },
+    {
+      "site": "maid-of-honor-hq",
+      "status": "GREEN",
+      "lagDays": 0.5948325462962963,
+      "pinSha": "9468ada2d10832d02b03f9e457c14c3a527bd488"
+    },
+    {
+      "site": "handicap-hq",
+      "status": "GREEN",
+      "lagDays": 0.5948325462962963,
+      "pinSha": "9468ada2d10832d02b03f9e457c14c3a527bd488"
+    },
+    {
+      "site": "offsite-outpost",
+      "status": "GREEN",
+      "lagDays": 0.5948325462962963,
+      "pinSha": "9468ada2d10832d02b03f9e457c14c3a527bd488"
+    },
+    {
+      "site": "friendsmoon",
+      "status": "GREEN",
+      "lagDays": 0.4886288425925926,
+      "pinSha": "c10248aa7d779717d5feae24e38e0a7135dc89b3"
+    },
+    {
+      "site": "engagedmoon",
+      "status": "GREEN",
+      "lagDays": 0.4886288425925926,
+      "pinSha": "c10248aa7d779717d5feae24e38e0a7135dc89b3"
+    }
+  ],
+  "days": [
+    {
+      "date": "2026-11-11",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-12",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-13",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-14",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-15",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-16",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-17",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-18",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-19",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-20",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-21",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-22",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-23",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-24",
+      "status": "RED",
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    },
+    {
+      "date": "2026-11-25",
+      "status": null,
+      "total": 0,
+      "lanes": {
+        "backfill": 0,
+        "expansion": 0,
+        "site-intake": 0
+      },
+      "brands": {}
+    }
+  ]
+}
