@@ -161,6 +161,20 @@ if /usr/bin/caffeinate -i -s -m npx tsx scripts/run-backfill.ts \
       --research-concurrency="$RESEARCH_CONCURRENCY" \
       --pending-keys="$PENDING" >> "$LOG" 2>&1; then
   say "=== run OK ($LABEL) ==="
+  # AUTO-MERGE (CONTROL SWEEP-2057, 2026-11-24). Green scheduled expand/* PRs
+  # whose files are all data + derived merge; a red one writes a RED line to the
+  # growth ledger. The PR this run just opened is usually still pending: skipped,
+  # no red; the 09:00/18:00 job (com.ncmills.shared-data-automerge) picks it up.
+  # The ledger is the main checkout's, not this worktree's: this tree is
+  # reset --hard every run, which would wipe the lines.
+  # Non-fatal: a red PR exits 1 and must not turn a good backfill run red.
+  if [ -z "$DRY_RUN" ]; then
+    if npx tsx scripts/automerge-data-prs.ts --apply --ledger="$REPO/docs/growth-ledger.json" >> "$LOG" 2>&1; then
+      say "automerge: done"
+    else
+      say "automerge: exit $? (RED line(s) above, or it could not run)"
+    fi
+  fi
 else
   # PROPAGATE. This `if/else` used to swallow the status and let the script fall
   # off the end at exit 0, so launchd recorded a failed backfill as a success and
