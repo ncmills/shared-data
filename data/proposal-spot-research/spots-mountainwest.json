@@ -1,0 +1,404 @@
+[
+  {
+    "id": "colorado-springs-co-garden-of-the-gods",
+    "destinationId": "colorado-springs-co",
+    "name": "Garden of the Gods — Sentinel Plaza & Three Graces",
+    "type": "park",
+    "highlight": "Red sandstone fins stand straight up out of the grass with Pikes Peak framed behind them. The Central Garden paths are paved and nearly flat, and the city designates six small plazas here — Sentinel, Three Graces, High Point among them — for brief ceremonies.",
+    "tier": "amber",
+    "permit": {
+      "required": false,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "There is no charge for the 6 areas listed below.  All are on a first come, first served basis. No reservations/permits available.",
+        "sourceUrl": "https://coloradosprings.gov/parks/page/weddings-parks"
+      },
+      "authority": "City of Colorado Springs Parks, Recreation and Cultural Services",
+      "authorityContact": "https://coloradosprings.gov/parks/page/weddings-parks"
+    },
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Tourists and other groups may be at the same site.  Please be respectful of other park users.",
+      "sourceUrl": "https://coloradosprings.gov/parks/page/weddings-parks"
+    },
+    "backup": null,
+    "sourceUrl": "https://coloradosprings.gov/parks/page/weddings-parks",
+    "citations": [
+      "https://coloradosprings.gov/parks/page/weddings-parks"
+    ],
+    "leadTimeDays": null,
+    "fee": "No charge for the six designated areas; first come, first served",
+    "blocker": "Do not bring in any tables, tents, arches, trellises, etc.",
+    "accessNote": "The city caps informal gatherings before a permit kicks in: \"If you plan to have more than 50 people, you will need to rent a pavilion or apply for a Special Event Permit.\" (https://coloradosprings.gov/parks/page/weddings-parks). The six Garden of the Gods areas carry their own posted capacities, from 20 people at Three Graces Plaza and High Point to 40 at Jaycee Plaza.",
+    "seasonalClosure": null
+  },
+  {
+    "id": "glenwood-springs-co-hanging-lake",
+    "destinationId": "glenwood-springs-co",
+    "name": "Hanging Lake",
+    "type": "hike",
+    "highlight": "A turquoise lake held on a travertine shelf above Glenwood Canyon, with Spouting Rock pouring out of the cliff just behind it. Getting there is the hard part: \"It climbs 1200 feet in 1.2 miles, follows multiple switchbacks, and crosses seven bridges.\"",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "A time-specific reservation is required for each visitor",
+        "sourceUrl": "https://www.fs.usda.gov/r02/whiteriver/recreation/hanging-lake"
+      },
+      "authority": "USDA Forest Service — White River National Forest",
+      "authorityContact": "https://www.fs.usda.gov/r02/whiteriver/recreation/hanging-lake"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.fs.usda.gov/r02/whiteriver/recreation/hanging-lake",
+    "citations": [
+      "https://www.fs.usda.gov/r02/whiteriver/recreation/hanging-lake",
+      "https://www.fs.usda.gov/r02/whiteriver/alerts/hanging-lake-occupancy-and-use"
+    ],
+    "leadTimeDays": null,
+    "fee": "Reservations are $12/person April 30 - October 31; $10/person November 1 - March 31",
+    "blocker": "Hikers must have their own vehicle parked at the trailhead. Uber, taxis, and drop-offs are not permitted due to potential emergency evacuations. There is no shuttle service to the Hanging Lake parking area.",
+    "accessNote": "There is no sunrise or sunset slot, and no walk-up. \"Reservations are available hourly from 7 a.m. to 5 p.m., with a 3-hour hiking window.\" and \"You must arrive within 30 minutes before or after your reservation time or you will not be allowed entry.\" (https://www.fs.usda.gov/r02/whiteriver/recreation/hanging-lake). Forest Order WRNF 2019-06 also makes it an offense to be on the trail \"without possessing a permit specifically exempting the act\" (https://www.fs.usda.gov/r02/whiteriver/alerts/hanging-lake-occupancy-and-use).",
+    "seasonalClosure": null
+  },
+  {
+    "id": "telluride-co-bridal-veil-falls",
+    "destinationId": "telluride-co",
+    "name": "Bridal Veil Falls & the Telluride box canyon",
+    "type": "trail",
+    "highlight": "The falls drop straight off the headwall that closes Telluride's box canyon, with a stone powerhouse perched on the lip above them. The trail starts at the Valley View parking area east of town and climbs steeply on old mine road.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Maximum size for non-commercial groups is 20 and commercial / industrial use is not permitted.",
+        "sourceUrl": "https://www.sanmiguelcountyco.gov/293/Trails"
+      },
+      "authority": "San Miguel County / Town of Telluride (Bridal Veil Trail)",
+      "authorityContact": "https://www.sanmiguelcountyco.gov/293/Trails"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.sanmiguelcountyco.gov/293/Trails",
+    "citations": [
+      "https://www.sanmiguelcountyco.gov/293/Trails"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "commercial / industrial use is not permitted",
+    "accessNote": "Half the year is off the table on the trail: \"Seasonal closure: December 1 - April 30.\" The land manager is a partnership, not one agency — \"This trail is the result of a cooperative effort with the Town of Telluride, Idarado Mining Company, Telluride Mountain Club and San Miguel County.\" Because commercial use is barred outright, a paid photographer is a question to put to the county before booking one (https://www.sanmiguelcountyco.gov/293/Trails).",
+    "seasonalClosure": "Seasonal closure: December 1 - April 30."
+  },
+  {
+    "id": "denver-co-dream-lake-rmnp",
+    "destinationId": "denver-co",
+    "name": "Dream Lake, Rocky Mountain National Park",
+    "type": "hike",
+    "highlight": "A shallow lake pinched between Hallett Peak and Flattop Mountain, reached in \"1.1 mi (1.8 km)\" with \"474 ft (144 m)\" of gain from the Bear Lake trailhead. The wind off the water is close to constant; morning is when it lies flat enough to mirror the peaks.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service — Rocky Mountain National Park",
+      "authorityContact": "https://www.nps.gov/romo/planyourvisit/timed-entry-permit-system.htm"
+    },
+    "crowdWindow": {
+      "verbatim": "Bear Lake Parking fills early in the day year-round. The parking area is often full by 9 a.m each day.",
+      "sourceUrl": "https://www.nps.gov/romo/planyourvisit/exploring-the-bear-lake-road-corridor.htm"
+    },
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/romo/planyourvisit/exploring-the-bear-lake-road-corridor.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/romo/planyourvisit/timed-entry-permit-system.htm",
+      "https://www.nps.gov/romo/planyourvisit/exploring-the-bear-lake-road-corridor.htm"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "No photo permit is needed, but you cannot drive to the trailhead without a separate reservation in season: \"Timed Entry + Bear Lake Road Reservations are needed to enter the Bear Lake Road Corridor between the hours of 5 a.m. to 6 p.m. daily beginning on Friday, May 22 through Sunday, October 18, 2026.\" They are not first-choice-of-date guaranteed — \"Timed entry reservations are released on a first-come, first-served basis on Recreation.gov\", with a last-chance batch at \"7 p.m. MDT on the night before a desired arrival date\" (https://www.nps.gov/romo/planyourvisit/timed-entry-permit-system.htm).",
+    "seasonalClosure": null
+  },
+  {
+    "id": "whitefish-mt-hidden-lake-overlook",
+    "destinationId": "whitefish-mt",
+    "name": "Hidden Lake Overlook, Logan Pass",
+    "type": "scenic-overlook",
+    "highlight": "The trail leaves from behind the Logan Pass Visitor Center on \"wooden boardwalk and packed soil\" — \"1.3 miles (2.1 km), one way\" and \"608 ft (185 m)\" up — to a railing above Hidden Lake with Bearhat Mountain on the far side. Mountain goats are common on the boardwalk.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service — Glacier National Park",
+      "authorityContact": "406-888-7800"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/places/hidden-lake-trailhead.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/places/hidden-lake-trailhead.htm",
+      "https://www.nps.gov/glac/planyourvisit/visiting-loganpass-2026.htm",
+      "https://www.nps.gov/glac/planyourvisit/goingtothesunroad.htm",
+      "https://www.nps.gov/glac/learn/news/logan-pass-opening-and-closing-dates.htm"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "No vehicle reservation this year — \"Vehicle reservations are not required in 2026.\" (https://www.nps.gov/glac/planyourvisit/goingtothesunroad.htm) — but you are on a clock at the top. \"The three-hour parking limit will be implemented July 1, 2026 through Labor Day, September 7, 2026 and will be enforced 24 hours each day\", and \"After parking, visitors must then obtain a free, timestamped parking permit from the parking permit kiosk\" (https://www.nps.gov/glac/planyourvisit/visiting-loganpass-2026.htm).",
+    "seasonalClosure": "Logan Pass is only reachable by road for part of the year, and the opening date is set by plowing, not by calendar. NPS records list openings as early as May 16 (1987) and as late as July 13 (2020 and 2022), with footnote (f): \"Pre-established closing date set for Logan Pass. Pass closes to vehicle use on third Monday in October, weather permitting.\" (https://www.nps.gov/glac/learn/news/logan-pass-opening-and-closing-dates.htm)"
+  },
+  {
+    "id": "santa-fe-nm-kasha-katuwe-tent-rocks",
+    "destinationId": "santa-fe-nm",
+    "name": "Kasha-Katuwe Tent Rocks National Monument",
+    "type": "hike",
+    "highlight": "Cone-shaped pumice hoodoos, some still wearing the boulder that made them — \"the tent rock formations vary in height from a few feet up to 90 feet.\" The Canyon Trail threads a slot before a \"steep (630-ft) climb to the mesa top for excellent views of the Sangre de Cristo, Jemez, Sandia mountains and the Rio Grande Valley.\"",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Entry into the monument is by reservation only, Thursdays through Mondays between 8:00 a.m. and 1:00 p.m.",
+        "sourceUrl": "https://www.blm.gov/visit/kktr"
+      },
+      "authority": "Bureau of Land Management, Rio Puerco Field Office (with Pueblo de Cochiti)",
+      "authorityContact": "505-761-8700"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.blm.gov/visit/kktr",
+    "citations": [
+      "https://www.blm.gov/visit/kktr"
+    ],
+    "leadTimeDays": null,
+    "fee": "BLM ticket reservation $6.00 per person (includes a $1.00 administrative fee), plus a separate Cochiti Pueblo Tribal Access Pass at \"$20/person over age 16; $10/person 2-16 years old; and free for visitors under 2 years old\"",
+    "blocker": "Access to the Monument may be closed by order of the Cochiti Tribal Governor. Closures will be posted at the gate.",
+    "accessNote": "A sunrise or sunset proposal here is impossible. It is \"Day Use Only\": \"Check in begins no earlier than 7:45 a.m. with pilot vehicles leading visitors into the Monument starting at 8:00 a.m.  The last pilot car will leave the Cochiti Visitor Center at 1:00 p.m. All visitors must exit the Monument by 4:00 p.m.\" Two separate permits are needed, not one — \"The Cochiti Pueblo Tribal Access Pass and the BLM Ticket Reservation are separate, and visitors must have both permits to access the Monument.\" Tickets are capped: \"Visitors are encouraged to plan ahead and make reservations early as tickets are limited.\" (https://www.blm.gov/visit/kktr)",
+    "seasonalClosure": "Closed \"Dec. 15 – Jan. 31 (seasonal closure)\", closed Tuesdays and Wednesdays year-round, plus Easter weekend, May 3, July 13 and 14, July 25, Nov. 1, Thanksgiving Day — and \"The Monument may also be closed for no more than three additional cultural days identified by the Pueblo.\" (https://www.blm.gov/visit/kktr)"
+  },
+  {
+    "id": "taos-nm-rio-grande-gorge-bridge",
+    "destinationId": "taos-nm",
+    "name": "Rio Grande Gorge Bridge",
+    "type": "scenic-overlook",
+    "highlight": "US 64 crosses on a steel arch over a gorge the BLM describes as 800 feet deep, with walkways on both sides of the deck. Behind you the Taos Plateau runs dead flat in sage to the Sangre de Cristos.",
+    "tier": "red",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": null,
+      "authority": "Bureau of Land Management, Taos Field Office (Río Grande del Norte National Monument)",
+      "authorityContact": "575-758-8851"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.blm.gov/visit/rgdnnm",
+    "citations": [
+      "https://www.blm.gov/visit/rgdnnm"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "The BLM publishes no permit rule for photography or gatherings at this site — its own page says only \"Open year-round\" and, on fees, \"Contact the field office for more information.\" The bridge deck itself is state highway right-of-way rather than BLM-managed land, so the answer can differ on the span versus the rim. Call the Taos Field Office at 575-758-8851 before planning anything with a photographer or a group (https://www.blm.gov/visit/rgdnnm).",
+    "seasonalClosure": null
+  },
+  {
+    "id": "sedona-az-bell-rock",
+    "destinationId": "sedona-az",
+    "name": "Bell Rock from Courthouse Vista",
+    "type": "trail",
+    "highlight": "Bell Rock is the rounded buttress right off SR 179, and the Bell Rock Pathway out of Courthouse Vista is wide and near-level — you can be standing on open red slickrock with Courthouse Butte behind you within ten minutes of the car.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Permits are not required for a wedding when: 1. Fewer than 75 people are in attendance with no paid service providers (planners, ministers, musicians, equipment vendors, etc.), and no sound equipment.",
+        "sourceUrl": "https://www.fs.usda.gov/r03/coconino/permits"
+      },
+      "authority": "USDA Forest Service — Coconino National Forest, Red Rock Ranger District",
+      "authorityContact": "https://www.fs.usda.gov/r03/coconino/permits"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.fs.usda.gov/r03/coconino/recreation/courthouse-vista",
+    "citations": [
+      "https://www.fs.usda.gov/r03/coconino/permits",
+      "https://www.fs.usda.gov/r03/coconino/recreation/courthouse-vista",
+      "https://www.fs.usda.gov/r03/coconino/passes/red-rock-coconino-passes-program"
+    ],
+    "leadTimeDays": 14,
+    "fee": "$5 per vehicle per day / $15 per week / $20 per annual (Red Rock Pass, Courthouse Vista trailhead)",
+    "blocker": null,
+    "accessNote": "You cannot park at the trailhead without a pass: \"Red Rock Pass or America the Beautiful Pass is required to park at the trailhead.\" (https://www.fs.usda.gov/r03/coconino/recreation/courthouse-vista). On the permit question, the Forest Service does not publish a proposal rule — its own wording is that \"A special use permit is required for commercial filming or photography on National Forest System lands under certain circumstances\" and that a permit is not needed \"if five or fewer people are involved in the film and photography project and are physically on site.\" Whether a hired proposal photographer counts is a call for the Red Rock Ranger District, not for us (https://www.fs.usda.gov/r03/coconino/permits).",
+    "seasonalClosure": null
+  },
+  {
+    "id": "flagstaff-az-havasu-falls",
+    "destinationId": "flagstaff-az",
+    "name": "Havasu Falls, Havasupai Indian Reservation",
+    "type": "hike",
+    "highlight": "Blue-green water pouring over travertine into pools the color of glass, on the Havasupai Tribe's land inside the Grand Canyon's side country. There is no road: \"It is an 8-mile hike with very significant elevation change between the trailhead and Supai Village\", dropping from 5,200 feet at Hualapai Hilltop to 3,205 feet in the village, with the campground and falls further still.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "PERMITS ARE REQUIRED FOR ALL VISITORS",
+        "sourceUrl": "https://www.havasupaireservations.com/faq"
+      },
+      "authority": "Havasupai Tribe",
+      "authorityContact": "https://www.havasupaireservations.com/faq"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.havasupaireservations.com/faq",
+    "citations": [
+      "https://www.havasupaireservations.com/faq",
+      "https://www.havasupaireservations.com/"
+    ],
+    "leadTimeDays": null,
+    "fee": "Campground permits are $455 per person for 3 nights. Lodge permits are $2,277 per lodge room for 3 nights – up to four people.",
+    "blocker": "Photography, filming, documenting, or recording using any means for commercial purposes is also prohibited.",
+    "accessNote": "This is not a park and not a national monument — it is a sovereign nation with its own permit regime, and it is the one place on this list where a specific date is often simply unavailable. \"The Havasupai Tribe (the 'Tribe') is a federally recognized Indian tribe with sovereign immunity.\" \"ALL visits to Havasupai require a booking made PRIOR to arrival.\" There is no day hike and no one-night option: \"All Bookings are 4 Days / 3 Nights.\" You cannot buy someone else's date: \"Reselling or transferring of bookings, in whole or in part, is strictly prohibited\", and \"PATLs cannot be named or changed after a booking is made.\" Refunds are narrow — \"Cancellations made within 90 days of the first day of your permit start date are not eligible for a refund.\" Showing up without one is a crime, not a fine: \"Entering the Reservation without a permit and wristband is trespassing.\" (https://www.havasupaireservations.com/faq, https://www.havasupaireservations.com/)",
+    "seasonalClosure": null
+  },
+  {
+    "id": "tucson-az-signal-hill-saguaro",
+    "destinationId": "tucson-az",
+    "name": "Signal Hill, Saguaro National Park (West)",
+    "type": "scenic-overlook",
+    "highlight": "A short stone stair up a low hill of boulders carved with petroglyphs — the park calls it \"the best place to see petroglyphs within the park\" — looking out over a dense saguaro forest to the Tucson Mountains. It sits on the Bajada Loop Drive, \"a 6 mile (9.7 km) loop\" of graded dirt.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service — Saguaro National Park",
+      "authorityContact": "520-733-5153"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/places/signal-hill.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/places/signal-hill.htm",
+      "https://www.nps.gov/sagu/planyourvisit/gettingaround.htm"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "The approach is unpaved: the Bajada Loop Drive is \"This unpaved, graded dirt road offers scenic pullouts, picnic areas, and hiking trailheads in a 6 mile (9.7 km) loop.\" (https://www.nps.gov/sagu/planyourvisit/gettingaround.htm). The park does not publish gate hours for the loop drives on its Getting Around or Operating Hours pages — confirm the closing time for your date with the park at 520-733-5153 before planning a sunset.",
+    "seasonalClosure": null
+  },
+  {
+    "id": "sun-valley-id-redfish-lake-north-shore",
+    "destinationId": "sun-valley-id",
+    "name": "Redfish Lake North Shore, Sawtooth NRA",
+    "type": "waterfront",
+    "highlight": "The whole Sawtooth crest stands at the far end of the lake and doubles in the water on a still morning. \"Redfish Lake is at the headwaters of the Salmon River\" — the North Shore picnic area and the Outlet day use area both put you at the shoreline with the range dead ahead.",
+    "tier": "amber",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "they are charging a fee for services rendered on National Forest System land or if income is derived from the use.",
+        "sourceUrl": "https://www.fs.usda.gov/r04/sawtooth/permits/special-and-commercial-uses"
+      },
+      "authority": "USDA Forest Service — Sawtooth National Forest, Sawtooth National Recreation Area",
+      "authorityContact": "(208) 774-3017"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.fs.usda.gov/r04/sawtooth/recreation/redfish-lake-recreation-complex",
+    "citations": [
+      "https://www.fs.usda.gov/r04/sawtooth/permits/special-and-commercial-uses",
+      "https://www.fs.usda.gov/r04/sawtooth/recreation/redfish-lake-recreation-complex"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "The Forest Service publishes no proposal or personal-photography rule for the Sawtooth NRA. Its stated triggers are occupancy of the land, income derived from the use, and \"they are hosting an activity or event that involves more than 75 spectators or participants.\" A paid photographer sits squarely in the second one, and the forest's own instruction is to ask: \"fill out a proposal form and contact one of our offices to confirm whether your use requires a special use permit.\" Sawtooth NRA (Ketchum & Stanley): (208) 774-3017 or (208) 727-5008 (https://www.fs.usda.gov/r04/sawtooth/permits/special-and-commercial-uses).",
+    "seasonalClosure": null
+  },
+  {
+    "id": "phoenix-az-papago-hole-in-the-rock",
+    "destinationId": "phoenix-az",
+    "name": "Hole-in-the-Rock, Papago Park",
+    "type": "scenic-overlook",
+    "highlight": "A few minutes of stone steps up a sandstone butte to a wind-hollowed opening that frames downtown Phoenix and the Papago ponds. The buttes here are \"comprised primarily of sandstone\" and the walk is short enough to do in whatever you are already wearing.",
+    "tier": "red",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": null,
+      "authority": "City of Phoenix Parks and Recreation Department",
+      "authorityContact": "602-495-5458"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "phoenix-az-camelback-echo-canyon",
+    "sourceUrl": "https://www.phoenix.gov/administration/departments/parks/activities-facilities/trails/papago-park.html",
+    "citations": [
+      "https://www.phoenix.gov/administration/departments/parks/activities-facilities/trails/papago-park.html",
+      "https://www.phoenix.gov/administration/departments/parks/rentals-permits.html"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": null,
+    "accessNote": "Phoenix publishes park hours but no photography or proposal permit rule. Hours from the park's own page: \"Parking/Entrance Hours: East of Galvin Pkwy. - 5 a.m. to 7 p.m. West of Galvin Pkwy.- Sunrise to Sunset\" and \"Trail Hours: 5 a.m. to 11 p.m.\" — a summer sunset here can fall after the east-side parking gate closes at 7 p.m., so check the gate against your date. Papago is also unusual for the city: \"The ramadas at Papago Park are available for public use, however unlike most City of Phoenix ramadas, they do require a reservation.\" Confirm with the Ranger Office at 602-495-5458 or Parks events at 602-262-6412 (https://www.phoenix.gov/administration/departments/parks/activities-facilities/trails/papago-park.html).",
+    "seasonalClosure": null
+  },
+  {
+    "id": "phoenix-az-camelback-echo-canyon",
+    "destinationId": "phoenix-az",
+    "name": "Camelback Mountain — Echo Canyon Summit",
+    "type": "hike",
+    "highlight": "The summit \"sits 2,704 feet above sea level and provides exceptional views of the Valley.\" This is not a stroll — the city rates both main trails \"Extremely Difficult\", with \"steep elevation gains, uneven terrain, and a path that is unprotected from the elements.\"",
+    "tier": "red",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": null,
+      "authority": "City of Phoenix Parks and Recreation Department",
+      "authorityContact": "602-534-5867"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "phoenix-az-papago-hole-in-the-rock",
+    "sourceUrl": "https://www.phoenix.gov/administration/departments/parks/activities-facilities/trails/camelback-mountain.html",
+    "citations": [
+      "https://www.phoenix.gov/administration/departments/parks/activities-facilities/trails/camelback-mountain.html",
+      "https://www.phoenix.gov/administration/departments/parks/activities-facilities/trails/heat-safety.html"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "Parking is limited at Camelback Mountain trailheads. Parking is not permitted along the majority of roadways near the trailheads. Vehicles parked in violation of posted signs will be towed at the owner's expense.",
+    "accessNote": "Phoenix publishes no photography or proposal permit rule for its preserves, but it does close this trail outright on heat days: \"On days when the NWS issues an Extreme Heat Warning, the following trails are restricted from 8 a.m. to 5 p.m: Camelback Mountain Preserve - Echo Canyon and Cholla Trail\". That is not rare — \"In 2024, Phoenix experienced 45 days of trail closures due to extreme heat warnings between May 1 and October 13\" (https://www.phoenix.gov/administration/departments/parks/activities-facilities/trails/heat-safety.html). Park hours are \"Sunrise to sunset\", and Cholla Trail is separately \"closed for construction from August 17-28, 2026\". Confirm with the gatehouse at 602-534-5867.",
+    "seasonalClosure": null
+  }
+]

@@ -266,3 +266,73 @@ test("claudeResearcher: an ORDINARY timeout does NOT notify the caller", async (
   assert.match(logs.join("\n"), /timed out/);
   assert.doesNotMatch(logs.join("\n"), /HOST SUSPENDED/);
 });
+
+// ─── usage limit vs. research failure (2026-08-06) ──────────────────────────
+//
+// MEASURED: at a Claude session usage limit, `claude -p` exits 1 and prints the
+// `--output-format json` envelope with `is_error: true` and ZERO tokens. The
+// researcher is fail-safe, so it returned [] and the run reported
+// "0 researched ... === run OK ===" — byte-identical to "researched everything,
+// found nothing". A 40-iteration drain burned all 40 in ~2 minutes that way.
+// The scheduled Tue-03:00 job would do the same, weekly, and read as healthy.
+
+const LIMIT_ENVELOPE = JSON.stringify({
+  is_error: true,
+  duration_api_ms: 0,
+  num_turns: 1,
+  stop_reason: "stop_sequence",
+  total_cost_usd: 0,
+  usage: { input_tokens: 0, output_tokens: 0, cache_read_input_tokens: 0 },
+});
+
+test("claudeResearcher: a usage-limit exit is reported as usage-limit, not a generic exit", async () => {
+  const reasons: string[] = [];
+  const logs: string[] = [];
+  const research = claudeResearcher({
+    runner: async (): Promise<ClaudeRunResult> => ({ code: 1, stdout: LIMIT_ENVELOPE, stderr: "" }),
+    onUnmeasured: (r) => reasons.push(r),
+    log: (m) => logs.push(m),
+  });
+
+  assert.deepEqual(await research("anything"), []);
+  assert.deepEqual(reasons, ["usage-limit"]);
+  assert.match(logs.join("\n"), /USAGE LIMIT/i);
+});
+
+test("claudeResearcher: the plain-text limit message is recognised too", async () => {
+  const reasons: string[] = [];
+  const research = claudeResearcher({
+    runner: async (): Promise<ClaudeRunResult> => ({
+      code: 1,
+      stdout: "You've hit your session limit · resets 1:40pm (America/New_York)",
+      stderr: "",
+    }),
+    onUnmeasured: (r) => reasons.push(r),
+  });
+
+  assert.deepEqual(await research("anything"), []);
+  assert.deepEqual(reasons, ["usage-limit"]);
+});
+
+test("claudeResearcher: an ordinary non-zero exit is still a plain exit, not a usage limit", async () => {
+  const reasons: string[] = [];
+  const research = claudeResearcher({
+    runner: async (): Promise<ClaudeRunResult> => ({ code: 2, stdout: "", stderr: "boom" }),
+    onUnmeasured: (r) => reasons.push(r),
+  });
+
+  assert.deepEqual(await research("anything"), []);
+  assert.deepEqual(reasons, ["exit"]);
+});
+
+test("claudeResearcher: a SUCCESSFUL call that found nothing is NOT unmeasured", async () => {
+  // The distinction the whole fix rests on: an empty result is a measurement.
+  const reasons: string[] = [];
+  const research = claudeResearcher({
+    runner: async (): Promise<ClaudeRunResult> => ({ code: 0, stdout: "[]", stderr: "" }),
+    onUnmeasured: (r) => reasons.push(r),
+  });
+
+  assert.deepEqual(await research("anything"), []);
+  assert.deepEqual(reasons, []);
+});

@@ -306,8 +306,13 @@ export function runAudit(opts: RunAuditOptions = {}): AuditResult {
     const matrix = buildCoverageMatrix(rows);
     writeFileSync(MATRIX_PATH, renderCoverageMatrixMd(matrix, starvedFinal, regressions));
 
+    // NO generatedAt. This is a COMMITTED artifact, so a field that changes on
+    // every run leaves the working tree permanently dirty — which reads as "a
+    // human is mid-work" to loop_runner._repo_busy() and made the fleet's
+    // autonomous loop skip every round from 2026-08-04 to 08-06. git already
+    // records when the report changed; its value is the findings. The run time
+    // is printed to stdout below, where it is informational and harmless.
     const report = {
-      generatedAt: new Date().toISOString(),
       underTagged,
       orphaned,
       starved: starvedFinal,
@@ -315,6 +320,7 @@ export function runAudit(opts: RunAuditOptions = {}): AuditResult {
       exitCode: regressions.length > 0 ? 1 : 0,
     };
     writeFileSync(REPORT_PATH, JSON.stringify(report, null, 2));
+    console.log(`audit generated ${new Date().toISOString()}`);
 
     if (opts.updateBaseline) {
       const newBaseline = buildBaseline(underTagged, orphaned, starvedFinal);

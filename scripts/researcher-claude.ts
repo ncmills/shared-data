@@ -198,8 +198,12 @@ export interface ClaudeRunResult {
   suspended?: boolean;
 }
 
-/** The seam unit tests inject so NO real `claude` process is spawned. */
-export type ClaudeRunner = (prompt: string) => Promise<ClaudeRunResult>;
+/** The seam unit tests inject so NO real `claude` process is spawned.
+ *
+ *  `timeoutMs` overrides the runner's construction-time default for THIS call.
+ *  The researcher is built once per run, but the right budget depends on how
+ *  many venues the individual call has to research — see `budgetForVenues`. */
+export type ClaudeRunner = (prompt: string, timeoutMs?: number) => Promise<ClaudeRunResult>;
 
 export interface ClaudeResearcherOptions {
   /** Injected runner (tests). Defaults to the real `claude -p` spawn runner. */
@@ -220,6 +224,55 @@ export interface ClaudeResearcherOptions {
    * venues that were never researched.
    */
   onSuspended?: () => void;
+  /**
+   * Called when a call produced NO MEASUREMENT of its venues — a timeout, or a
+   * non-zero exit (which is what an upstream rate-limit looks like). Distinct
+   * from `onSuspended`, which is the narrower host-slept case.
+   *
+   * Why this exists (2026-08-06): every one of these resolves to `[]`, exactly
+   * like a clean call that genuinely found nothing. `run-backfill` then strikes
+   * every asked venue that isn't in `ingestedRows` — so a 180s timeout retired 8
+   * venues that were never actually researched. At the measured ~50% timeout
+   * rate and TOP_K=40 that is ~160 false strikes per run, against an attempts
+   * file already holding 62 venues one strike from permanent retirement.
+   * `onSuspended` had a seam for precisely this reason; timeout and non-zero
+   * exit did not. A clean call returning `[]` does NOT fire this — that is a
+   * real negative result and should count.
+   */
+  onUnmeasured?: (reason: "timeout" | "exit" | "usage-limit") => void;
+}
+
+/**
+ * Does this failed invocation look like a Claude USAGE LIMIT rather than a
+ * research failure?
+ *
+ * MEASURED 2026-08-06 13:16: at a session limit `claude -p` exits 1 and writes
+ * the `--output-format json` envelope with `is_error: true` and zero tokens —
+ * with EMPTY stderr, so there is nothing to diagnose from unless we look at
+ * stdout. Interactively it prints "You've hit your session limit · resets
+ * 1:40pm". Both shapes matter: the job may or may not be using --output-format.
+ *
+ * This is worth separating from a generic non-zero exit because the two demand
+ * opposite responses: a research failure is about the venues, a usage limit is
+ * about the account and every call in the run will fail the same way.
+ */
+export function looksLikeUsageLimit(stdout = "", stderr = ""): boolean {
+  const hay = `${stdout}\n${stderr}`;
+  if (/\b(session|usage|rate)\s+limit\b/i.test(hay)) return true;
+  // The JSON envelope: an error that consumed no tokens at all. A genuine
+  // research failure that reached the model would report non-zero usage.
+  try {
+    const env = JSON.parse(stdout.trim()) as Record<string, unknown>;
+    if (env && env.is_error === true) {
+      const u = (env.usage ?? {}) as Record<string, number>;
+      const spent =
+        (u.input_tokens ?? 0) + (u.output_tokens ?? 0) + (u.cache_read_input_tokens ?? 0);
+      if (spent === 0) return true;
+    }
+  } catch {
+    /* not the envelope — fall through */
+  }
+  return false;
 }
 
 /**
@@ -269,8 +322,10 @@ export function defaultClaudeRunner(opts: ClaudeResearcherOptions): ClaudeRunner
   const timeoutMs = opts.timeoutMs ?? 180_000;
   const model = opts.model;
 
-  return (prompt: string) =>
+  return (prompt: string, callTimeoutMs?: number) =>
     new Promise<ClaudeRunResult>((resolve) => {
+      // Per-call budget wins over the construction-time default.
+      const effectiveTimeoutMs = callTimeoutMs ?? timeoutMs;
       // --allowedTools LAST-but-one is a variadic; a following `--model` (a
       // `--`-prefixed token) correctly terminates it. Order matters.
       const args = ["-p", "--output-format", "json", "--allowedTools", "WebSearch", "WebFetch"];
@@ -317,9 +372,9 @@ export function defaultClaudeRunner(opts: ClaudeResearcherOptions): ClaudeRunner
         // call never really got its allotted time — the machine was suspended.
         // 2× is deliberately loose: normal scheduling jitter is nowhere near
         // it, while the observed sleep case overshot by ~54×.
-        suspended = Date.now() - startedAt > timeoutMs * 2;
+        suspended = Date.now() - startedAt > effectiveTimeoutMs * 2;
         killGroup();
-      }, timeoutMs);
+      }, effectiveTimeoutMs);
 
       const done = (code: number) => {
         if (settled) return;
@@ -358,9 +413,9 @@ export function claudeResearcher(opts: ClaudeResearcherOptions = {}): Researcher
   const log = opts.log ?? (() => {});
   const runner = opts.runner ?? defaultClaudeRunner(opts);
 
-  return async (prompt: string): Promise<unknown[]> => {
+  return async (prompt: string, callOpts?: { timeoutMs?: number }): Promise<unknown[]> => {
     try {
-      const res = await runner(wrapPrompt(prompt));
+      const res = await runner(wrapPrompt(prompt), callOpts?.timeoutMs);
       if (res.timedOut) {
         if (res.suspended) {
           // Say which failure this is. "timed out" and "the host slept" look
@@ -370,14 +425,27 @@ export function claudeResearcher(opts: ClaudeResearcherOptions = {}): Researcher
           opts.onSuspended?.();
           return [];
         }
-        log("claudeResearcher: timed out — returning []");
+        log("claudeResearcher: timed out — returning [] (NOT a measurement of these venues)");
+        opts.onUnmeasured?.("timeout");
         return [];
       }
       if (res.code !== 0) {
+        if (looksLikeUsageLimit(res.stdout, res.stderr)) {
+          // Name it. This exact failure spent two minutes burning 40 drain
+          // iterations while reporting success, because "exited 1" with empty
+          // stderr reads as a research problem and it is not one.
+          log(
+            "claudeResearcher: USAGE LIMIT — claude -p refused the call and spent no tokens. " +
+              "Returning [] (NOT a measurement of these venues).",
+          );
+          opts.onUnmeasured?.("usage-limit");
+          return [];
+        }
         log(
           `claudeResearcher: claude exited ${res.code} — returning [] ` +
             `(stderr: ${(res.stderr ?? "").slice(0, 200).replace(/\s+/g, " ").trim()})`,
         );
+        opts.onUnmeasured?.("exit");
         return [];
       }
       const rows = parseCandidates(res.stdout);
@@ -385,6 +453,7 @@ export function claudeResearcher(opts: ClaudeResearcherOptions = {}): Researcher
       return rows;
     } catch (e) {
       log(`claudeResearcher: threw (${String(e)}) — returning [] (fail-safe)`);
+      opts.onUnmeasured?.("exit");
       return [];
     }
   };

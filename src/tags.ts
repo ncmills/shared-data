@@ -46,21 +46,29 @@
  *
  * ⚠️ TAGGED AHEAD OF THEIR CONSUMERS — ON PURPOSE. Nick's call, 2026-07-31.
  *
- * `friendsmoon` and `engagedmoon` are tags for sites that DO NOT EXIST YET.
+ * `friendsmoon` and `engagedmoon` were tags for sites that did not exist yet.
  * This was deliberately held out of `main` for exactly that reason — it is the
  * shape of the `tdf` mistake the retirement above cleaned up — and was then
  * merged as a considered decision, not an oversight. The intent: tag the data
  * NOW so that when either wizard is built it reads a universe that is already
  * routed, instead of needing a tagging pass at build time.
  *
- * WHAT THIS COSTS, so nobody rediscovers it as a bug:
- *   - the coverage matrix counts ~5,705 party rows per wizard against
- *     consumers that render nothing;
- *   - the starved-input audit enumerates ~30 cells for products nobody ships.
- * Those numbers are REAL but currently MEANINGLESS. Do not tune data to close
- * them, and do not read a "starved" friendsmoon/engagedmoon cell as work to do
- * until the site exists. Tags are inert without a consumer — nothing renders
- * from these, and no runtime behaviour depends on them.
+ * ✅ `engagedmoon` REACHED ITS CONSUMER 2026-08-06 — engagedmoon.com is live and
+ * now reads this package. Its cells are therefore NO LONGER exempt: a starved
+ * engagedmoon input is real work, and its ~5,705 party rows now have a reader
+ * (the proposal trip layer picks dinner/backup venues from them). The exemption
+ * below is what suppressed that signal, so it is scoped to `friendsmoon` alone
+ * from here. Leaving it blanket would have gone on telling every audit to
+ * ignore gaps in a shipped product — the inverse of the tdf mistake, and the
+ * same failure class as an audit rule anchored to nothing.
+ *
+ * WHAT THIS STILL COSTS for `friendsmoon`, so nobody rediscovers it as a bug:
+ *   - the coverage matrix counts ~5,705 party rows against a consumer that
+ *     renders nothing;
+ *   - the starved-input audit enumerates ~30 cells for a product nobody ships.
+ * Those numbers are REAL but currently MEANINGLESS *for friendsmoon*. Do not
+ * tune data to close them, and do not read a "starved" friendsmoon cell as work
+ * to do until that site exists. Tags are inert without a consumer.
  *
  * DO NOT "clean these up" on the grounds that they have no reader. That is the
  * tdf argument, and it was heard and overruled here. If either site is KILLED
@@ -268,15 +276,38 @@ type Brand = "moh" | "bestman" | "both";
 
 /** Party brands → bachelor/ette wizards. Offsite-outing is added separately,
  *  based on corporate audience-eligibility, NOT on brand. */
-export function wizardsFromBrands(brands: Brand[]): WizardTag[] {
+/**
+ * `brands` is OPTIONAL, and its absence is a real state — not a defensive cast.
+ *
+ * Every hand-authored party row carries `brands`, so for a year these three
+ * readers could assume it. The sanctioned ingest path cannot: a researched row
+ * is only required to carry its category's fields (`research-schema.ts`), and a
+ * row that belongs to NEITHER party wizard has nothing true to put there.
+ * Writing `brands: []` to satisfy a signature would be the same fact stated
+ * less honestly.
+ *
+ * Until 2026-08-06 that combination threw — `bakeDining` called this with
+ * `undefined` and died on `.includes` — which meant the party-venue ingest gate
+ * structurally could not insert a dining or nightlife row for Friendsmoon,
+ * Engagedmoon or Offsite alone. The gate rejected the whole batch and rolled
+ * back, so it failed loudly rather than silently; but the class of row the two
+ * newest wizards most need was the exact class it could not accept.
+ *
+ * Absent brands therefore means "branded for neither party wizard", and the
+ * per-item bake adds `offsite-outing` / `friendsmoon` / `engagedmoon` on the
+ * audience signal as it always did.
+ */
+export function wizardsFromBrands(brands: Brand[] | undefined): WizardTag[] {
   const out: WizardTag[] = [];
+  if (!brands) return out;
   if (brands.includes("bestman") || brands.includes("both")) out.push("bestman");
   if (brands.includes("moh") || brands.includes("both")) out.push("moh");
   return out;
 }
 
-export function audiencesFromBrands(brands: Brand[]): AudienceTag[] {
+export function audiencesFromBrands(brands: Brand[] | undefined): AudienceTag[] {
   const out: AudienceTag[] = [];
+  if (!brands) return out;
   if (brands.includes("bestman") || brands.includes("both")) out.push("bachelor");
   if (brands.includes("moh") || brands.includes("both")) out.push("bachelorette");
   return out;
@@ -301,7 +332,7 @@ function isGolfType(type: string): boolean {
  * overlay dropped them a layer later — but a tag that survives only because
  * something downstream filters it is a latent bug, not a safe one.
  */
-export function wizardsForActivity(type: string, brands: Brand[]): WizardTag[] {
+export function wizardsForActivity(type: string, brands: Brand[] | undefined): WizardTag[] {
   const audiences = activityAudiences(type) as AudienceTag[];
   // Golf is a bachelor + corporate thing and NEVER a bachelorette one.
   const party = wizardsFromBrands(brands).filter((w) => !(w === "moh" && isGolfType(type)));
@@ -315,8 +346,9 @@ export function wizardsForActivity(type: string, brands: Brand[]): WizardTag[] {
   return Array.from(new Set([...party, ...outing, ...fm, ...em]));
 }
 
-export function productsFromBrands(brands: Brand[]): ProductTag[] {
+export function productsFromBrands(brands: Brand[] | undefined): ProductTag[] {
   const out: ProductTag[] = [];
+  if (!brands) return out;
   if (brands.includes("bestman") || brands.includes("both")) out.push("bach-party");
   if (brands.includes("moh") || brands.includes("both")) out.push("bachelorette");
   return out;

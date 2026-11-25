@@ -1,0 +1,3997 @@
+{
+  "$schema": "shared-data vocab — see scripts/corpus/vocab-build.ts",
+  "version": "1.0.0",
+  "note": "Controlled vocabulary (CORPUS-M4). Generated — edit scripts/corpus/vocab-build.ts or scripts/corpus/lexicons.ts and re-run; never hand-edit. No consumer reads this file yet.",
+  "facets": {
+    "kind": {
+      "source": "suitability row kinds: the five party categories (src/destinations-types.ts) + golf course (src/golf.ts)",
+      "terms": [
+        "activity",
+        "dining",
+        "golf-course",
+        "lodging",
+        "nightlife",
+        "transport"
+      ]
+    },
+    "activity.type": {
+      "source": "observed on sharedDestinations activities ∪ keys of CATEGORY_OF (src/tags.ts) ∪ MOH_/BESTMAN_ACTIVITY_TYPES (src/destinations-overlay.ts)",
+      "terms": [
+        "adventure-park",
+        "art-class",
+        "atv",
+        "axe-throwing",
+        "beach",
+        "beach-hangout",
+        "biking",
+        "boat-cruise",
+        "boudoir",
+        "brewery-tour",
+        "brunch",
+        "brunch-crawl",
+        "burlesque-class",
+        "cacao-ceremony",
+        "candle-making",
+        "canyoneering",
+        "casino",
+        "cigar-bar",
+        "cocktail-class",
+        "cooking-class",
+        "dance-class",
+        "distillery-tour",
+        "dog-sledding",
+        "drag-brunch",
+        "escape-room",
+        "farm-tour",
+        "fishing",
+        "flower-crown",
+        "food-tour",
+        "ghost-tour",
+        "go-karts",
+        "golf",
+        "hiking",
+        "horseback-riding",
+        "karaoke",
+        "kayaking",
+        "luxe-picnic",
+        "matcha-ceremony",
+        "mid-century-tour",
+        "mural-tour",
+        "paintball",
+        "painting-class",
+        "perfume-making",
+        "photoshoot",
+        "pickleball",
+        "poker-night",
+        "pole-class",
+        "pool-party",
+        "pottery-class",
+        "racing",
+        "rafting",
+        "rooftop-bar",
+        "sailing",
+        "scenic-overlook",
+        "second-line-parade",
+        "shooting-range",
+        "shopping-tour",
+        "silent-disco",
+        "skiing",
+        "skydiving",
+        "sleigh-ride",
+        "snorkeling",
+        "sound-bath",
+        "spa",
+        "spa-day",
+        "sports-event",
+        "stargazing",
+        "sunset-cruise",
+        "tarot-reading",
+        "tea-ceremony",
+        "tennis-clinic",
+        "tour",
+        "vortex-hike",
+        "walking-tour",
+        "wine-tour",
+        "yacht-charter",
+        "yoga-retreat",
+        "zip-lining"
+      ]
+    },
+    "activity.category": {
+      "source": "ActivityCategory union (src/tags.ts)",
+      "terms": [
+        "golf",
+        "culinary",
+        "water",
+        "field-sports",
+        "motorsport",
+        "wellness",
+        "nightlife",
+        "equestrian",
+        "cycling",
+        "winter",
+        "give-back",
+        "adventure",
+        "cultural",
+        "social",
+        "gaming"
+      ]
+    },
+    "nightlife.type": {
+      "source": "observed on sharedDestinations nightlife",
+      "terms": [
+        "arcade-bar",
+        "bar",
+        "beer-garden",
+        "brewery-tour",
+        "brewpub",
+        "casino",
+        "club",
+        "cocktail-bar",
+        "cocktail-lounge",
+        "comedy-club",
+        "dive-bar",
+        "drag-show",
+        "dueling-piano",
+        "honky-tonk",
+        "karaoke",
+        "lounge",
+        "pool-party",
+        "pub",
+        "rooftop",
+        "rooftop-bar",
+        "saloon",
+        "speakeasy",
+        "sports-bar",
+        "taproom",
+        "tasting-room",
+        "tiki-bar",
+        "wine-bar"
+      ]
+    },
+    "nightlife.vibe": {
+      "source": "PartyVibe union (src/destinations-types.ts)",
+      "terms": [
+        "chill",
+        "balanced",
+        "unhinged"
+      ]
+    },
+    "destination.id": {
+      "source": "sharedDestinations ids (party destinations)",
+      "terms": [
+        "albuquerque-nm",
+        "ambergris-caye-bz",
+        "amelia-island-fl",
+        "annapolis-md",
+        "aruba-aw",
+        "asheville-nc",
+        "aspen-co",
+        "atlanta-ga",
+        "atlantic-city-nj",
+        "austin-tx",
+        "baltimore-md",
+        "bar-harbor-me",
+        "beaufort-sc",
+        "bend-or",
+        "bentonville-ar",
+        "berkshires-ma",
+        "bermuda-bm",
+        "big-bear-lake-ca",
+        "big-sky-mt",
+        "birmingham-al",
+        "black-hills-sd",
+        "block-island-ri",
+        "boise-id",
+        "boston-ma",
+        "bozeman-mt",
+        "branson-mo",
+        "breckenridge-co",
+        "burlington-vt",
+        "cabo-mx",
+        "cancun-mx",
+        "cannon-beach-or",
+        "cape-cod-ma",
+        "cape-may-nj",
+        "carmel-ca",
+        "cartagena-co",
+        "charleston-sc",
+        "charlotte-nc",
+        "chattanooga-tn",
+        "chicago-il",
+        "cincinnati-oh",
+        "cleveland-oh",
+        "cody-wy",
+        "coeur-dalene-id",
+        "colorado-springs-co",
+        "columbia-sc",
+        "columbus-oh",
+        "cozumel-mx",
+        "crested-butte-co",
+        "dallas-tx",
+        "denver-co",
+        "des-moines-ia",
+        "destin-fl",
+        "detroit-mi",
+        "door-county-wi",
+        "duluth-mn",
+        "durango-co",
+        "eugene-or",
+        "eureka-springs-ar",
+        "fargo-nd",
+        "finger-lakes-ny",
+        "flagstaff-az",
+        "fort-lauderdale-fl",
+        "fort-worth-tx",
+        "franklin-tn",
+        "fredericksburg-tx",
+        "galena-il",
+        "galveston-tx",
+        "gatlinburg-tn",
+        "gettysburg-pa",
+        "glenwood-springs-co",
+        "grand-rapids-mi",
+        "greenville-sc",
+        "gulf-shores-al",
+        "gulfport-ms",
+        "hamptons-ny",
+        "hilton-head-sc",
+        "honolulu-hi",
+        "hood-river-or",
+        "hot-springs-ar",
+        "houston-tx",
+        "hudson-valley-ny",
+        "indianapolis-in",
+        "iowa-city-ia",
+        "jackson-hole-wy",
+        "jacksonville-fl",
+        "joshua-tree-ca",
+        "kansas-city-mo",
+        "kennebunkport-me",
+        "key-west-fl",
+        "kiawah-island-sc",
+        "killington-vt",
+        "knoxville-tn",
+        "lake-geneva-wi",
+        "lake-george-ny",
+        "lake-havasu-city-az",
+        "lake-of-the-ozarks-mo",
+        "lake-placid-ny",
+        "lake-tahoe-ca",
+        "lancaster-pa",
+        "las-vegas-nv",
+        "leavenworth-wa",
+        "lexington-ky",
+        "lincoln-ne",
+        "los-angeles-ca",
+        "louisville-ky",
+        "mackinac-island-mi",
+        "madison-wi",
+        "mammoth-lakes-ca",
+        "marthas-vineyard-ma",
+        "maui-hi",
+        "mccall-id",
+        "medellin-co",
+        "memphis-tn",
+        "mendocino-ca",
+        "mexico-city-mx",
+        "miami-fl",
+        "milwaukee-wi",
+        "minneapolis-mn",
+        "missoula-mt",
+        "moab-ut",
+        "mobile-al",
+        "montauk-ny",
+        "montego-bay-jm",
+        "montreal-ca",
+        "myrtle-beach-sc",
+        "mystic-ct",
+        "nantucket-ma",
+        "napa-valley-ca",
+        "naples-fl",
+        "nashville-in",
+        "nashville-tn",
+        "nassau-bs",
+        "negril-jm",
+        "new-haven-ct",
+        "new-orleans-la",
+        "new-york-ny",
+        "newport-ri",
+        "niagara-falls-ny",
+        "norfolk-va",
+        "north-conway-nh",
+        "oahu-hi",
+        "ocean-city-md",
+        "oklahoma-city-ok",
+        "omaha-ne",
+        "outer-banks-nc",
+        "overland-park-ks",
+        "palm-springs-ca",
+        "panama-city-pa",
+        "park-city-ut",
+        "pensacola-fl",
+        "philadelphia-pa",
+        "phoenix-az",
+        "pittsburgh-pa",
+        "playa-del-carmen-mx",
+        "poconos-pa",
+        "portland-me",
+        "portland-or",
+        "portsmouth-nh",
+        "prescott-az",
+        "providence-ri",
+        "providenciales-tc",
+        "provincetown-ma",
+        "puerto-vallarta-mx",
+        "punta-cana-do",
+        "raleigh-durham-nc",
+        "rehoboth-beach-de",
+        "reno-nv",
+        "richmond-va",
+        "salem-ma",
+        "salt-lake-city-ut",
+        "san-antonio-tx",
+        "san-diego-ca",
+        "san-francisco-ca",
+        "san-juan-pr",
+        "sandusky-oh",
+        "sanibel-fl",
+        "santa-barbara-ca",
+        "santa-fe-nm",
+        "saratoga-springs-ny",
+        "savannah-ga",
+        "scottsdale-az",
+        "seattle-wa",
+        "sedona-az",
+        "shreveport-la",
+        "sioux-falls-sd",
+        "sonoma-ca",
+        "spokane-wa",
+        "st-augustine-fl",
+        "st-louis-mo",
+        "st-paul-mn",
+        "stateline-nv",
+        "steamboat-springs-co",
+        "stowe-vt",
+        "sun-valley-id",
+        "tamarindo-cr",
+        "tampa-fl",
+        "taos-nm",
+        "telluride-co",
+        "tempe-az",
+        "traverse-city-mi",
+        "tucson-az",
+        "tulum-mx",
+        "tunica-ms",
+        "vail-co",
+        "virginia-beach-va",
+        "walla-walla-wa",
+        "washington-dc",
+        "whitefish-mt",
+        "wichita-ks",
+        "willamette-valley-or",
+        "wilmington-nc",
+        "wisconsin-dells-wi"
+      ]
+    },
+    "lodging.type": {
+      "source": "CanonicalLodging.type union (src/destinations-types.ts)",
+      "terms": [
+        "house",
+        "hotel",
+        "resort",
+        "airbnb",
+        "boutique-hotel",
+        "hostel"
+      ]
+    },
+    "transport.type": {
+      "source": "CanonicalTransport.type union (src/destinations-types.ts)",
+      "terms": [
+        "party-bus",
+        "limo",
+        "shuttle",
+        "rideshare",
+        "charter"
+      ]
+    },
+    "party.region": {
+      "source": "CanonicalRegion union (src/destinations-types.ts)",
+      "terms": [
+        "south",
+        "west",
+        "northeast",
+        "midwest",
+        "international"
+      ]
+    },
+    "golf.region": {
+      "source": "observed on SHARED_GOLF_COURSES",
+      "terms": [
+        "California",
+        "International",
+        "Midwest",
+        "Mountain West",
+        "Northeast",
+        "Pacific NW",
+        "South Central",
+        "Southeast",
+        "Southwest"
+      ]
+    },
+    "golf.tier": {
+      "source": "observed on SHARED_GOLF_COURSES",
+      "terms": [
+        "bucket-list",
+        "budget",
+        "premium",
+        "solid"
+      ]
+    },
+    "golf.style": {
+      "source": "observed on SHARED_GOLF_COURSES",
+      "terms": [
+        "coastal",
+        "desert",
+        "heathland",
+        "links",
+        "mountain",
+        "parkland",
+        "resort"
+      ]
+    },
+    "place.scope": {
+      "source": "derived: party row → its destination's region === \"international\" ⇒ non-us; golf course → region === \"International\" ⇒ non-us; else us",
+      "terms": [
+        "non-us",
+        "us"
+      ]
+    },
+    "residence.setting": {
+      "source": "observed on ALL_RESIDENCES",
+      "terms": [
+        "alpine",
+        "castle",
+        "coastal",
+        "countryside",
+        "desert",
+        "island",
+        "lake",
+        "links",
+        "palace",
+        "ranch",
+        "safari",
+        "ski-resort",
+        "tropical",
+        "urban",
+        "vineyard"
+      ]
+    },
+    "residence.goodFor": {
+      "source": "observed on ALL_RESIDENCES",
+      "terms": [
+        "leadership",
+        "celebration",
+        "team-building",
+        "kickoff",
+        "strategy"
+      ]
+    },
+    "oo.kind": {
+      "source": "observed on ooExperiences",
+      "terms": [
+        "amazing-race",
+        "culinary",
+        "cycling",
+        "equestrian",
+        "field-sports",
+        "golf",
+        "highland-games",
+        "hospitality",
+        "motorsport",
+        "nightlife",
+        "service",
+        "spirits",
+        "water",
+        "wellness",
+        "wilderness",
+        "wildlife",
+        "wrangling"
+      ]
+    },
+    "amenity": {
+      "source": "free-text tag mapping (TAG_RULES in scripts/corpus/vocab-build.ts)",
+      "terms": [
+        "all-inclusive",
+        "ballroom",
+        "beach",
+        "fine-dining",
+        "hot-springs",
+        "marina",
+        "meeting-space",
+        "pool",
+        "private-chef",
+        "rooftop",
+        "screening-room",
+        "spa",
+        "waterpark"
+      ]
+    },
+    "format": {
+      "source": "free-text tag mapping (TAG_RULES in scripts/corpus/vocab-build.ts)",
+      "terms": [
+        "after-dark",
+        "all-abilities",
+        "competition",
+        "endurance",
+        "guided",
+        "hands-on",
+        "overnight",
+        "relaxed",
+        "team"
+      ]
+    },
+    "purpose": {
+      "source": "free-text tag mapping (TAG_RULES in scripts/corpus/vocab-build.ts)",
+      "terms": [
+        "celebration",
+        "client-entertaining",
+        "conference",
+        "incentive",
+        "leadership"
+      ]
+    },
+    "exclusivity": {
+      "source": "free-text tag mapping (TAG_RULES in scripts/corpus/vocab-build.ts)",
+      "terms": [
+        "exclusive-use",
+        "full-buyout"
+      ]
+    },
+    "group.scale": {
+      "source": "free-text tag mapping (TAG_RULES in scripts/corpus/vocab-build.ts)",
+      "terms": [
+        "large",
+        "small"
+      ]
+    },
+    "character": {
+      "source": "free-text tag mapping (TAG_RULES in scripts/corpus/vocab-build.ts)",
+      "terms": [
+        "adults-only",
+        "boutique",
+        "design-led",
+        "eco",
+        "historic",
+        "remote"
+      ]
+    },
+    "quality.band": {
+      "source": "free-text tag mapping (TAG_RULES in scripts/corpus/vocab-build.ts)",
+      "terms": [
+        "luxury",
+        "premium",
+        "value"
+      ]
+    },
+    "access": {
+      "source": "free-text tag mapping (TAG_RULES in scripts/corpus/vocab-build.ts)",
+      "terms": [
+        "drive-to",
+        "near-airport",
+        "transfer-required"
+      ]
+    },
+    "residence.form": {
+      "source": "free-text tag mapping (TAG_RULES in scripts/corpus/vocab-build.ts)",
+      "terms": [
+        "cabin-or-lodge",
+        "estate",
+        "riad",
+        "ryokan",
+        "villa"
+      ]
+    },
+    "lexicon.wrong-occasion": {
+      "source": "friendsmoon/src/lib/catalog.ts:67-68@3812b3a (WRONG_OCCASION)",
+      "terms": [
+        "\\b(bachelorette|bachelor part(y|ies)|bach part(y|ies)|hen (party|do|night)|stag (party|do|night)|groomsmen|bridesmaids?|bridal (party|shower)|bride|groom)\\b"
+      ]
+    },
+    "lexicon.em-row-register": {
+      "source": "engagedmoon/src/lib/brand.ts:289-299@c2518db (CATALOG_ROW_BANNED)",
+      "terms": [
+        "\\bcasino\\b",
+        "\\bkaraoke\\b",
+        "\\bopen\\s*bar\\b",
+        "\\bnightclub\\b",
+        "\\bgroups?\\b(?!\\s+(area|campground|site|shelter|use\\s+area))",
+        "\\bcrawl\\b",
+        "\\bparty\\s*(bus|boat|barge)\\b",
+        "\\bkeg\\b",
+        "\\bshots?\\b(?!\\s+(of\\s+espresso|glass))"
+      ]
+    },
+    "lexicon.em-banned-patterns": {
+      "source": "engagedmoon/src/lib/brand.ts:173-212,237-245@c2518db (BANNED_PATTERNS + BANNED_SOCIAL_PROOF)",
+      "terms": [
+        "\\bbest\\s*man\\s*hq\\b",
+        "\\bmaid\\s*of\\s*honor\\s*hq\\b",
+        "\\bhandicap\\s*hq\\b",
+        "\\boffsite\\s*outpost\\b",
+        "\\btour\\s*de\\s*fore\\b",
+        "\\bbachelor(ette)?\\b",
+        "\\bstag\\s*(do|party|night)\\b",
+        "\\bhen\\s*(do|party|night)\\b",
+        "\\bpedal\\s*tavern\\b",
+        "\\bhonky[-\\s]?tonk\\b",
+        "\\bstrip\\s*club\\b",
+        "\\bbottle\\s*service\\b",
+        "\\bpub\\s*crawl\\b",
+        "\\blast\\s*(night\\s*of\\s*freedom|rodeo|ride)\\b",
+        "\\bteam\\s*building\\b",
+        "\\boffsite\\b",
+        "\\bcorporate\\s*(retreat|outing)\\b",
+        "\\battendees?\\b",
+        "\\bbreakout\\s*session\\b",
+        "\\btee\\s*time\\b",
+        "\\bgreen\\s*fees?\\b",
+        "\\bhandicap\\s*index\\b",
+        "\\bfoursome\\b",
+        "\\b(join|trusted\\s*by|loved\\s*by)\\s*[\\d,]+\\+?\\s*(couples|users|people)\\b",
+        "\\b[\\d,]+\\+?\\s*(proposals|engagements)\\s*planned\\b",
+        "\\bas\\s*seen\\s*(in|on)\\b",
+        "\\b\\d(\\.\\d)?\\s*(stars?|\\/\\s*5)\\b"
+      ]
+    }
+  },
+  "categoryOf": {
+    "adventure-park": [
+      "adventure"
+    ],
+    "atv": [
+      "motorsport",
+      "adventure"
+    ],
+    "axe-throwing": [
+      "social"
+    ],
+    "biking": [
+      "cycling"
+    ],
+    "boat-cruise": [
+      "water"
+    ],
+    "brewery-tour": [
+      "culinary"
+    ],
+    "brunch": [
+      "culinary",
+      "social"
+    ],
+    "canyoneering": [
+      "adventure"
+    ],
+    "casino": [
+      "gaming"
+    ],
+    "cigar-bar": [
+      "nightlife"
+    ],
+    "cocktail-class": [
+      "culinary"
+    ],
+    "cooking-class": [
+      "culinary"
+    ],
+    "distillery-tour": [
+      "culinary"
+    ],
+    "dog-sledding": [
+      "winter",
+      "adventure"
+    ],
+    "escape-room": [
+      "social",
+      "gaming"
+    ],
+    "farm-tour": [
+      "cultural"
+    ],
+    "fishing": [
+      "field-sports"
+    ],
+    "food-tour": [
+      "culinary"
+    ],
+    "ghost-tour": [
+      "cultural"
+    ],
+    "go-karts": [
+      "motorsport"
+    ],
+    "golf": [
+      "golf"
+    ],
+    "hiking": [
+      "adventure"
+    ],
+    "horseback-riding": [
+      "equestrian"
+    ],
+    "karaoke": [
+      "social",
+      "nightlife"
+    ],
+    "kayaking": [
+      "water"
+    ],
+    "mural-tour": [
+      "cultural"
+    ],
+    "paintball": [
+      "social",
+      "field-sports"
+    ],
+    "pickleball": [
+      "social"
+    ],
+    "poker-night": [
+      "gaming"
+    ],
+    "racing": [
+      "motorsport"
+    ],
+    "rafting": [
+      "water",
+      "adventure"
+    ],
+    "rooftop-bar": [
+      "nightlife"
+    ],
+    "sailing": [
+      "water"
+    ],
+    "shooting-range": [
+      "field-sports"
+    ],
+    "skiing": [
+      "winter"
+    ],
+    "skydiving": [
+      "adventure"
+    ],
+    "sleigh-ride": [
+      "winter"
+    ],
+    "snorkeling": [
+      "water"
+    ],
+    "sound-bath": [
+      "wellness"
+    ],
+    "spa": [
+      "wellness"
+    ],
+    "spa-day": [
+      "wellness"
+    ],
+    "sunset-cruise": [
+      "water"
+    ],
+    "tour": [
+      "cultural"
+    ],
+    "walking-tour": [
+      "cultural"
+    ],
+    "wine-tour": [
+      "culinary"
+    ],
+    "yacht-charter": [
+      "water"
+    ],
+    "yoga-retreat": [
+      "wellness"
+    ],
+    "zip-lining": [
+      "adventure"
+    ]
+  },
+  "tagMap": {
+    "residence.tags": {
+      "full buyout": [
+        "exclusivity:full-buyout"
+      ],
+      "golf": [
+        "activity.category:golf"
+      ],
+      "lake": [
+        "residence.setting:lake"
+      ],
+      "tropical": [
+        "residence.setting:tropical"
+      ],
+      "countryside": [
+        "residence.setting:countryside"
+      ],
+      "coastal": [
+        "residence.setting:coastal"
+      ],
+      "palace": [
+        "residence.setting:palace"
+      ],
+      "vineyard": [
+        "residence.setting:vineyard"
+      ],
+      "historic": [
+        "character:historic"
+      ],
+      "big-campus": [
+        "group.scale:large"
+      ],
+      "desert": [
+        "residence.setting:desert"
+      ],
+      "marina": [
+        "amenity:marina"
+      ],
+      "buyout": [
+        "exclusivity:full-buyout"
+      ],
+      "island": [
+        "residence.setting:island"
+      ],
+      "heritage": [
+        "character:historic"
+      ],
+      "safari": [
+        "residence.setting:safari"
+      ],
+      "beach": [
+        "amenity:beach"
+      ],
+      "spa": [
+        "activity.category:wellness",
+        "activity.type:spa",
+        "amenity:spa"
+      ],
+      "wellness": [
+        "activity.category:wellness"
+      ],
+      "alpine": [
+        "residence.setting:alpine"
+      ],
+      "all-inclusive": [
+        "amenity:all-inclusive"
+      ],
+      "castle": [
+        "residence.setting:castle"
+      ],
+      "luxury": [
+        "quality.band:luxury"
+      ],
+      "private island": [
+        "exclusivity:exclusive-use",
+        "residence.setting:island"
+      ],
+      "dive": [
+        "activity.category:water"
+      ],
+      "exclusive-use": [
+        "exclusivity:exclusive-use"
+      ],
+      "lakefront": [
+        "residence.setting:lake"
+      ],
+      "links": [
+        "activity.category:golf",
+        "residence.setting:links"
+      ],
+      "oceanfront": [
+        "residence.setting:coastal"
+      ],
+      "clifftop": [
+        "residence.setting:coastal"
+      ],
+      "remote": [
+        "character:remote"
+      ],
+      "ski-in ski-out": [
+        "activity.category:winter",
+        "residence.setting:ski-resort"
+      ],
+      "ski-resort": [
+        "activity.category:winter",
+        "residence.setting:ski-resort"
+      ],
+      "surf": [
+        "activity.category:water"
+      ],
+      "billfish": [
+        "activity.category:field-sports",
+        "activity.type:fishing"
+      ],
+      "falconry": [
+        "activity.category:field-sports"
+      ],
+      "villas": [
+        "residence.form:villa"
+      ],
+      "wine": [
+        "activity.category:culinary"
+      ],
+      "ballroom": [
+        "amenity:ballroom",
+        "group.scale:large"
+      ],
+      "conservation": [
+        "activity.category:give-back"
+      ],
+      "exclusive use": [
+        "exclusivity:exclusive-use"
+      ],
+      "large capacity": [
+        "group.scale:large"
+      ],
+      "large events": [
+        "group.scale:large"
+      ],
+      "large-group": [
+        "group.scale:large"
+      ],
+      "private-island": [
+        "exclusivity:exclusive-use",
+        "residence.setting:island"
+      ],
+      "wilderness": [
+        "activity.category:adventure"
+      ],
+      "alpine-lake": [
+        "residence.setting:lake"
+      ],
+      "big five": [
+        "residence.setting:safari"
+      ],
+      "big-group": [
+        "group.scale:large"
+      ],
+      "convention": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "design hotel": [
+        "character:design-led"
+      ],
+      "design-led": [
+        "character:design-led"
+      ],
+      "equestrian": [
+        "activity.category:equestrian"
+      ],
+      "five-star": [
+        "quality.band:luxury"
+      ],
+      "full-buyout": [
+        "exclusivity:full-buyout"
+      ],
+      "gaucho": [
+        "residence.setting:ranch"
+      ],
+      "large event capacity": [
+        "group.scale:large"
+      ],
+      "large group": [
+        "group.scale:large"
+      ],
+      "large-scale": [
+        "group.scale:large"
+      ],
+      "private beach": [
+        "amenity:beach"
+      ],
+      "reef": [
+        "activity.category:water"
+      ],
+      "sailing": [
+        "activity.category:water",
+        "activity.type:sailing"
+      ],
+      "ultra-luxe": [
+        "quality.band:luxury"
+      ],
+      "watersports": [
+        "activity.category:water"
+      ],
+      "winter": [
+        "activity.category:winter"
+      ],
+      "working ranch": [
+        "residence.setting:ranch"
+      ],
+      "adults-only": [
+        "character:adults-only"
+      ],
+      "art": [
+        "activity.category:cultural"
+      ],
+      "city-centre": [
+        "residence.setting:urban"
+      ],
+      "conference": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "estate-buyout": [
+        "exclusivity:full-buyout",
+        "residence.form:estate"
+      ],
+      "fly-fishing": [
+        "activity.category:field-sports",
+        "activity.type:fishing"
+      ],
+      "golf groups": [
+        "activity.category:golf"
+      ],
+      "mice": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "onsen": [
+        "activity.category:wellness",
+        "amenity:hot-springs"
+      ],
+      "polo": [
+        "activity.category:equestrian"
+      ],
+      "rooftop": [
+        "amenity:rooftop"
+      ],
+      "ski-in-ski-out": [
+        "activity.category:winter",
+        "residence.setting:ski-resort"
+      ],
+      "stargazing": [
+        "activity.category:cultural"
+      ],
+      "value": [
+        "quality.band:value"
+      ],
+      "wine country": [
+        "residence.setting:vineyard"
+      ],
+      "adventure": [
+        "activity.category:adventure"
+      ],
+      "asado": [
+        "residence.setting:ranch"
+      ],
+      "beach-club": [
+        "amenity:beach"
+      ],
+      "beachfront": [
+        "residence.setting:coastal"
+      ],
+      "big-five": [
+        "residence.setting:safari"
+      ],
+      "boat access": [
+        "access:transfer-required",
+        "amenity:marina"
+      ],
+      "client entertaining": [
+        "purpose:client-entertaining"
+      ],
+      "coastal trails": [
+        "activity.type:hiking",
+        "residence.setting:coastal"
+      ],
+      "cortijo": [
+        "residence.form:estate"
+      ],
+      "cottages": [
+        "residence.form:cabin-or-lodge"
+      ],
+      "cultural-immersion": [
+        "activity.category:cultural"
+      ],
+      "desert ranch": [
+        "residence.setting:desert"
+      ],
+      "English estate": [
+        "residence.form:estate",
+        "residence.setting:countryside"
+      ],
+      "estancia": [
+        "residence.setting:ranch"
+      ],
+      "farm-to-table": [
+        "activity.category:culinary"
+      ],
+      "fortress": [
+        "residence.setting:castle"
+      ],
+      "gala": [
+        "purpose:celebration"
+      ],
+      "great-barrier-reef": [
+        "activity.category:water"
+      ],
+      "hiking": [
+        "activity.category:adventure",
+        "activity.type:hiking"
+      ],
+      "horseback": [
+        "activity.category:equestrian",
+        "activity.type:horseback-riding"
+      ],
+      "horsemanship": [
+        "activity.category:equestrian"
+      ],
+      "hot-air balloon": [
+        "activity.category:adventure"
+      ],
+      "incentive": [
+        "purpose:incentive"
+      ],
+      "intimate": [
+        "group.scale:small"
+      ],
+      "large ballroom": [
+        "amenity:ballroom",
+        "group.scale:large"
+      ],
+      "large conference": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "large groups": [
+        "group.scale:large"
+      ],
+      "large-capacity": [
+        "group.scale:large"
+      ],
+      "lodge": [
+        "residence.form:cabin-or-lodge"
+      ],
+      "Matterhorn views": [
+        "residence.setting:alpine"
+      ],
+      "mega-resort": [
+        "group.scale:large"
+      ],
+      "Michelin dining": [
+        "activity.category:culinary",
+        "amenity:fine-dining"
+      ],
+      "mountain lake": [
+        "residence.setting:lake"
+      ],
+      "near-airport": [
+        "access:near-airport"
+      ],
+      "nordic": [
+        "activity.category:winter"
+      ],
+      "ocean cliff": [
+        "residence.setting:coastal"
+      ],
+      "ocean links": [
+        "activity.category:golf",
+        "residence.setting:links"
+      ],
+      "off-road": [
+        "activity.category:motorsport",
+        "activity.type:atv"
+      ],
+      "onsen spa": [
+        "activity.category:wellness",
+        "activity.type:spa",
+        "amenity:spa"
+      ],
+      "premium": [
+        "quality.band:premium"
+      ],
+      "private-beach": [
+        "amenity:beach"
+      ],
+      "ranch": [
+        "residence.setting:ranch"
+      ],
+      "regatta": [
+        "activity.category:water",
+        "activity.type:sailing"
+      ],
+      "riad": [
+        "residence.form:riad"
+      ],
+      "scale-500": [
+        "group.scale:large"
+      ],
+      "small group": [
+        "group.scale:small"
+      ],
+      "Sonoran desert": [
+        "residence.setting:desert"
+      ],
+      "sustainability": [
+        "activity.category:give-back",
+        "character:eco"
+      ],
+      "tented-camp": [
+        "residence.setting:safari"
+      ],
+      "trekking": [
+        "activity.category:adventure",
+        "activity.type:hiking"
+      ],
+      "whisky": [
+        "activity.category:culinary"
+      ],
+      "wine-country": [
+        "residence.setting:vineyard"
+      ],
+      "1500 capacity": [
+        "group.scale:large"
+      ],
+      "60000 sq ft meeting space": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "adaptive reuse": [
+        "character:historic"
+      ],
+      "all-suite lodge": [
+        "residence.form:cabin-or-lodge"
+      ],
+      "alpine access": [
+        "residence.setting:alpine"
+      ],
+      "alpine lodges": [
+        "residence.setting:alpine"
+      ],
+      "archipelago": [
+        "residence.setting:island"
+      ],
+      "arts and nature": [
+        "activity.category:cultural"
+      ],
+      "Atlantic links": [
+        "activity.category:golf",
+        "residence.setting:links"
+      ],
+      "atlantic-coast": [
+        "residence.setting:coastal"
+      ],
+      "atoll": [
+        "residence.setting:island"
+      ],
+      "award-winning bar": [
+        "activity.category:nightlife"
+      ],
+      "balloon": [
+        "activity.category:adventure"
+      ],
+      "ballooning": [
+        "activity.category:adventure"
+      ],
+      "banqueting": [
+        "amenity:ballroom",
+        "group.scale:large"
+      ],
+      "barbecue": [
+        "activity.category:culinary"
+      ],
+      "barefoot-luxury": [
+        "quality.band:luxury"
+      ],
+      "barrier-island": [
+        "residence.setting:island"
+      ],
+      "Bauhaus landmark": [
+        "character:historic"
+      ],
+      "beach club": [
+        "amenity:beach"
+      ],
+      "Beaux-Arts": [
+        "character:historic"
+      ],
+      "belle-epoque": [
+        "character:historic"
+      ],
+      "big capacity": [
+        "group.scale:large"
+      ],
+      "black tie": [
+        "purpose:celebration"
+      ],
+      "boat fleet": [
+        "activity.category:water"
+      ],
+      "boat-arrival": [
+        "access:transfer-required",
+        "amenity:marina"
+      ],
+      "boutique": [
+        "character:boutique"
+      ],
+      "boutique villa": [
+        "character:boutique",
+        "residence.form:villa"
+      ],
+      "Brunello winery": [
+        "residence.setting:vineyard"
+      ],
+      "cabins": [
+        "residence.form:cabin-or-lodge"
+      ],
+      "cable-car access": [
+        "access:transfer-required"
+      ],
+      "car-free": [
+        "character:remote"
+      ],
+      "car-free village": [
+        "character:remote"
+      ],
+      "castle energy": [
+        "residence.setting:castle"
+      ],
+      "catamaran": [
+        "activity.category:water"
+      ],
+      "championship links": [
+        "activity.category:golf",
+        "residence.setting:links"
+      ],
+      "Chianti wine estate": [
+        "residence.setting:vineyard"
+      ],
+      "chuckwagon": [
+        "residence.setting:ranch"
+      ],
+      "cider farm": [
+        "activity.category:culinary"
+      ],
+      "clay shooting": [
+        "activity.category:field-sports",
+        "activity.type:shooting-range"
+      ],
+      "clays": [
+        "activity.category:field-sports",
+        "activity.type:shooting-range"
+      ],
+      "close to airport": [
+        "access:near-airport"
+      ],
+      "coastal California": [
+        "residence.setting:coastal"
+      ],
+      "coastal links": [
+        "activity.category:golf",
+        "residence.setting:links"
+      ],
+      "colonial landmark": [
+        "character:historic"
+      ],
+      "community-owned": [
+        "activity.category:give-back"
+      ],
+      "concert-hall": [
+        "activity.category:cultural"
+      ],
+      "concession-buyout": [
+        "exclusivity:full-buyout"
+      ],
+      "conference centre": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "conference resort": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "conference-centre": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "conservancy buyout": [
+        "exclusivity:full-buyout"
+      ],
+      "conservation story": [
+        "activity.category:give-back"
+      ],
+      "convention center": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "cottage-country": [
+        "residence.setting:countryside"
+      ],
+      "country house": [
+        "residence.form:estate",
+        "residence.setting:countryside"
+      ],
+      "country-house": [
+        "residence.form:estate",
+        "residence.setting:countryside"
+      ],
+      "culinary": [
+        "activity.category:culinary"
+      ],
+      "culinary campus": [
+        "activity.category:culinary"
+      ],
+      "cultural forum": [
+        "activity.category:cultural"
+      ],
+      "desert architecture": [
+        "residence.setting:desert"
+      ],
+      "desert-edge": [
+        "residence.setting:desert"
+      ],
+      "design-forward": [
+        "character:design-led"
+      ],
+      "design-hotel": [
+        "character:design-led"
+      ],
+      "distillery": [
+        "activity.category:culinary",
+        "activity.type:distillery-tour"
+      ],
+      "Dolomite views": [
+        "residence.setting:alpine"
+      ],
+      "domestic-tropical": [
+        "residence.setting:tropical"
+      ],
+      "drive-from-seattle": [
+        "access:drive-to"
+      ],
+      "drive-to": [
+        "access:drive-to"
+      ],
+      "dubai-gateway": [
+        "access:near-airport"
+      ],
+      "Ducasse dining": [
+        "activity.category:culinary",
+        "amenity:fine-dining"
+      ],
+      "dune-driving": [
+        "activity.category:motorsport",
+        "activity.type:atv"
+      ],
+      "dunescape": [
+        "residence.setting:desert"
+      ],
+      "eco resort": [
+        "character:eco"
+      ],
+      "eco-luxury": [
+        "character:eco",
+        "quality.band:luxury"
+      ],
+      "empty-quarter": [
+        "residence.setting:desert"
+      ],
+      "estate": [
+        "residence.form:estate"
+      ],
+      "exclusive club": [
+        "exclusivity:exclusive-use"
+      ],
+      "exclusive villa": [
+        "exclusivity:exclusive-use",
+        "residence.form:villa"
+      ],
+      "exclusive-use only": [
+        "exclusivity:exclusive-use"
+      ],
+      "expedition-arrival": [
+        "access:transfer-required"
+      ],
+      "farm estate": [
+        "residence.setting:countryside"
+      ],
+      "field sports": [
+        "activity.category:field-sports"
+      ],
+      "fishing": [
+        "activity.category:field-sports",
+        "activity.type:fishing"
+      ],
+      "five-diamond": [
+        "quality.band:luxury"
+      ],
+      "floating-green": [
+        "activity.category:golf"
+      ],
+      "floating-pool": [
+        "amenity:pool"
+      ],
+      "fly fishing": [
+        "activity.category:field-sports",
+        "activity.type:fishing"
+      ],
+      "food district": [
+        "residence.setting:urban"
+      ],
+      "Forbes Five-Star": [
+        "quality.band:luxury"
+      ],
+      "forest chalets": [
+        "residence.form:cabin-or-lodge"
+      ],
+      "forest wellness": [
+        "activity.category:wellness"
+      ],
+      "forum venue": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "four-diamond": [
+        "quality.band:premium"
+      ],
+      "funicular-arrival": [
+        "access:transfer-required"
+      ],
+      "game-drives": [
+        "residence.setting:safari"
+      ],
+      "golf and spa": [
+        "activity.category:golf",
+        "amenity:spa"
+      ],
+      "golf-pilgrimage": [
+        "activity.category:golf"
+      ],
+      "gorilla trekking": [
+        "activity.category:adventure"
+      ],
+      "grand ballroom": [
+        "amenity:ballroom",
+        "group.scale:large"
+      ],
+      "great camp": [
+        "residence.form:cabin-or-lodge"
+      ],
+      "Great Migration": [
+        "residence.setting:safari"
+      ],
+      "great-camp": [
+        "residence.form:cabin-or-lodge"
+      ],
+      "greenhouse dining": [
+        "activity.category:culinary"
+      ],
+      "hacienda courtyard": [
+        "residence.form:estate"
+      ],
+      "heli-ski": [
+        "activity.category:winter",
+        "residence.setting:ski-resort"
+      ],
+      "heritage building": [
+        "character:historic"
+      ],
+      "heritage conversion": [
+        "character:historic"
+      ],
+      "high desert": [
+        "residence.setting:desert"
+      ],
+      "high-alpine meadow": [
+        "residence.setting:alpine"
+      ],
+      "high-desert": [
+        "residence.setting:desert"
+      ],
+      "hill-country": [
+        "residence.setting:countryside"
+      ],
+      "hillside bungalows": [
+        "residence.form:cabin-or-lodge"
+      ],
+      "historic banking hall": [
+        "character:historic"
+      ],
+      "historic estate": [
+        "character:historic",
+        "residence.form:estate"
+      ],
+      "historic hospiz": [
+        "character:historic"
+      ],
+      "historic landmark": [
+        "character:historic"
+      ],
+      "historic manor": [
+        "character:historic",
+        "residence.form:estate"
+      ],
+      "historic monument": [
+        "character:historic"
+      ],
+      "historic resort": [
+        "character:historic"
+      ],
+      "historic tower": [
+        "character:historic"
+      ],
+      "historic villa": [
+        "character:historic",
+        "residence.form:villa"
+      ],
+      "hog hunt": [
+        "activity.category:field-sports"
+      ],
+      "home farm": [
+        "residence.setting:countryside"
+      ],
+      "home of golf": [
+        "activity.category:golf"
+      ],
+      "horseback safari": [
+        "residence.setting:safari"
+      ],
+      "hot-springs": [
+        "activity.category:wellness",
+        "amenity:hot-springs"
+      ],
+      "imperial-palace views": [
+        "residence.setting:palace"
+      ],
+      "infinity-pool": [
+        "amenity:pool"
+      ],
+      "integrated-resort": [
+        "activity.category:gaming"
+      ],
+      "intimate group": [
+        "group.scale:small"
+      ],
+      "Irish demesne": [
+        "residence.form:estate"
+      ],
+      "island-gala": [
+        "purpose:celebration"
+      ],
+      "Jean-Georges": [
+        "activity.category:culinary",
+        "amenity:fine-dining"
+      ],
+      "jetty": [
+        "amenity:marina"
+      ],
+      "kayaking": [
+        "activity.category:water",
+        "activity.type:kayaking"
+      ],
+      "kitesurfing": [
+        "activity.category:water"
+      ],
+      "Kruger frontage": [
+        "residence.setting:safari"
+      ],
+      "lake-resort": [
+        "residence.setting:lake"
+      ],
+      "lakefront-golf": [
+        "activity.category:golf"
+      ],
+      "lakeside": [
+        "residence.setting:lake"
+      ],
+      "lapland": [
+        "activity.category:winter"
+      ],
+      "large all-hands": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "large events venue": [
+        "group.scale:large"
+      ],
+      "large meeting space": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "largest ballroom in park city": [
+        "amenity:ballroom",
+        "group.scale:large"
+      ],
+      "largest-scale": [
+        "group.scale:large"
+      ],
+      "leaderboard": [
+        "format:competition"
+      ],
+      "leadership": [
+        "purpose:leadership"
+      ],
+      "lift base": [
+        "activity.category:winter",
+        "residence.setting:ski-resort"
+      ],
+      "links-style golf": [
+        "activity.category:golf",
+        "residence.setting:links"
+      ],
+      "live music": [
+        "activity.category:nightlife"
+      ],
+      "lobster bakes": [
+        "activity.category:culinary"
+      ],
+      "loch-side": [
+        "residence.setting:lake"
+      ],
+      "log-lodge": [
+        "residence.form:cabin-or-lodge"
+      ],
+      "marine-wildlife": [
+        "oo.kind:wildlife"
+      ],
+      "Matteo Thun design": [
+        "character:design-led"
+      ],
+      "medieval": [
+        "character:historic",
+        "residence.setting:castle"
+      ],
+      "meeting space": [
+        "amenity:meeting-space",
+        "purpose:conference"
+      ],
+      "Michelin": [
+        "activity.category:culinary",
+        "amenity:fine-dining"
+      ],
+      "migration": [
+        "residence.setting:safari"
+      ],
+      "mile-long beach": [
+        "residence.setting:coastal"
+      ],
+      "multi-camp": [
+        "residence.setting:safari"
+      ],
+      "museum quarter": [
+        "residence.setting:urban"
+      ],
+      "National Trust grounds": [
+        "residence.form:estate"
+      ],
+      "Negev desert": [
+        "residence.setting:desert"
+      ],
+      "Niseko powder": [
+        "activity.category:winter",
+        "residence.setting:ski-resort"
+      ],
+      "northern-lights": [
+        "activity.category:winter"
+      ],
+      "open bar": [
+        "activity.category:nightlife"
+      ],
+      "Open links": [
+        "activity.category:golf",
+        "residence.setting:links"
+      ],
+      "outback": [
+        "character:remote"
+      ],
+      "outdoor-pursuits": [
+        "activity.category:adventure"
+      ],
+      "Pacific coast": [
+        "residence.setting:coastal"
+      ],
+      "Palace buyout": [
+        "exclusivity:full-buyout",
+        "residence.setting:palace"
+      ],
+      "Parador": [
+        "residence.form:estate"
+      ],
+      "piste-side": [
+        "activity.category:winter",
+        "residence.setting:ski-resort"
+      ],
+      "pool-suites": [
+        "amenity:pool"
+      ],
+      "powder": [
+        "activity.category:winter",
+        "residence.setting:ski-resort"
+      ],
+      "primate-tracking": [
+        "activity.category:adventure"
+      ],
+      "private atoll": [
+        "exclusivity:exclusive-use",
+        "residence.setting:island"
+      ],
+      "private cay": [
+        "exclusivity:exclusive-use",
+        "residence.setting:island"
+      ],
+      "private cove": [
+        "amenity:beach",
+        "exclusivity:exclusive-use"
+      ],
+      "private golf": [
+        "activity.category:golf"
+      ],
+      "private hamlet": [
+        "exclusivity:exclusive-use"
+      ],
+      "private headland": [
+        "exclusivity:exclusive-use"
+      ],
+      "private lake": [
+        "residence.setting:lake"
+      ],
+      "private links": [
+        "activity.category:golf",
+        "residence.setting:links"
+      ],
+      "private-chef chalets": [
+        "amenity:private-chef",
+        "residence.form:cabin-or-lodge"
+      ],
+      "private-community": [
+        "exclusivity:exclusive-use"
+      ],
+      "private-guide": [
+        "format:guided"
+      ],
+      "private-reserve": [
+        "exclusivity:exclusive-use"
+      ],
+      "real castle": [
+        "residence.setting:castle"
+      ],
+      "red rock adventure": [
+        "activity.category:adventure"
+      ],
+      "reef diving": [
+        "activity.category:water"
+      ],
+      "Regency house": [
+        "character:historic",
+        "residence.form:estate"
+      ],
+      "relaxed estate": [
+        "format:relaxed"
+      ],
+      "remote Pacific": [
+        "character:remote"
+      ],
+      "restorative": [
+        "activity.category:wellness"
+      ],
+      "rock-art": [
+        "activity.category:cultural"
+      ],
+      "rock-climbing": [
+        "activity.category:adventure"
+      ],
+      "rooftop ballroom": [
+        "amenity:ballroom",
+        "group.scale:large"
+      ],
+      "rooftop pool": [
+        "amenity:pool"
+      ],
+      "royal palace": [
+        "residence.setting:palace"
+      ],
+      "Ryder Cup": [
+        "activity.category:golf"
+      ],
+      "Ryder Cup venue": [
+        "activity.category:golf"
+      ],
+      "ryokan": [
+        "residence.form:ryokan"
+      ],
+      "screening room": [
+        "amenity:screening-room"
+      ],
+      "seaplane": [
+        "access:transfer-required"
+      ],
+      "self-contained": [
+        "exclusivity:exclusive-use"
+      ],
+      "seven beaches": [
+        "residence.setting:coastal"
+      ],
+      "ski": [
+        "activity.category:winter",
+        "residence.setting:ski-resort"
+      ],
+      "ski-hill": [
+        "activity.category:winter",
+        "residence.setting:ski-resort"
+      ],
+      "ski-in": [
+        "activity.category:winter",
+        "residence.setting:ski-resort"
+      ],
+      "skyline rooftop": [
+        "amenity:rooftop",
+        "residence.setting:urban"
+      ],
+      "sonoran": [
+        "residence.setting:desert"
+      ],
+      "sport fishing": [
+        "activity.category:field-sports",
+        "activity.type:fishing"
+      ],
+      "sporting clays": [
+        "activity.category:field-sports",
+        "activity.type:shooting-range"
+      ],
+      "spruce chalets": [
+        "residence.form:cabin-or-lodge"
+      ],
+      "stately home": [
+        "character:historic",
+        "residence.form:estate"
+      ],
+      "summer alpine": [
+        "residence.setting:alpine"
+      ],
+      "tasting rooms": [
+        "activity.category:culinary"
+      ],
+      "tented-villas": [
+        "residence.form:villa",
+        "residence.setting:safari"
+      ],
+      "three camps": [
+        "residence.setting:safari"
+      ],
+      "tournament": [
+        "format:competition"
+      ],
+      "Tuscan estate": [
+        "residence.setting:vineyard"
+      ],
+      "twin beaches": [
+        "residence.setting:coastal"
+      ],
+      "two ballrooms": [
+        "amenity:ballroom",
+        "group.scale:large"
+      ],
+      "two camps": [
+        "residence.setting:safari"
+      ],
+      "U.S. Open": [
+        "activity.category:golf"
+      ],
+      "ultra-premium": [
+        "quality.band:luxury"
+      ],
+      "unplugged": [
+        "character:remote",
+        "format:relaxed"
+      ],
+      "urban": [
+        "residence.setting:urban"
+      ],
+      "via ferrata": [
+        "activity.category:adventure"
+      ],
+      "via-ferrata": [
+        "activity.category:adventure"
+      ],
+      "vineyard views": [
+        "residence.setting:vineyard"
+      ],
+      "vintage cars": [
+        "activity.category:motorsport"
+      ],
+      "walled gardens": [
+        "residence.form:estate"
+      ],
+      "waterfront": [
+        "residence.setting:coastal"
+      ],
+      "waterpark": [
+        "amenity:waterpark"
+      ],
+      "whole-camp buyout": [
+        "exclusivity:full-buyout"
+      ],
+      "whole-lodge buyout": [
+        "exclusivity:full-buyout"
+      ],
+      "wine cellar": [
+        "activity.category:culinary"
+      ],
+      "wine estate": [
+        "residence.setting:vineyard"
+      ],
+      "wine-farm": [
+        "residence.setting:vineyard"
+      ],
+      "winelands": [
+        "residence.setting:vineyard"
+      ],
+      "winery": [
+        "residence.setting:vineyard"
+      ],
+      "wingshooting": [
+        "activity.category:field-sports",
+        "activity.type:shooting-range"
+      ],
+      "wrangling": [
+        "oo.kind:wrangling",
+        "residence.setting:ranch"
+      ],
+      "yacht": [
+        "activity.category:water",
+        "activity.type:yacht-charter"
+      ]
+    },
+    "oo.tags": {
+      "team": [
+        "activity.category:social",
+        "format:team"
+      ],
+      "competition": [
+        "format:competition"
+      ],
+      "golf": [
+        "activity.category:golf"
+      ],
+      "hands-on": [
+        "format:hands-on"
+      ],
+      "client-entertaining": [
+        "purpose:client-entertaining"
+      ],
+      "driving": [
+        "activity.category:motorsport"
+      ],
+      "give-back": [
+        "activity.category:give-back"
+      ],
+      "service": [
+        "activity.category:give-back",
+        "oo.kind:service"
+      ],
+      "hospitality": [
+        "oo.kind:hospitality"
+      ],
+      "nightlife": [
+        "activity.category:nightlife"
+      ],
+      "vip": [
+        "purpose:client-entertaining"
+      ],
+      "wellness": [
+        "activity.category:wellness"
+      ],
+      "cooking": [
+        "activity.category:culinary",
+        "activity.type:cooking-class"
+      ],
+      "highland-games": [
+        "activity.category:social",
+        "oo.kind:highland-games"
+      ],
+      "outdoors": [
+        "activity.category:adventure"
+      ],
+      "ranch": [
+        "residence.setting:ranch"
+      ],
+      "tasting": [
+        "activity.category:culinary"
+      ],
+      "amazing-race": [
+        "activity.category:social",
+        "oo.kind:amazing-race"
+      ],
+      "cycling": [
+        "activity.category:cycling",
+        "activity.type:biking"
+      ],
+      "horses": [
+        "activity.category:equestrian"
+      ],
+      "recovery": [
+        "activity.category:wellness"
+      ],
+      "social": [
+        "activity.category:social"
+      ],
+      "tournament": [
+        "format:competition"
+      ],
+      "adventure": [
+        "activity.category:adventure"
+      ],
+      "blending": [
+        "activity.category:culinary",
+        "format:hands-on"
+      ],
+      "celebration": [
+        "purpose:celebration"
+      ],
+      "clays": [
+        "activity.category:field-sports",
+        "activity.type:shooting-range"
+      ],
+      "client entertaining": [
+        "purpose:client-entertaining"
+      ],
+      "clinic": [
+        "format:guided"
+      ],
+      "cocktails": [
+        "activity.category:culinary"
+      ],
+      "conservation": [
+        "activity.category:give-back"
+      ],
+      "expedition": [
+        "activity.category:adventure"
+      ],
+      "feast": [
+        "activity.category:culinary"
+      ],
+      "heritage": [
+        "character:historic"
+      ],
+      "horsemanship": [
+        "activity.category:equestrian"
+      ],
+      "navigation": [
+        "activity.category:adventure"
+      ],
+      "urban": [
+        "residence.setting:urban"
+      ],
+      "wildlife": [
+        "oo.kind:wildlife"
+      ],
+      "wine": [
+        "activity.category:culinary"
+      ],
+      "all-abilities": [
+        "format:all-abilities"
+      ],
+      "archery": [
+        "activity.category:field-sports"
+      ],
+      "bbq": [
+        "activity.category:culinary"
+      ],
+      "beer": [
+        "activity.category:culinary"
+      ],
+      "beginner-friendly": [
+        "format:all-abilities"
+      ],
+      "birding": [
+        "oo.kind:wildlife"
+      ],
+      "boats": [
+        "activity.category:water"
+      ],
+      "breathwork": [
+        "activity.category:wellness"
+      ],
+      "brewing": [
+        "activity.category:culinary",
+        "activity.type:brewery-tour"
+      ],
+      "build": [
+        "format:hands-on",
+        "format:team"
+      ],
+      "bushcraft": [
+        "activity.category:adventure"
+      ],
+      "camping": [
+        "activity.category:adventure"
+      ],
+      "carriage": [
+        "activity.category:equestrian"
+      ],
+      "casino": [
+        "activity.category:gaming",
+        "activity.type:casino"
+      ],
+      "cattle": [
+        "residence.setting:ranch"
+      ],
+      "championship": [
+        "format:competition"
+      ],
+      "charcuterie": [
+        "activity.category:culinary"
+      ],
+      "charity": [
+        "activity.category:give-back"
+      ],
+      "chef battle": [
+        "activity.category:culinary",
+        "activity.type:cooking-class",
+        "format:hands-on"
+      ],
+      "chuckwagon": [
+        "residence.setting:ranch"
+      ],
+      "citywide": [
+        "residence.setting:urban"
+      ],
+      "classic cars": [
+        "activity.category:motorsport"
+      ],
+      "clay shooting": [
+        "activity.category:field-sports",
+        "activity.type:shooting-range"
+      ],
+      "climbing": [
+        "activity.category:adventure"
+      ],
+      "cold-plunge": [
+        "activity.category:wellness"
+      ],
+      "comedy": [
+        "activity.category:nightlife"
+      ],
+      "concert": [
+        "activity.category:cultural"
+      ],
+      "concours": [
+        "activity.category:motorsport"
+      ],
+      "construction": [
+        "activity.category:give-back"
+      ],
+      "craft": [
+        "format:hands-on"
+      ],
+      "creative": [
+        "format:hands-on"
+      ],
+      "CSR": [
+        "activity.category:give-back"
+      ],
+      "distilling": [
+        "activity.category:culinary",
+        "activity.type:distillery-tour"
+      ],
+      "dj": [
+        "activity.category:nightlife"
+      ],
+      "e-bike": [
+        "activity.category:cycling",
+        "activity.type:biking"
+      ],
+      "endurance": [
+        "format:endurance"
+      ],
+      "estate": [
+        "residence.form:estate"
+      ],
+      "falconry": [
+        "activity.category:field-sports"
+      ],
+      "farm-to-table": [
+        "activity.category:culinary"
+      ],
+      "field-day": [
+        "activity.category:social",
+        "format:team"
+      ],
+      "fly casting": [
+        "activity.category:field-sports",
+        "activity.type:fishing"
+      ],
+      "fly fishing": [
+        "activity.category:field-sports",
+        "activity.type:fishing"
+      ],
+      "gin": [
+        "activity.category:culinary"
+      ],
+      "glacier": [
+        "activity.category:adventure"
+      ],
+      "gravel": [
+        "activity.category:cycling",
+        "activity.type:biking"
+      ],
+      "guided": [
+        "format:guided"
+      ],
+      "hog hunt": [
+        "activity.category:field-sports"
+      ],
+      "horse-racing": [
+        "activity.category:equestrian"
+      ],
+      "horseback": [
+        "activity.category:equestrian",
+        "activity.type:horseback-riding"
+      ],
+      "hot-air balloon": [
+        "activity.category:adventure"
+      ],
+      "large-group": [
+        "group.scale:large"
+      ],
+      "leaderboard": [
+        "format:competition"
+      ],
+      "learning": [
+        "format:guided"
+      ],
+      "legacy": [
+        "activity.category:give-back"
+      ],
+      "live-music": [
+        "activity.category:nightlife"
+      ],
+      "long table": [
+        "activity.category:culinary"
+      ],
+      "marquee": [
+        "purpose:client-entertaining"
+      ],
+      "masterclass": [
+        "format:guided"
+      ],
+      "matchplay": [
+        "activity.category:golf",
+        "format:competition"
+      ],
+      "mentorship": [
+        "format:guided"
+      ],
+      "mezcal": [
+        "activity.category:culinary"
+      ],
+      "mindfulness": [
+        "activity.category:wellness"
+      ],
+      "motorsport": [
+        "activity.category:motorsport"
+      ],
+      "night": [
+        "format:after-dark"
+      ],
+      "off-road": [
+        "activity.category:motorsport",
+        "activity.type:atv"
+      ],
+      "overnight": [
+        "format:overnight"
+      ],
+      "picnic": [
+        "activity.category:culinary"
+      ],
+      "polo": [
+        "activity.category:equestrian"
+      ],
+      "purpose": [
+        "activity.category:give-back"
+      ],
+      "puzzle": [
+        "activity.category:social"
+      ],
+      "racing": [
+        "activity.category:motorsport",
+        "activity.type:racing"
+      ],
+      "rafting": [
+        "activity.category:adventure",
+        "activity.category:water",
+        "activity.type:rafting"
+      ],
+      "reception": [
+        "purpose:celebration"
+      ],
+      "regatta": [
+        "activity.category:water",
+        "activity.type:sailing"
+      ],
+      "relaxed": [
+        "format:relaxed"
+      ],
+      "relay": [
+        "activity.category:social",
+        "format:competition"
+      ],
+      "reset": [
+        "activity.category:wellness"
+      ],
+      "restorative": [
+        "activity.category:wellness"
+      ],
+      "roping": [
+        "residence.setting:ranch"
+      ],
+      "sailing": [
+        "activity.category:water",
+        "activity.type:sailing"
+      ],
+      "sauna": [
+        "activity.category:wellness"
+      ],
+      "scramble": [
+        "activity.category:golf",
+        "format:competition"
+      ],
+      "seafood": [
+        "activity.category:culinary"
+      ],
+      "sound-bath": [
+        "activity.category:wellness",
+        "activity.type:sound-bath"
+      ],
+      "spa": [
+        "activity.category:wellness",
+        "activity.type:spa",
+        "amenity:spa"
+      ],
+      "sport fishing": [
+        "activity.category:field-sports",
+        "activity.type:fishing"
+      ],
+      "stargazing": [
+        "activity.category:cultural"
+      ],
+      "strongman": [
+        "activity.category:social",
+        "format:competition"
+      ],
+      "summit": [
+        "activity.category:adventure"
+      ],
+      "tequila": [
+        "activity.category:culinary"
+      ],
+      "theater": [
+        "activity.category:cultural"
+      ],
+      "timbersports": [
+        "activity.category:social"
+      ],
+      "trail-ride": [
+        "activity.category:equestrian",
+        "activity.type:horseback-riding"
+      ],
+      "trek": [
+        "activity.category:adventure",
+        "activity.type:hiking"
+      ],
+      "trophy": [
+        "format:competition"
+      ],
+      "tropical": [
+        "residence.setting:tropical"
+      ],
+      "tug-of-war": [
+        "activity.category:social",
+        "format:competition"
+      ],
+      "via-ferrata": [
+        "activity.category:adventure"
+      ],
+      "vineyard": [
+        "residence.setting:vineyard"
+      ],
+      "whisky": [
+        "activity.category:culinary"
+      ],
+      "wilderness": [
+        "activity.category:adventure"
+      ],
+      "wine tasting": [
+        "activity.category:culinary",
+        "activity.type:wine-tour"
+      ],
+      "winemaker dinner": [
+        "activity.category:culinary",
+        "activity.type:wine-tour"
+      ],
+      "wingshooting": [
+        "activity.category:field-sports",
+        "activity.type:shooting-range"
+      ],
+      "workshop": [
+        "format:hands-on"
+      ]
+    }
+  },
+  "tagStats": {
+    "residence.tags": {
+      "distinct": 604,
+      "uses": 1431,
+      "mappedDistinct": 382,
+      "mappedUses": 1045
+    },
+    "oo.tags": {
+      "distinct": 164,
+      "uses": 308,
+      "mappedDistinct": 144,
+      "mappedUses": 288
+    }
+  },
+  "unmapped": [
+    {
+      "source": "residence.tags",
+      "tag": "europe",
+      "count": 36,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "south-africa",
+      "count": 8,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "northeast",
+      "count": 7,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "australia",
+      "count": 6,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "colorado",
+      "count": 6,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "hawaii",
+      "count": 6,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "india",
+      "count": 6,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "morocco",
+      "count": 6,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "gardens",
+      "count": 5,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "japan",
+      "count": 5,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "new-zealand",
+      "count": 5,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "pacific-northwest",
+      "count": 5,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "thailand",
+      "count": 5,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "florida",
+      "count": 4,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "mendoza",
+      "count": 4,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "uae",
+      "count": 4,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "bahamas",
+      "count": 3,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "forest",
+      "count": 3,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "four-seasons",
+      "count": 3,
+      "reason": "brand-or-affiliation: a proper noun, not a neutral facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "grace-bay",
+      "count": 3,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "hudson-valley",
+      "count": 3,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "iceland",
+      "count": 3,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "los-cabos",
+      "count": 3,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "niche",
+      "count": 3,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "oregon",
+      "count": 3,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "patagonia",
+      "count": 3,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "punta-mita",
+      "count": 3,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "rainforest",
+      "count": 3,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "riviera-maya",
+      "count": 3,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "saudi-arabia",
+      "count": 3,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "turks-caicos",
+      "count": 3,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "all-suite",
+      "count": 2,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "alula",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "andalucia",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "andes",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "arabian",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "aspen",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "belize",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "botswana",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "bvi",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "dubai",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "great-lakes",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "iconic",
+      "count": 2,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "jaipur",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "kenya",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "malaria-free",
+      "count": 2,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "mallorca",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "members' club",
+      "count": 2,
+      "reason": "brand-or-affiliation: a proper noun, not a neutral facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "mountain",
+      "count": 2,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "national park",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "national-park",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "okanagan",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "okavango",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "oman",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "provence",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "queenstown",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Relais & Chateaux",
+      "count": 2,
+      "reason": "brand-or-affiliation: a proper noun, not a neutral facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "royal",
+      "count": 2,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "st-lucia",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "udaipur",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "vietnam",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "washington",
+      "count": 2,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "waterfall",
+      "count": 2,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "abaco",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "adirondack",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "adirondacks",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "adriatic",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "alentejo",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "altitude",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Aman",
+      "count": 1,
+      "reason": "brand-or-affiliation: a proper noun, not a neutral facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "americana",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Andalusian",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "andaman",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "andermatt",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "apac",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "arizona",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Arlberg",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "atlantis",
+      "count": 1,
+      "reason": "brand-or-affiliation: a proper noun, not a neutral facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "atlas",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "baja",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "bavaria",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "beaver-creek",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Belmond",
+      "count": 1,
+      "reason": "brand-or-affiliation: a proper noun, not a neutral facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "berkshires",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "bordeaux",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "botanical gardens",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "bucket-list",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "california",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "cambodia",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "camel farm",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "canada",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "canyon",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "canyon rim",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Cape winelands",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "caribbean",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "carneros",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "cenote",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "charter-circuit",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Colorado Plateau",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "columbia-gorge",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "comporta",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "conservancy",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "cool-climate",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "dmc",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "douro",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "dry forest",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "family-run reserve",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "festival-ops",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "fjord",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "fort-views",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Four Valleys",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "four-season",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "g7-host",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "georgia",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "glamping",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "glass atrium",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "goa",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Grand Canal",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Grand Teton",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "grand-cayman",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "gstaad",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "hunter-valley",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Indian Ocean",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "indian-ocean",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "indonesia",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Ireland",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Italy",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "jungle",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "jw-marriott",
+      "count": 1,
+      "reason": "brand-or-affiliation: a proper noun, not a neutral facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "karst",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "kauai",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "kimberley",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "kitzbuhel",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "koh-samui",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "kona",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "kyoto",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "lake-pichola",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "lanai",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "lava",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "maine",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "malaysia",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "maldives",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "mangrove lagoon",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "margaret-river",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "marine research",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "marine reserve",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "marine-park",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "marrakech",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "mediterranean",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "mid-atlantic",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "midwest",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "modern mountain",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "montenegro",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Mount Timpanogos",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "mt-yotei",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "mughal",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "multi-lodge",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "musandam",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "nagano",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "napa",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Napa",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "new-build",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "newport",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Nile",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Okavango Delta",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "okinawa",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "orlando",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "overflow",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "panama",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "park-hyatt",
+      "count": 1,
+      "reason": "brand-or-affiliation: a proper noun, not a neutral facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "phang-nga",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "photographic studio",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "pitons",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "porto",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Puglian village",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "quebec",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Red Centre",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "red rock",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "red-rock",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "red-sea",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "relais-chateaux",
+      "count": 1,
+      "reason": "brand-or-affiliation: a proper noun, not a neutral facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "reserve",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "resort",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "rhode-island",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "rioja",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "river",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "riverfront",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Riviera",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "riviera-nayarit",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "rock formations",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "rocky-mountains",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "rwanda",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "salzburg",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Sandhills",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "sandstone",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "scottsdale",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "sea-of-cortez",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "secure",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "sentosa",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "serengeti",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "singapore",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "sister-property",
+      "count": 1,
+      "reason": "brand-or-affiliation: a proper noun, not a neutral facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Sonoma",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "south-carolina",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "st-regis",
+      "count": 1,
+      "reason": "brand-or-affiliation: a proper noun, not a neutral facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Star Beds",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "steamer",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "subtropical gardens",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "sunset",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "tahoe",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "tasmania",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "telluride",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "texas",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "tyrol",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "Uluru views",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "vail",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "victoria-falls",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "virgin-gorda",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "virginia",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "white-lotus",
+      "count": 1,
+      "reason": "brand-or-affiliation: a proper noun, not a neutral facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "wildlife-reserve",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "residence.tags",
+      "tag": "zambezi",
+      "count": 1,
+      "reason": "place-name: belongs in the row's place fields (country/region), not a facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "awe",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "bonfire",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "branded merch",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "bucket-list",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "cart-girl service",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "engineering",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "entertainment",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "harbor",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "ice",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "iconic",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "marine",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "nature",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "open range",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "performance",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "photography",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "river",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "scenic drive",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "science",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "show",
+      "count": 1,
+      "reason": "no-confident-facet"
+    },
+    {
+      "source": "oo.tags",
+      "tag": "tennis",
+      "count": 1,
+      "reason": "no-confident-facet"
+    }
+  ],
+  "image": {
+    "status": "empty-until-M6",
+    "subject": [],
+    "scene": [],
+    "mood": []
+  }
+}

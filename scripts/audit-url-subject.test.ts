@@ -8,7 +8,7 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { judge, nameTokens, visibleText } from "./audit-url-subject";
+import { judge, nameTokens, visibleText, verdictForStatus } from "./audit-url-subject";
 
 const page = (body: string) => `<html><head><title>x</title></head><body>${body}</body></html>`;
 
@@ -90,4 +90,44 @@ test("state abbreviation matches as a whole word only", () => {
     page("<p>Franchise opportunities since 1990</p>"),
   );
   assert.equal(r.verdict, "UNCONFIRMED");
+});
+
+// ─── status classification (2026-08-10) ─────────────────────────────────────
+//
+// The 08-07 audit reported ONE dead link portfolio-wide and the watchdog
+// escalated it to RED: "users see a broken 'Reserve' link with no fallback."
+//
+//   Sagamore Spirit Distillery Tour (Baltimore) → https://sagamorespirit.com/
+//
+// Re-measured by hand on 08-10: 10 GETs six seconds apart returned 5× HTTP 521
+// and 5× HTTP 200, and every 200 carried `cf-cache-status: DYNAMIC` with the
+// real 343KB homepage — served by the ORIGIN, not a cache. A live site with a
+// flapping origin. Quarantining it would have stripped a working link, which is
+// the same failure that nearly cost seven links in the first audit.
+
+test("a Cloudflare origin error is UNREACHABLE, not DEAD", () => {
+  for (const status of [520, 521, 522, 523, 524, 525, 526, 527]) {
+    const r = verdictForStatus(status);
+    assert.equal(r?.verdict, "UNREACHABLE", `HTTP ${status} is the edge, not the origin`);
+    assert.match(r!.why, /NOT a dead link/);
+  }
+});
+
+test("a server that answered with an error is still DEAD", () => {
+  // The origin spoke. That IS evidence about the url, and must stay actionable —
+  // widening the transient bucket to 5xx generally would hide real breakage.
+  for (const status of [404, 410, 500, 502, 503, 519, 528]) {
+    assert.equal(verdictForStatus(status)?.verdict, "DEAD", `HTTP ${status} must stay actionable`);
+  }
+});
+
+test("a refusal stays BLOCKED — the three states must not blur", () => {
+  for (const status of [401, 403, 429]) {
+    assert.equal(verdictForStatus(status)?.verdict, "BLOCKED");
+  }
+});
+
+test("a 2xx settles nothing by itself — only the page body can", () => {
+  assert.equal(verdictForStatus(200), null);
+  assert.equal(verdictForStatus(299), null);
 });

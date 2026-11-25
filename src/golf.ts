@@ -39,22 +39,53 @@
  * the BASE specifically for duplicate detection.
  */
 
-import { SHARED_GOLF_COURSES as SHARED_GOLF_COURSES_BASE, type SharedGolfCourse } from "./golf-courses";
-import { SHARED_GOLF_COURSES_HHQ_MERGE } from "./golf-courses-hhq-merge";
+import {
+  GOLF_COURSE_RECORDS,
+  flatCourseView,
+  type GolfCourseRecord,
+  type SharedGolfCourse,
+} from "./golf-courses";
+import { SHARED_GOLF_COURSES_HHQ_MERGE as HHQ_MERGE_SOURCE } from "./golf-courses-hhq-merge";
+import { assignIds, golfCourseIdBase, indexById } from "./row-ids";
 
-export type { SharedGolfCourse };
-export { SHARED_GOLF_COURSES_HHQ_MERGE };
+export type { SharedGolfCourse, GolfCourseRecord };
+
+/**
+ * Every canonical course record — base + sanctioned expansion — with its id
+ * FIRST (CORPUS-M3a; rules in src/row-ids.ts). Ids are assigned over the
+ * combined list in this order, so a researched course whose slug collides with
+ * a base course gets the `-2`. Carries the embedded-only facts too (see
+ * golf-courses.ts); readers want `SHARED_GOLF_COURSES` or `golfDestinations()`.
+ */
+export const GOLF_COURSES_CANONICAL: (GolfCourseRecord & { id: string })[] = (() => {
+  const all: GolfCourseRecord[] = [...GOLF_COURSE_RECORDS, ...HHQ_MERGE_SOURCE];
+  const ids = assignIds(all, golfCourseIdBase);
+  return all.map((r, i) => ({ id: ids[i], ...r }));
+})();
+
+/** id AND alias → canonical record. Throws on an id or alias claimed twice. */
+export const GOLF_COURSE_INDEX = indexById(GOLF_COURSES_CANONICAL, "golf courses");
+
+const flatWithId = (r: GolfCourseRecord & { id: string }) => flatCourseView(r) as SharedGolfCourse & { id: string };
+
+/** The sanctioned expansion rows, with ids. */
+export const SHARED_GOLF_COURSES_HHQ_MERGE: (SharedGolfCourse & { id: string })[] = GOLF_COURSES_CANONICAL.slice(
+  GOLF_COURSE_RECORDS.length,
+).map(flatWithId);
 
 /** The regenerated base set WITHOUT the sanctioned expansion. Exported for the
  *  ingest gate's duplicate check and for provenance reporting — NOT a reader
  *  surface. If you are answering "what golf exists?", you want
  *  `SHARED_GOLF_COURSES` below. */
-export { SHARED_GOLF_COURSES_BASE };
+export const SHARED_GOLF_COURSES_BASE: (SharedGolfCourse & { id: string })[] = GOLF_COURSES_CANONICAL.slice(
+  0,
+  GOLF_COURSE_RECORDS.length,
+).map(flatWithId);
 
 /**
  * Every golf course in the universe: the regenerated base plus the sanctioned
  * HHQ/ingest expansion. THIS is the golf set — TDF, Offsite, Handicap HQ and
- * Best Man HQ all read it.
+ * Best Man HQ all read it. Flat shape, plus `id`.
  */
 export const SHARED_GOLF_COURSES: SharedGolfCourse[] = [
   ...SHARED_GOLF_COURSES_BASE,

@@ -1,0 +1,422 @@
+[
+  {
+    "id": "gatlinburg-tn-kuwohi-observation-tower",
+    "destinationId": "gatlinburg-tn",
+    "name": "Kuwohi Observation Tower, Great Smoky Mountains National Park",
+    "type": "hike",
+    "highlight": "A spiral concrete ramp lifts you above the spruce-fir canopy at the highest point in the Smokies, and on a clear evening the ridgelines stack out to the horizon in fading blue layers. The paved trail from the parking area is short — the park lists it as \"1 mile (1.6 km) roundtrip\" — but it climbs hard the whole way.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/grsm/planyourvisit/filming-and-still-photography.htm — grsm_filming@nps.gov, (865) 436-1200"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/grsm/planyourvisit/filming-and-still-photography.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/grsm/planyourvisit/filming-and-still-photography.htm",
+      "https://www.nps.gov/thingstodo/kuwohi.htm",
+      "https://www.nps.gov/grsm/planyourvisit/seasonalroads.htm"
+    ],
+    "accessNote": "Kuwohi Road is seasonal — the park's seasonal road schedule lists it as \"4/1-11/29\", closed the rest of the year, which rules out a winter date entirely (https://www.nps.gov/grsm/planyourvisit/seasonalroads.htm). Great Smoky also requires a paid parking tag; the park notes \"Obtaining a filming or photography permit does not exempt you from the parking tag requirement.\""
+  },
+  {
+    "id": "denver-co-dream-lake",
+    "destinationId": "denver-co",
+    "name": "Dream Lake, Rocky Mountain National Park",
+    "type": "hike",
+    "highlight": "A small alpine lake pinched between Hallett Peak and Flattop Mountain, with wind-bent limber pines along the shoreline and the peaks doubled in the water on a still morning. It is a short but steadily uphill walk from the Bear Lake trailhead, on packed snow and ice much of the year.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/romo/planyourvisit/permitsandreservations.htm — Public Affairs Office (970) 586-1363"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/romo/planyourvisit/permitsandreservations.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/romo/planyourvisit/permitsandreservations.htm",
+      "https://www.nps.gov/romo/planyourvisit/timed-entry-permit-system.htm"
+    ],
+    "accessNote": "This is the single biggest date-killer on this list. Rocky Mountain requires a timed entry reservation in season: \"Beginning on Friday, May 22 to mid-October, a timed entry reservation will be required to enter and visit all areas of Rocky Mountain National Park.\" Dream Lake sits in the Bear Lake Road corridor, which needs the stricter \"Timed Entry+ Bear Lake Road\" permit covering \"5 a.m. to 6 p.m. daily beginning on Friday, May 22 through Sunday, October 18, 2026\" — i.e. sunrise AND sunset. Reserve on Recreation.gov (https://www.nps.gov/romo/planyourvisit/timed-entry-permit-system.htm)."
+  },
+  {
+    "id": "bozeman-mt-lake-butte-overlook",
+    "destinationId": "bozeman-mt",
+    "name": "Lake Butte Overlook, Yellowstone National Park",
+    "type": "scenic-overlook",
+    "highlight": "A pull-off high above the east shore of Yellowstone Lake where the water opens out for miles and the Teton Range shows as a serrated line on the far southern horizon. It faces west, so the whole lake goes copper at sunset, and it sees a fraction of the traffic of the park's headline overlooks.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/yell/planyourvisit/filmpermit.htm — yell_film_permits@nps.gov, (307) 344-2110"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/yell/planyourvisit/filmpermit.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/yell/planyourvisit/filmpermit.htm",
+      "https://www.nps.gov/yell/planyourvisit/parkroads.htm"
+    ],
+    "accessNote": "Lake Butte Overlook is on the East Entrance Road, which is seasonal: the park's road schedule lists \"Open May 1 - October 31, 2026: East Entrance to Fishing Bridge (Sylvan Pass)\", and adds that \"All dates are subject to change depending on weather conditions.\" Road status line: (307) 344-2117 (https://www.nps.gov/yell/planyourvisit/parkroads.htm)."
+  },
+  {
+    "id": "bozeman-mt-artist-point",
+    "destinationId": "bozeman-mt",
+    "name": "Artist Point, Yellowstone National Park",
+    "type": "scenic-overlook",
+    "highlight": "The classic view straight down the Grand Canyon of the Yellowstone to the Lower Falls, with the canyon walls running yellow, rust and bone-white on either side. It is a short paved walk from the parking area to a stone-walled platform. Read the permit note below before you plan a summer date here.",
+    "tier": "red",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "The activity does not take place in a small or confined area that receives a high volume of visitation.",
+        "sourceUrl": "https://www.nps.gov/yell/planyourvisit/filmpermit.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/yell/planyourvisit/filmpermit.htm — yell_film_permits@nps.gov, (307) 344-2110, Mon-Fri 8am-5pm MT"
+    },
+    "crowdWindow": {
+      "verbatim": "During the summer season, areas such as Old Faithful, Grand Prismatic, Fairy Falls Overlook, Artist Point and other major overlooks along the Grand Canyon of the Yellowstone are considered high visitation areas.",
+      "sourceUrl": "https://www.nps.gov/yell/planyourvisit/filmpermit.htm"
+    },
+    "privacy": null,
+    "backup": "bozeman-mt-lake-butte-overlook",
+    "sourceUrl": "https://www.nps.gov/yell/planyourvisit/filmpermit.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/yell/planyourvisit/filmpermit.htm"
+    ],
+    "accessNote": "Two rules disagree here and you should know both. Servicewide, NPS says: \"In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals\" (https://www.nps.gov/aboutus/news/film-and-photo-permits.htm). But Yellowstone's own film permit page adds a condition the servicewide page does not — you are exempt only if \"The activity does not take place in a small or confined area that receives a high volume of visitation\" — and the same page names Artist Point as one of those areas in summer. A hired photographer at Artist Point in July arguably falls outside the exemption. Call the Film Permit Office at (307) 344-2110 or email yell_film_permits@nps.gov before booking, or use Lake Butte Overlook instead."
+  },
+  {
+    "id": "seattle-wa-hurricane-ridge",
+    "destinationId": "seattle-wa",
+    "name": "Hurricane Ridge, Olympic National Park",
+    "type": "scenic-overlook",
+    "highlight": "A subalpine meadow ridge looking straight across at the glaciated wall of Mount Olympus and the interior Olympics, with the Strait of Juan de Fuca and Vancouver Island behind you. The park calls it \"the most easily accessed mountain area within Olympic National Park\" — you drive to the view.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/olym/planyourvisit/special-use-permits-commercial-permits-overnight-reservations.htm — olym_permits@nps.gov, 360-565-3092"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "seattle-wa-reflection-lakes",
+    "sourceUrl": "https://www.nps.gov/olym/planyourvisit/special-use-permits-commercial-permits-overnight-reservations.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/olym/planyourvisit/special-use-permits-commercial-permits-overnight-reservations.htm",
+      "https://www.nps.gov/olym/planyourvisit/visiting-hurricane-ridge.htm"
+    ],
+    "accessNote": "Winter dates are restricted to a three-day week: \"During the winter season, the road is scheduled to be open Friday through Sunday and holiday Mondays, weather and road conditions permitting, and closed all other days,\" and \"All vehicles must carry tire chains during the winter season.\" The park also warns \"Hurricane Ridge Road may be closed at any time due to weather-related conditions.\" Road and weather line: (360) 565-3131 (https://www.nps.gov/olym/planyourvisit/visiting-hurricane-ridge.htm). Separately, if you intend an actual ceremony rather than a proposal, Olympic states \"A permit is required for all wedding ceremonies held within Olympic National Park.\""
+  },
+  {
+    "id": "seattle-wa-reflection-lakes",
+    "destinationId": "seattle-wa",
+    "name": "Reflection Lakes, Mount Rainier National Park",
+    "type": "viewpoint",
+    "highlight": "Two shallow roadside lakes that hold Mount Rainier upside down in the water on a windless morning — the park's own description is \"lakes that reflect views of Mount Rainier.\" You park and walk a few steps to the shoreline; the mountain does the rest.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/mora/planyourvisit/permitsandreservations.htm — mora_special_use@nps.gov, 360-569-6513"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "seattle-wa-hurricane-ridge",
+    "sourceUrl": "https://www.nps.gov/mora/planyourvisit/permitsandreservations.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/mora/planyourvisit/permitsandreservations.htm",
+      "https://www.nps.gov/places/reflection-lakes.htm",
+      "https://www.nps.gov/mora/learn/news/mount-rainier-national-park-will-not-require-timed-entry-reservations-in-2026.htm"
+    ],
+    "accessNote": "Summer-only by car: the park lists \"Season: Summer Only (June - September)\" and notes \"Reflection Lakes is located along Stevens Canyon Road which is open to vehicles during the summer season, typically from late June-September\" (https://www.nps.gov/places/reflection-lakes.htm). Good news for 2026 — \"Mount Rainier National Park will not implement a timed entry reservation for any portion of the park in 2026\" (https://www.nps.gov/mora/learn/news/mount-rainier-national-park-will-not-require-timed-entry-reservations-in-2026.htm). Note that an actual wedding ceremony is different: the park says \"Weddings are permitted for a 3-hour timeframe\" under a permit. A proposal is not a ceremony."
+  },
+  {
+    "id": "bend-or-watchman-overlook",
+    "destinationId": "bend-or",
+    "name": "Watchman Overlook, Crater Lake National Park",
+    "type": "scenic-overlook",
+    "highlight": "The overlook on the west rim that looks down on Wizard Island and the full width of the caldera, roughly a thousand feet above water that is famously, almost unreasonably blue. It is one of thirty rim pull-offs on a road the park describes as \"33 miles (53 km) of lake views, panoramic vistas, forests and meadows.\"",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/crla/planyourvisit/filming-and-photography-permits.htm — 541-594-3000"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/crla/planyourvisit/filming-and-photography-permits.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/crla/planyourvisit/filming-and-photography-permits.htm",
+      "https://www.nps.gov/crla/planyourvisit/hours.htm",
+      "https://www.nps.gov/crla/planyourvisit/scenic-rim-drive.htm"
+    ],
+    "accessNote": "Rim Drive is snow-closed for over half the year and the reopening date is not fixed. The park says these roads \"close for the season with the first big snowstorm, or on November 1, whichever comes first,\" and that \"Typically, plowing begins on West Rim Drive in mid-April and all roads are ready to open by mid-July. However, opening dates depend on winter snow totals, late snow fall and other weather related events.\" Do not lock a spring date on this one (https://www.nps.gov/crla/planyourvisit/hours.htm)."
+  },
+  {
+    "id": "las-vegas-nv-zabriskie-point",
+    "destinationId": "las-vegas-nv",
+    "name": "Zabriskie Point, Death Valley National Park",
+    "type": "scenic-overlook",
+    "highlight": "A short paved ramp off Highway 190 opens onto a field of eroded golden badlands, ridge after wrinkled ridge, with the dark spire of Manly Beacon standing out of the middle of it. The rock lights up first at sunrise, when the crowd is a handful of people and the Panamints are still in shadow.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/deva/learn/management/filming-and-photography.htm — DEVA_permits@nps.gov, 760-786-3241"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/deva/learn/management/filming-and-photography.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/deva/learn/management/filming-and-photography.htm"
+    ],
+    "accessNote": "The overlook itself is open year-round, but Death Valley notes that filming activity along State Highway 190 can pull in Caltrans permitting and California Highway Patrol traffic control — stay on the overlook and off the roadway. Drones are separately prohibited: \"Launching, landing, or operating an unmanned aircraft\" is not allowed (https://www.nps.gov/deva/learn/management/filming-and-photography.htm)."
+  },
+  {
+    "id": "black-hills-sd-pinnacles-overlook",
+    "destinationId": "black-hills-sd",
+    "name": "Pinnacles Overlook, Badlands National Park",
+    "type": "scenic-overlook",
+    "highlight": "A high point near the northwest end of the Badlands Loop Road where the banded spires drop away below you and the mixed-grass prairie runs flat to the horizon behind them. West-facing, so the buttes go pink and gold in the last half hour of light.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/badl/planyourvisit/permits.htm — badl_permits@nps.gov, 605-433-5361"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/badl/planyourvisit/permits.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/badl/planyourvisit/permits.htm"
+    ],
+    "accessNote": "If you are planning an actual ceremony rather than a proposal, Badlands requires a Special Use Permit and states \"All permits must be submitted 45 days in advance\" with a $100 non-refundable application fee (https://www.nps.gov/badl/planyourvisit/permits.htm). A three-person proposal does not trigger that."
+  },
+  {
+    "id": "las-vegas-nv-zion-canyon-junction-bridge",
+    "destinationId": "las-vegas-nv",
+    "name": "Canyon Junction Bridge, Zion National Park",
+    "type": "viewpoint",
+    "highlight": "From the bridge where the Pa'rus Trail meets the Zion Canyon Scenic Drive, the Virgin River leads the eye straight up to the Watchman, which catches the last light after the canyon floor has gone into shade. Flat, paved, and a level walk from the visitor center.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/zion/planyourvisit/filming-and-still-photography.htm — zion_park_information@nps.gov, 435-772-3256"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "las-vegas-nv-bryce-sunset-point",
+    "sourceUrl": "https://www.nps.gov/zion/planyourvisit/filming-and-still-photography.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/zion/planyourvisit/filming-and-still-photography.htm",
+      "https://www.nps.gov/zion/planyourvisit/zion-canyon-shuttle-system.htm"
+    ],
+    "accessNote": "Zion publishes photography closures that go beyond the servicewide rule, so location matters here: \"No filming or still photography is allowed within designated Wilderness or Recommended Wilderness Areas. This includes most slot canyons.\" Also \"No filming on the West Rim Trail (including Scout Lookout and the trail to Angels Landing)\" and \"Riverside Walk and Narrows trails are not currently permitted.\" Canyon Junction Bridge is in the developed road corridor and is not on that list. Getting there: \"During the shuttle season, visitors cannot drive personal vehicles on the Zion Canyon Scenic Drive\" — but \"No ticket, permit, or reservation needed to ride the park shuttle or enter Zion National Park\" and \"The park shuttle is free to ride.\""
+  },
+  {
+    "id": "las-vegas-nv-bryce-sunset-point",
+    "destinationId": "las-vegas-nv",
+    "name": "Sunset Point, Bryce Canyon National Park",
+    "type": "scenic-overlook",
+    "highlight": "The rim drops away into the densest stand of hoodoos in the amphitheatre — thousands of orange fins and columns, with Thor's Hammer standing clear below the railing. It is a flat walk from the parking area, and at 8,000 feet the light goes warm and long well before the sun is actually down.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/brca/planyourvisit/filmphotoguidelines.htm — brca_sup@nps.gov, (435) 834-5322 option #2"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": "las-vegas-nv-zion-canyon-junction-bridge",
+    "sourceUrl": "https://www.nps.gov/brca/planyourvisit/filmphotoguidelines.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/brca/planyourvisit/filmphotoguidelines.htm"
+    ],
+    "accessNote": "No reservation system and the rim road stays open year-round, but drones are banned outright: the park states \"use of remote-controlled equipment (including but not limited to helicopters, drones, and other aircraft-based equipment) within Bryce Canyon National Park is prohibited by law\" (https://www.nps.gov/brca/planyourvisit/filmphotoguidelines.htm)."
+  },
+  {
+    "id": "washington-dc-hawksbill-summit",
+    "destinationId": "washington-dc",
+    "name": "Hawksbill Summit, Shenandoah National Park",
+    "type": "hike",
+    "highlight": "The highest point in Shenandoah, a rock outcrop with a stone viewing platform and an open sweep down the Shenandoah Valley and out across the Blue Ridge. The climb from the Skyline Drive parking area is short and steep, and the summit is bare rock — no trees between you and the view.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/shen/planyourvisit/special-use-permits.htm — SHEN_permits@nps.gov, 540-999-3500"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/shen/planyourvisit/special-use-permits.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/shen/planyourvisit/special-use-permits.htm"
+    ],
+    "accessNote": "Worth knowing if the proposal turns into a ceremony on the spot: Shenandoah needs no wedding permit when \"No props, sets, decor, music, or other equipment will be used and the group size is 15 or less people,\" and separately bans one common prop outright — \"Live flowers and plant material of any type (cut or potted) are not permitted at outdoor ceremonies in the Park\" (https://www.nps.gov/shen/planyourvisit/special-use-permits.htm). Skyline Drive can close on short notice for snow, ice or fog; check park conditions before driving up."
+  },
+  {
+    "id": "san-francisco-ca-tunnel-view",
+    "destinationId": "san-francisco-ca",
+    "name": "Tunnel View, Yosemite National Park",
+    "type": "scenic-overlook",
+    "highlight": "You come out of the Wawona Tunnel and the whole valley is simply there — El Capitan on the left, Bridalveil Fall on the right, Half Dome closing the far end. It is a stone-walled pull-off directly off the road, so there is no hike and no excuse about the light.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/yose/planyourvisit/filming.htm — Office of Special Park Uses, 209-379-1858"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/yose/planyourvisit/filming.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/yose/planyourvisit/filming.htm",
+      "https://www.nps.gov/yose/learn/news/yosemite-national-park-will-not-require-vehicle-reservations-in-2026.htm"
+    ],
+    "accessNote": "No reservation needed in 2026: \"Yosemite National Park today announced it will no longer use a timed reservation system in 2026,\" concluding that \"a season-wide reservation requirement is not the most effective approach for 2026\" (https://www.nps.gov/yose/learn/news/yosemite-national-park-will-not-require-vehicle-reservations-in-2026.htm). Two Yosemite-specific rules to respect: \"Except for casual filming by visitors, special use permits for filming are required for all filming activities in wilderness areas, no matter the group size or equipment used\" — Tunnel View is roadside, not wilderness — and night photography and artificial lighting are prohibited without a permit."
+  },
+  {
+    "id": "cleveland-oh-brandywine-falls",
+    "destinationId": "cleveland-oh",
+    "name": "Brandywine Falls, Cuyahoga Valley National Park",
+    "type": "trail",
+    "highlight": "A tiered sandstone waterfall dropping into a wooded gorge, seen from a wooden boardwalk that steps down the cliff to an upper and a lower deck. Thirty minutes from downtown Cleveland, and the only national park spot on this list you can do on a weeknight after work.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All filming, still photography, and audio recording is treated the same under the new law. It does not matter whether it is commercial, non-commercial, for content creation, by a student, or conducted by media or for news gathering. In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/cuva/planyourvisit/permitsandreservations.htm — 440-546-5904"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/cuva/planyourvisit/permitsandreservations.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/cuva/planyourvisit/permitsandreservations.htm"
+    ],
+    "accessNote": "A useful crowding tell from the park's own wedding-permit rules: Cuyahoga Valley lists Brandywine Falls as an available ceremony location but does not make it available on weekends, holidays, or during October — the falls are simply too busy then. That restriction applies to wedding permits, not to a three-person proposal, but it tells you which dates to avoid. The boardwalk decks are small and fill up (https://www.nps.gov/cuva/planyourvisit/permitsandreservations.htm)."
+  },
+  {
+    "id": "key-west-fl-fort-jefferson",
+    "destinationId": "key-west-fl",
+    "name": "Fort Jefferson, Dry Tortugas National Park",
+    "type": "historic-site",
+    "highlight": "A six-sided brick fortress sitting alone on a sand key seventy miles west of Key West, ringed by a moat wall you can walk the whole way around with nothing but turquoise shallows on the other side. Read the permit note carefully — this one is not straightforward.",
+    "tier": "red",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Federal law requires a permit for all filming, no matter the size of the crew or the type of equipment.",
+        "sourceUrl": "https://www.nps.gov/drto/planyourvisit/permitsandreservations.htm"
+      },
+      "authority": "National Park Service",
+      "authorityContact": "https://www.nps.gov/drto/getinvolved/filming-permits.htm — Dry Tortugas National Park, 305-242-7700"
+    },
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/drto/planyourvisit/permitsandreservations.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/drto/planyourvisit/permitsandreservations.htm",
+      "https://www.nps.gov/drto/planyourvisit/directions.htm"
+    ],
+    "accessNote": "Two federal pages say different things and Dry Tortugas is the stricter one. Servicewide, NPS says \"In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals\" (https://www.nps.gov/aboutus/news/film-and-photo-permits.htm). Dry Tortugas' own permits page, last updated March 18, 2025 — after the EXPLORE Act took effect — says \"Federal law requires a permit for all filming, no matter the size of the crew or the type of equipment.\" Call the park at 305-242-7700 and get the answer in writing before you book a photographer. Access is the other constraint: \"Cars are not able to access the island. The only methods of transportation are by boat or seaplane\" — the ferry and seaplane run once a day and book out weeks ahead (https://www.nps.gov/drto/planyourvisit/directions.htm)."
+  }
+]

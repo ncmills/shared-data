@@ -38,6 +38,34 @@ export interface UrlLiveResult {
    * re-rejecting it on every future run.
    */
   blocked?: boolean;
+  /**
+   * The CDN answered, but its ORIGIN did not (Cloudflare 520-527). Like
+   * `blocked`, this is unverified rather than dead — but for a different
+   * reason, so it is counted separately rather than blurring what `blocked`
+   * means. Nobody refused us here; the site's own server simply failed to
+   * answer its edge on this attempt.
+   *
+   * Measured on sagamorespirit.com 2026-08-10: 10 GETs six seconds apart
+   * returned 5× 521 and 5× 200, and every 200 carried `cf-cache-status:
+   * DYNAMIC` with the real homepage — origin-served, not cached. The 08-07
+   * audit filed that single-shot 521 as DEAD and the watchdog escalated it to
+   * RED. Quarantining it would have stripped a working link.
+   */
+  transient?: boolean;
+}
+
+/**
+ * Cloudflare's 520-527 range: the edge reached US, but could not get a usable
+ * response from the site's ORIGIN (520 unknown, 521 origin down, 522/524
+ * timeouts, 523 unreachable, 525/526 origin TLS, 527 Railgun).
+ *
+ * These are the HTTP-status twin of a connection error, not of a 404. The
+ * origin never spoke, so nothing here is evidence that the URL is wrong.
+ * Deliberately NOT extended to 500/502/503: those come from a server that DID
+ * answer, and treating them as transient would hide genuinely broken links.
+ */
+export function isOriginUnreachable(status: number): boolean {
+  return status >= 520 && status <= 527;
 }
 
 /** The minimal shape of `fetch` this module needs — real `fetch` satisfies
@@ -137,7 +165,11 @@ export async function verifyUrlLive(url: string, opts: VerifyUrlOptions = {}): P
 
     // 429 explicitly means "try later", so try later — once. Anything still
     // rate-limited after that is reported as blocked, not invented into a pass.
-    if (res && res.status === 429) {
+    //
+    // A Cloudflare origin error earns the same one retry, for the same reason:
+    // it describes a moment, not the URL. On the measured 50/50 flap that turns
+    // a 50% chance of a false DEAD into 25%.
+    if (res && (res.status === 429 || isOriginUnreachable(res.status))) {
       await sleep(opts.retryDelayMs ?? 1500);
       const retry = await attempt(fetchImpl, url, "GET", controller.signal);
       if (retry.res) res = retry.res;
@@ -166,6 +198,18 @@ export async function verifyUrlLive(url: string, opts: VerifyUrlOptions = {}): P
           `about the URL. Unverifiable, not dead.`,
       };
     }
+    if (isOriginUnreachable(status)) {
+      // NOT a pass, and NOT dead. The edge answered for a server that didn't.
+      return {
+        ok: false,
+        status,
+        transient: true,
+        reason:
+          `the CDN could not reach the origin (${status}) — the site's own server never ` +
+          `answered, which is not evidence about the URL. Unverifiable, not dead.`,
+      };
+    }
+
     return { ok: false, status, reason: `non-2xx/3xx final status: ${status}` };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
@@ -204,9 +248,11 @@ export async function validateResearchedRowLive(
   const verify = opts.verifyUrl ?? ((url: string) => verifyUrlLive(url));
   const live = await verify(sync.row.sourceUrl);
   if (!live.ok) {
-    // A blocked source is reported in its own words. Filing it under the same
-    // "not live" reason as a 404 is what made two live hotels look dead.
-    const prefix = live.blocked ? "sourceUrl could not be verified" : "sourceUrl is not live";
+    // A blocked or origin-unreachable source is reported in its own words.
+    // Filing either under the same "not live" reason as a 404 is what made two
+    // live hotels look dead.
+    const prefix =
+      live.blocked || live.transient ? "sourceUrl could not be verified" : "sourceUrl is not live";
     return {
       ok: false,
       reasons: [`${prefix}: ${sync.row.sourceUrl} (${live.reason ?? `status ${live.status ?? "unknown"}`})`],

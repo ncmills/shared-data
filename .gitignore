@@ -2,3 +2,7 @@ node_modules
 .DS_Store
 *.log
 .playwright-mcp/
+
+# supabase CLI link state — machine-local, and an untracked dir a tool writes
+# eventually blocks somebody else's merge (D24, 2026-08-27).
+supabase/.temp/

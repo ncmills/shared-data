@@ -18,6 +18,12 @@ export * from "./destinations-overlay";
 // resolve to the base-only versions, hiding every researched course from every
 // consumer. Do not re-add it. See src/golf.ts.
 export * from "./golf";
+// Exported here, not only as a file, because a consumer imports `from "shared-data"` and the
+// package's `main` is this file. crawler-user-agents shipped in #46 with nine passing tests --
+// and every one of them imported it by RELATIVE path, so none exercised the public surface. It
+// was unreachable from every consumer and the suite could not tell. Found 2026-08-27 when
+// maid-of-honor-hq's route threw `classifyUserAgent is not a function` at runtime.
+export * from "./crawler-user-agents";
 export * from "./residences";
 export * from "./residences-expansion";
 export * from "./golf-destinations";
@@ -25,60 +31,48 @@ export * from "./moh-locals";
 export * from "./bestman-locals";
 export * from "./oo-atlas";
 export * from "./tagging-rules";
+// Proposal spots (engagedmoon). Exported here because a module nothing can
+// import is a module nothing can be checked against: `proposal-spots.ts` landed
+// in #25 with its whole three-tier firewall and then sat unreachable from the
+// package root, so engagedmoon grew a SECOND, weaker copy of the dataset in its
+// own repo and drifted for a week. The schema is only load-bearing if the
+// consumer actually reads it.
+export * from "./proposal-spots";
+// ...and the ROWS, for the same reason, which #27 missed while fixing exactly
+// this bug one file over: it exported the schema and left the 144 rows
+// unreachable, so `PROPOSAL_SPOTS_DATA` did not resolve from the package root
+// and engagedmoon's first attempt to stop forking the dataset failed to
+// compile. A schema without its rows is the same unreachable module in a
+// smaller costume.
+export * from "./proposal-spots-data";
+// Composed trips — schema AND rows both reachable from the package root, for
+// the same reason spelled twice above: #25 shipped proposal-spots' schema
+// unreachable and #27 fixed the schema while leaving the rows unreachable. A
+// trips module a consumer cannot import is a trips module nothing is checked
+// against. (The composed `EM_COMPOSED_TRIPS` export itself is assembled at the
+// bottom of this file, after `sharedDestinations` exists — see the comment
+// there and in trips/em-trips.ts for the cycle it avoids.)
+export * from "./trips/schema";
+export * from "./trips/em-trips";
 
-// 2026-06-24 expansion: the canonical catalog is now the core set plus the
-// region/international expansion files. New cities land in a
-// `destinations-expansion-*.ts` file and get spread in here so every consumer
-// (BESTMAN HQ, MOH) picks them up via the same `sharedDestinations` export.
-import type { CanonicalDestination } from "./destinations-types";
-import { bakeDestination } from "./destinations-bake";
-import { stripDeadVenueUrls } from "./dead-url-quarantine";
-import { sharedDestinations as coreDestinations } from "./destinations-data";
-import { expansionSouth } from "./destinations-expansion-south";
-import { expansionInternational } from "./destinations-expansion-international";
-import { expansionNortheast } from "./destinations-expansion-northeast";
-import { expansionMidwest } from "./destinations-expansion-midwest";
-import { expansionWest } from "./destinations-expansion-west";
-import { attachPartyVenues } from "./party-venues-attach";
-import { applyPartyVenuePatches } from "./party-venue-patch-apply";
+// The canonical catalog (core + expansion files, attach → patch → bake → strip)
+// is assembled in ./destinations-canonical — moved there verbatim on 2026-09-24
+// so the locals modules can derive from it without importing this file.
+import { sharedDestinations } from "./destinations-canonical";
+export { sharedDestinations };
 
-// Every canonical item is baked with universe tags (wizards/audiences/products/
-// priceTier) at module load, so the overlays are pure filters over the tags and
-// every consumer reads pre-tagged data. See destinations-bake.ts.
-//
-// `attachPartyVenues` runs FIRST and merges the machine-appended rows from the
-// flat `party-venues-expansion.ts` into the destination each one anchors — the
-// curated nested files are never machine-edited (see that file's header for
-// why, and for the golf precedent it follows). Attaching BEFORE the bake is the
-// whole point: an ingested row is then tagged by the identical code path as a
-// curated one, so no overlay, consumer or audit needs a special case. It throws
-// on an anchor that resolves to nothing rather than dropping the row.
-// `applyPartyVenuePatches` then ENRICHES existing rows from the flat
-// `party-venue-patches.ts` — coordinates, URLs, regraded `groupMin`, occupancy.
-// The append path above deliberately lets a curated row win a name collision,
-// so it can never enrich one; that is what this second pass is for.
-//
-// The order attach → patch → bake is load-bearing in both joints. Patching
-// after attach lets a venue added this month be enriched next month. Patching
-// before the bake feeds derived tags: a repriced row must not keep a
-// `priceTier` computed from its stale price.
-// `stripDeadVenueUrls` runs LAST, after the patch pass, because a patch is
-// exactly how one of these urls would come back: the quarantine has to see the
-// final value a consumer will render, not the one the source file happens to
-// carry. It only ever removes a `url` key, so it cannot affect tags or pricing
-// derived by the bake above.
-export const sharedDestinations: CanonicalDestination[] = applyPartyVenuePatches(
-  attachPartyVenues([
-    ...coreDestinations,
-    ...expansionSouth,
-    ...expansionInternational,
-    ...expansionNortheast,
-    ...expansionMidwest,
-    ...expansionWest,
-  ]),
-)
-  .map(bakeDestination)
-  .map(stripDeadVenueUrls);
+// Composed trips are assembled HERE, below the `sharedDestinations`
+// definition, not in trips/em-trips.ts: composition needs the baked catalog,
+// and em-trips.ts cannot import it back out of this module without an ESM
+// cycle that evaluates em-trips before `sharedDestinations` exists (TDZ crash
+// for every consumer). em-trips.ts owns the authored inputs; this line derives
+// each trip's estPerPerson from the referenced rows' published ranges — the
+// money on a trip can never drift from the catalog because it is never typed.
+// deriveEstPerPerson throws on a dangling row key, so a bad reference is a
+// build failure (scripts/verify-trips.ts reports it more readably first).
+import { EM_COMPOSED_TRIP_INPUTS } from "./trips/em-trips";
+import { composeTrips } from "./trips/schema";
+export const EM_COMPOSED_TRIPS = composeTrips(EM_COMPOSED_TRIP_INPUTS, sharedDestinations);
 
 // Golf is the single golf-cite source (Task 3). The regenerated 994-row
 // `golf-courses.ts` (do-not-hand-edit) plus the `golf-courses-hhq-merge.ts`

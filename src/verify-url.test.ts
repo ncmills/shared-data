@@ -10,7 +10,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { verifyUrlLive, validateResearchedRowLive } from "./verify-url";
+import { verifyUrlLive, validateResearchedRowLive, isOriginUnreachable } from "./verify-url";
 import type { ResearchedRow } from "./research-schema";
 
 const GOOD_GOLF: ResearchedRow = {
@@ -264,4 +264,73 @@ test("validateResearchedRowLive reports a blocked source distinguishably", async
   assert.equal(res.ok, false);
   const why = (res as { reasons: string[] }).reasons.join(" ");
   assert.match(why, /block|unverifiab/i, "must not be filed under the same reason as a dead link");
+});
+
+// ─── the CDN reached us but not its origin (2026-08-10) ─────────────────────
+//
+// Measured on sagamorespirit.com, which the 08-07 audit reported DEAD and the
+// watchdog escalated to RED ("users see a broken Reserve link"):
+//
+//   10 GETs, 6s apart, browser UA  →  5× HTTP 521, 5× HTTP 200
+//   every 200 carried `cf-cache-status: DYNAMIC` and the real 343KB homepage,
+//   so the passes came from the ORIGIN — not a cache, not Always Online.
+//
+// A live site with a flapping origin. Quarantining it would have stripped a
+// working link, which is the exact failure this module's 403/429 split exists
+// to prevent. Cloudflare's 520-527 are edge→origin errors: the origin never
+// answered, so the response says nothing about whether the URL is right. That
+// is the epistemic class of 429, NOT of 404 — a distinct state, retried once
+// and then reported as unverified rather than dead.
+
+test("a 521 that clears on retry resolves to live", async () => {
+  let calls = 0;
+  const res = await verifyUrlLive("https://flapping-origin.example.org/", {
+    retryDelayMs: 0,
+    fetchImpl: async () => {
+      calls++;
+      return calls <= 2 ? { ok: false, status: 521 } : { ok: true, status: 200 };
+    },
+  });
+
+  assert.equal(res.ok, true, "the origin answered on retry — that is a live URL");
+});
+
+test("a persistent 521 is unverified, NOT dead", async () => {
+  const res = await verifyUrlLive("https://origin-down.example.org/", {
+    retryDelayMs: 0,
+    fetchImpl: async () => ({ ok: false, status: 521 }),
+  });
+
+  assert.equal(res.ok, false, "unverified is still not verified — never pretend otherwise");
+  assert.equal(res.transient, true);
+  assert.doesNotMatch(
+    res.reason ?? "",
+    /non-2xx\/3xx final status/,
+    "must not be filed under the same reason as a genuinely dead link",
+  );
+});
+
+test("every Cloudflare origin error is transient, and 5xx from the origin itself is not", () => {
+  // 520-527 are the edge telling us about ITS hop to the origin.
+  for (const status of [520, 521, 522, 523, 524, 525, 526, 527]) {
+    assert.equal(isOriginUnreachable(status), true, `${status} is an edge→origin error`);
+  }
+  // A server that answered with its own error IS evidence about the URL.
+  for (const status of [404, 410, 500, 502, 503, 519, 528, 400]) {
+    assert.equal(isOriginUnreachable(status), false, `${status} must stay actionable`);
+  }
+});
+
+test("validateResearchedRowLive reports an unreachable origin distinguishably", async () => {
+  const res = await validateResearchedRowLive(GOOD_GOLF, {
+    verifyUrl: async () => ({
+      ok: false, status: 521, transient: true,
+      reason: "the CDN could not reach the origin (521)",
+    }),
+  });
+
+  assert.equal(res.ok, false);
+  const why = (res as { reasons: string[] }).reasons.join(" ");
+  assert.match(why, /could not be verified|unverifiab/i,
+    "must not be filed under the same reason as a dead link");
 });

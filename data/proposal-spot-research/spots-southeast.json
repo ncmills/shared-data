@@ -1,0 +1,429 @@
+[
+  {
+    "id": "charleston-sc-waterfront-park-pineapple-fountain",
+    "destinationId": "charleston-sc",
+    "name": "Waterfront Park & the Pineapple Fountain",
+    "type": "waterfront",
+    "highlight": "A brick esplanade runs from the Pineapple Fountain out onto a covered pier over the Cooper River, with the Ravenel Bridge cables filling the view north. Container ships pass close enough to read their hulls.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Photography/filming in a City Park also requires a park permit.",
+        "sourceUrl": "https://charleston-sc.gov/3368/Film-and-Photography-Permits"
+      },
+      "authority": "City of Charleston — Office of Film & Photography / Department of Recreation",
+      "authorityContact": "843-579-6422 (Film & Photography Manager); 843-724-7327 (Recreation Department)"
+    },
+    "disputed": [],
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Events (including weddings) held at the Waterfront Park or at White Point Garden are limited to 25 people, in total, at the event (This includes the bride and groom).",
+      "sourceUrl": "https://www.charleston-sc.gov/362/Reservations-Rentals"
+    },
+    "backup": "charleston-sc-white-point-garden-battery",
+    "sourceUrl": "https://charleston-sc.gov/3368/Film-and-Photography-Permits",
+    "citations": [
+      "https://charleston-sc.gov/3368/Film-and-Photography-Permits",
+      "https://www.charleston-sc.gov/362/Reservations-Rentals"
+    ],
+    "leadTimeDays": 21,
+    "fee": null,
+    "blocker": null
+  },
+  {
+    "id": "charleston-sc-white-point-garden-battery",
+    "destinationId": "charleston-sc",
+    "name": "White Point Garden & the Battery",
+    "type": "park",
+    "highlight": "Live oaks and Civil War mortars fill a triangle of lawn at the tip of the peninsula, where the Ashley and Cooper rivers meet. The raised seawall promenade runs east from here past the Battery's antebellum row houses.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Photography/filming in a City Park also requires a park permit.",
+        "sourceUrl": "https://charleston-sc.gov/3368/Film-and-Photography-Permits"
+      },
+      "authority": "City of Charleston — Office of Film & Photography / Department of Recreation",
+      "authorityContact": "843-579-6422 (Film & Photography Manager); 843-724-7327 (Recreation Department)"
+    },
+    "disputed": [],
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Events (including weddings) held at the Waterfront Park or at White Point Garden are limited to 25 people, in total, at the event (This includes the bride and groom).",
+      "sourceUrl": "https://www.charleston-sc.gov/362/Reservations-Rentals"
+    },
+    "backup": "charleston-sc-waterfront-park-pineapple-fountain",
+    "sourceUrl": "https://www.charleston-sc.gov/362/Reservations-Rentals",
+    "citations": [
+      "https://www.charleston-sc.gov/362/Reservations-Rentals",
+      "https://charleston-sc.gov/3368/Film-and-Photography-Permits"
+    ],
+    "leadTimeDays": 21,
+    "fee": null,
+    "blocker": null
+  },
+  {
+    "id": "charleston-sc-magnolia-plantation-long-white-bridge",
+    "destinationId": "charleston-sc",
+    "name": "Magnolia Plantation & Gardens — the Long White Bridge",
+    "type": "garden",
+    "highlight": "A white timber footbridge arcs over blackwater in the garden's oldest section, cypress and azalea crowding both banks. The property runs down to the Ashley River behind it.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Contact our sales team at weddings@magnoliaplantation.com to book your proposal or photo shoot today.",
+        "sourceUrl": "https://www.magnoliaplantation.com/photoshoots-and-proposals"
+      },
+      "authority": "Magnolia Plantation & Gardens (private property — not a public park)",
+      "authorityContact": "weddings@magnoliaplantation.com — https://www.magnoliaplantation.com/photoshoots-and-proposals"
+    },
+    "disputed": [],
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Magnolia does not provide photography services. You must bring your own independent photographer, and they will count as one of your 4 permitted attendees.",
+      "sourceUrl": "https://www.magnoliaplantation.com/photoshoots-and-proposals"
+    },
+    "backup": "charleston-sc-white-point-garden-battery",
+    "sourceUrl": "https://www.magnoliaplantation.com/photoshoots-and-proposals",
+    "citations": [
+      "https://www.magnoliaplantation.com/photoshoots-and-proposals"
+    ],
+    "leadTimeDays": null,
+    "fee": "Proposal fee - $250; Historic Walking Tour proposal fee - $315; Photo shoot Package - $250",
+    "blocker": "Private property. Access for a booked proposal is capped at 4 people total, including your photographer."
+  },
+  {
+    "id": "savannah-ga-jones-street-squares",
+    "destinationId": "savannah-ga",
+    "name": "Jones Street & the historic squares",
+    "type": "historic-site",
+    "highlight": "Jones Street runs three blocks under a closed canopy of live oak between 1850s brick townhouses, crossing Monterey and Madison squares. The squares hold monuments, benches and the same canopy overhead.",
+    "tier": "red",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": null,
+      "authority": "City of Savannah — Recreation and Leisure Services / City Parks Rental",
+      "authorityContact": "912-351-3837"
+    },
+    "disputed": [
+      {
+        "verbatim": "If you are planning a small wedding with fewer than fifty people, you may proceed without a permit.",
+        "sourceUrl": "https://www.savannahga.gov/3607/Weddings"
+      },
+      {
+        "verbatim": "If you are planning a small wedding with fewer than twenty people, you will probably be able to do so without a permit.",
+        "sourceUrl": "https://www.savannahga.gov/672/Reserve-City-Parks-Squares"
+      }
+    ],
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Yes, anything set up in the parks and squares requires a permit. Chairs may be set up for the elderly and handicapped without requiring a permit.",
+      "sourceUrl": "https://www.savannahga.gov/672/Reserve-City-Parks-Squares"
+    },
+    "backup": "savannah-ga-bonaventure-cemetery",
+    "sourceUrl": "https://www.savannahga.gov/672/Reserve-City-Parks-Squares",
+    "citations": [
+      "https://www.savannahga.gov/3607/Weddings",
+      "https://www.savannahga.gov/672/Reserve-City-Parks-Squares"
+    ],
+    "leadTimeDays": 90,
+    "fee": "Wedding permit schedule published at savannahga.gov/3607/Weddings: $30 application; $350 resident (4-hour minimum); $725 non-resident peak season; $575 non-resident off-season; $60 per additional hour",
+    "blocker": "The City of Savannah publishes two different no-permit thresholds on two of its own live pages — fifty people on the Weddings page, twenty on the Parks & Squares Rental page. Call 912-351-3837 and get the answer in writing before relying on either."
+  },
+  {
+    "id": "savannah-ga-bonaventure-cemetery",
+    "destinationId": "savannah-ga",
+    "name": "Bonaventure Cemetery",
+    "type": "historic-site",
+    "highlight": "Oak avenues hung with Spanish moss run between Victorian statuary on a bluff above the Wilmington River. The east edge drops away to open tidal marsh.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Weddings are allowed in public areas of the cemetery, provided you register with the Cemeteries Event Coordinator. The use of private lots for weddings/photography is allowed only with the written permission of the lot owner.",
+        "sourceUrl": "https://www.savannahga.gov/739/Tours-Events"
+      },
+      "authority": "City of Savannah — Department of Cemeteries",
+      "authorityContact": "912-651-6843"
+    },
+    "disputed": [],
+    "crowdWindow": {
+      "verbatim": "Tours may be conducted between the hours of 6 a.m. - 8 p.m., seven days a week.",
+      "sourceUrl": "https://www.savannahga.gov/739/Tours-Events"
+    },
+    "privacy": null,
+    "backup": "savannah-ga-jones-street-squares",
+    "sourceUrl": "https://www.savannahga.gov/739/Tours-Events",
+    "citations": [
+      "https://www.savannahga.gov/739/Tours-Events"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "The published rule covers weddings and lot-owner permission, not proposals. The Department of Cemeteries has not published a proposal or personal-photography rule — call 912-651-6843."
+  },
+  {
+    "id": "new-orleans-la-city-park",
+    "destinationId": "new-orleans-la",
+    "name": "New Orleans City Park — Big Lake & the live oak groves",
+    "type": "park",
+    "highlight": "Live oaks several centuries old stand over the paths around Big Lake, their lower limbs resting on the ground. Low arched bridges cross the water at the lake's north end.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Personal-use film and photo shoots do not need a permit.",
+        "sourceUrl": "https://neworleanscitypark.org/events-permitting/park-permits/"
+      },
+      "authority": "New Orleans City Park",
+      "authorityContact": "https://neworleanscitypark.org/events-permitting/park-permits/"
+    },
+    "disputed": [],
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "A permit is required for any commercial, professional, or university-level photo or film shoot.",
+      "sourceUrl": "https://neworleanscitypark.org/events-permitting/park-permits/"
+    },
+    "backup": "new-orleans-la-jackson-square",
+    "sourceUrl": "https://neworleanscitypark.org/events-permitting/park-permits/",
+    "citations": [
+      "https://neworleanscitypark.org/events-permitting/park-permits/"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "The no-permit rule is scoped to personal use. Hiring a professional photographer moves the shoot into the commercial/professional category, which the same page says does require a permit."
+  },
+  {
+    "id": "new-orleans-la-jackson-square",
+    "destinationId": "new-orleans-la",
+    "name": "Jackson Square",
+    "type": "park",
+    "highlight": "A fenced garden square with the Andrew Jackson equestrian statue at its center and the three spires of St. Louis Cathedral rising directly behind it. The Pontalba balconies close the flanking sides.",
+    "tier": "green",
+    "permit": {
+      "required": true,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "All commercial, professional, staged, planned or formal photography must be scheduled and permitted.",
+        "sourceUrl": "https://nola.gov/next/parks-parkways/topics/event-rules-regulations/photography-in-jackson-square/"
+      },
+      "authority": "City of New Orleans — Department of Parks & Parkways",
+      "authorityContact": "(504) 658-3201"
+    },
+    "disputed": [],
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Jackson Square is a public park and may be used as a backdrop for photography whether professional, planned, formal or staged.",
+      "sourceUrl": "https://nola.gov/next/parks-parkways/topics/event-rules-regulations/photography-in-jackson-square/"
+    },
+    "backup": "new-orleans-la-city-park",
+    "sourceUrl": "https://nola.gov/next/parks-parkways/topics/event-rules-regulations/photography-in-jackson-square/",
+    "citations": [
+      "https://nola.gov/next/parks-parkways/topics/event-rules-regulations/photography-in-jackson-square/"
+    ],
+    "leadTimeDays": 14,
+    "fee": "A non-refundable $50 processing fee must be received before reservations are scheduled.",
+    "blocker": null
+  },
+  {
+    "id": "st-augustine-fl-castillo-de-san-marcos",
+    "destinationId": "st-augustine-fl",
+    "name": "Castillo de San Marcos — the gun deck and glacis",
+    "type": "historic-site",
+    "highlight": "A coquina-stone star fort finished in 1695, sitting on the Matanzas Bay seawall. The gun deck looks north over the inlet; outside the walls the glacis is open, unbroken lawn.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "FEDERAL LAND — National Park Service, Castillo de San Marcos National Monument",
+      "authorityContact": "904-829-6506 (park headquarters) — https://www.nps.gov/casa/contacts.htm"
+    },
+    "disputed": [],
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Individuals and groups conducting filming, still photography, or audio recording are subject to entrance and/or recreation fees that may apply in park areas even when a permit is not required.",
+      "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+    },
+    "backup": null,
+    "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/casa/getinvolved/permit-conditions.htm",
+      "https://www.nps.gov/casa/contacts.htm"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "FEDERAL LAND — National Park Service rules govern, not the City of St. Augustine. The no-permit exemption is conditional: eight or fewer people, hand-carried equipment only, no exclusive use of a site, no adverse impact, and no added administrative cost to NPS. The monument's own published permit conditions cover only educational and recreational tours and say nothing about ceremonies, proposals or personal photography."
+  },
+  {
+    "id": "key-west-fl-mallory-square",
+    "destinationId": "key-west-fl",
+    "name": "Mallory Square",
+    "type": "waterfront",
+    "highlight": "A brick plaza on the harbor's west edge where the sunset draws a nightly crowd of street performers. The water opens straight west with no land in the frame.",
+    "tier": "red",
+    "permit": {
+      "required": "unknown",
+      "appliesToProposal": false,
+      "fact": null,
+      "authority": "City of Key West — Special Events Division",
+      "authorityContact": "305-809-3881 (Special Events Manager) — https://www.cityofkeywest-fl.gov/679/Special-Events"
+    },
+    "disputed": [],
+    "crowdWindow": null,
+    "privacy": null,
+    "backup": null,
+    "sourceUrl": "https://www.cityofkeywest-fl.gov/679/Special-Events",
+    "citations": [
+      "https://www.cityofkeywest-fl.gov/679/Special-Events",
+      "https://www.cityofkeywest-fl.gov/FormCenter/Filming-Forms-7/Location-Filming-Permit-49"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "No City of Key West page addresses personal or non-commercial photography. The Special Events page defines a special event as a temporary, planned occasion and lists event fees; the filming permit application sets a 14-business-day lead time and a $1,000,000 insurance requirement but publishes no personal-use exemption. Call 305-809-3881 before assuming a proposal shoot is unregulated."
+  },
+  {
+    "id": "hilton-head-sc-coligny-beach-park",
+    "destinationId": "hilton-head-sc",
+    "name": "Coligny Beach Park",
+    "type": "beach",
+    "highlight": "A town beach access at the island's south end, with a boardwalk out through the dune line onto hard-packed sand that runs flat for miles at low tide.",
+    "tier": "amber",
+    "permit": {
+      "required": true,
+      "appliesToProposal": false,
+      "fact": {
+        "verbatim": "Wedding ceremonies performed on the beach require a permit (free of charge) from the Town of Hilton Head Island.",
+        "sourceUrl": "https://hiltonheadislandsc.gov/our_island/beach/beach_wedding_permits.php"
+      },
+      "authority": "Town of Hilton Head Island — Facilities Management",
+      "authorityContact": "843-342-4580"
+    },
+    "disputed": [],
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "To apply, please complete the request form and submit online at least 30 days prior to your ceremony date.",
+      "sourceUrl": "https://hiltonheadislandsc.gov/our_island/beach/beach_wedding_permits.php"
+    },
+    "backup": null,
+    "sourceUrl": "https://hiltonheadislandsc.gov/our_island/beach/beach_wedding_permits.php",
+    "citations": [
+      "https://hiltonheadislandsc.gov/our_island/beach/beach_wedding_permits.php",
+      "https://services.hiltonheadislandsc.gov/beachwedding/beachwedrequest.cfm"
+    ],
+    "leadTimeDays": 30,
+    "fee": "Free of charge",
+    "blocker": "The Town's published rule covers wedding ceremonies only. It says nothing about proposals or photography — a proposal is not a wedding ceremony, so this permit does not on its face apply. Confirm at 843-342-4580."
+  },
+  {
+    "id": "amelia-island-fl-fort-clinch",
+    "destinationId": "amelia-island-fl",
+    "name": "Fort Clinch State Park",
+    "type": "historic-site",
+    "highlight": "A brick pentagonal fort at the mouth of the St. Marys River, reached by a three-mile road running under a closed tunnel of oak and palmetto. From the north jetty you look across the water to Cumberland Island.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "Photography is permitted without fee for all purposes except where normal park operations are disrupted or for resource protection.",
+        "sourceUrl": "https://www.floridastateparks.org/plan-your-visit/faqs"
+      },
+      "authority": "Florida Department of Environmental Protection — Division of Recreation and Parks",
+      "authorityContact": "https://www.floridastateparks.org/fortclinch"
+    },
+    "disputed": [],
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "If you need to exclude other visitors from a particular area of the park during the photography session, arrange in advance for a photography permit.",
+      "sourceUrl": "https://www.floridastateparks.org/plan-your-visit/faqs"
+    },
+    "backup": null,
+    "sourceUrl": "https://www.floridastateparks.org/plan-your-visit/faqs",
+    "citations": [
+      "https://www.floridastateparks.org/plan-your-visit/faqs",
+      "https://www.floridastateparks.org/fortclinch"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "Park entrance fees still apply. A permit becomes necessary if the shoot will affect park visitors or resources: \"Photography permits are required if your photo/film shoot will affect park visitors or resources.\""
+  },
+  {
+    "id": "gatlinburg-tn-cades-cove-wildlife-overlook",
+    "destinationId": "gatlinburg-tn",
+    "name": "Cades Cove — Wildlife Overlook",
+    "type": "overlook",
+    "highlight": "An open valley floor ringed by the Smokies, worked into split-rail fields and 19th-century churches along an eleven-mile one-way loop. Deer and turkey come into the fields at first and last light.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm"
+      },
+      "authority": "FEDERAL LAND — National Park Service, Great Smoky Mountains National Park",
+      "authorityContact": "865-436-1200 — grsm_special_use_permits@nps.gov"
+    },
+    "disputed": [],
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Permits do not grant exclusive use of an area and the area is still open to normal visitor use.",
+      "sourceUrl": "https://www.nps.gov/grsm/planyourvisit/wedding-information.htm"
+    },
+    "backup": "chattanooga-tn-point-park-lookout-mountain",
+    "sourceUrl": "https://www.nps.gov/grsm/planyourvisit/wedding-information.htm",
+    "citations": [
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/grsm/planyourvisit/wedding-information.htm"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "FEDERAL LAND — National Park Service rules govern. A proposal is not a ceremony, but the line matters here: the park states \"A Special Use Permit (SUP) is required for all weddings, vow renewals, elopements, commitment ceremonies, historic structure use (religious services), or other similar ceremonies to be held in the park.\" Outdoor SUP locations are capped at 25 people, 1 hour and 6 vehicles, with a $50 application fee due no later than 30 days prior. If you plan anything ceremony-shaped on the spot, you are in permit territory."
+  },
+  {
+    "id": "chattanooga-tn-point-park-lookout-mountain",
+    "destinationId": "chattanooga-tn",
+    "name": "Point Park, Lookout Mountain",
+    "type": "overlook",
+    "highlight": "The bluff at the north end of Lookout Mountain, roughly 1,400 feet above the Tennessee River where it doubles back around Moccasin Bend. Ochs Memorial Observatory sits on the rim below the main walk.",
+    "tier": "green",
+    "permit": {
+      "required": false,
+      "appliesToProposal": true,
+      "fact": {
+        "verbatim": "In most cases, permits and fees are not required for filming, still photography, or audio recording that involves eight or fewer individuals.",
+        "sourceUrl": "https://www.nps.gov/chch/planyourvisit/permitsandreservations.htm"
+      },
+      "authority": "FEDERAL LAND — National Park Service, Chickamauga & Chattanooga National Military Park",
+      "authorityContact": "706-866-9241"
+    },
+    "disputed": [],
+    "crowdWindow": null,
+    "privacy": {
+      "verbatim": "Permits and fees are never required for filming, still photography, or audio recording that is associated with an activity or event that has been authorized under a written instrument (e.g., permit or agreement), such as a wedding, sporting event, demonstration or other activity.",
+      "sourceUrl": "https://www.nps.gov/chch/planyourvisit/permitsandreservations.htm"
+    },
+    "backup": "gatlinburg-tn-cades-cove-wildlife-overlook",
+    "sourceUrl": "https://www.nps.gov/chch/planyourvisit/permitsandreservations.htm",
+    "citations": [
+      "https://www.nps.gov/chch/planyourvisit/permitsandreservations.htm",
+      "https://www.nps.gov/aboutus/news/film-and-photo-permits.htm",
+      "https://www.nps.gov/chch/learn/lookout-mountain.htm"
+    ],
+    "leadTimeDays": null,
+    "fee": null,
+    "blocker": "FEDERAL LAND — National Park Service rules govern, not the City of Chattanooga. If you turn the moment into a ceremony: \"Weddings and other special events, such as church services, require a Special Use Permit (SUP) from the park and must follow specific guidelines, according to policy and regulation,\" with completed applications due no less than 14 days prior."
+  }
+]

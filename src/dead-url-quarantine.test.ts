@@ -1,5 +1,5 @@
 /**
- * The quarantine must remove exactly the five confirmed-dead urls and nothing else.
+ * The quarantine must remove exactly the confirmed-dead urls and nothing else.
  *
  * The falsification case matters most here. Seven urls the audit called dead were
  * working links, and quarantining any of them would have replaced a good direct
@@ -25,6 +25,15 @@ test("the confirmed-dead urls are recognised", () => {
   assert.equal(isDeadUrl("https://moondogsbar.com/"), true);
   assert.equal(isDeadUrl("https://automaticseafood.com"), true);
   assert.equal(isDeadUrl("https://www.hiltonvb.com"), true);
+  assert.equal(isDeadUrl("https://thecapitolbend.com/"), true);
+});
+
+test("a live site with a flapping origin is NOT quarantined", () => {
+  // sagamorespirit.com answered 5 of 10 GETs with the real homepage from its
+  // origin while the other 5 returned Cloudflare 521. Dropping its url would
+  // trade a link that works half the time for no link at all.
+  assert.equal(isDeadUrl("https://sagamorespirit.com/"), false);
+  assert.equal(isDeadUrl("https://sagamorespirit.com"), false);
 });
 
 test("a trailing slash does not let a dead url through", () => {
@@ -78,9 +87,9 @@ test("no quarantined url survives into the published universe", () => {
   assert.deepEqual(leaked, [], `dead urls reached consumers:\n${leaked.join("\n")}`);
 });
 
-test("the five venues still render — only their link is gone", () => {
+test("the quarantined venues still render — only their link is gone", () => {
   const names = ["The Noble South", "Ludlow & Prime", "Moondogs Atlanta",
-                 "Automatic Seafood & Oysters", "Sky Bar"];
+                 "Automatic Seafood & Oysters", "Sky Bar", "The Capitol"];
   const found = new Set<string>();
   for (const dest of sharedDestinations as any[]) {
     for (const cat of ["activities", "dining", "nightlife", "lodging", "transport"]) {

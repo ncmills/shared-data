@@ -13,7 +13,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { runBackfill, deriveBackfillCliConfig } from "./run-backfill";
+import { runBackfill, deriveBackfillCliConfig, runMeasuredNothing } from "./run-backfill";
 import type { BackfillTask } from "./backfill-queue";
 import type { IngestResult } from "./ingest-researched";
 
@@ -369,4 +369,75 @@ test("without a sleeping host, the SAME empty run still records attempts", async
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+// ── timeouts are not verdicts (2026-08-06) ──────────────────────────────────
+// Measured on the TOP_K=40 run: 14 of 28 research calls hit the 180s timeout.
+// Each asked about 8 venues, so recording that run's attempts would have struck
+// ~112 venues the researcher never actually looked at — against an attempts file
+// already holding 62 venues one strike from permanent retirement (maxAttempts=3).
+// `hostSuspended` already had this seam; timeout and non-zero exit did not.
+test("a run with TIMED-OUT research calls records no attempts — those venues were never asked", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "attempts-unmeasured-"));
+  const path = join(dir, "backfill-attempts.json");
+  try {
+    await runBackfill({
+      ...baseOpts,
+      tasks: TASKS,
+      recordAttempts: true,
+      attemptsPath: path,
+      // Indistinguishable from a genuine "found nothing" at this seam...
+      researcher: async () => [],
+      hostSuspended: () => false,
+      // ...but the calls timed out, so they measured nothing.
+      unmeasuredCalls: () => 3,
+    });
+    assert.equal(
+      existsSync(path),
+      false,
+      "a timed-out call must not retire venues it never actually researched",
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("with ZERO unmeasured calls, the same empty run still records attempts", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "attempts-measured-"));
+  const path = join(dir, "backfill-attempts.json");
+  try {
+    await runBackfill({
+      ...baseOpts,
+      tasks: TASKS,
+      recordAttempts: true,
+      attemptsPath: path,
+      researcher: async () => [],
+      hostSuspended: () => false,
+      unmeasuredCalls: () => 0,
+    });
+    assert.equal(
+      existsSync(path),
+      true,
+      "a clean call that genuinely found nothing IS evidence and must still count",
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+// ─── a run that measured nothing is not a successful run (2026-08-06) ───────
+test("runMeasuredNothing: every call unmeasured ⇒ the run failed", () => {
+  assert.equal(runMeasuredNothing(40, 40), true);
+  assert.equal(runMeasuredNothing(1, 1), true);
+});
+
+test("runMeasuredNothing: a PARTIAL failure is still a real run", () => {
+  // ~42% of calls time out normally. That must not fail the job.
+  assert.equal(runMeasuredNothing(40, 17), false);
+  assert.equal(runMeasuredNothing(40, 39), false);
+});
+
+test("runMeasuredNothing: an EMPTY QUEUE makes no calls and is a success", () => {
+  // The drain's terminal state. Failing here would turn "done" into an alarm.
+  assert.equal(runMeasuredNothing(0, 0), false);
 });

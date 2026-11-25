@@ -33,7 +33,7 @@
  */
 
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -43,7 +43,7 @@ import type { EntityKind } from "../../src/tagging-rules";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(HERE, "..", "..");
-const SIBLING_ROOT = process.env.CONSUMER_ROOT ?? join(REPO_ROOT, "..");
+export const SIBLING_ROOT = process.env.CONSUMER_ROOT ?? join(REPO_ROOT, "..");
 
 /** Which repo hosts which wizard(s). One repo can host two wizards (Offsite). */
 export const CONSUMER_REPOS: { repo: string; wizards: WizardTag[]; note?: string }[] = [
@@ -51,6 +51,18 @@ export const CONSUMER_REPOS: { repo: string; wizards: WizardTag[]; note?: string
   { repo: "maid-of-honor-hq", wizards: ["moh"] },
   { repo: "handicap-hq", wizards: ["handicap"] },
   { repo: "offsite-outpost", wizards: ["offsite-retreat", "offsite-outing"] },
+  // Added 2026-08-21. Both were tagged ahead of their consumers (see the note in
+  // src/tags.ts) and both have since REACHED them: engagedmoon on 2026-08-06,
+  // friendsmoon by 2026-08-20. Each imports `sharedDestinations` — engagedmoon
+  // across src/lib/{trip-context,refine-plan,proposal-spots,trip}.ts, friendsmoon
+  // in src/lib/catalog.ts — and each pins a real SHA. Until now neither was
+  // listed here, so 5,878 tagged rows apiece were reaching production with the
+  // pin-integrity and field-reach checks never once run against them. That is
+  // the same blind spot this file was written to close, arrived at from the
+  // opposite direction: not a phantom consumer counted as real, but a real
+  // consumer counted as nothing.
+  { repo: "friendsmoon", wizards: ["friendsmoon"] },
+  { repo: "engagedmoon", wizards: ["engagedmoon"] },
   // tour-de-fore is deliberately ABSENT. It became a personal golf site + pro
   // shop in the 2026-07-02 split and imports nothing from this package; the
   // `tdf` wizard it hosted was retired 2026-07-31 and all golf routes to
@@ -363,10 +375,69 @@ export interface ReachFinding {
   detail: string;
 }
 
+/**
+ * Every sibling checkout that declares a `shared-data` dependency. The roster
+ * above is hand-maintained, and a consumer missing from it is invisible to
+ * every check in this file — which is strictly worse than a failing check,
+ * because the report still says PASS. friendsmoon and engagedmoon each shipped
+ * ~5,878 tagged rows to production this way, unaudited, until 2026-08-21.
+ *
+ * So: derive the truth from the filesystem and compare. A repo that installs
+ * this package is a consumer whether or not anyone wrote it down.
+ */
+export function declaredConsumers(): string[] {
+  let entries;
+  try {
+    entries = readdirSync(SIBLING_ROOT, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+  const found: string[] = [];
+  for (const e of entries) {
+    if (!e.isDirectory() || e.name.startsWith(".")) continue;
+
+    // Skip git WORKTREES. A worktree of plan-my-party is a second checkout of a
+    // consumer already on the roster, not a seventh consumer — flagging it would
+    // fail this check on a correct tree, and a guard that fires on correct state
+    // is a guard people learn to ignore. A worktree's `.git` is a FILE pointing
+    // at the parent's gitdir; a real clone's is a directory. Three of these
+    // (bmhq-og-sweep, moh-og-sweep, friendsmoon-atlasfix) sat in the sibling
+    // root the day this check was written.
+    try {
+      if (statSync(join(SIBLING_ROOT, e.name, ".git")).isFile()) continue;
+    } catch {
+      // no .git at all — not a checkout; the package.json test below decides
+    }
+
+    try {
+      const pkg = JSON.parse(readFileSync(join(SIBLING_ROOT, e.name, "package.json"), "utf8"));
+      const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+      if (deps["shared-data"]) found.push(e.name);
+    } catch {
+      // no package.json, or unreadable — not a consumer as far as we can tell
+    }
+  }
+  return found.sort();
+}
+
 export function runConsumerReach(): { findings: ReachFinding[]; skipped: string[] } {
   const findings: ReachFinding[] = [];
   const skipped: string[] = [];
   const allImported = new Set<string>();
+
+  // 0. roster integrity — a consumer nobody registered is a consumer nobody checks
+  const registered = new Set(CONSUMER_REPOS.map((c) => c.repo));
+  for (const repo of declaredConsumers()) {
+    if (registered.has(repo)) continue;
+    findings.push({
+      severity: "critical",
+      repo,
+      detail:
+        `depends on shared-data but is NOT in CONSUMER_REPOS — so its pin integrity, wizard ` +
+        `reach and field reach have never been checked, and \`bump-consumers\` skips it on every ` +
+        `release. Add it to CONSUMER_REPOS (scripts/audit/consumer-reach.ts) with the wizard(s) it hosts.`,
+    });
+  }
 
   for (const { repo, wizards, note } of CONSUMER_REPOS) {
     const root = join(SIBLING_ROOT, repo);

@@ -30,8 +30,14 @@
  * rows sourced, two batches in, with no third batch coming.
  */
 import { buildBackfillQueue, loadAttempts, recordAttempts, type BackfillTask } from "./backfill-queue";
+import { loadPendingKeys } from "./open-pr-rows";
 import { researchBackfill } from "./research-backfill";
-import { runExpansion, type RunExpansionOptions, type RunResult } from "./run-expansion";
+import {
+  DEFAULT_RESEARCH_CONCURRENCY,
+  runExpansion,
+  type RunExpansionOptions,
+  type RunResult,
+} from "./run-expansion";
 
 export interface RunBackfillOptions
   extends Omit<RunExpansionOptions<BackfillTask>, "research" | "gapQueue" | "gapQueuePath"> {
@@ -53,6 +59,11 @@ export interface RunBackfillOptions
    * it is latched during the run, after these options are constructed.
    */
   hostSuspended?: () => boolean;
+  /** How many research calls produced NO measurement (timeout / non-zero exit). */
+  unmeasuredCalls?: () => number;
+  /** Venues already proposed in an open `expand/*` PR; never offered again.
+   *  See `BackfillQueueOptions.pending` and scripts/open-pr-rows.ts. */
+  pendingKeys?: ReadonlySet<string>;
 }
 
 export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<BackfillTask>> {
@@ -64,6 +75,7 @@ export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<B
       // queue head does not silt up with residue (yield fell 22 -> 3 per batch
       // across the 31-batch run for exactly this reason).
       attempts: opts.recordAttempts === false ? {} : loadAttempts(opts.attemptsPath),
+      pending: opts.pendingKeys,
     }).tasks;
 
   const result = await runExpansion<BackfillTask>({
@@ -105,6 +117,19 @@ export async function runBackfill(opts: RunBackfillOptions): Promise<RunResult<B
   if (opts.hostSuspended?.()) {
     console.log(
       "run-backfill: host slept mid-run — NOT recording attempts " +
+        "(those venues were never really researched)",
+    );
+  } else if (opts.unmeasuredCalls?.()) {
+    // A timeout or non-zero exit is not a verdict on a venue — the researcher
+    // never got to look. Measured 2026-08-06: 14 of 28 calls timed out, which
+    // would have struck ~112 venues that were never asked about, against an
+    // attempts file already holding 62 venues one strike from retirement at
+    // maxAttempts=3. Skipping the WHOLE run's attempts is deliberately
+    // conservative — per-venue attribution isn't available here, and this file's
+    // own doctrine is that re-asking a venue beats silently dropping it.
+    console.log(
+      `run-backfill: ${opts.unmeasuredCalls()} research call(s) produced no measurement ` +
+        "(timeout / non-zero exit) — NOT recording attempts for this run " +
         "(those venues were never really researched)",
     );
   } else if (opts.recordAttempts !== false && !opts.dryRun) {
@@ -152,6 +177,29 @@ export function deriveBackfillCliConfig(args: {
   };
 }
 
+/**
+ * Did this run MEASURE anything at all?
+ *
+ * WHY (2026-08-06): `claudeResearcher` is fail-safe — a timeout, a non-zero
+ * exit, or a usage limit all resolve to `[]`. So a run in which every single
+ * call failed printed "0 researched, 0 ingested" and exited 0, which
+ * `weekly-url-backfill.sh` logged as `=== run OK ===`. That is byte-identical
+ * to a run that researched everything and genuinely found nothing, and the
+ * backfill watchdog reads run status — so a usage-limited Tue-03:00 job could
+ * report health every week while sourcing nothing.
+ *
+ * A run that measured NOTHING is not a successful run. Absence of a
+ * measurement is not a passing measurement (feedback_fleet_signal_integrity).
+ *
+ * Deliberately narrow: it fires only when there was at least one call AND
+ * every one of them was unmeasured. A partial failure (the normal case — ~42%
+ * of calls time out) is still a real run, and an EMPTY QUEUE makes zero calls
+ * and must stay a success, not a false alarm.
+ */
+export function runMeasuredNothing(totalCalls: number, unmeasuredCalls: number): boolean {
+  return totalCalls > 0 && unmeasuredCalls >= totalCalls;
+}
+
 // ─── CLI ────────────────────────────────────────────────────────────────────
 if (import.meta.url === `file://${process.argv[1]}`) {
   const args = new Map(
@@ -196,11 +244,23 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   // Latched, never reset: once the host has slept mid-run, this run's "failures"
   // are no longer evidence about any venue.
   let hostSuspended = false;
+  // Latched, never reset: any call that produced no measurement (timeout, or a
+  // non-zero exit — what an upstream rate-limit looks like). Its venues were
+  // never really researched, so this run must not strike them. Same doctrine as
+  // hostSuspended directly below; that case had a seam and these did not.
+  let unmeasuredCalls = 0;
+  // The DENOMINATOR. `unmeasuredCalls` alone cannot distinguish "3 of 40 calls
+  // failed" from "3 of 3 calls failed" — and only the second means the run
+  // learned nothing. Every number carries its denominator.
+  let totalCalls = 0;
   const researcher = noResearch
     ? async () => []
     : (await import("./researcher-claude")).claudeResearcher({
         onSuspended: () => {
           hostSuspended = true;
+        },
+        onUnmeasured: () => {
+          unmeasuredCalls++;
         },
         // WIRE THE DIAGNOSTIC LOG. `claudeResearcher` is fail-safe by design —
         // it returns [] on a timeout, a non-zero exit, or a parse failure — so
@@ -211,12 +271,38 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         timeoutMs: num("researcher-timeout-ms", 180_000),
       });
 
+  // How many research calls run at once. The loop used to be strictly
+  // sequential, so a top-K=40 run was 40 × up-to-180s of wall clock (~1h52m),
+  // and ~59% of that was spent inside calls that timed out and returned
+  // nothing. Bounded on purpose — `--research-concurrency=40` would put 40
+  // `claude -p` processes on the machine at once.
+  const researchConcurrency = Math.max(
+    1,
+    Math.floor(num("research-concurrency", DEFAULT_RESEARCH_CONCURRENCY)),
+  );
+
+  // PR-AWARE. An unattended run MUST say which rows open PRs already propose;
+  // loadPendingKeys throws when --auto has no file, so the lane cannot quietly
+  // fall back to re-proposing everything.
+  const pendingKeys = loadPendingKeys(args.get("pending-keys"), args.get("auto") === "true");
+
   const maxVenuesPerTask = num("max-venues-per-task", 8);
-  const q = buildBackfillQueue(undefined, { maxVenuesPerTask });
+  const q = buildBackfillQueue(undefined, { maxVenuesPerTask, pending: pendingKeys });
   console.log(
     `run-backfill: ${q.totalUnsourced} of ${q.totalRows} party rows unsourced ` +
       `across ${q.tasks.length} task(s)\n`,
   );
+  console.log(
+    `run-backfill: skipped ${q.pendingSkipped} venue(s) already proposed in open PR(s) ` +
+      `(${pendingKeys.size} pending key(s) loaded)\n`,
+  );
+
+  // Forwards the per-call budget. Dropping `callOpts` here would silently pin
+  // every call back to the run-wide default — the counter must be transparent.
+  const countingResearcher = async (prompt: string, callOpts?: { timeoutMs?: number }) => {
+    totalCalls++;
+    return researcher(prompt, callOpts);
+  };
 
   const res = await runBackfill({
     label,
@@ -225,9 +311,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     dryRun,
     liveUrlCheck,
     pushPr,
-    researcher,
+    researcher: countingResearcher,
     maxVenuesPerTask,
+    researchConcurrency,
     hostSuspended: () => hostSuspended,
+    unmeasuredCalls: () => unmeasuredCalls,
+    pendingKeys,
   });
 
   // Print what was actually sourced. On a dry run this IS the deliverable —
@@ -249,6 +338,18 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       console.log(`  ${r.taskId} [#${r.index}]`);
       for (const reason of r.reasons) console.log(`      ${reason}`);
     }
+  }
+
+  if (runMeasuredNothing(totalCalls, unmeasuredCalls)) {
+    // EXIT NON-ZERO. weekly-url-backfill.sh propagates a failed run's status, so
+    // this is what turns a silently-starved job into a visible one.
+    console.error(
+      `\nrun-backfill[${label}]: MEASURED NOTHING — all ${totalCalls} research ` +
+        `call(s) failed (timeout / non-zero exit / usage limit). This is NOT ` +
+        `"found nothing": the venues were never researched, and no attempt was ` +
+        `recorded against them. Check the log above for "USAGE LIMIT".`,
+    );
+    process.exitCode = 1;
   }
 
   console.log(

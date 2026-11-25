@@ -42,6 +42,7 @@ export const expansionSouth: CanonicalDestination[] = [
     lodging: [
       { name: "The Historic Cavalier Hotel & Beach Club", type: "boutique-hotel", pricePerNight: [350,700], perRoom: true, maxGuests: 2, highlight: "Restored 1927 landmark with distillery + spa on-site" },
       { name: "Embassy Suites VB Oceanfront", type: "hotel", pricePerNight: [200,400], perRoom: true, maxGuests: 6, highlight: "All-suite oceanfront — suites sleep a crew" },
+      { name: "Oceanfront 6BR house", type: "house", pricePerNight: [910,1820], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Steps to the sand with a deck facing the water" },
     ],
     transport: [
       { name: "Virginia Beach Party Bus", type: "party-bus", priceRange: "$150-$350/hr", highlight: "11-49 passenger buses + ORF airport transfers" },
@@ -76,6 +77,7 @@ export const expansionSouth: CanonicalDestination[] = [
     lodging: [
       { name: "Quirk Hotel", type: "boutique-hotel", pricePerNight: [250,450], perRoom: true, maxGuests: 2, highlight: "Art-gallery boutique with the city's best rooftop" },
       { name: "Graduate Richmond", type: "hotel", pricePerNight: [180,350], perRoom: true, maxGuests: 2, highlight: "Rooftop pool + bar, party-friendly and central" },
+      { name: "The Fan 6BR rowhouse", type: "house", pricePerNight: [650,1170], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Tree-lined block, tall ceilings, and Carytown nearby" },
     ],
     transport: [
       { name: "Richmond Party Bus", type: "party-bus", priceRange: "$150-$350/hr", highlight: "Brewery-tour buses + RIC airport transfers" },
@@ -110,6 +112,7 @@ export const expansionSouth: CanonicalDestination[] = [
     lodging: [
       { name: "Hilton Norfolk The Main", type: "hotel", pricePerNight: [200,400], perRoom: true, maxGuests: 2, highlight: "Downtown flagship with rooftop bar, walk to Granby" },
       { name: "Glass Light Hotel (Autograph Collection)", type: "boutique-hotel", pricePerNight: [180,350], perRoom: true, maxGuests: 2, highlight: "Art-forward downtown boutique near the nightlife" },
+      { name: "Ghent 6BR house", type: "house", pricePerNight: [520,1040], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Historic block near the Elizabeth River and the arts district" },
     ],
     transport: [
       { name: "Norfolk Party Bus", type: "party-bus", priceRange: "$150-$350/hr", highlight: "11-49 passenger buses, ORF transfers + brewery tours" },
@@ -178,6 +181,7 @@ export const expansionSouth: CanonicalDestination[] = [
     lodging: [
       { name: "The Edwin Hotel", type: "boutique-hotel", pricePerNight: [300,550], perRoom: true, maxGuests: 2, highlight: "Waterfront five-star with the Whiskey Thief rooftop + plunge pool" },
       { name: "The Read House", type: "boutique-hotel", pricePerNight: [200,400], perRoom: true, maxGuests: 2, highlight: "Award-winning historic landmark with in-house steakhouse + lobby bar" },
+      { name: "North Shore 6BR house", type: "house", pricePerNight: [780,1430], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Walk the bridge downtown, mountains on every side" },
     ],
     transport: [
       { name: "Chattanooga Party Bus Company", type: "party-bus", priceRange: "$150-$350/hr", highlight: "10-50 passenger buses + sprinter limos, crawl + airport runs" },
@@ -246,6 +250,7 @@ export const expansionSouth: CanonicalDestination[] = [
     lodging: [
       { name: "The Elyton Hotel (Autograph Collection)", type: "boutique-hotel", pricePerNight: [200,400], perRoom: true, maxGuests: 2, highlight: "1909 landmark with the Moonshine rooftop bar, walk downtown" },
       { name: "Redmont Hotel (Curio by Hilton)", type: "boutique-hotel", pricePerNight: [170,320], perRoom: true, maxGuests: 2, highlight: "Birmingham's oldest hotel + highest rooftop bar in the state" },
+      { name: "Highland Park 6BR house", type: "house", pricePerNight: [520,1040], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Big porch on the park, minutes from the restaurant district" },
     ],
     transport: [
       { name: "Birmingham Party Bus", type: "party-bus", priceRange: "$125-$200/hr", highlight: "Group transport between Avondale, Lakeview + downtown" },
@@ -280,6 +285,7 @@ export const expansionSouth: CanonicalDestination[] = [
     lodging: [
       { name: "The Battle House Renaissance Mobile Hotel & Spa", type: "hotel", pricePerNight: [200,380], perRoom: true, maxGuests: 2, highlight: "Historic downtown hotel with full spa + rooftop pool" },
       { name: "The Admiral Hotel", type: "boutique-hotel", pricePerNight: [150,280], perRoom: true, maxGuests: 2, highlight: "Reimagined historic downtown boutique near the strip" },
+      { name: "Midtown 6BR house", type: "house", pricePerNight: [520,990], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Live oaks and a wide porch near the parade route" },
     ],
     transport: [
       { name: "Mobile Party Bus", type: "party-bus", priceRange: "$100-$175/hr", highlight: "Downtown crawl + Dauphin Island fishing runs" },
@@ -348,6 +354,7 @@ export const expansionSouth: CanonicalDestination[] = [
     lodging: [
       { name: "Naples Bay Resort & Marina", type: "resort", pricePerNight: [300,700], perRoom: false, maxGuests: 6, highlight: "Five pools, spa + marina, full-kitchen suites for groups" },
       { name: "Inn on Fifth", type: "boutique-hotel", pricePerNight: [350,800], perRoom: true, maxGuests: 2, highlight: "On Fifth Ave, walk to nightlife + dining" },
+      { name: "Old Naples 6BR house", type: "house", pricePerNight: [910,2080], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Pool and a short walk to Fifth Avenue and the pier" },
     ],
     transport: [
       { name: "Naples Transportation & Tours", type: "party-bus", priceRange: "$175-$450/hr", highlight: "75-vehicle fleet, bach + wine-tour runs, 24/7" },
@@ -450,6 +457,7 @@ export const expansionSouth: CanonicalDestination[] = [
     lodging: [
       { name: "Gold Strike Casino Resort", type: "resort", pricePerNight: [99,249], perRoom: true, maxGuests: 4, highlight: "The tallest tower + biggest property, central to everything" },
       { name: "Hollywood Casino & Hotel Tunica", type: "resort", pricePerNight: [79,189], perRoom: true, maxGuests: 4, highlight: "Group-event amenities, on-strip" },
+      { name: "Riverside 6BR house", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Quiet river road with the casinos a short drive north" },
     ],
     transport: [
       { name: "Memphis party-bus / limo charter", type: "limo", priceRange: "$120-$200/hr", highlight: "MEM airport to the Tunica strip + casino hopping" },
@@ -552,6 +560,7 @@ export const expansionSouth: CanonicalDestination[] = [
     lodging: [
       { name: "Margaritaville Resort Casino Hotel", type: "resort", pricePerNight: [129,299], perRoom: true, maxGuests: 4, highlight: "Tropical-themed market leader, best all-in-one base" },
       { name: "Horseshoe Bossier City Hotel", type: "resort", pricePerNight: [99,259], perRoom: true, maxGuests: 4, highlight: "Central casino-row property with suites for groups" },
+      { name: "Highland 6BR house", type: "house", pricePerNight: [400,900], perRoom: false, maxGuests: 14, bedrooms: 6, highlight: "Historic district porch near the riverfront" },
     ],
     transport: [
       { name: "Shreveport-Bossier party-bus / limo", type: "limo", priceRange: "$110-$180/hr", highlight: "SHV airport + cross-river casino hopping" },

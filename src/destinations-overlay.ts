@@ -68,6 +68,25 @@ export const BESTMAN_ACTIVITY_TYPES = new Set([
   // ["bestman"]. But the type was never added here, so applyBestmanOverlay
   // dropped it and it had NEVER rendered. Found by scripts/new-data-report.ts.
   "second-line-parade",
+  // Added 2026-08-06 — the same lag, caught by the adoption queue. Both rows are
+  // authored `brands: ["both"]` with BOTH "bachelor" and "bachelorette" in
+  // `audiences`, i.e. deliberately cross-brand, and both types were already in
+  // MOH_ACTIVITY_TYPES. Only this allowlist was missing them, so 3 correctly
+  // tagged rows (Goose Rocks Beach + Nantucket luxe picnics, Joshua Tree
+  // photoshoot) could never surface on Best Man HQ.
+  // NOTE the recurring shape: this allowlist is a SECOND gate behind the wizard
+  // tags, and it lags them. A row tagged "bestman" whose type is absent here is
+  // dropped SILENTLY — see the parity test below, added so the next lag fails
+  // loudly instead of quietly shipping a row that renders nowhere.
+  "luxe-picnic",
+  "photoshoot",
+  // Added 2026-08-18 — the SAME lag, third time. `sleigh-ride` has been in
+  // MOH_ACTIVITY_TYPES since the 2026-04-20 audit and was never mirrored here,
+  // so a horse-drawn sleigh ride authored `brands: ["both"]` was tagged
+  // `bestman` and dropped by this overlay. Caught by the parity test above the
+  // moment Stowe's Trapp Family Lodge sleigh row landed. A winter sleigh ride
+  // is not a gendered activity and there is no brand reason for the asymmetry.
+  "sleigh-ride",
 ]);
 
 /**
@@ -163,8 +182,8 @@ export function applyMohOverlay(c: CanonicalDestination): unknown {
     nightlife,
     dining,
     activities,
-    lodging: c.lodging.map((l) => omitTags(l)),
-    transport: c.transport.map((t) => omitTags(t)),
+    lodging: c.lodging.filter((l) => forWizard(l, "moh")).map((l) => omitTags(l)),
+    transport: c.transport.filter((t) => forWizard(t, "moh")).map((t) => omitTags(t)),
     bacheloretteScore: c.score,
   };
 }
@@ -191,8 +210,8 @@ export function applyBestmanOverlay(c: CanonicalDestination): unknown {
     nightlife,
     dining,
     activities,
-    lodging: c.lodging.map((l) => omitTags(l)),
-    transport: c.transport.map((t) => omitTags(t)),
+    lodging: c.lodging.filter((l) => forWizard(l, "bestman")).map((l) => omitTags(l)),
+    transport: c.transport.filter((t) => forWizard(t, "bestman")).map((t) => omitTags(t)),
     bachelorScore: c.score,
   };
 }
@@ -229,8 +248,8 @@ export function applyOutpostOverlay(c: CanonicalDestination): unknown {
     nightlife,
     dining,
     activities,
-    lodging: c.lodging.map((l) => omitTags(l)),
-    transport: c.transport.map((t) => omitTags(t)),
+    lodging: c.lodging.filter((l) => forWizard(l, "offsite-outing")).map((l) => omitTags(l)),
+    transport: c.transport.filter((t) => forWizard(t, "offsite-outing")).map((t) => omitTags(t)),
     /** generic neutral score; OO does its own corporate scoring downstream */
     score: c.score,
   };

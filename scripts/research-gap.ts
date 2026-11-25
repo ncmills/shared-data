@@ -23,7 +23,17 @@ import { validateResearchedRowLive, type UrlLiveResult } from "../src/verify-url
  * this wraps a web-research agent (WebSearch/WebFetch) following the
  * parallel-research-fanout discipline; in tests it's a deterministic mock.
  */
-export type Researcher = (prompt: string) => Promise<unknown[]>;
+/**
+ * `opts` is per-CALL, and optional on both sides: a researcher may ignore it
+ * (every fake in the tests does) and a caller may omit it. It exists because
+ * the only component that knows how much work a call represents is the caller
+ * holding the task, while the only component that can enforce a budget is the
+ * backend — and a single run-wide timeout cannot serve both.
+ */
+export type Researcher = (
+  prompt: string,
+  opts?: { timeoutMs?: number },
+) => Promise<unknown[]>;
 
 export interface ResearchGapOptions {
   /**
