@@ -22,6 +22,7 @@
 
 import type { SharedGolfCourse } from "./golf-courses";
 import type { SharedResidence } from "./residences";
+import { validateRetreatFacet } from "./residence-retreat";
 
 /** Provenance every researched row carries, regardless of dataset. */
 export interface Provenance {
@@ -379,6 +380,17 @@ export function validateResearchedRow(input: unknown): ValidationResult {
     }
     if (("lat" in row) !== ("lng" in row)) {
       reasons.push("patch sets only one of lat/lng — a half coordinate locates nothing");
+    }
+  }
+
+  // ── any dataset: the optional retreat facet ──────────────────────────────
+  // Absent = unknown, so a row with no facet is untouched. A present facet must
+  // cite an https source per field and stay inside the fixed vocab.
+  if ("retreat" in row && row.retreat !== undefined) {
+    if (dataset !== "residence") {
+      reasons.push(`retreat facet is only valid on residence rows, not ${dataset}`);
+    } else {
+      reasons.push(...validateRetreatFacet(row.retreat));
     }
   }
 

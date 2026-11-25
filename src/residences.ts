@@ -7,6 +7,8 @@
  * DO NOT hand-edit.
  */
 
+import type { ResidenceRetreatFacet } from "./residence-retreat";
+
 export interface SharedResidence {
   id: string;
   name: string;
@@ -36,6 +38,12 @@ export interface SharedResidence {
   bedrooms?: number;
   beds?: number;
   bathrooms?: number;
+  /**
+   * Optional retreat facet (worship space, quiet hours, dietary, lodging).
+   * Every present field cites an https `source`; absent = unknown, never
+   * false. See residence-retreat.ts. There is no matching tag yet.
+   */
+  retreat?: ResidenceRetreatFacet;
   [key: string]: unknown;
 }
 
