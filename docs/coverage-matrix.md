@@ -4,14 +4,14 @@ Rows = wizard, columns = dataset. Cell = real reachable row count in the canonic
 
 | wizard | party | golf | residence | golf-destination | moh-local | bestman-local | oo-experience | oo-outing |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bestman | 5219 | 1000 | 0 | 0 | 0 | 91 | 0 | 0 |
-| moh | 4938 | 0 | 0 | 0 | 50 | 0 | 0 | 0 |
-| offsite-retreat | 1282 | 1000 | 339 | 0 | 0 | 0 | 158 | 0 |
-| offsite-outing | 5878 | 1000 | 339 | 0 | 0 | 0 | 158 | 107 |
+| bestman | 5220 | 1000 | 0 | 0 | 0 | 91 | 0 | 0 |
+| moh | 4939 | 0 | 0 | 0 | 50 | 0 | 0 | 0 |
+| offsite-retreat | 1283 | 1000 | 339 | 0 | 0 | 0 | 158 | 0 |
+| offsite-outing | 5900 | 1000 | 339 | 0 | 0 | 0 | 158 | 107 |
 | handicap | 0 | 1000 | 0 | 234 | 0 | 0 | 0 | 0 |
-| friendsmoon | 5878 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| engagedmoon | 5878 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| honeymoon | 5878 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| friendsmoon | 5900 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| engagedmoon | 5900 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| honeymoon | 5900 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Starved-cell summary (input-space cells below threshold, per wizard)
 
