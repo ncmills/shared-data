@@ -599,6 +599,23 @@ CREATE TABLE public.wp_plan_selections (
 );
 CREATE INDEX idx_ps_brand_created ON public.wp_plan_selections USING btree (brand, created_at DESC);
 
+CREATE TABLE public.wp_privacy_requests (
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  brand text NOT NULL,
+  kind text DEFAULT 'do_not_sell'::text NOT NULL,
+  channel text NOT NULL,
+  email text NOT NULL,
+  matched_rows integer,
+  outcome text NOT NULL,
+  ip_hash text,
+  CONSTRAINT wp_privacy_requests_channel_check CHECK ((channel = ANY (ARRAY['form'::text, 'gpc'::text]))),
+  CONSTRAINT wp_privacy_requests_kind_check CHECK ((kind = 'do_not_sell'::text)),
+  CONSTRAINT wp_privacy_requests_outcome_check CHECK ((outcome = ANY (ARRAY['applied'::text, 'no_match'::text, 'store_unavailable'::text, 'error'::text]))),
+  CONSTRAINT wp_privacy_requests_pkey PRIMARY KEY (id)
+);
+CREATE INDEX idx_wp_privacy_requests_email ON public.wp_privacy_requests USING btree (email);
+
 CREATE TABLE public.wp_signal_rate_limit (
   session_id text NOT NULL,
   hour_bucket timestamp with time zone NOT NULL,
