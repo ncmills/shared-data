@@ -126,7 +126,7 @@ const outingProducts = (audiences: AudienceTag[]): ProductTag[] =>
  * query into the cache and make the row invisible to any future two-person use.
  */
 const moonWizards = (audiences: AudienceTag[]): WizardTag[] =>
-  isGeneralAudience(audiences) ? ["friendsmoon", "engagedmoon"] : [];
+  isGeneralAudience(audiences) ? ["friendsmoon", "engagedmoon", "honeymoon"] : [];
 const moonProducts = (audiences: AudienceTag[]): ProductTag[] =>
   isGeneralAudience(audiences) ? ["friends-trip", "proposal-trip"] : [];
 
@@ -235,6 +235,7 @@ const HOUSING_WIZARDS: WizardTag[] = [
   "offsite-retreat",
   "friendsmoon",
   "engagedmoon",
+  "honeymoon",
 ];
 const ALL_AUD: AudienceTag[] = ["corporate", "clients", "bachelor", "bachelorette"];
 const HOUSING_PRODUCTS: ProductTag[] = [

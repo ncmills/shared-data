@@ -128,7 +128,7 @@ export function deriveRouting(input: RoutingInput): Routing {
         wizards: uniq([
           ...partyWizardsFromBrands(brands),
           ...(corporate ? (["offsite-outing"] as WizardTag[]) : []),
-          ...(general ? (["friendsmoon", "engagedmoon"] as WizardTag[]) : []),
+          ...(general ? (["friendsmoon", "engagedmoon", "honeymoon"] as WizardTag[]) : []),
         ]),
         audiences: aud,
         products: uniq([
