@@ -242,4 +242,8 @@ export const WIZARD_INPUT_SPACE: Record<WizardTag, InputAxis[]> = {
     { name: "region", values: PARTY_REGIONS },
     { name: "partyVibe", values: PARTY_VIBES },
   ],
+  honeymoon: [
+    { name: "region", values: PARTY_REGIONS },
+    { name: "partyVibe", values: PARTY_VIBES },
+  ],
 };
