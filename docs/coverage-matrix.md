@@ -9,7 +9,7 @@ Rows = wizard, columns = dataset. Cell = real reachable row count in the canonic
 | offsite-retreat | 1282 | 999 | 339 | 0 | 0 | 0 | 158 | 0 |
 | offsite-outing | 5878 | 999 | 339 | 0 | 0 | 0 | 158 | 107 |
 | handicap | 0 | 999 | 0 | 234 | 0 | 0 | 0 | 0 |
-| friendsmoon | 5878 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| friendsmoon | 6376 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | engagedmoon | 5878 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## Starved-cell summary (input-space cells below threshold, per wizard)
