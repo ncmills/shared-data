@@ -597,3 +597,60 @@ test("residence ingest PERSISTS provenance (sourceUrl -> url, citations kept)", 
     rmSync(tmpDir, { recursive: true, force: true });
   }
 });
+
+// ── optional retreat facet rides through the gate ───────────────────────────
+function retreatResidence(retreat: unknown): ResearchedRow {
+  return {
+    dataset: "residence",
+    id: `ingest-test-retreat-${Date.now()}`,
+    name: "Ingest Test Retreat House",
+    setting: "countryside",
+    region: "Nowhere Valley",
+    country: "USA",
+    capacity: { min: 10, max: 40, sleepsOnsite: 40 },
+    price: { perPersonPerNight: { low: 200, high: 400 } },
+    sourceUrl: "https://www.ingest-test-fixture-retreat.example/",
+    citations: ["https://www.ingest-test-fixture-retreat.example/about"],
+    retreat,
+  } as unknown as ResearchedRow;
+}
+
+function withResidenceFixture(fn: (path: string, initial: string) => void) {
+  const tmpDir = mkdtempSync(join(tmpdir(), "ingest-retreat-"));
+  const path = join(tmpDir, "residence-fixture.ts");
+  const initial =
+    `import type { SharedResidence } from "../src/residences";\n\n` +
+    `export const SHARED_RESIDENCES_EXPANSION: SharedResidence[] = [];\n`;
+  writeFileSync(path, initial);
+  try {
+    fn(path, initial);
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
+}
+
+test("retreat facet: a cited facet is accepted and persisted on the residence", () => {
+  withResidenceFixture((path) => {
+    const facet = { quietHours: { value: true, source: "https://www.ingest-test-fixture-retreat.example/stay" } };
+    const result = ingestResearched([retreatResidence(facet)], {
+      residenceFilePath: path,
+      runGates: () => ({ ok: true, output: "" }),
+    });
+    assert.equal(result.rejected, 0, result.reasons.join(" | "));
+    assert.equal(result.accepted, 1);
+    assert.ok(readFileSync(path, "utf-8").includes('"quietHours"'), "facet should be written to the file");
+  });
+});
+
+test("retreat facet: an uncited facet field is rejected at the gate, file untouched", () => {
+  withResidenceFixture((path, initial) => {
+    const result = ingestResearched([retreatResidence({ alcoholFree: { value: true } })], {
+      residenceFilePath: path,
+      runGates: () => ({ ok: true, output: "" }),
+    });
+    assert.equal(result.accepted, 0);
+    assert.equal(result.rejected, 1);
+    assert.ok(result.reasons.some((r) => /retreat\.alcoholFree\.source/.test(r)), result.reasons.join(" | "));
+    assert.equal(readFileSync(path, "utf-8"), initial);
+  });
+});

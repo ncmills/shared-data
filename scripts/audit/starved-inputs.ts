@@ -202,6 +202,7 @@ export const STARVED_CELL_COUNTERS: Record<WizardTag, CellCounterFactory> = {
   // it is handed, never on a hardcoded name.
   friendsmoon: countPartyDestinations,
   engagedmoon: countPartyDestinations,
+  honeymoon: countPartyDestinations,
 };
 
 /**
