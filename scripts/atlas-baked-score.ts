@@ -7,6 +7,8 @@
  *
  *   1  every slot is a named venue that resolves in the shared pool
  *      (needs a stay, a meal and an activity/course; nothing free-generated)
+ *      [PROXY: only checks that a slot NAME exists in the trip's destination pool,
+ *      not that the named venue is the right one]
  *   2  every venue carries a url (present and non-empty)
  *   3  every url returns 2xx            -> NOT CHECKED (needs network)
  *   4  a verified photo of the exact place for the hero and every stop  [PROXY]
@@ -14,6 +16,12 @@
  *   6  why-this-trip copy specific to the place                          [PROXY]
  *
  * PROXIES, said plainly:
+ *  - 1: a name match against the pool for the trip's destinationId. It cannot tell
+ *    a correct venue from a wrong-but-listed one.
+ *  - UNMEASURABLE: points 1 and 2 resolve venues inside the trip's destination, so a
+ *    trip with no destinationId (MOH and BMHQ today) cannot be measured on them.
+ *    They are reported UNMEASURABLE (no destinationId), never failed, are not counted
+ *    as passes, and keep that trip out of "baked".
  *  - 4: no atlas schema has a per-trip verified-photo field today, so this can
  *    only look for one (`verifiedPhotos`: a hero plus a photo for each stop). It
  *    cannot tell a verified photo from an unverified one.
@@ -74,6 +82,8 @@ export interface TripScore {
   passed: number;
   failed: number[];
   missing: string[];
+  /** points that could not be measured (no destinationId); not passes, not fails */
+  unmeasurable: number[];
   tier: Tier;
   point3: "NOT CHECKED";
 }
@@ -83,6 +93,8 @@ export interface SiteSummary {
   baked: number;
   partial: number;
   thin: number;
+  /** trips with p1/p2 UNMEASURABLE (no destinationId) */
+  unmeasurable: number;
   point3: "NOT CHECKED";
   topMissing: { detail: string; count: number }[];
   passByPoint: Record<string, number>;
@@ -132,6 +144,7 @@ export interface ScoreOpts { minNarrativeChars: number; requireFaqs?: boolean }
 export function scoreTrip(t: NormTrip, idx: PoolIndex, opts: ScoreOpts): TripScore {
   const missing: string[] = [];
   const failed: number[] = [];
+  const unmeasurable: number[] = [];
   const fail = (p: number, why: string) => {
     if (!failed.includes(p)) failed.push(p);
     missing.push(why);
@@ -145,13 +158,17 @@ export function scoreTrip(t: NormTrip, idx: PoolIndex, opts: ScoreOpts): TripSco
   if (t.dining.length === 0) { p1 = false; missing.push("p1: no meal slot"); }
   if (t.activities.length + t.courses.length === 0) { p1 = false; missing.push("p1: no activity slot"); }
   const resolved = new Map<string, PoolHit | undefined>();
+  const measurable = Boolean(t.destinationId);
   for (const s of slots) resolved.set(s, lookup(idx, s, t.destinationId));
-  if ([...resolved.values()].some((h) => !h)) { p1 = false; missing.push("p1: venue not in pool"); }
+  if (measurable && [...resolved.values()].some((h) => !h)) { p1 = false; missing.push("p1: venue not in pool"); }
   if (!p1) { if (!failed.includes(1)) failed.push(1); }
+  else if (!measurable) { unmeasurable.push(1); missing.push("p1: UNMEASURABLE (no destinationId)"); }
 
   // 2 — every venue has a url
   const hasUrl = (s: string) => Boolean(resolved.get(s)?.url || t.urls?.[s]);
-  if (slots.length === 0 || !slots.every(hasUrl)) fail(2, "p2: venue without url");
+  if (slots.length === 0) fail(2, "p2: venue without url");
+  else if (!measurable) { unmeasurable.push(2); missing.push("p2: UNMEASURABLE (no destinationId)"); }
+  else if (!slots.every(hasUrl)) fail(2, "p2: venue without url");
 
   // 4 — verified photo, hero + every stop (proxy: field presence only)
   const ph = t.verifiedPhotos;
@@ -174,9 +191,9 @@ export function scoreTrip(t: NormTrip, idx: PoolIndex, opts: ScoreOpts): TripSco
   if (t.schedule === undefined) missing.push("info: no schedule with times (not a gate point)");
 
   failed.sort((a, b) => a - b);
-  const passed = 5 - failed.length;
+  const passed = 5 - failed.length - unmeasurable.length;
   const tier: Tier = passed === 5 ? "baked" : passed >= 3 ? "partial" : "thin";
-  return { slug: t.slug, passed, failed, missing, tier, point3: "NOT CHECKED" };
+  return { slug: t.slug, passed, failed, missing, unmeasurable, tier, point3: "NOT CHECKED" };
 }
 
 function costReconciles(t: NormTrip): boolean {
@@ -203,7 +220,7 @@ export function summarise(site: string, scores: TripScore[]): SiteSummary {
   const passByPoint: Record<string, number> = { "1": 0, "2": 0, "4": 0, "5": 0, "6": 0 };
   for (const s of scores) {
     for (const m of new Set(s.missing)) counts.set(m, (counts.get(m) ?? 0) + 1);
-    for (const p of [1, 2, 4, 5, 6]) if (!s.failed.includes(p)) passByPoint[String(p)]++;
+    for (const p of [1, 2, 4, 5, 6]) if (!s.failed.includes(p) && !s.unmeasurable.includes(p)) passByPoint[String(p)]++;
   }
   return {
     site,
@@ -211,6 +228,7 @@ export function summarise(site: string, scores: TripScore[]): SiteSummary {
     baked: scores.filter((s) => s.tier === "baked").length,
     partial: scores.filter((s) => s.tier === "partial").length,
     thin: scores.filter((s) => s.tier === "thin").length,
+    unmeasurable: scores.filter((s) => s.unmeasurable.length > 0).length,
     point3: "NOT CHECKED",
     topMissing: [...counts.entries()].map(([detail, count]) => ({ detail, count })).sort((a, b) => b.count - a.count || a.detail.localeCompare(b.detail)),
     passByPoint,
@@ -288,7 +306,7 @@ export async function scoreRepo(repo: string): Promise<{ summary: SiteSummary; s
 
 function table(s: SiteSummary): string {
   const rows = [
-    `${s.site}: ${s.total} trips | baked ${s.baked} | partial ${s.partial} | thin ${s.thin} | point 3 (url 2xx): ${s.point3}`,
+    `${s.site}: ${s.total} trips | baked ${s.baked} | partial ${s.partial} | thin ${s.thin} | p1/p2 UNMEASURABLE (no destinationId): ${s.unmeasurable} | point 3 (url 2xx): ${s.point3}`,
     `  trips passing each point: ${Object.entries(s.passByPoint).map(([p, n]) => `p${p}=${n}`).join(" ")}`,
     "  top missing details:",
     ...s.topMissing.map((m) => `    ${String(m.count).padStart(4)}  ${m.detail}`),

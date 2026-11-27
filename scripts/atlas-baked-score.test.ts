@@ -202,3 +202,38 @@ test("summarise counts tiers and ranks missing details", () => {
   assert.equal(s.topMissing.find((m) => m.detail.startsWith("p4"))?.count, 1);
   assert.equal(s.point3, "NOT CHECKED");
 });
+
+test("F1: a trip with no destinationId reports p1/p2 UNMEASURABLE, not failed, and is never baked", () => {
+  const t = good();
+  t.destinationId = undefined;
+  const r = scoreTrip(t, idx, opts);
+  assert.deepEqual(r.unmeasurable, [1, 2]);
+  assert.equal(r.failed.includes(1), false);
+  assert.equal(r.failed.includes(2), false);
+  assert.ok(r.missing.some((m) => /p1: UNMEASURABLE \(no destinationId\)/.test(m)));
+  assert.ok(r.missing.some((m) => /p2: UNMEASURABLE \(no destinationId\)/.test(m)));
+  assert.notEqual(r.tier, "baked");
+  assert.equal(r.passed, 3);
+  const s = summarise("synthetic", [r, scoreTrip(good(), idx, opts)]);
+  assert.equal(s.unmeasurable, 1);
+  assert.equal(s.baked, 1);
+  assert.equal(s.passByPoint["1"], 1);
+});
+
+test("F3a: a venue that exists only in ANOTHER destination does not resolve (guards hits[0] fallback)", () => {
+  const t = good();
+  t.destinationId = "bandon-or"; // Blue Ridge House / Cúrate / Biltmore Tour live in asheville-nc only
+  const r = scoreTrip(t, idx, opts);
+  assert.ok(r.failed.includes(1));
+  assert.ok(r.missing.some((m) => /not in pool/.test(m)));
+});
+
+test("F3b: long, filler-free copy naming no venue and not the city fails p6 (guards `|| true` on specific)", () => {
+  const t = good();
+  t.narrative =
+    "Everyone arrives on Friday and the weekend unfolds at a gentle pace with long dinners, late mornings and an easy Sunday departure. " +
+    "The group gathers around one big table, trades stories, and leaves with a plan for next year. Nothing is rushed and nobody is left out. " +
+    "It is a relaxed weekend built around good company and plenty of time to talk, with room for a nap whenever one is needed.";
+  assert.ok(t.narrative.length >= 300);
+  assert.deepEqual(scoreTrip(t, idx, opts).failed, [6]);
+});
