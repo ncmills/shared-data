@@ -24,6 +24,10 @@ export interface Fleet { sites: FleetSite[]; excluded: { repo: string; reason: s
 /** Returns file text, a JSON array of names for a directory, or null when absent. */
 export type Fetcher = (repo: string, path: string) => string | null;
 
+export const DEFAULT_OPT_OUTS = join(dirname(fileURLToPath(import.meta.url)), "opt-outs.json");
+export function loadPinned(file = DEFAULT_OPT_OUTS) {
+  try { const v = JSON.parse(readFileSync(file, "utf8")); return Array.isArray(v) ? v : []; } catch { return []; }
+}
 export const DEFAULT_FLEET = join(dirname(fileURLToPath(import.meta.url)), "fleet.json");
 const RULING_ID = /^[A-Z][A-Z0-9-]{2,}$/;
 const LIVE_USES = /^\s*-?\s*uses:\s*["']?ncmills\/shared-data\/\.github\/workflows\/site-guards\.yml@\S+/m;
@@ -60,11 +64,16 @@ export function prebuildRuns(pkgText: string | null, id: string): boolean {
   return !only || only[1].split(",").includes(id);
 }
 
-export function configured(cfg: SiteConfig | undefined, id: string): boolean {
+export function configured(cfg: SiteConfig | undefined, id: string, pinned: { site: string; guard: string; ruling: string; reason: string }[] = loadPinned()): boolean {
   if (!cfg) return false;
   if (cfg.guards?.[id] !== undefined) return true;
   if (id === "shared-data-pin-age" && cfg.sharedData === false) return true;
-  return RULING_ID.test(cfg.optOut?.[id]?.ruling ?? "");
+  // F1 parity with run.ts: an opt-out counts only when pinned in guards/opt-outs.json for this
+  // site and guard, with non-empty reasons on both sides. A ruling-shaped string alone is not enough.
+  const opt = cfg.optOut?.[id];
+  if (!opt || !RULING_ID.test(opt.ruling ?? "")) return false;
+  const pin = pinned.find((p) => p.site === cfg.site && p.guard === id && p.ruling === opt.ruling);
+  return !!pin && !!String(pin.reason ?? "").trim() && !!String(opt.reason ?? "").trim();
 }
 
 export function coverage(fleet: Fleet, fetch: Fetcher = ghFetcher) {

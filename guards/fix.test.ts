@@ -159,3 +159,12 @@ test("F5 coverage: reads origin through a fetcher, ignores commented uses:, name
   assert.match(dup.missing.join(), /o\/commented.*no live uses: line/);
   assert.match(dup.missing.join(), /o\/commented.*no prebuild/);
 });
+
+// Driver 2026-11-27: coverage must apply the same pinned opt-out rule as run.ts (F1 parity).
+import { configured as covConfigured } from "./coverage.ts";
+test("F1 coverage: an unpinned ruling-shaped opt-out does not count as covered", () => {
+  const cfg = { site: "x", optOut: { "duplicate-assets": { ruling: "TODO", reason: "later" } } } as any;
+  assert.equal(covConfigured(cfg, "duplicate-assets", []), false);
+  const pinned = [{ site: "x", guard: "duplicate-assets", ruling: "TODO", reason: "ruled" }];
+  assert.equal(covConfigured(cfg, "duplicate-assets", pinned), true);
+});
