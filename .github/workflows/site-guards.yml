@@ -43,6 +43,19 @@ jobs:
         working-directory: shared-data
         run: npm ci --ignore-scripts
 
+      # F6: install the SITE's own deps so its TS data modules can import their packages.
+      - name: Install site dependencies
+        working-directory: site
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            corepack enable
+            pnpm install --frozen-lockfile --ignore-scripts
+          elif [ -f package-lock.json ]; then
+            npm ci --ignore-scripts
+          else
+            echo "no lockfile in site; skipping dependency install"
+          fi
+
       - name: Run fleet guards
         env:
           SHARED_DATA_DIR: ${{ github.workspace }}/shared-data

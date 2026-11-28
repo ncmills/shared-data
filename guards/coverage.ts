@@ -30,7 +30,31 @@ export function loadPinned(file = DEFAULT_OPT_OUTS) {
 }
 export const DEFAULT_FLEET = join(dirname(fileURLToPath(import.meta.url)), "fleet.json");
 const RULING_ID = /^[A-Z][A-Z0-9-]{2,}$/;
-const LIVE_USES = /^\s*-?\s*uses:\s*["']?ncmills\/shared-data\/\.github\/workflows\/site-guards\.yml@\S+/m;
+const LIVE_USES = /^\s*-?\s*uses:\s*["']?ncmills\/shared-data\/\.github\/workflows\/site-guards\.yml@\S+/;
+const IF_FALSE = /^\s*if:\s*["']?(false|0)["']?\s*(#.*)?$/i;
+const indent = (l: string) => l.length - l.trimStart().length;
+/** A live caller line: uncommented, not inside a `run: |` block, and its job/step has no `if: false`. */
+export function liveUses(text: string): boolean {
+  const lines = text.split("\n");
+  let blockIndent = -1;
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i];
+    if (blockIndent >= 0) { if (!l.trim() || indent(l) > blockIndent) continue; blockIndent = -1; }
+    if (/^\s*-?\s*[\w-]+:\s*[|>][-+0-9]*\s*$/.test(l)) { blockIndent = indent(l.replace(/^(\s*)-/, "$1 ")); continue; }
+    if (!LIVE_USES.test(l)) continue;
+    const n = indent(l.replace(/^(\s*)-/, "$1 "));
+    let off = false;
+    for (const dir of [-1, 1]) for (let j = i + dir; j >= 0 && j < lines.length; j += dir) {
+      if (!lines[j].trim()) continue;
+      if (indent(lines[j]) < n) break;
+      if (indent(lines[j]) === n && IF_FALSE.test(lines[j])) off = true;
+    }
+    if (!off) return true;
+  }
+  return false;
+}
+/** Command position: the guard runner is the command (node --import tsx / tsx), not an argument to echo. */
+const RUN_CMD = /^(?:[A-Z_][A-Z0-9_]*=\S*\s+)*(?:node\s+(?:--(?:import|loader|require)[ =]\S+\s+)+|(?:npx\s+)?tsx\s+)\S*shared-data\/guards\/run\.ts(?:\s|$)/;
 
 export function loadFleet(file = DEFAULT_FLEET): Fleet {
   const f = JSON.parse(readFileSync(file, "utf8")) as Fleet;
@@ -53,13 +77,13 @@ export function hasLiveCaller(repo: string, fetch: Fetcher): boolean {
   let names: string[] = ["guards.yml"];
   const dir = fetch(repo, ".github/workflows");
   if (dir) { try { const j = JSON.parse(dir); if (Array.isArray(j)) names = j; } catch { /* not a listing */ } }
-  return names.filter((n) => /\.ya?ml$/.test(n)).some((n) => LIVE_USES.test(fetch(repo, `.github/workflows/${n}`) ?? ""));
+  return names.filter((n) => /\.ya?ml$/.test(n)).some((n) => liveUses(fetch(repo, `.github/workflows/${n}`) ?? ""));
 }
 
 export function prebuildRuns(pkgText: string | null, id: string): boolean {
   let pre = "";
   try { pre = JSON.parse(pkgText ?? "{}")?.scripts?.prebuild ?? ""; } catch { return false; }
-  if (!/shared-data\/guards\/run\.ts/.test(pre)) return false;
+  if (!pre.split(/&&|\|\||;|\|/).some((seg) => RUN_CMD.test(seg.trim()))) return false;
   const only = pre.match(/--only[ =]([\w,-]+)/);
   return !only || only[1].split(",").includes(id);
 }

@@ -15,6 +15,7 @@ export interface DuplicateAssetsConfig { imageDirs?: string[]; urlSources?: UrlS
 
 const IMG_EXT = /\.(jpe?g|png|webp|avif|gif|svg)$/i;
 const URL_RE = /https?:\/\/[^\s"'`()<>\\]+/g;
+const REL_RE = /["'`](\/[^\s"'`()<>\\]*\.(?:jpe?g|png|webp|avif))["'`]/gi;
 const looksLikeImage = (u: string) => IMG_EXT.test(u.split("?")[0]) || /images\.unsplash\.com|res\.cloudinary\.com|\/images?\//i.test(u);
 
 function walk(dir: string, out: string[]) {
@@ -52,6 +53,7 @@ export const duplicateAssets: Guard = async (cfg: DuplicateAssetsConfig, ctx) =>
   for (const src of cfg.urlSources ?? []) {
     const max = src.maxUses ?? 1;
     let n = 0;
+    const fieldUses = new Map<string, number>();
     const note = (u: string, who: string) => {
       n++; urls++;
       const k = assetKey(u);
@@ -65,13 +67,17 @@ export const duplicateAssets: Guard = async (cfg: DuplicateAssetsConfig, ctx) =>
         const who = String(getPath(r, src.idField ?? "id") ?? `#${i}`);
         for (const f of src.urlFields ?? ["image"]) {
           const v = getPath(r, f);
-          for (const u of Array.isArray(v) ? v : [v]) if (typeof u === "string" && u.trim()) note(u.trim(), who);
+          for (const u of Array.isArray(v) ? v : [v]) if (typeof u === "string" && u.trim()) { fieldUses.set(f, (fieldUses.get(f) ?? 0) + 1); note(u.trim(), who); }
         }
       });
+      for (const f of src.urlFields ?? ["image"]) if (!fieldUses.get(f) && n > 0) reasons.push(`${label(src)}: urlField "${f}" has 0 uses (matches nothing): nothing would be checked for it`);
     } else {
       let text: string;
       try { text = readFileSync(resolve(ctx.repoRoot, src.file), "utf8"); } catch { reasons.push(`could not read ${src.file}`); continue; }
-      text.split("\n").forEach((line, i) => { for (const u of line.match(URL_RE) ?? []) if (looksLikeImage(u)) note(u, `line ${i + 1}`); });
+      text.split("\n").forEach((line, i) => {
+        for (const u of line.match(URL_RE) ?? []) if (looksLikeImage(u)) note(u, `line ${i + 1}`);
+        for (const m of line.matchAll(REL_RE)) note(m[1], `line ${i + 1}`);
+      });
     }
     if (n === 0) reasons.push(`${label(src)}: 0 uses (urlFields ${JSON.stringify(src.urlFields ?? ["image"])} match nothing): nothing would be checked`);
   }

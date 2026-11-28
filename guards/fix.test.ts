@@ -168,3 +168,41 @@ test("F1 coverage: an unpinned ruling-shaped opt-out does not count as covered",
   const pinned = [{ site: "x", guard: "duplicate-assets", ruling: "TODO", reason: "ruled" }];
   assert.equal(covConfigured(cfg, "duplicate-assets", pinned), true);
 });
+
+// ---- Round 2 (REVIEW-PR99-R2): N1, F3 per-field, F5 hardening ----
+test("R2 N1 raw-text: a relative image path used twice FAILs", async () => {
+  const d = green();
+  writeFileSync(join(d, "data/raw.ts"), `export const X = [\n "https://example.com/one.jpg",\n "/images/a.jpg",\n "/images/a.jpg",\n];\n`);
+  edit(d, (c) => { c.guards["duplicate-assets"].urlSources = [{ file: "data/raw.ts", maxUses: 1 }]; });
+  const r = await pick(d, "duplicate-assets");
+  assert.equal(r.status, "FAIL");
+  assert.match(r.reasons.join(), /\/images\/a\.jpg/);
+});
+test("R2 F3 per-field: a urlField that names nothing FAILs naming the field", async () => {
+  const d = green();
+  edit(d, (c) => { c.guards["duplicate-assets"].urlSources[0].urlFields = ["image", "heroImg"]; });
+  const r = await pick(d, "duplicate-assets");
+  assert.equal(r.status, "FAIL");
+  assert.match(r.reasons.join(), /heroImg/);
+});
+{
+  const CALL = "ncmills/shared-data/.github/workflows/site-guards.yml@main";
+  const live = (wf: string) => async () => {
+    const { hasLiveCaller } = await import("./coverage.ts");
+    return hasLiveCaller("o/x", (_r: string, p: string) => (p === ".github/workflows" ? JSON.stringify(["g.yml"]) : p.endsWith("g.yml") ? wf : null));
+  };
+  test("R2 F5 control: a plain live caller counts", async () => { assert.equal(await live(`jobs:\n  guards:\n    uses: ${CALL}\n`)(), true); });
+  test("R2 F5 a job with if: false is not covered", async () => {
+    assert.equal(await live(`jobs:\n  guards:\n    if: false\n    uses: ${CALL}\n`)(), false);
+  });
+  test("R2 F5 a uses: line inside a run: | block is not covered", async () => {
+    assert.equal(await live(`jobs:\n  a:\n    runs-on: x\n    steps:\n      - run: |\n          echo hi\n          uses: ${CALL}\n`)(), false);
+  });
+  test("R2 F5 prebuild that only echoes the guard is not running it", async () => {
+    const { prebuildRuns } = await import("./coverage.ts");
+    const pk = (s: string) => JSON.stringify({ scripts: { prebuild: s } });
+    assert.equal(prebuildRuns(pk("echo shared-data/guards/run.ts"), "duplicate-assets"), false);
+    assert.equal(prebuildRuns(pk("node --import tsx node_modules/shared-data/guards/run.ts ."), "duplicate-assets"), true);
+    assert.equal(prebuildRuns(pk("tsx node_modules/shared-data/guards/run.ts ."), "duplicate-assets"), true);
+  });
+}
