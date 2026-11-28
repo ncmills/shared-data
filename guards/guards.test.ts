@@ -51,6 +51,10 @@ test("shared-data-pin-age: red on a 30d-old pin, green at main, n/a when sharedD
   const cfg = JSON.parse(readFileSync(join(d, "guards.config.json"), "utf8"));
   delete cfg.guards["shared-data-pin-age"]; cfg.sharedData = false;
   writeFileSync(join(d, "guards.config.json"), JSON.stringify(cfg));
+  // F3 (deliberate change): sharedData:false is n/a only when package.json does NOT depend on
+  // shared-data; with the dependency still declared it now FAILs (covered in fix.test.ts).
+  assert.equal((await pick(d, "shared-data-pin-age")).status, "FAIL");
+  writeFileSync(join(d, "package.json"), JSON.stringify({ name: "no-shared-data" }));
   assert.match((await pick(d, "shared-data-pin-age")).checked ?? "", /n\/a/);
 });
 
@@ -73,20 +77,25 @@ test("runner: missing guard FAILs; opt-out needs a CONTROL ruling id", async () 
   assert.ok(all.length === 5 && all.every((x) => x.r.status === "FAIL"), "no config file = every guard FAILs");
 });
 
-test("coverage: counts caller workflow + configured guard, names every repo missing it", async () => {
-  const { coverage, parseFleet } = await import("./coverage.ts");
-  const { mkdirSync } = await import("node:fs");
-  const on = fx("green");
-  mkdirSync(join(on, ".github/workflows"), { recursive: true });
-  writeFileSync(join(on, ".github/workflows/guards.yml"), readFileSync(new URL("./caller-template.yml", import.meta.url), "utf8"));
-  const off = fx("green"); // config but no caller workflow
-  const list = join(mkdtempSync(join(tmpdir(), "fleet-")), "list.sh");
-  writeFileSync(list, `SITES=(\n  "${on}:on"\n  "${off}:off"\n  "/nope/ghost:ghost"\n)\n`);
-  const rows = coverage(parseFleet(list));
+// F5 (deliberate rewrite): coverage no longer reads local checkouts or the SITES array in
+// set-signal-secret.sh. It reads origin through an injectable fetcher over guards/fleet.json,
+// so this test drives an in-memory fetcher instead of temp dirs.
+test("coverage: counts live caller + prebuild + configured guard, names every repo missing it", async () => {
+  const { coverage } = await import("./coverage.ts");
+  const caller = readFileSync(new URL("./caller-template.yml", import.meta.url), "utf8");
+  const cfg = readFileSync(join(fx("green"), "guards.config.json"), "utf8");
+  const pkg = JSON.stringify({ scripts: { prebuild: "node --import tsx node_modules/shared-data/guards/run.ts ." } });
+  const files: Record<string, Record<string, string>> = {
+    "o/on": { ".github/workflows/guards.yml": caller, "package.json": pkg, "guards.config.json": cfg },
+    "o/off": { "package.json": pkg, "guards.config.json": cfg }, // config + prebuild, no caller workflow
+  };
+  const rows = coverage({ sites: [{ repo: "o/on" }, { repo: "o/off" }, { repo: "o/ghost" }, { repo: "o/never" }], excluded: [{ repo: "o/never", reason: "excluded" }] },
+    (repo, path) => files[repo]?.[path] ?? null);
   assert.equal(rows.length, 5);
   for (const r of rows) {
     assert.equal(`${r.covered}/${r.total}`, "1/3", r.guard);
-    assert.match(r.missing.join(), /no caller workflow/);
-    assert.match(r.missing.join(), /ghost \(no local checkout\)/);
+    assert.match(r.missing.join(), /o\/off \(no live uses: line/);
+    assert.match(r.missing.join(), /o\/ghost .*no guards\.config\.json/);
+    assert.ok(!r.missing.join().includes("o/never"), "excluded repos are never read or counted");
   }
 });

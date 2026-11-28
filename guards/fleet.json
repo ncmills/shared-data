@@ -1,0 +1,32 @@
+{
+  "_doc": "Whole-fleet site list for guards/coverage.ts (F5). Repos verified against `gh repo list ncmills` 2026-11-27. A site with no `guards` key is counted for every shared guard; personal sites carry guards [\"mobile\"] only (no shared-data guards, no SEO). Excluded repos are never read.",
+  "sites": [
+    { "site": "bmhq", "repo": "ncmills/plan-my-party", "cluster": "planning" },
+    { "site": "hhq", "repo": "ncmills/handicap-hq", "cluster": "planning" },
+    { "site": "moh", "repo": "ncmills/maid-of-honor-hq", "cluster": "planning" },
+    { "site": "oo", "repo": "ncmills/offsite-outpost", "cluster": "planning" },
+    { "site": "proposalmoon", "repo": "ncmills/engagedmoon", "cluster": "planning" },
+    { "site": "friendsmoon", "repo": "ncmills/friendsmoon", "cluster": "planning", "note": "the COMMERCIAL wizard, not indiamoon" },
+    { "site": "wpd", "repo": "ncmills/peptide-stack", "cluster": "peptide" },
+    { "site": "cornerstone", "repo": "ncmills/cornerstone-peptide", "cluster": "peptide" },
+    { "site": "aissdi", "repo": "ncmills/ssdi-platform", "cluster": "legal" },
+    { "site": "idhaw", "repo": "ncmills/idonthaveawill", "cluster": "legal" },
+    { "site": "doppelwriter", "repo": "ncmills/doppelwriter", "cluster": "legal" },
+    { "site": "imfrustrated", "repo": "ncmills/imfrustrated.org", "cluster": "legal" },
+    { "site": "kingsclothiers", "repo": "ncmills/kingsclothiers", "cluster": "commerce" },
+    { "site": "tourdefore", "repo": "ncmills/tour-de-fore", "personal": true, "guards": ["mobile"] },
+    { "site": "museletter", "repo": "ncmills/museletter", "personal": true, "guards": ["mobile"] },
+    { "site": "slidetackled", "repo": "ncmills/slidetackled", "personal": true, "guards": ["mobile"] },
+    { "site": "knicklaus", "repo": "ncmills/knicklaus", "personal": true, "guards": ["mobile"] },
+    { "site": "the-devils", "repo": "ncmills/the-devils", "personal": true, "guards": ["mobile"] }
+  ],
+  "unresolved": [
+    { "site": "millsetc", "reason": "personal site (guards: mobile only); no GitHub repo under ncmills to read" },
+    { "site": "planmymoon", "reason": "pre-launch; ~/work/honeymoon/site has no git remote yet" }
+  ],
+  "excluded": [
+    { "repo": "ncmills/claimpros", "reason": "ClaimPros: excluded from all cross-project work by hard rule" },
+    { "repo": "qualify-ai-platform", "reason": "ClaimPros fork: isolated, no cross-project propagation" },
+    { "repo": "ncmills/indiamoon", "reason": "personal, noindex one-off invite site: never read by any agent or sweep" }
+  ]
+}
