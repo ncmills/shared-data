@@ -1,0 +1,78 @@
+{
+  "site": "example-site",
+  "sharedData": true,
+  "guards": {
+    "duplicate-assets": {
+      "imageDirs": [
+        "public/images"
+      ],
+      "urlSources": [
+        {
+          "file": "src/data/venues.ts",
+          "export": "VENUES",
+          "idField": "slug",
+          "urlFields": [
+            "image",
+            "gallery"
+          ],
+          "maxUses": 1
+        },
+        {
+          "file": "src/app/page.tsx"
+        }
+      ]
+    },
+    "stale-datasets": {
+      "datasets": [
+        {
+          "file": "src/data/offices.ts",
+          "export": "OFFICES",
+          "idField": "id",
+          "maxAgeDays": 120
+        }
+      ]
+    },
+    "shared-data-pin-age": {
+      "maxDays": 7
+    },
+    "unsourced-facts": {
+      "datasets": [
+        {
+          "file": "data/states.json",
+          "row_path": "states",
+          "max_age_days": 180
+        }
+      ],
+      "exempt": [
+        {
+          "file": "lib/site-config.ts",
+          "reason": "site chrome (nav labels), no facts"
+        }
+      ],
+      "policy": {
+        "forbid": [
+          {
+            "match": "semaglutide",
+            "reason": "no GLP-1 per README policy",
+            "source": "README.md"
+          }
+        ]
+      }
+    },
+    "promise-registry": {
+      "roots": [
+        "src",
+        "app",
+        "components",
+        "content"
+      ],
+      "registry": "guards/claims.yml"
+    }
+  },
+  "optOut": {
+    "_example": {
+      "ruling": "CONTROL-RULING-ID",
+      "reason": "only a CONTROL ruling naming this site and reason turns a guard off"
+    }
+  }
+}

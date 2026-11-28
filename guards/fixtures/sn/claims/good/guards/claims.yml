@@ -1,0 +1,10 @@
+claims:
+  "bc3de34fc43a":
+    sentence: "Delete your data at any time from your settings."
+    kind: feature
+    test: tests/delete-data.test.ts
+  "9f9f5a291e56":
+    sentence: "We offer a full refund within 14 days of purchase."
+    kind: manual
+    runbook: guards/refund-runbook.md
+    reviewed_on: "2026-11-01"

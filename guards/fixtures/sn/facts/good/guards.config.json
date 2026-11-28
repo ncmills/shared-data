@@ -1,0 +1,36 @@
+{
+ "site": "fixture",
+ "guards": {
+  "unsourced-facts": {
+   "datasets": [
+    {
+     "file": "data/peptides.json",
+     "kind": "claim",
+     "row_path": "peptides[*].dosingInfo",
+     "max_age_days": 180
+    },
+    {
+     "file": "data/states.json",
+     "kind": "claim",
+     "row_path": "states",
+     "max_age_days": 180
+    }
+   ],
+   "exempt": [
+    {
+     "file": "lib/site-config.ts",
+     "reason": "site chrome (nav labels), no facts"
+    }
+   ],
+   "policy": {
+    "forbid": [
+     {
+      "match": "semaglutide|tirzepatide|retatrutide",
+      "reason": "no GLP-1 per README policy",
+      "source": "README.md"
+     }
+    ]
+   }
+  }
+ }
+}
