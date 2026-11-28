@@ -9,7 +9,7 @@
     "audit": "tsx scripts/audit/index.ts",
     "reach": "tsx scripts/audit/consumer-reach.ts",
     "lag": "tsx scripts/consumer-lag.ts",
-    "test": "tsx --test $(find scripts src -name '*.test.ts')",
+    "test": "tsx --test $(find scripts src guards -name '*.test.ts')",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "verify": "npm run typecheck && tsx scripts/verify-universe.ts && tsx scripts/verify-trips.ts && tsx scripts/check-brand-rules.ts && tsx scripts/audit/index.ts && tsx scripts/corpus/verify-suitability.ts && tsx scripts/corpus/slice.ts --check",
     "new-data-report": "tsx scripts/new-data-report.ts --write",

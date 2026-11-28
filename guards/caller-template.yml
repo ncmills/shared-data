@@ -1,0 +1,14 @@
+# .github/workflows/guards.yml — copy this file into a site repo, unchanged.
+# Switches on EVERY fleet guard (GUARDS-FLEET-WIDE). Configure them in guards.config.json
+# at the repo root (start from shared-data guards/guards.config.example.json).
+name: guards
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "23 13 * * *"   # daily: catches staleness (dates, pins) with no code change
+  workflow_dispatch:
+jobs:
+  guards:
+    uses: ncmills/shared-data/.github/workflows/site-guards.yml@main

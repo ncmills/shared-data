@@ -1,0 +1,49 @@
+# site-guards — the ONE reusable fleet guard workflow (GUARDS-FLEET-WIDE, rulings.md:444).
+# A site switches every fleet guard on by adding guards/caller-template.yml (see there).
+# shared-data is PUBLIC, so the checkout below needs no token (same as shared-data-freshness.yml).
+# Runs guards/run.ts against the CALLER repo; any FAIL fails the job. --strict: in CI a
+# COULD-NOT-RUN is a failure too (the shared-data clone is right here, so there is no excuse).
+name: site guards
+
+on:
+  workflow_call:
+    inputs:
+      shared-data-ref:
+        description: "shared-data ref whose guards/ to run (default main)"
+        type: string
+        default: main
+
+permissions:
+  contents: read
+
+jobs:
+  guards:
+    name: Fleet guards
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the site
+        uses: actions/checkout@v4
+        with:
+          path: site
+
+      - name: Check out shared-data (full history, for pin age)
+        uses: actions/checkout@v4
+        with:
+          repository: ncmills/shared-data
+          ref: ${{ inputs.shared-data-ref }}
+          path: shared-data
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install shared-data dev deps (tsx)
+        working-directory: shared-data
+        run: npm ci --ignore-scripts
+
+      - name: Run fleet guards
+        env:
+          SHARED_DATA_DIR: ${{ github.workspace }}/shared-data
+          SHARED_DATA_REF: HEAD
+        run: node --import ./shared-data/node_modules/tsx/dist/loader.mjs shared-data/guards/run.ts site --strict

@@ -31,6 +31,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": ["src/**/*.ts", "scripts/**/*.ts"],
+  "include": ["src/**/*.ts", "scripts/**/*.ts", "guards/**/*.ts"],
   "exclude": ["node_modules", "deploy"]
 }

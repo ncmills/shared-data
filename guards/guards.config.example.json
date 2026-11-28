@@ -1,0 +1,28 @@
+{
+  "site": "example-site",
+  "sharedData": true,
+  "guards": {
+    "duplicate-assets": {
+      "imageDirs": ["public/images"],
+      "urlSources": [
+        { "file": "src/data/venues.ts", "export": "VENUES", "idField": "slug", "urlFields": ["image", "gallery"], "maxUses": 1 },
+        { "file": "src/app/page.tsx" }
+      ]
+    },
+    "stale-datasets": {
+      "datasets": [
+        { "file": "src/data/offices.ts", "export": "OFFICES", "idField": "id", "dateField": "researchedOn", "maxAgeDays": 120 }
+      ]
+    },
+    "shared-data-pin-age": { "maxDays": 7 },
+    "unsourced-facts": {
+      "catalogs": [
+        { "file": "lib/peptides.ts", "export": "PEPTIDES", "idField": "slug", "factFields": ["cas", "mw"], "sourceUrlField": "source.url" }
+      ]
+    },
+    "promise-registry": { "registry": "promises.json", "copyGlobs": ["src/app/**/page.tsx"] }
+  },
+  "optOut": {
+    "_example": { "ruling": "CONTROL-RULING-ID", "reason": "only a CONTROL ruling naming this site and reason turns a guard off" }
+  }
+}
