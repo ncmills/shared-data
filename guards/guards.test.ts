@@ -63,9 +63,12 @@ test("runner: missing guard FAILs; opt-out needs a CONTROL ruling id", async () 
   cfg.optOut = { "stale-datasets": { ruling: "", reason: "no data" } };
   writeFileSync(join(d, "guards.config.json"), JSON.stringify(cfg));
   assert.equal((await pick(d, "stale-datasets")).status, "FAIL");
-  cfg.optOut = { "stale-datasets": { ruling: "SITE-NO-DATASETS", reason: "no data" } };
-  writeFileSync(join(d, "guards.config.json"), JSON.stringify(cfg));
-  assert.equal((await pick(d, "stale-datasets")).status, "PASS");
+  // F1 (was the hole at :66): a ruling-shaped id NOT pinned in guards/opt-outs.json must FAIL.
+  for (const ruling of ["SITE-NO-DATASETS", "TODO", "NONE", "SKIP"]) {
+    cfg.optOut = { "stale-datasets": { ruling, reason: "no data" } };
+    writeFileSync(join(d, "guards.config.json"), JSON.stringify(cfg));
+    assert.equal((await pick(d, "stale-datasets")).status, "FAIL", ruling);
+  }
   const all = await runGuards(mkdtempSync(join(tmpdir(), "guards-empty-")), { now });
   assert.ok(all.length === 5 && all.every((x) => x.r.status === "FAIL"), "no config file = every guard FAILs");
 });

@@ -17,9 +17,16 @@ import { fileURLToPath } from "node:url";
 import { type GuardResult, type SiteConfig, fail } from "./lib.ts";
 import { GUARDS, GUARD_IDS } from "./registry.ts";
 
-const RULING_ID = /^[A-Z][A-Z0-9-]{2,}$/; // e.g. GUARDS-FLEET-WIDE
+// F1: an opt-out passes ONLY if {site, guard, ruling} is pinned in guards/opt-outs.json with a
+// non-empty reason, and the site's own optOut also gives a non-empty reason. A ruling-shaped
+// string alone ("TODO", "NONE", "SKIP") is never enough.
+export interface PinnedOptOut { site: string; guard: string; ruling: string; reason: string }
+const DEFAULT_OPT_OUTS = resolve(dirname(fileURLToPath(import.meta.url)), "opt-outs.json");
+function loadOptOuts(file: string): PinnedOptOut[] {
+  try { const v = JSON.parse(readFileSync(file, "utf8")); return Array.isArray(v) ? v : []; } catch { return []; }
+}
 
-export async function runGuards(repoRoot: string, opts: { only?: string[]; now?: Date; sharedDataDir?: string } = {}) {
+export async function runGuards(repoRoot: string, opts: { only?: string[]; now?: Date; sharedDataDir?: string; optOutsFile?: string } = {}) {
   const root = resolve(repoRoot);
   let config: SiteConfig;
   try { config = JSON.parse(readFileSync(join(root, "guards.config.json"), "utf8")); }
@@ -31,6 +38,7 @@ export async function runGuards(repoRoot: string, opts: { only?: string[]; now?:
     now: opts.now ?? (process.env.GUARDS_NOW ? new Date(process.env.GUARDS_NOW) : new Date()),
     sharedDataDir: opts.sharedDataDir ?? process.env.SHARED_DATA_DIR ?? resolve(dirname(fileURLToPath(import.meta.url)), ".."),
   };
+  const pinned = loadOptOuts(opts.optOutsFile ?? DEFAULT_OPT_OUTS);
   const out: { id: string; r: GuardResult }[] = [];
   for (const id of GUARD_IDS) {
     if (opts.only && !opts.only.includes(id)) continue;
@@ -38,8 +46,13 @@ export async function runGuards(repoRoot: string, opts: { only?: string[]; now?:
     const opt = config.optOut?.[id];
     const implicit = id === "shared-data-pin-age" && config.sharedData === false;
     if (g === undefined && !implicit) {
-      if (opt && RULING_ID.test(opt.ruling ?? "")) out.push({ id, r: { status: "PASS", reasons: [], checked: `OPTED OUT by CONTROL ruling ${opt.ruling}: ${opt.reason ?? "(no reason given)"}` } });
-      else out.push({ id, r: fail([opt ? `opt-out has no CONTROL ruling id (got ${JSON.stringify(opt.ruling)})` : `guard ${id} not configured`]) });
+      const pin = opt && pinned.find((p) => p.site === config.site && p.guard === id && p.ruling === opt.ruling);
+      const why = !opt ? `guard ${id} not configured`
+        : !pin ? `opt-out ruling ${JSON.stringify(opt.ruling)} is not pinned for site ${JSON.stringify(config.site)} + guard ${id} in guards/opt-outs.json`
+        : !String(pin.reason ?? "").trim() || !String(opt.reason ?? "").trim() ? `opt-out ${opt.ruling} has an empty reason`
+        : "";
+      if (why) out.push({ id, r: fail([why]) });
+      else out.push({ id, r: { status: "PASS", reasons: [], checked: `OPTED OUT by pinned ruling ${pin!.ruling}: ${pin!.reason}` } });
       continue;
     }
     try { out.push({ id, r: await GUARDS[id](g ?? {}, ctx) }); }
