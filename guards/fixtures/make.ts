@@ -24,7 +24,7 @@ export function makeFixture(kind: "red" | "green", dir: string) {
   writeFileSync(join(dir, "public/img/a.png"), Buffer.from("PNG-bytes-A"));
   writeFileSync(join(dir, "public/img/b.png"), Buffer.from(red ? "PNG-bytes-A" : "PNG-bytes-B"));
   // stale-datasets: idhaw had 47 rows researched 2026-03-24.
-  const offices = Array.from({ length: 47 }, (_, i) => ({ id: `office-${i + 1}`, researchedOn: red ? "2026-03-24" : "2026-11-20" }));
+  const offices = Array.from({ length: 47 }, (_, i) => ({ id: `office-${i + 1}`, researched_on: red ? "2026-03-24" : "2026-11-20" }));
   writeFileSync(join(dir, "data/offices.ts"), `export const OFFICES = ${JSON.stringify(offices)};\n`);
   // shared-data-pin-age: red = a pin >30 days older than main; green = main itself.
   const pin = red ? git("rev-list", "-1", "--before=30 days ago", mainRef()) : git("rev-parse", mainRef());
@@ -33,10 +33,10 @@ export function makeFixture(kind: "red" | "green", dir: string) {
     site: `fixture-${kind}`,
     guards: {
       "duplicate-assets": { imageDirs: ["public/img"], urlSources: [{ file: "data/venues.json", export: "venues", urlFields: ["image"] }] },
-      "stale-datasets": { datasets: [{ file: "data/offices.ts", export: "OFFICES", dateField: "researchedOn", maxAgeDays: 120 }] },
+      "stale-datasets": { datasets: [{ file: "data/offices.ts", export: "OFFICES", maxAgeDays: 120 }] },
       "shared-data-pin-age": { maxDays: 7 },
-      "unsourced-facts": { catalogs: [] },
-      "promise-registry": { registry: "promises.json", copyGlobs: [] },
+      "unsourced-facts": { datasets: [], exempt: [{ file: "data/venues.json", reason: "image urls only, no facts" }] },
+      "promise-registry": { roots: ["data"] },
     },
   }, null, 2));
   return dir;

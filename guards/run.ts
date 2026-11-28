@@ -5,6 +5,10 @@
 // Reads <repoRoot>/guards.config.json and runs EVERY registered guard. One line per guard:
 // PASS / FAIL (reasons) / COULD-NOT-RUN (named reason). A guard missing from the config is
 // a FAIL unless optOut[guard].ruling names a CONTROL ruling.
+// Only REGISTERED guards run: a config key the registry does not know is ignored, never a
+// failure, and a guard with nothing to check returns PASS "n/a" -- so --strict never fails on
+// an unregistered or not-yet-applicable guard. --report-only always exits 0 (CI).
+// BLOCKING PATH: the site's Vercel prebuild, `node --import tsx node_modules/shared-data/guards/run.ts .`
 // Exit: 1 on any FAIL; COULD-NOT-RUN alone exits 0 (printed as NOT a pass) unless --strict,
 // because a Vercel prebuild has no shared-data clone and must not fail on that alone.
 import { readFileSync, appendFileSync } from "node:fs";
@@ -54,6 +58,7 @@ export function format(id: string, r: GuardResult): string {
 async function main() {
   const args = process.argv.slice(2);
   const flag = (n: string) => { const i = args.indexOf(n); return i === -1 ? undefined : args.splice(i, 2)[1]; };
+  const reportOnly = args.includes("--report-only") ? (args.splice(args.indexOf("--report-only"), 1), true) : false;
   const strict = args.includes("--strict") ? (args.splice(args.indexOf("--strict"), 1), true) : false;
   const only = flag("--only")?.split(",");
   const sharedDataDir = flag("--shared-data");
@@ -68,6 +73,7 @@ async function main() {
   if (process.env.GITHUB_STEP_SUMMARY) {
     try { appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Fleet guards\n\n${summary}\n\n\`\`\`\n${lines.join("\n")}\n\`\`\`\n`); } catch { /* summary is best-effort */ }
   }
+  if (reportOnly) process.exit(0); // CI: private repos cannot have branch protection, so CI reports; the Vercel prebuild blocks
   process.exit(n("FAIL") || (strict && n("COULD-NOT-RUN")) ? 1 : 0);
 }
 

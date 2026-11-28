@@ -3,26 +3,76 @@
   "sharedData": true,
   "guards": {
     "duplicate-assets": {
-      "imageDirs": ["public/images"],
+      "imageDirs": [
+        "public/images"
+      ],
       "urlSources": [
-        { "file": "src/data/venues.ts", "export": "VENUES", "idField": "slug", "urlFields": ["image", "gallery"], "maxUses": 1 },
-        { "file": "src/app/page.tsx" }
+        {
+          "file": "src/data/venues.ts",
+          "export": "VENUES",
+          "idField": "slug",
+          "urlFields": [
+            "image",
+            "gallery"
+          ],
+          "maxUses": 1
+        },
+        {
+          "file": "src/app/page.tsx"
+        }
       ]
     },
     "stale-datasets": {
       "datasets": [
-        { "file": "src/data/offices.ts", "export": "OFFICES", "idField": "id", "dateField": "researchedOn", "maxAgeDays": 120 }
+        {
+          "file": "src/data/offices.ts",
+          "export": "OFFICES",
+          "idField": "id",
+          "maxAgeDays": 120
+        }
       ]
     },
-    "shared-data-pin-age": { "maxDays": 7 },
+    "shared-data-pin-age": {
+      "maxDays": 7
+    },
     "unsourced-facts": {
-      "catalogs": [
-        { "file": "lib/peptides.ts", "export": "PEPTIDES", "idField": "slug", "factFields": ["cas", "mw"], "sourceUrlField": "source.url" }
-      ]
+      "datasets": [
+        {
+          "file": "data/states.json",
+          "row_path": "states",
+          "max_age_days": 180
+        }
+      ],
+      "exempt": [
+        {
+          "file": "lib/site-config.ts",
+          "reason": "site chrome (nav labels), no facts"
+        }
+      ],
+      "policy": {
+        "forbid": [
+          {
+            "match": "semaglutide",
+            "reason": "no GLP-1 per README policy",
+            "source": "README.md"
+          }
+        ]
+      }
     },
-    "promise-registry": { "registry": "promises.json", "copyGlobs": ["src/app/**/page.tsx"] }
+    "promise-registry": {
+      "roots": [
+        "src",
+        "app",
+        "components",
+        "content"
+      ],
+      "registry": "guards/claims.yml"
+    }
   },
   "optOut": {
-    "_example": { "ruling": "CONTROL-RULING-ID", "reason": "only a CONTROL ruling naming this site and reason turns a guard off" }
+    "_example": {
+      "ruling": "CONTROL-RULING-ID",
+      "reason": "only a CONTROL ruling naming this site and reason turns a guard off"
+    }
   }
 }

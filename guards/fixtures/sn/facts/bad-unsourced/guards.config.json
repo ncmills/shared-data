@@ -1,0 +1,16 @@
+{
+ "site": "fixture",
+ "guards": {
+  "unsourced-facts": {
+   "datasets": [
+    {
+     "file": "data/peptides.json",
+     "kind": "claim",
+     "row_path": "peptides[*].dosingInfo",
+     "max_age_days": 180
+    }
+   ],
+   "exempt": []
+  }
+ }
+}

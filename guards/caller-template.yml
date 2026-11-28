@@ -12,3 +12,6 @@ on:
 jobs:
   guards:
     uses: ncmills/shared-data/.github/workflows/site-guards.yml@main
+# BLOCKING PATH (required): add to the site's package.json so every Vercel build runs the guards
+#   "prebuild": "node --import tsx node_modules/shared-data/guards/run.ts ."
+# This workflow only REPORTS (private repos cannot have branch protection).

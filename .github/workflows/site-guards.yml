@@ -1,8 +1,9 @@
 # site-guards — the ONE reusable fleet guard workflow (GUARDS-FLEET-WIDE, rulings.md:444).
 # A site switches every fleet guard on by adding guards/caller-template.yml (see there).
 # shared-data is PUBLIC, so the checkout below needs no token (same as shared-data-freshness.yml).
-# Runs guards/run.ts against the CALLER repo; any FAIL fails the job. --strict: in CI a
-# COULD-NOT-RUN is a failure too (the shared-data clone is right here, so there is no excuse).
+# Runs guards/run.ts against the CALLER repo and REPORTS (job summary). It does not block:
+# private site repos cannot have branch protection (GitHub Free), so a red check gates nothing.
+# The BLOCKING path is each site's Vercel prebuild (see guards/caller-template.yml).
 name: site guards
 
 on:
@@ -46,4 +47,4 @@ jobs:
         env:
           SHARED_DATA_DIR: ${{ github.workspace }}/shared-data
           SHARED_DATA_REF: HEAD
-        run: node --import ./shared-data/node_modules/tsx/dist/loader.mjs shared-data/guards/run.ts site --strict
+        run: node --import ./shared-data/node_modules/tsx/dist/loader.mjs shared-data/guards/run.ts site --strict --report-only

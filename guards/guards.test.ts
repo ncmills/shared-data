@@ -36,7 +36,7 @@ test("stale-datasets: red on 47 rows dated 2026-03-24, red on missing date, gree
   assert.match(red.reasons.join("\n"), /47 row\(s\) older than 120d \(oldest 2026-03-24/);
   const d = fx("green");
   writeFileSync(join(d, "data/offices.ts"), `export const OFFICES = [{ id: "x" }];`);
-  assert.match((await pick(d, "stale-datasets")).reasons.join(), /no valid researchedOn: x/);
+  assert.match((await pick(d, "stale-datasets")).reasons.join(), /no valid researched_on: x/);
   assert.equal((await pick(fx("green"), "stale-datasets")).status, "PASS");
 });
 
@@ -54,7 +54,7 @@ test("shared-data-pin-age: red on a 30d-old pin, green at main, n/a when sharedD
   assert.match((await pick(d, "shared-data-pin-age")).checked ?? "", /n\/a/);
 });
 
-test("runner: missing guard FAILs; opt-out needs a CONTROL ruling id; stubs FAIL 'not yet lifted'", async () => {
+test("runner: missing guard FAILs; opt-out needs a CONTROL ruling id", async () => {
   const d = fx("green");
   const cfg = JSON.parse(readFileSync(join(d, "guards.config.json"), "utf8"));
   delete cfg.guards["stale-datasets"];
@@ -66,7 +66,6 @@ test("runner: missing guard FAILs; opt-out needs a CONTROL ruling id; stubs FAIL
   cfg.optOut = { "stale-datasets": { ruling: "SITE-NO-DATASETS", reason: "no data" } };
   writeFileSync(join(d, "guards.config.json"), JSON.stringify(cfg));
   assert.equal((await pick(d, "stale-datasets")).status, "PASS");
-  for (const id of ["unsourced-facts", "promise-registry"]) assert.match((await pick(d, id)).reasons.join(), /not yet lifted/);
   const all = await runGuards(mkdtempSync(join(tmpdir(), "guards-empty-")), { now });
   assert.ok(all.length === 5 && all.every((x) => x.r.status === "FAIL"), "no config file = every guard FAILs");
 });

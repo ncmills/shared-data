@@ -1,0 +1,16 @@
+{
+ "site": "fixture",
+ "guards": {
+  "unsourced-facts": {
+   "datasets": [
+    {
+     "file": "data/rows.json",
+     "kind": "stat",
+     "row_path": "*",
+     "max_age_days": 180
+    }
+   ],
+   "exempt": []
+  }
+ }
+}

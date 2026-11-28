@@ -13,7 +13,8 @@ export const staleDatasets: Guard = async (cfg: StaleDatasetsConfig, ctx) => {
   const reasons: string[] = [];
   let total = 0;
   for (const ds of cfg.datasets) {
-    const field = ds.dateField ?? "researchedOn";
+    const field = "researched_on"; // ONE date field name fleet-wide (what the real data uses)
+    if (ds.dateField !== undefined && ds.dateField !== field) { reasons.push(`${label(ds)}: dateField "${ds.dateField}" -- the fleet uses one date field, researched_on`); continue; }
     if (!(ds.maxAgeDays > 0)) { reasons.push(`${label(ds)}: maxAgeDays missing or not positive`); continue; }
     let rows: unknown[];
     try { rows = await loadRows(ctx.repoRoot, ds); } catch (e) { reasons.push(`could not load ${label(ds)}: ${(e as Error).message}`); continue; }

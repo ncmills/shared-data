@@ -1,17 +1,20 @@
-// guards/unsourced-facts.ts — class: ANY unsourced fact (dose strings, research claims,
-// CAS/MW, statute citations, prices...). SLOT ONLY in this unit: per-site guards are being
-// written in DRV-cs-sourcing (scripts/guard-catalog-sources.mjs), DRV-wpd-sourcing and
-// DRV-dw-promises; DRV lifts them here next. Until then a configured site FAILs loudly.
-//
-// Config shape (what the lifted guard will read):
-//   { "catalogs": [{ "file": "lib/peptides.ts", "export": "PEPTIDES", "idField": "slug",
-//                    "factFields": ["cas", "mw"], "sourceUrlField": "source.url" }] }
-// Rule: a row that states any factField must carry an https:// primary-source URL.
-import { type Guard, fail } from "./lib.ts";
-import type { DataSource } from "./lib.ts";
+// guards/unsourced-facts.ts — class: ANY unsourced or stale fact in a site's data files.
+// SN's guard (site-guards facts.js, GUARDS-ARE-SN), ported into the fleet layer, not rewritten.
+// Config: guards.config.json guards["unsourced-facts"] =
+//   { datasets: [{ file, row_path, max_age_days, kind? }], exempt: [{ file, reason }],
+//     policy?: { forbid: [{ match, reason, source }] } }
+// Faults: NO_SOURCE, STALE / NO_DATE (researched_on), UNLISTED (class-glob discovery of
+// data/**/*.json, src/data/**, lib/*.json, lib/*.ts catalogs, src/lib/*{data,config,...}*),
+// EXEMPT_NO_REASON, FORBIDDEN (policy.forbid), UNMEASURED (rows are read from JSON only).
+import { type Guard, fail, pass, cap } from "./lib.ts";
+// @ts-ignore -- plain JS port
+import { runFacts, classFiles } from "./sn/facts.js";
 
-export interface FactCatalog extends DataSource { idField?: string; factFields: string[]; sourceUrlField: string }
-export interface UnsourcedFactsConfig { catalogs: FactCatalog[] }
-
-export const unsourcedFacts: Guard = async () =>
-  fail(["not yet lifted: the shared unsourced-facts guard is a slot; DRV lifts the per-site guards (DRV-cs-sourcing, DRV-wpd-sourcing) next"]);
+export const unsourcedFacts: Guard = async (cfg: any, ctx) => {
+  const { faults } = runFacts({ root: ctx.repoRoot, now: ctx.now, manifest: cfg }) as { faults: string[] };
+  const n = (cfg?.datasets ?? []).length;
+  const discovered = (classFiles(ctx.repoRoot) as string[]).length;
+  const checked = `${n} dataset(s), ${discovered} class-glob data file(s)`;
+  if (!faults.length && n === 0 && discovered === 0) return pass(`n/a: no data files in the class glob (${checked})`);
+  return faults.length ? fail(cap(faults, 12), checked) : pass(checked);
+};
